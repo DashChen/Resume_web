@@ -1,0 +1,57 @@
+[mat-raised-button] {
+    border-radius: 8px;
+    height: 50px;
+    width: 150px;
+    background: #C5D0DF;
+    &:hover {
+        background: #DCE5F0;
+    }
+    ::ng-deep .mat-button-wrapper {
+        color: #FFFFFF;
+    }
+    &.mat-button {
+        &--small {
+            width: 100px;
+        }
+        &--block {
+            width: 100%;
+        }
+        &--orange {
+            background-color: #F4781E;
+            &:hover {
+                background-color: #FF984D;
+            }
+        }
+        &--blue {
+            background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+            &:hover {
+                background: linear-gradient(270deg, #02B2E1 9.33%, #006CD0 100%);
+            }
+        }
+        &--blue2 {
+            background: #006CD0;
+            &:hover {
+                background: #42A4FF;
+            }
+        }
+    }
+}
+
+[mat-stroked-button] {
+    height: 50px;
+    &.mat-button {
+        &--block {
+            width: 100%;
+        }
+    }
+    ::ng-deep .mat-button-wrapper {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 19px;
+        color: #6C7A8E;
+        mat-icon {
+            margin-right: 16px;
+        }
+    }
+}

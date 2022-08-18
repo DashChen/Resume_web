@@ -1,0 +1,22 @@
+
+<div class="app-term-dialog__title" mat-dialog-title *ngIf="showDetail">{{title}}</div>
+<mat-dialog-content class="app-term-dialog__content">
+    <div fxFlex fxLayout="column" fxLayoutGap="24px" style="max-width: 100%;" *ngIf="!showDetail">
+        <button mat-stroked-button class="mat-button--block" (click)="showTerm('service')">
+            <span>服務政策</span>
+            <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow icon"></mat-icon>
+        </button>
+        <button mat-stroked-button class="mat-button--block" (click)="showTerm('privacy')">
+            <span>隱私權政策</span>
+            <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow icon"></mat-icon>
+        </button>
+    </div>
+    <ng-container *ngIf="showDetail">
+        {{termHtmlContent}}
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="app-term-dialog__action">
+    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="handleReturn()">
+        {{btnText}}
+    </button>
+</mat-dialog-actions>

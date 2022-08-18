@@ -1,0 +1,37 @@
+@import 'public-mixin';
+
+:host {
+    padding: 40px 24px;
+    $this: '.app-term-dialog';
+
+    #{$this} {
+        &__title {
+            color: #27303D;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 33px;
+            text-align: center;
+        }
+        &__content {
+            max-height: 508px;
+            span {
+                color: #27303D;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 33px;
+            }
+            mat-icon {
+                color: #F4781E;
+                margin-left: 40px;
+                ::ng-deep {
+                    transform: rotate(-90deg);
+                }
+            }
+        }
+        &__action {
+            margin-top: 40px;
+        }
+    }
+}

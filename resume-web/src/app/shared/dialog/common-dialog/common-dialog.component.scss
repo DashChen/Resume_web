@@ -1,0 +1,46 @@
+:host {
+    $this: '.app-common-dialog';
+
+    #{$this} {
+        text-align: center;
+        mat-icon {
+            height: 35px;
+            width: 35px;
+        }
+        &__content {
+            text-align: center;
+        }
+        &__title {
+            color: #27303D;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 33px;
+            letter-spacing: 0em;
+            margin-top: 24px;
+        }
+        &__subtitle {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 25px;
+            color: #6C7A8E;
+            margin-top: 4px;
+        }
+        &__action {
+            margin-top: 32px;
+            button {
+                width: 150px;
+                height: 50px;
+                background: #F4781E;
+                border-radius: 8px;
+
+                ::ng-deep .mat-button-wrapper {
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 25px;
+                    color: #FFFFFF;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,124 @@
+@import 'public-mixin';
+
+:host {
+    $this: '.app-login';
+
+    #{$this} {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 695px;
+        &__content {
+            margin-bottom: 115px;
+            margin-top: 115px;
+            width: 420px;
+        }
+        &__prompt {
+            align-items: baseline;
+            display: flex;
+            justify-content: space-between;
+            span {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 33px;
+                color: #27303D;
+            }
+            small {
+                color: #6C7A8E;
+            }
+        }
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+            margin-top: 40px;
+
+            &__remeber__block {
+                display: flex;
+                justify-content: space-between;
+                mat-checkbox {
+                    ::ng-deep .mat-checkbox-label {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 25px;
+                        color: #6C7A8E;
+                    }
+                }
+                a {
+                    text-decoration: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 25px;
+                    color: #6C7A8E;
+                }
+            }
+            &__login__btn {
+                margin-top: 40px;
+            }
+        }
+        &__register {
+            margin-top: 24px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 25px;
+            color: #C5D0DF;
+            span {
+                margin-right: 6px;
+            }
+            a {
+                text-decoration: none;
+
+            }
+        }
+        &__divider {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            &::before, &::after {
+                content: '';
+                width: 100%;
+                height: 1px;
+                background-color: #C5D0DF;
+            }
+            span {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 19px;
+                color: #C5D0DF;
+                margin: 0 14px;
+            }
+        }
+        &__social {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        &__route__admin {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 42px;
+            span {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 19px;
+                color: #F4781E;
+                margin-right: 28px;
+            }
+            mat-icon {
+                color: #F4781E;
+                height: 16px;
+                transform: rotate(-90deg);
+            }
+        }
+    }
+}

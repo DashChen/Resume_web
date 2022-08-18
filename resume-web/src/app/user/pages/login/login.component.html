@@ -1,0 +1,62 @@
+<div class="app-login__content">
+    <div class="app-login__prompt">
+        <span>登入</span>
+        <small>請輸入下方資訊，繼續使用履歷系統</small>
+    </div>
+    <form class="app-login__form">
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <input matInput placeholder="請輸入手機/身分帳號/E-mail" [formControl]="account" required>
+            <mat-error *ngIf="account.invalid">
+                {{ getAccountErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <input matInput placeholder="請輸入密碼" [formControl]="password" required>
+            <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword"></mat-icon>
+            <mat-error *ngIf="password.invalid">
+                {{ getPasswordErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="app-login__form__remeber__block">
+            <mat-checkbox>記住我</mat-checkbox>
+
+            <a routerLink="/forget">
+                忘記密碼?
+            </a>
+        </div>
+
+        <button mat-raised-button class="app-login__form__login__btn mat-button--block mat-button--orange">登入</button>
+
+    </form>
+
+    <div class="app-login__register">
+        <span>還沒有註冊?</span>
+        <a routerLink="/register">註冊</a>
+    </div>
+
+    <div class="app-login__divider">
+        <span>or</span>
+    </div>
+
+    <div class="app-login__social">
+        <button mat-stroked-button (click)="loginBySocial('google')">
+            <mat-icon svgIcon="google-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
+            <span>Google</span>
+        </button>
+        <button mat-stroked-button (click)="loginBySocial('fb')">
+            <mat-icon svgIcon="fb-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
+            <span>Facebook</span>
+        </button>
+        <button mat-stroked-button (click)="loginBySocial('line')">
+            <mat-icon svgIcon="line-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
+            <span>LINE</span>
+        </button>
+    </div>
+
+    <div class="app-login__route__admin">
+        <span>切換管理者登入</span>
+        <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
+    </div>
+</div>

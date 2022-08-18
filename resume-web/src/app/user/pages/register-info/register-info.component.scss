@@ -1,0 +1,34 @@
+@import 'public-mixin';
+
+:host {
+    $this: '.app-register-info';
+
+    #{$this} {
+        &__content {
+            margin: 150px 0;
+            width: 420px;
+        }
+        &__form {
+            margin-top: 40px;
+            &__other {
+                > div {
+                    position: relative;
+                    mat-error {
+                        position: absolute;
+                    }
+                }
+                a {
+                    color: #02B2E1;
+                    text-decoration: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 25px;
+                }
+            }
+            &__btn {
+                margin-top: 35px;
+            }
+        }
+    }
+}

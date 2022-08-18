@@ -1,0 +1,45 @@
+<div class="app-register__content">
+    <app-page-title [title]="title" [subtitle]="subtitle"></app-page-title>
+    <ng-container *ngTemplateOutlet="showCountdown ? validateCode : countryMobile"></ng-container>
+        <ng-template #countryMobile>
+            <form fxLayout="row" fxLayoutGap="10px" class="app-register__form" [formGroup]="beforeValidationForm" novalidate>
+                <mat-form-field class="app-register__form__country__code" appearance="fill">
+                    <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of countryCodeOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error *ngIf="countryCodeFormControl.invalid">
+                        {{ getCountryCodeErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block" appearance="fill">
+                    <input type="tel" matInput placeholder="例:0912345678" formControlName="mobile" [errorStateMatcher]="matcher" required>
+                    <mat-error *ngIf="mobileFormControl.invalid">
+                        {{ getMobileErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </ng-template>
+    <ng-template #validateCode>
+        <form fxLayout="column" class="app-register__form" [formGroup]="validationForm" novalidate>
+            <mat-form-field class="mat-form-field__block" appearance="fill">
+                <input type="text" matInput placeholder="請輸入驗證碼" formControlName="verificationCode" [errorStateMatcher]="matcher" required>
+                <mat-error *ngIf="verificationCodeFormControl.invalid">
+                    {{ getVerificationCodeErrorMessage() }}
+                </mat-error>
+            </mat-form-field>
+        </form>
+    </ng-template>
+    <div class="app-register__form__countdown" *ngIf="showCountdown">
+        <span>剩餘時間</span><span>{{ getCountdownStr() }}</span>
+    </div>
+    <button mat-raised-button class="app-register__form__login__btn mat-button--block mat-button--orange" (click)="submitForm()">
+        {{btnText}}
+    </button>
+
+    <div class="app-register__other">
+        <span>{{otherTitle}}</span>
+        <a href="#" (click)="otherAction($event)" [ngClass]="{'not-allowed': showCountdown && disabledSendAgain}">{{otherActionText}}</a>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+@import 'public-mixin';
+
+:host {
+    align-self: center;
+    $this: '.app-register';
+
+    #{$this} {
+        &__content {
+            margin-bottom: 115px;
+            margin-top: 115px;
+            width: 420px;
+        }
+        &__form {
+            margin-top: 40px;
+            &__country__code {
+                width: 125px;
+            }
+            &__countdown {
+                margin-bottom: 35px;
+                span {
+                    &:nth-child(2) {
+                        margin-left: 8px;
+                    }
+                }
+            }
+        }
+        &__other {
+            margin-top: 24px;
+            a {
+                text-decoration: none;
+                &.not-allowed {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

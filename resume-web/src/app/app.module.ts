@@ -1,0 +1,56 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { InjectionToken } from '@angular/core';
+import { BREAKPOINT } from '@angular/flex-layout';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { LayoutModule, DialogModule, ComponentModule } from './shared';
+import { AdminModule } from './admin';
+import { environment } from '../environments/environment';
+import { UserModule } from './user';
+
+import * as icons from '@assets/icons.json';
+import { IconProps } from './core/interfaces/icons';
+import * as country from '@assets/country.json';
+import { ICountry } from './core/interfaces/country';
+
+const iconObj: IconProps = JSON.parse(JSON.stringify(icons));
+const countryObj: ICountry = JSON.parse(JSON.stringify(country));
+export const ICONS_TOKEN = new InjectionToken<IconProps>('icons token',
+{
+  providedIn: 'root',
+  factory: () => (iconObj)
+});
+export const COUNTRY_TOKEN = new InjectionToken<ICountry>('country token',
+{
+  providedIn: 'root',
+  factory: () => (countryObj)
+});
+
+@NgModule({
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    BrowserModule,
+    LayoutModule,
+    ComponentModule,
+    DialogModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    AdminModule,
+    UserModule,
+    AppRoutingModule,
+  ],
+  providers: [
+    { provide: 'API_BASE_URL', useValue: environment.apiBaseUrl },
+    { provide: ICONS_TOKEN, useValue: iconObj },
+    { provide: COUNTRY_TOKEN, useValue: countryObj },
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
