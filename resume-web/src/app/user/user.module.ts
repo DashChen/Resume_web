@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
 import { ComponentModule } from '@app/shared';
 import { RegisterInfoComponent } from './pages/register-info/register-info.component';
+import { ResumeManagementComponent } from './pages/resume-management/resume-management.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { RegisterInfoComponent } from './pages/register-info/register-info.compo
       ForgetComponent,
       LoginComponent,
       RegisterComponent,
-      RegisterInfoComponent
+      RegisterInfoComponent,
+      ResumeManagementComponent
   ],
   imports: [
     CommonModule,

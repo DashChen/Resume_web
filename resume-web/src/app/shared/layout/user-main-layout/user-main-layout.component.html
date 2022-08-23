@@ -1,3 +1,11 @@
-<div fxFlex fxLayout="column">
-  <router-outlet></router-outlet>
-</div>
+<mat-toolbar class="app-user-main-layout" color="primary">
+  <div class="app-user-main-layout__logo"></div>
+  <span class="app-user-main-layout__flex-spacer"></span>
+  <ng-container *ngFor="let item of links">
+    <button mat-button [routerLink]="item.link">
+      <span class="h2-text--bold">{{ item.title }}</span>
+    </button>
+  </ng-container>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

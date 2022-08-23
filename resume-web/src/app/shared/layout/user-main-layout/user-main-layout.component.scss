@@ -1,3 +1,19 @@
+@import 'public-mixin';
+
 :host {
   $this: '.app-user-main-layout';
+
+  #{$this} {
+    &__logo {
+      background-image: url('^assets/common/logo_compony_name.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      height: 30px;
+      width: 184px;
+    }
+    &__flex-spacer {
+      flex: 1 1 auto;
+    }
+  }
 }

@@ -94,7 +94,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       this.disableLoginBtn = false;
       if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
         console.log('login');
-        return this.router.navigate(['/dashboard']);
+        return this.router.navigate(['/resume-management']);
       }
       this.showLoginError = true;
       return null;
