@@ -1,0 +1,39 @@
+@mixin Noto-Sans-TCTitle24-Bold {
+    font-family: Noto Sans;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33px;
+    letter-spacing: 0em;
+}
+
+@mixin Noto-Sans-TCBody14-Bold {
+    font-family: Noto Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 25px;
+    letter-spacing: 0em;
+}
+
+@mixin Noto-Sans-TCBody14-Medium {
+    font-family: Noto Sans;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 19px;
+    letter-spacing: 0em;
+}
+
+@mixin Noto-Sans-TCBody14-Regular {
+    font-family: Noto Sans;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    letter-spacing: 0em;
+}
+
+@mixin Noto-Sans-TCBody12-medium {
+    font-family: Noto Sans;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+}

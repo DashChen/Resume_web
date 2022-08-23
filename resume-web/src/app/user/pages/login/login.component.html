@@ -1,15 +1,15 @@
 <div class="app-login__content">
     <div class="app-login__prompt">
-        <span>登入</span>
-        <small>請輸入下方資訊，繼續使用履歷系統</small>
-        <div class="app-login__prompt--error" *ngIf="showLoginError">
+        <span class="h1-title">登入</span>
+        <small class="h2-text--regular">請輸入下方資訊，繼續使用履歷系統</small>
+        <div class="app-login__prompt--error h2-text--regular" *ngIf="showLoginError">
             {{ getLoginErrorMessage() }}
         </div>
     </div>
     <form class="app-login__form" [formGroup]="loginForm">
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <input matInput placeholder="請輸入手機/身分帳號/E-mail" formControlName="account" required>
-            <mat-error *ngIf="accountFormCtl.invalid">
+            <mat-error class="h3-text--medium" *ngIf="accountFormCtl.invalid">
                 {{ getAccountErrorMessage() }}
             </mat-error>
         </mat-form-field>
@@ -23,43 +23,49 @@
         </mat-form-field>
 
         <div class="app-login__form__remeber__block">
-            <mat-checkbox formControlName="rememberMe">記住我</mat-checkbox>
+            <mat-checkbox class="h2-text--regular" formControlName="rememberMe">記住我</mat-checkbox>
 
-            <a routerLink="/forget">
+            <a class="h2-text--regular" routerLink="/forget">
                 忘記密碼?
             </a>
         </div>
 
-        <button mat-raised-button class="app-login__form__login__btn mat-button--block mat-button--orange" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
+        <button mat-raised-button class="app-login__form__login__btn mat-button--block mat-button--orange h2-text--bold" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
 
     </form>
 
     <div class="app-login__register">
-        <span>還沒有註冊?</span>
-        <a routerLink="/register">註冊</a>
+        <span class="h2-text--regular">還沒有註冊?</span>
+        <a class="h2-text--regular" routerLink="/register">註冊</a>
     </div>
 
     <div class="app-login__divider">
-        <span>or</span>
+        <span class="h2-text--bold">or</span>
     </div>
 
     <div class="app-login__social">
         <button mat-stroked-button (click)="loginBySocial('google')">
-            <mat-icon svgIcon="google-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
-            <span>Google</span>
+            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                <mat-icon svgIcon="google-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
+                <div class="app-login__social__name h2-text--bold">Google</div>
+            </div>
         </button>
         <button mat-stroked-button (click)="loginBySocial('fb')">
-            <mat-icon svgIcon="fb-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
-            <span>Facebook</span>
+            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                <mat-icon svgIcon="fb-icon" aria-hidden="false" aria-label="Facebook icon"></mat-icon>
+                <div class="app-login__social__name h2-text--bold">Facebook</div>
+            </div>
         </button>
         <button mat-stroked-button (click)="loginBySocial('line')">
-            <mat-icon svgIcon="line-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
-            <span>LINE</span>
+            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                <mat-icon svgIcon="line-icon" aria-hidden="false" aria-label="line icon"></mat-icon>
+                <div class="app-login__social__name h2-text--bold">LINE</div>
+            </div>
         </button>
     </div>
 
     <a class="app-login__route__admin" routerLink="/admin/login">
-        <span>切換管理者登入</span>
+        <span class="h2-text--bold">切換管理者登入</span>
         <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
     </a>
 </div>

@@ -1,0 +1,12 @@
+mat-select {
+    $this: '.mat-select';
+    &#{$this} {
+        ::ng-deep #{$this} {
+            &-arrow-wrapper {
+                position: absolute;
+                right: 0;
+                top: 50%;
+            }
+        }
+    }
+}
