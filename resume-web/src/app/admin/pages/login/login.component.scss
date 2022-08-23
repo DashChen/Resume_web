@@ -1,0 +1,85 @@
+@import 'public-mixin';
+
+:host {
+    $this: '.admin-login';
+
+    #{$this} {
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        width: 745px;
+        &__content {
+            min-width: 420px;
+            padding-left: 70px;
+            border-left: 1px solid #FFFFFF;
+        }
+        &__prompt {
+            align-items: baseline;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            span {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 33px;
+                color: #FFFFFF;
+            }
+            small {
+                color: #FFFFFF;
+            }
+            &--error {
+                position: absolute;
+                bottom: -26px;
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 25px;
+                color: #FBBC05;
+            }
+        }
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+            margin-top: 40px;
+
+            &__remeber__block {
+                display: flex;
+                justify-content: space-between;
+                a {
+                    text-decoration: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 25px;
+                    color: #FFFFFF;
+                }
+            }
+            &__login__btn {
+                margin-top: 40px;
+            }
+        }
+
+        &__route__admin {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 35px;
+            text-decoration: none;
+            span {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 19px;
+                color: #FFFFFF;
+                margin-right: 28px;
+            }
+            mat-icon {
+                color: #FFFFFF;
+                height: 16px;
+                transform: rotate(-90deg);
+            }
+        }
+    }
+}

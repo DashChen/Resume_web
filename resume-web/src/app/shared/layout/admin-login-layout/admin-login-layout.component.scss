@@ -2,11 +2,12 @@
     $this: '.app-admin-login-layout';
 
     #{$this} {
+        background-image: url('^assets/common/admin-bg.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
         &__left {
-            background-image: url('^assets/common/admin-bg.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
+            
             &__logo__block {
                 align-items: center;
                 display: flex;

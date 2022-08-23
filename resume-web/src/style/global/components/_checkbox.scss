@@ -1,10 +1,40 @@
 mat-checkbox {
-    &.mat-checkbox-checked {
+    ::ng-deep .mat-checkbox-layout {
+        .mat-checkbox-label {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 25px;
+            color: #6C7A8E;
+        }
+    }
+
+    $this: '.mat-checkbox';
+    &#{$this}-checked {
         ::ng-deep .mat-checkbox-layout {
             .mat-checkbox-inner-container {
                 .mat-checkbox-background {
                     background-color: #02B2E1;
                 }
+            }
+        }
+    }
+    &#{$this}--white {
+        ::ng-deep .mat-checkbox-layout  {
+            .mat-checkbox-label {
+                color: #FFFFFF;
+            }
+            .mat-checkbox-frame {
+                border-color: #C5D0DF;
+            }
+            .mat-checkbox-background {
+                background-color: #FFFFFF;
+                box-sizing: content-box;
+                width: calc(100% - 2px);
+                height: calc(100% - 2px);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
         }
     }
