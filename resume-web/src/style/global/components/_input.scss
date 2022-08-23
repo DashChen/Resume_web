@@ -42,4 +42,24 @@ mat-form-field {
     ::ng-deep .mat-form-field-subscript-wrapper {
         text-align: right;
     }
+
+    &#{$this}--white {
+        ::ng-deep .mat-form-field-wrapper {
+            .mat-form-field-flex {
+                border-radius: 8px;
+                border-color: #C5D0DF;
+                background-color: white;
+                .mat-form-field-infix {
+                    input[type="text"], input[type="password"] {
+                        background-color: #FFFFFF !important;
+                    }
+                }
+            }
+            .mat-form-field-subscript-wrapper {
+                .mat-error {
+                    color: #FBBC05;
+                }
+            }
+        }
+    }
 }

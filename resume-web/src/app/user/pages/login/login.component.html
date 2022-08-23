@@ -2,32 +2,35 @@
     <div class="app-login__prompt">
         <span>登入</span>
         <small>請輸入下方資訊，繼續使用履歷系統</small>
+        <div class="app-login__prompt--error" *ngIf="showLoginError">
+            {{ getLoginErrorMessage() }}
+        </div>
     </div>
-    <form class="app-login__form">
+    <form class="app-login__form" [formGroup]="loginForm">
         <mat-form-field class="mat-form-field__block" appearance="fill">
-            <input matInput placeholder="請輸入手機/身分帳號/E-mail" [formControl]="account" required>
-            <mat-error *ngIf="account.invalid">
+            <input matInput placeholder="請輸入手機/身分帳號/E-mail" formControlName="account" required>
+            <mat-error *ngIf="accountFormCtl.invalid">
                 {{ getAccountErrorMessage() }}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field class="mat-form-field__block" appearance="fill">
-            <input matInput placeholder="請輸入密碼" [formControl]="password" required>
+            <input [type]="showPassword ? 'text' : 'password'" matInput placeholder="請輸入密碼" formControlName="password" required>
             <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword"></mat-icon>
-            <mat-error *ngIf="password.invalid">
+            <mat-error *ngIf="passwordFormCtl.invalid">
                 {{ getPasswordErrorMessage() }}
             </mat-error>
         </mat-form-field>
 
         <div class="app-login__form__remeber__block">
-            <mat-checkbox>記住我</mat-checkbox>
+            <mat-checkbox formControlName="rememberMe">記住我</mat-checkbox>
 
             <a routerLink="/forget">
                 忘記密碼?
             </a>
         </div>
 
-        <button mat-raised-button class="app-login__form__login__btn mat-button--block mat-button--orange">登入</button>
+        <button mat-raised-button class="app-login__form__login__btn mat-button--block mat-button--orange" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
 
     </form>
 
@@ -55,8 +58,8 @@
         </button>
     </div>
 
-    <div class="app-login__route__admin">
+    <a class="app-login__route__admin" routerLink="/admin/login">
         <span>切換管理者登入</span>
         <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
-    </div>
+    </a>
 </div>

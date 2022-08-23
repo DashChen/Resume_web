@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdminRoutingModule } from './admin-routing.module';
-import { AboutComponent, AdminComponent, HomeComponent } from './pages';
+import { AdminLoginComponent, AboutComponent, AdminComponent, HomeComponent } from './pages';
+import { ComponentModule } from '@app/shared';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '@app/material-module';
+import { ForgetComponent } from './pages/forget/forget.component';
 
 @NgModule({
   declarations: [
-      AboutComponent,
-      AdminComponent,
-      HomeComponent
+    AdminLoginComponent,
+    AboutComponent,
+    AdminComponent,
+    HomeComponent,
+    ForgetComponent,
   ],
   imports: [
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatCardModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
     AdminRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    ComponentModule
   ],
   providers: [],
 })

@@ -1,3 +1,8 @@
+// 1. base style
+@import './base/base',
+'./base/helper',
+'./base/font-set';
+
 // component
 @import './components/button';
 @import './components/input';

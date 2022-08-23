@@ -3,18 +3,17 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataService } from '@app/core';
-import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
-import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { catchError, from, of, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-login',
+  selector: 'admin-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends BaseComponent implements OnInit {
+export class AdminLoginComponent extends BaseComponent implements OnInit {
+
   showPassword: boolean = false;
 
   loginForm = new FormGroup({
@@ -92,25 +91,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
     .subscribe((next) => {
       console.log(this.accountFormCtl, this.passwordFormCtl)
       this.disableLoginBtn = false;
-      if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
+      if (this.accountFormCtl.value === 'admin' && this.passwordFormCtl.value === 'admin1234') {
         console.log('login');
-        return this.router.navigate(['/dashboard']);
+        return this.router.navigate(['/admin/dashboard']);
       }
       this.showLoginError = true;
       return null;
-    });
-  }
-
-  loginBySocial(target: string) {
-    this.dialogConfig.icon = 'unsuccessful';
-    this.dialogConfig.title = '您尚未綁定';
-    this.dialogConfig.subTitle = '您尚未將帳號做綁定，請登入到會員˙管理做綁定，下次再次登入時才能使用登入';
-    this.dialogConfig.showSuccessBtn = true;
-    this.dialogConfig.successBtnText = '確認';
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      height: '311px',
-      width: '614px',
-      data: this.dialogConfig
     });
   }
 }

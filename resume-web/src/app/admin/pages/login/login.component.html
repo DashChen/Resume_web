@@ -1,0 +1,41 @@
+<div class="admin-login__content">
+    <div class="admin-login__prompt">
+        <span>登入</span>
+        <small>請輸入下方資訊，繼續使用履歷系統</small>
+        <div class="admin-login__prompt--error" *ngIf="showLoginError">
+            {{ getLoginErrorMessage() }}
+        </div>
+    </div>
+    <form class="admin-login__form" [formGroup]="loginForm">
+        <mat-form-field class="mat-form-field__block mat-form-field--white" appearance="fill">
+            <input matInput placeholder="請輸入手機/身分帳號/E-mail" formControlName="account" required>
+            <mat-error *ngIf="accountFormCtl.invalid">
+                {{ getAccountErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mat-form-field__block mat-form-field--white" appearance="fill">
+            <input [type]="showPassword ? 'text' : 'password'" matInput placeholder="請輸入密碼" formControlName="password" required>
+            <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword"></mat-icon>
+            <mat-error *ngIf="passwordFormCtl.invalid">
+                {{ getPasswordErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="admin-login__form__remeber__block">
+            <mat-checkbox class="mat-checkbox--white" formControlName="rememberMe">記住我</mat-checkbox>
+
+            <a routerLink="/admin/forget">
+                忘記密碼?
+            </a>
+        </div>
+
+        <button mat-raised-button class="admin-login__form__login__btn mat-button--block mat-button--orange" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
+
+    </form>
+
+    <a class="admin-login__route__admin" routerLink="/login">
+        <span>切換使用者登入 </span>
+        <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
+    </a>
+</div>

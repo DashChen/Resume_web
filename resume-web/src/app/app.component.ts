@@ -1,14 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router, RoutesRecognized } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RoutesRecognized } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ICONS_TOKEN } from './app.module';
 import { IconProps } from './core/interfaces/icons';
+import { AppService } from './core';
 
 
 export enum Layouts {
   userLogin,
-  userMain
+  userMain,
+  adminLogin,
+  adminMain,
 }
 
 
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private appService: AppService,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
     @Inject(ICONS_TOKEN) private iconsList: IconProps
@@ -36,10 +40,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.router.events.subscribe((data) => {
-        if (data instanceof RoutesRecognized) {
-          this.layout = data.state.root.firstChild?.data['layout'];
-        }
-      });
+    this.appService.route$.subscribe(route => {
+      if (route && route instanceof ActivatedRouteSnapshot) {
+        this.layout = route.data['layout'];
+      }
+    });
   }
 }
