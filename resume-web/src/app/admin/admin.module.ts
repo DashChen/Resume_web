@@ -6,13 +6,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdminRoutingModule } from './admin-routing.module';
-import { AboutComponent, AdminComponent, HomeComponent } from './pages';
+import { AdminLoginComponent, AboutComponent, AdminComponent, HomeComponent } from './pages';
 
 @NgModule({
   declarations: [
-      AboutComponent,
-      AdminComponent,
-      HomeComponent
+    AdminLoginComponent,
+    AboutComponent,
+    AdminComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserAnimationsModule,

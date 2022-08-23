@@ -17,6 +17,7 @@
             align-items: baseline;
             display: flex;
             justify-content: space-between;
+            position: relative;
             span {
                 font-style: normal;
                 font-weight: 600;
@@ -26,6 +27,15 @@
             }
             small {
                 color: #6C7A8E;
+            }
+            &--error {
+                position: absolute;
+                bottom: -26px;
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 25px;
+                color: #EE3943;
             }
         }
         &__form {

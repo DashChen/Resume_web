@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { InjectionToken } from '@angular/core';
 import { BREAKPOINT } from '@angular/flex-layout';
@@ -17,6 +17,7 @@ import * as icons from '@assets/icons.json';
 import { IconProps } from './core/interfaces/icons';
 import * as country from '@assets/country.json';
 import { ICountry } from './core/interfaces/country';
+import { AppService } from './core';
 
 const iconObj: IconProps = JSON.parse(JSON.stringify(icons));
 const countryObj: ICountry = JSON.parse(JSON.stringify(country));
@@ -47,6 +48,14 @@ export const COUNTRY_TOKEN = new InjectionToken<ICountry>('country token',
     AppRoutingModule,
   ],
   providers: [
+    {
+      multi: true,
+      provide: APP_INITIALIZER,
+      useFactory: function initializeRoutes(appService: AppService) {
+        return () => appService.ngOnAppInit();
+      },
+      deps: [AppService]
+    },
     { provide: 'API_BASE_URL', useValue: environment.apiBaseUrl },
     { provide: ICONS_TOKEN, useValue: iconObj },
     { provide: COUNTRY_TOKEN, useValue: countryObj },

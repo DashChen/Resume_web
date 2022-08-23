@@ -1,0 +1,30 @@
+:host {
+    $this: '.app-admin-login-layout';
+
+    #{$this} {
+        &__left {
+            background-image: url('^assets/common/admin-bg.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            &__logo__block {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                height: 60.51px;
+                width: 370px;
+            }
+            &__logo {
+                background-image: url('^assets/common/logo_compony_name.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+                height: 100%;
+                width: 100%;
+            }
+        }
+        &__right {
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+    }
+}
