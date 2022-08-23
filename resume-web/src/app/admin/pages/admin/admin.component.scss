@@ -1,0 +1,9 @@
+:host {
+  $this: '.app-admin';
+
+  #{$this} {
+    &__flex-spacer {
+      flex: 1 1 auto;
+    }
+  }
+}
