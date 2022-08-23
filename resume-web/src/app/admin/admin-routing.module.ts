@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { Layouts } from '../app.component';
-import { AdminLoginComponent, AboutComponent, AdminComponent, HomeComponent } from './pages';
+import { AdminLoginComponent, AboutComponent, AdminComponent, CompanyJobListComponent, HomeComponent } from './pages';
 import { ForgetComponent } from './pages/forget/forget.component';
 
 const routes: Routes = [
     {
         path: 'admin', component: AdminComponent,
-        data: { layout: Layouts.userMain },
+        data: { layout: Layouts.adminMain },
         children: [
             { path: 'login', component: AdminLoginComponent, data: { layout: Layouts.adminLogin }, },
             { path: 'forget', component: ForgetComponent, data: { layout: Layouts.adminLogin }, },
-            { path: 'about', component: AboutComponent, data: { layout: Layouts.userMain }, },
-            { path: 'home', component: HomeComponent, data: { layout: Layouts.userMain }, },
+            { path: 'about', component: AboutComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'home', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
         ]
     },
 ];

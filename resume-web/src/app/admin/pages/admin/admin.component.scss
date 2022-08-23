@@ -1,9 +1,81 @@
 :host {
-  $this: '.app-admin';
+  $this: '.admin-admin';
 
   #{$this} {
     &__flex-spacer {
       flex: 1 1 auto;
+    }
+
+    &__personal {
+      /* Group 592 */
+      width: 113px;
+      height: 30px;
+
+      /* Inside auto layout */
+      flex: none;
+      order: 2;
+      flex-grow: 0;
+
+      &__polygon {
+        /* Polygon 1 */
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        left: 827px;
+        top: 34.62px;
+
+        /* withe */
+        background: #FFFFFF;
+        transform: rotate(-180deg);
+      }
+
+      &__item {
+        /* Auto layout */
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        padding: 0px;
+        gap: 11px;
+
+        position: absolute;
+        width: 83px;
+        height: 30px;
+        left: 714px;
+        top: 15px;
+      }
+
+      &__name {
+        /* 王大明 */
+        width: 42px;
+        height: 25px;
+
+        /* 14pt regular */
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        /* identical to box height, or 179% */
+
+        /* withe */
+        color: #FFFFFF;
+
+        /* Inside auto layout */
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+      }
+
+      &__icon {
+        /* member-icon */
+        width: 30px;
+        height: 30px;
+
+        /* Inside auto layout */
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+      }
     }
   }
 }

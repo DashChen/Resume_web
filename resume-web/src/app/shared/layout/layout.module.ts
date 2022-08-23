@@ -6,12 +6,14 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@app/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AdminLoginLayoutComponent } from './admin-login-layout/admin-login-layout.component';
+import { AdminMainLayoutComponent } from './admin-main-layout/admin-main-layout.component';
 
 @NgModule({
   declarations: [
     UserLoginLayoutComponent,
     UserMainLayoutComponent,
-    AdminLoginLayoutComponent
+    AdminLoginLayoutComponent,
+    AdminMainLayoutComponent,
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { AdminLoginLayoutComponent } from './admin-login-layout/admin-login-layo
   exports: [
     UserLoginLayoutComponent,
     UserMainLayoutComponent,
-    AdminLoginLayoutComponent
+    AdminLoginLayoutComponent,
+    AdminMainLayoutComponent,
   ]
 })
 export class LayoutModule { }

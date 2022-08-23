@@ -1,14 +1,23 @@
 <mat-toolbar color="primary">
-  <h1>
-    ngStore
-  </h1>
-  <span class="app-admin__flex-spacer"></span>
+  <h1>捷報人力資源服務集團</h1>
+  <span class="admin-admin__flex-spacer"></span>
   <button mat-button routerLink="/admin/home">Home</button>
   <button mat-button routerLink="/admin/about">About</button>
-  <button mat-button routerLink="/admin/about">職缺管理</button>
-  <button mat-icon-button aria-label="Example icon-button with share icon">
-    <mat-icon>share</mat-icon>
+  <button mat-button routerLink="/admin/about">履歷管理</button>
+  <button mat-button routerLink="/admin/about">信件/簡訊管理</button>
+  <button mat-button routerLink="/admin/company-job">職缺管理</button>
+  <button mat-button routerLink="/admin/about">會員管理</button>
+  <button mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal" matTooltip="Select a personal of the documentation">
+    <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
+    <span>王大明</span>
+    <mat-icon>arrow_drop_down</mat-icon>
   </button>
+  <mat-menu #personalPicker="matMenu" xPosition="before">
+    <button mat-menu-item>
+      ．．．．
+    </button>
+  </mat-menu>
+
 </mat-toolbar>
 
 <router-outlet></router-outlet>

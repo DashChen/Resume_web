@@ -11,5 +11,6 @@
   "line-icon": "line-icon.svg",
   "search-icon": "search-icon.svg",
   "success": "success.svg",
-  "unsuccessful": "unsuccessful.svg"
+  "unsuccessful": "unsuccessful.svg",
+  "member-icon": "member-icon.svg"
 }
