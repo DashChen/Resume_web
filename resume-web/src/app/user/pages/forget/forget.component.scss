@@ -1,32 +1,18 @@
+@import 'public-mixin';
+
 :host {
     $this: '.app-forget';
     align-self: center;
 
     #{$this} {
-        &__prompt {
-            align-items: baseline;
-            display: flex;
-            justify-content: space-between;
-            span {
-                font-style: normal;
-                font-weight: 600;
-                font-size: 24px;
-                line-height: 33px;
-                color: #27303D;
-            }
-            small {
-                color: #6C7A8E;
-            }
+        &__content {
+            width: 420px;
         }
         &__other {
             margin-top: 24px;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 25px;
-            color: #C5D0DF;
             a {
                 text-decoration: none;
+                color: $colorSecond;
             }
         }
         &__form {
@@ -34,8 +20,35 @@
             flex-direction: column;
             gap: 35px;
             margin-top: 40px;
-            ::ng-deep .mat-tab-body-wrapper {
-                margin-top: 35px;
+
+            mat-tab-group {
+                ::ng-deep .mat-tab-header {
+                    .mat-tab-labels {
+                        justify-content: space-between;
+
+                        .mat-tab-label {
+                            width: 205px;
+                            .mat-tab-label-content {
+                                @include Noto-Sans-TCBody14-Bold;
+                                color: $colorSecond;
+                            }
+                            &-active {
+                                .mat-tab-label-content {
+                                    color: $colorBule;
+                                }
+                            }
+                        }
+                    }
+                    .mat-ink-bar {
+                        background-color: $colorBule;
+                    }
+                }
+                ::ng-deep .mat-tab-body-wrapper {
+                    margin-top: 35px;
+                }
+            }
+            &__country__code {
+                width: 125px;
             }
             &__login__btn {
                 background-color: #F4781E;

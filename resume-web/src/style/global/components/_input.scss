@@ -7,11 +7,8 @@ mat-form-field {
     }
     #{$this} {
         &__lable--top {
+            @include Noto-Sans-TCBody14-Medium;
             color: #6C7A8E;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 19px;
             position: absolute;
             left: -10px;
             top: -36px;

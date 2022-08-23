@@ -1,42 +1,45 @@
 <div class="app-forget__content">
-    <div class="app-forget__prompt">
-        <span>{{title}}</span>
-        <small>{{subTitle}}</small>
-    </div>
-    <form class="app-forget__form">
+    <app-page-title [title]="title" [subtitle]="subtitle"></app-page-title>
+    <div class="app-forget__form">
         <mat-tab-group [selectedIndex]="tabSelected.value"
                         (selectedIndexChange)="changeTab($event)">
             <mat-tab label="Email" class="app-forget__form__tab">
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <input matInput placeholder="請輸入Email" value="">
-                </mat-form-field>
+                <form [formGroup]="emailValidationForm">
+                    <mat-form-field class="mat-form-field__block" appearance="fill">
+                        <input type="email" matInput placeholder="例:WanDaiMain@gmail.com" formControlName="emailAddress" required [errorStateMatcher]="matcher">
+                        <mat-error class="h3-text--medium" *ngIf="emailAddressFormCtl.invalid">
+                            {{ getEmailAddressErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                </form>
             </mat-tab>
             <mat-tab label="手機" class="app-forget__form__tab">
-                <mat-form-field appearance="fill">
-                    <mat-label>Choose one</mat-label>
-                    <mat-select [formControl]="selected" [errorStateMatcher]="matcher">
-                      <mat-option>Clear</mat-option>
-                      <mat-option value="valid">Valid option</mat-option>
-                      <mat-option value="invalid">Invalid option</mat-option>
-                    </mat-select>
-                    <mat-hint>Errors appear instantly!</mat-hint>
-                    <mat-error *ngIf="selected.hasError('required')">You must make a selection</mat-error>
-                    <mat-error *ngIf="selected.hasError('pattern') && !selected.hasError('required')">
-                      Your selection is invalid
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <input matInput placeholder="0912345678" value="">
-                </mat-form-field>
+                <form fxLayout="row" fxLayoutGap="10px" [formGroup]="mobileValidationForm">
+                    <mat-form-field class="app-forget__form__country__code" appearance="fill">
+                        <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                            <ng-container *ngFor="let option of countryCodeOptions">
+                                <mat-option [value]="option.key">{{option.text}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error class="h3-text--medium" *ngIf="countryCodeFormControl.invalid">
+                            {{ getCountryCodeErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="mat-form-field__block" appearance="fill">
+                        <input type="tel" matInput placeholder="例:0912345678" formControlName="mobile" [errorStateMatcher]="matcher" required>
+                        <mat-error class="h3-text--medium" *ngIf="mobileFormControl.invalid">
+                            {{ getMobileErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+                </form>
             </mat-tab>
         </mat-tab-group>
         <button mat-raised-button class="app-forget__form__login__btn" (click)="sendVerification()">
             {{btnText}}
         </button>
-    </form>
+    </div>
 
     <div class="app-forget__other">
-        <a routerLink="/login">返回登入畫面</a>
+        <a class="h2-text--regular" routerLink="/login">返回登入畫面</a>
     </div>
 </div>

@@ -22,7 +22,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
   showConfirmPwd: boolean = false;
 
   registerForm = new FormGroup({
-    userName: new FormControl('', [Validators.required, Validators.pattern('[\w]+')]),
+    userName: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
     emailAddress: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, createPasswordStrengthValidator()]),
     confirmPwd: new FormControl('', [Validators.required, MatchValidator('password', 'confirmPwd')]),
@@ -53,6 +53,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
     if (this.userNameFormCtl.hasError('required')) {
       return '請填寫此欄位'
     }
+    console.log(this.userNameFormCtl.errors)
     return this.userNameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
   }
 
@@ -82,6 +83,8 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
     return this.readOverFormCtl.hasError('required') ? '請勾選' : '';
   }
 
+  disabledBtn: boolean = false;
+
   constructor(
     public router: Router,
     public dialog: MatDialog,
@@ -99,6 +102,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
       if (this.readOverFormCtl.invalid) {
         return;
       }
+      this.disabledBtn = true;
 
       const observable$ = from(this.dataService.api.accountRegisterCreate({
         userName: this.userNameFormCtl.value,
@@ -113,6 +117,8 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
         })
       )
       .subscribe((next) => {
+        // test
+        next = {ok: true};
         this.dialogConfig.icon = next.ok ? 'success' : 'unsuccessful';
         this.dialogConfig.title = next.ok ? '註冊成功' : '註冊失敗';
         this.dialogConfig.subTitle = next.ok ? '您已經成功註冊帳號' : next.error.error.message;
@@ -127,7 +133,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
           if (result && next.ok) {
             this.router.navigate(['/login']);
           }
-        })
+        });
       });
     }
   }

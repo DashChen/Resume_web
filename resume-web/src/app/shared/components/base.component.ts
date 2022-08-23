@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { FormErrorStateMatcher } from "@app/core";
 import { IBasicDialog } from "@app/core/interfaces/basic-dialog";
 import { Subject } from "rxjs";
@@ -13,5 +14,16 @@ export class BaseComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next(null);
         this.destroy$.complete();
+    }
+
+    validateAllFormFields(formGroup: FormGroup) {
+        Object.keys(formGroup.controls).forEach(field => {
+            const control = formGroup.get(field);
+            if (control instanceof FormControl) {
+                control.markAsTouched({ onlySelf: true });
+            } else if (control instanceof FormGroup) {
+                this.validateAllFormFields(control);
+            }
+        })
     }
 }

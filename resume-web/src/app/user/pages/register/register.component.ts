@@ -57,7 +57,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   countryCodeOptions: ISelectOption[] = [];
   showCountdown: boolean = false;
-  basicCountdown: number = 10;
+  basicCountdown: number = 60;
   countdown: number = 60;
   validateError: boolean = false;
   validateErrorTimes: number = 0;
@@ -99,7 +99,10 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     if (this.verificationCodeFormControl.hasError('required')) {
       return '請填寫這個欄位';
     }
-    return this.verificationCodeFormControl.hasError('pattern') ? '驗證碼長度錯誤' : '';
+    if (this.verificationCodeFormControl.hasError('pattern')) {
+      return '驗證碼格錯誤';
+    }
+    return this.verificationCodeFormControl.hasError('minlength') ? '驗證碼長度錯誤' : '';
   }
 
   maskPhone(phone: string, maskStr: string = '*') {
@@ -117,19 +120,26 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   submitForm() {
     // 代表等待送出驗證碼
     if (this.showCountdown) {
-      this.router.navigate(['/register-info']);
-      
-      if (true) {
-        this.validateError = true;
-        this.showCountdown = false;
-        this.title = '驗證失敗';
-        this.subtitle = '請輸入您的手機號碼，進行驗證';
-        this.btnText = '確認';
+      if (this.validationForm.valid) {
+        this.router.navigate(['/register-info']);
+        if (true) {
+          this.validateError = true;
+          this.showCountdown = false;
+          this.title = '驗證失敗';
+          this.subtitle = '請輸入您的手機號碼，進行驗證';
+          this.btnText = '確認';
+        }
+      } else {
+        this.validateAllFormFields(this.validationForm);
       }
     } else {
-      // 驗證失敗或其他
-      this.validateError = false;
-      this.sendVerificationCode();
+      if (this.beforeValidationForm.valid) {
+        // 驗證失敗或其他
+        this.validateError = false;
+        this.sendVerificationCode();
+      } else {
+        this.validateAllFormFields(this.beforeValidationForm);
+      }
     }
   }
 

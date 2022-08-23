@@ -4,14 +4,14 @@
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <label class="mat-form-field__lable--top">中文姓名*</label>
             <input matInput placeholder="例:王大明" formControlName="userName" required [errorStateMatcher]="matcher">
-            <mat-error *ngIf="userNameFormCtl.invalid">
+            <mat-error class="h3-text--medium" *ngIf="userNameFormCtl.invalid">
                 {{ getUserNameErrorMessage() }}
             </mat-error>
         </mat-form-field>
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <label class="mat-form-field__lable--top">Email*</label>
-            <input type="email" matInput placeholder="請輸入密碼" formControlName="emailAddress" required [errorStateMatcher]="matcher">
-            <mat-error *ngIf="emailAddressFormCtl.invalid">
+            <input type="email" matInput placeholder="請輸入Email" formControlName="emailAddress" required [errorStateMatcher]="matcher">
+            <mat-error class="h3-text--medium" *ngIf="emailAddressFormCtl.invalid">
                 {{ getEmailAddressErrorMessage() }}
             </mat-error>
         </mat-form-field>
@@ -19,7 +19,7 @@
             <label class="mat-form-field__lable--top">請輸入密碼*</label>
             <input [type]="showPassword ? 'text' : 'password'" autocomplete="new-password" minlength="8" matInput placeholder="請輸入密碼" formControlName="password" required [errorStateMatcher]="matcher">
             <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword"></mat-icon>
-            <mat-error *ngIf="passwordFormCtl.invalid">
+            <mat-error class="h3-text--medium" *ngIf="passwordFormCtl.invalid">
                 {{ getPasswordErrorMessage() }}
             </mat-error>
         </mat-form-field>
@@ -27,25 +27,26 @@
             <label class="mat-form-field__lable--top">請再次輸入密碼*</label>
             <input [type]="showConfirmPwd ? 'text' : 'password'" matInput placeholder="請輸入密碼" formControlName="confirmPwd" required>
             <mat-icon [svgIcon]="showConfirmPwd ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showConfirmPwd = !showConfirmPwd"></mat-icon>
-            <mat-error *ngIf="confirmPwdFormCtl.invalid">
+            <mat-error class="h3-text--medium" *ngIf="confirmPwdFormCtl.invalid">
                 {{ getConfirmPwdErrorMessage() }}
             </mat-error>
         </mat-form-field>
 
         <div class="app-register-info__form__other">
             <div fxFlex="0 1 0" fxFlexLayout="column">
-                <mat-checkbox formControlName="readOver"> 我已同意並閱讀</mat-checkbox>
-                <mat-error *ngIf="readOverFormCtl.invalid">
+                <mat-checkbox class="h2-text--regular" formControlName="readOver"> 我已同意並閱讀</mat-checkbox>
+                <mat-error class="h3-text--medium" *ngIf="readOverFormCtl.invalid">
                     {{ getReadOverErrorMessage() }}
                 </mat-error>
             </div>
 
-            <a href="#" (click)="showTerms($event)">
-               服務條款及隱私權保護政策?
+            <a href="#" class="h2-text--regular" (click)="showTerms($event)">
+               服務條款及隱私權保護政策
             </a>
         </div>
 
-        <button mat-raised-button class="app-register-info__form__btn mat-button--block mat-button--orange" (click)="submitForm()">
+        <button mat-raised-button (click)="submitForm()" [disabled]="disabledBtn"
+            class="app-register-info__form__btn mat-button--block mat-button--orange h2-text--bold">
             確認
         </button>
     </form>

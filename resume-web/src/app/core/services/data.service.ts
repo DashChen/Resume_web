@@ -26,7 +26,7 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
       // Server-side errors
       errorMessage = `Error Code: ${error.status}\\nMessage: ${error.message}`;
     }
-    window.alert(errorMessage);
+    // TODO: show Error Toast
     return throwError(() => new Error('errorMessage'));
   }
 }
