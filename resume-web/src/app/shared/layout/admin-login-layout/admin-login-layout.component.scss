@@ -1,19 +1,43 @@
+@import 'public-mixin';
+
 :host {
     $this: '.app-admin-login-layout';
 
     #{$this} {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
         background-image: url('^assets/common/admin-bg.svg');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+
+        @include lt-md {
+            background-image: url('^assets/common/admin-bg-small.svg');
+            flex-direction: column;
+        }
         &__left {
-            
+            flex: 1 1 45%;
+            align-items: center;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 70px;
+
+            @include lt-md {
+                flex: 0;
+                padding-right: 0;
+            }
+
             &__logo__block {
                 align-items: center;
                 display: flex;
                 justify-content: center;
                 height: 60.51px;
                 width: 370px;
+                @include lt-md {
+                    height: 215px;
+                    width: 100%;
+                }
             }
             &__logo {
                 background-image: url('^assets/common/logo_compony_name.svg');
@@ -24,8 +48,17 @@
             }
         }
         &__right {
+            flex: 1 0 55%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
             max-height: 100vh;
             overflow-y: auto;
+            @include lt-md {
+                align-items: flex-start;
+                flex: 1;
+                justify-content: center;
+            }
         }
     }
 }

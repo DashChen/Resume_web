@@ -89,11 +89,10 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
       })
     )
     .subscribe((next) => {
-      console.log(this.accountFormCtl, this.passwordFormCtl)
       this.disableLoginBtn = false;
       if (this.accountFormCtl.value === 'admin' && this.passwordFormCtl.value === 'admin1234') {
         console.log('login');
-        return this.router.navigate(['/admin/dashboard']);
+        return this.router.navigate(['/admin/company-job']);
       }
       this.showLoginError = true;
       return null;

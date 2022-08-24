@@ -1,8 +1,8 @@
 <div class="admin-login__content">
     <div class="admin-login__prompt">
-        <span>登入</span>
-        <small>請輸入下方資訊，繼續使用履歷系統</small>
-        <div class="admin-login__prompt--error" *ngIf="showLoginError">
+        <span class="h1-title">登入</span>
+        <small class="h2-text--medium">請輸入下方資訊，繼續使用履歷系統</small>
+        <div class="admin-login__prompt--error h3-text--medium" *ngIf="showLoginError">
             {{ getLoginErrorMessage() }}
         </div>
     </div>
@@ -23,19 +23,19 @@
         </mat-form-field>
 
         <div class="admin-login__form__remeber__block">
-            <mat-checkbox class="mat-checkbox--white" formControlName="rememberMe">記住我</mat-checkbox>
+            <mat-checkbox class="mat-checkbox--white h2-text--regular" formControlName="rememberMe">記住我</mat-checkbox>
 
-            <a routerLink="/admin/forget">
+            <a class="h2-text--regular" routerLink="/admin/forget">
                 忘記密碼?
             </a>
         </div>
 
-        <button mat-raised-button class="admin-login__form__login__btn mat-button--block mat-button--orange" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
+        <button mat-raised-button class="admin-login__form__login__btn mat-button--block mat-button--orange h2-text--bold" [disabled]="disableLoginBtn" (click)="login($event)">登入</button>
 
     </form>
 
     <a class="admin-login__route__admin" routerLink="/login">
-        <span>切換使用者登入 </span>
+        <span class="h2-text--bold">切換使用者登入</span>
         <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
     </a>
 </div>

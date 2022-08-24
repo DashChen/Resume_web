@@ -2,16 +2,23 @@
 
 :host {
     $this: '.admin-login';
-
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    @include lt-md {
+        width: 380px;
+    }
     #{$this} {
-        align-items: center;
-        display: flex;
-        justify-content: flex-start;
-        width: 745px;
+
         &__content {
             min-width: 420px;
             padding-left: 70px;
             border-left: 1px solid #FFFFFF;
+            @include lt-md {
+                min-width: 100%;
+                padding-left: 0;
+                border-left: none;
+            }
         }
         &__prompt {
             align-items: baseline;
@@ -19,10 +26,6 @@
             justify-content: space-between;
             position: relative;
             span {
-                font-style: normal;
-                font-weight: 600;
-                font-size: 24px;
-                line-height: 33px;
                 color: #FFFFFF;
             }
             small {
@@ -31,10 +34,6 @@
             &--error {
                 position: absolute;
                 bottom: -26px;
-                font-style: normal;
-                font-weight: 400;
-                font-size: 14px;
-                line-height: 25px;
                 color: #FBBC05;
             }
         }
@@ -49,10 +48,6 @@
                 justify-content: space-between;
                 a {
                     text-decoration: none;
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 14px;
-                    line-height: 25px;
                     color: #FFFFFF;
                 }
             }
@@ -68,10 +63,6 @@
             margin-top: 35px;
             text-decoration: none;
             span {
-                font-style: normal;
-                font-weight: 600;
-                font-size: 14px;
-                line-height: 19px;
                 color: #FFFFFF;
                 margin-right: 28px;
             }
