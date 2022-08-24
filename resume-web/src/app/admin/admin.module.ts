@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@app/material-module';
 import { ForgetComponent } from './pages/forget/forget.component';
+import { CompanyJobListComponent } from './pages/company-job-list/company-job-list.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ForgetComponent } from './pages/forget/forget.component';
     AdminComponent,
     HomeComponent,
     ForgetComponent,
+    CompanyJobListComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -23,7 +25,7 @@ import { ForgetComponent } from './pages/forget/forget.component';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    ComponentModule
+    ComponentModule,
   ],
   providers: [],
 })

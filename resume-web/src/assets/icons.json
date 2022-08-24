@@ -11,5 +11,10 @@
   "line-icon": "line-icon.svg",
   "search-icon": "search-icon.svg",
   "success": "success.svg",
-  "unsuccessful": "unsuccessful.svg"
+  "unsuccessful": "unsuccessful.svg",
+  "menu-icon01": "menu-icon01.svg",
+  "menu-icon02": "menu-icon02.svg",
+  "menu-icon03": "menu-icon03.svg",
+  "menu-icon04": "menu-icon04.svg",
+  "member-icon": "member-icon.svg"
 }

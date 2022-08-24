@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-forget',
+  selector: 'admin-forget',
   templateUrl: './forget.component.html',
   styleUrls: ['./forget.component.scss']
 })
