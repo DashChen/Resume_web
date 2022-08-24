@@ -1,23 +1,61 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="admin-admin__mat-toolbar">
   <h1>捷報人力資源服務集團</h1>
+
   <span class="admin-admin__flex-spacer"></span>
-  <button mat-button routerLink="/admin/home">Home</button>
-  <button mat-button routerLink="/admin/about">About</button>
-  <button mat-button routerLink="/admin/about">履歷管理</button>
-  <button mat-button routerLink="/admin/about">信件/簡訊管理</button>
-  <button mat-button routerLink="/admin/company-job">職缺管理</button>
-  <button mat-button routerLink="/admin/about">會員管理</button>
-  <button mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal" matTooltip="Select a personal of the documentation">
-    <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
-    <span>王大明</span>
-    <mat-icon>arrow_drop_down</mat-icon>
-  </button>
-  <mat-menu #personalPicker="matMenu" xPosition="before">
-    <button mat-menu-item>
-      ．．．．
+
+  <div fxShow="true" fxHide.lt-md="true">
+    <button mat-button routerLink="/admin/home">Home</button>
+    <button mat-button routerLink="/admin/about">About</button>
+    <button mat-button routerLink="/admin/about">
+      <mat-icon svgIcon="menu-icon01" aria-hidden="false" aria-label="Member icon"></mat-icon>
+      履歷管理
     </button>
-  </mat-menu>
+    <button mat-button routerLink="/admin/about">
+      <mat-icon svgIcon="menu-icon02" aria-hidden="false" aria-label="Member icon"></mat-icon>
+      信件/簡訊管理
+    </button>
+    <a href="#" mat-button routerLink="/admin/company-job">
+      <mat-icon svgIcon="menu-icon03" aria-hidden="false" aria-label="Member icon"></mat-icon>
+      職缺管理
+    </a>
+    <button mat-button routerLink="/admin/about">
+      <mat-icon svgIcon="menu-icon04" aria-hidden="false" aria-label="Member icon"></mat-icon>
+      會員管理
+    </button>
+    <button mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal" matTooltip="Select a personal of the documentation">
+      <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
+      <span>王大明</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #personalPicker="matMenu" xPosition="before">
+      <button mat-menu-item>
+        ．．．．
+      </button>
+    </mat-menu>
+  </div>
+
+  <div fxShow="true" fxHide.gt-sm="true">
+    <button mat-icon-button class="example-icon" (click)="sidenav.toggle()" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
 
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<mat-sidenav-container fxFlexFill class="example-container">
+  <mat-sidenav #sidenav fxLayout="column" position="end">
+    <div fxLayout="column">
+      <a href="#" mat-button>Home</a>
+      <a href="#" mat-button>About</a>
+      <a href="#" mat-button>履歷管理</a>
+      <a href="#" mat-button>信件/簡訊管理</a>
+      <a href="#" mat-button>職缺管理</a>
+      <a href="#" mat-button>會員管理</a>
+      <a (click)="sidenav.toggle()" href="#" mat-button>Close</a>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content fxFlexFill>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

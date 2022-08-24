@@ -2,9 +2,21 @@
   $this: '.admin-admin';
 
   #{$this} {
+    &__mat-toolbar {
+      background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+      color: #FFFFFF;
+    }
+
     &__flex-spacer {
       flex: 1 1 auto;
     }
+
+    &__menu-text {
+      margin-top: 5px;
+      margin-left: 5px; /* optional */
+    }
+    
+
 
     &__personal {
       /* Group 592 */
