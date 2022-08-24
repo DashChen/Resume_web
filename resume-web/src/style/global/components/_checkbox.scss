@@ -1,11 +1,11 @@
 mat-checkbox {
     ::ng-deep .mat-checkbox-layout {
         .mat-checkbox-label {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 25px;
             color: #6C7A8E;
+            @include Noto-Sans-TCBody14-Regular;
+            @include lt-md {
+                @include Noto-Sans-TCBody12-Regular;
+            }
         }
     }
 

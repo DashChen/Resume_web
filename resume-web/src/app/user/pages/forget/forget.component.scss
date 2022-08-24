@@ -2,14 +2,20 @@
 
 :host {
     $this: '.app-forget';
-    align-self: center;
 
     #{$this} {
         &__content {
             width: 420px;
+            @include lt-md {
+                padding-top: 20px;
+                width: 380px;
+            }
         }
         &__other {
             margin-top: 24px;
+            span {
+                margin-right: 8px;
+            }
             a {
                 text-decoration: none;
                 color: $colorSecond;
@@ -18,7 +24,6 @@
         &__form {
             display: flex;
             flex-direction: column;
-            gap: 35px;
             margin-top: 40px;
 
             mat-tab-group {
@@ -28,9 +33,15 @@
 
                         .mat-tab-label {
                             width: 205px;
+                            @include lt-md {
+                                width: 185px;
+                            }
                             .mat-tab-label-content {
                                 @include Noto-Sans-TCBody14-Bold;
                                 color: $colorSecond;
+                                @include lt-md {
+                                    @include Noto-Sans-TCBody12-Bold;
+                                }
                             }
                             &-active {
                                 .mat-tab-label-content {
@@ -50,11 +61,23 @@
             &__country__code {
                 width: 125px;
             }
+            &__countdown {
+                color: $colorSecond;
+            }
             &__login__btn {
                 background-color: #F4781E;
                 border-radius: 8px;
+                margin-top: 35px;
                 width: 100%;
                 height: 50px;
+                @include lt-md {
+                    margin-top: 30px;
+                }
+
+                &--no-countdown {
+                    margin-top: 0;
+                }
+
                 ::ng-deep .mat-button-wrapper {
                     color: #FFFFFF;
                 }

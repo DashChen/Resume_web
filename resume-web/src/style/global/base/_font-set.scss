@@ -1,22 +1,40 @@
 // 全站共用字體大小 h1
 .h1-title {
     @include Noto-Sans-TCTitle24-Bold;
+    @include lt-md {
+        @include Noto-Sans-TCTitle22-Bold;
+    }
 }
 
 .h2-text {
     &--bold {
         @include Noto-Sans-TCBody14-Bold;
+        @include lt-md {
+            @include Noto-Sans-TCBody12-Bold;
+        }
     }
     &--medium {
         @include Noto-Sans-TCBody14-Medium;
+        @include lt-md {
+            @include Noto-Sans-TCBody12-Medium;
+        }
     }
     &--regular {
         @include Noto-Sans-TCBody14-Regular;
+        @include lt-md {
+            @include Noto-Sans-TCBody12-Regular;
+        }
     }
 }
 
 .h3-text {
+    &--bold {
+        @include Noto-Sans-TCBody12-Bold;
+    }
     &--medium {
-        @include Noto-Sans-TCBody12-medium;
+        @include Noto-Sans-TCBody12-Medium;
+    }
+    &--regular {
+        @include Noto-Sans-TCBody12-Regular;
     }
 }

@@ -1,12 +1,31 @@
+@import 'public-mixin';
+
 :host {
     $this: '.app-user-login-layout';
 
     #{$this} {
+        display: flex;
+        flex-direction: row;
+        @include lt-md {
+            flex-direction: column;
+        }
+
         &__left {
+            flex: 1;
+            align-items: center;
+            display: flex;
+            justify-content: center;
             background-image: url('^assets/common/bg.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
+
+            @include lt-md {
+                background-image: url('^assets/common/bg-small.svg');
+                min-height: 160px;
+                max-height: 160px;
+            }
+
             &__logo__block {
                 align-items: center;
                 display: flex;
@@ -23,8 +42,15 @@
             }
         }
         &__right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            place-content: center;
             max-height: 100vh;
             overflow-y: auto;
+            @include lt-md {
+                align-items: flex-start;
+            }
         }
     }
 }

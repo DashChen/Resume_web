@@ -1,45 +1,71 @@
 <div class="app-forget__content">
     <app-page-title [title]="title" [subtitle]="subtitle"></app-page-title>
     <div class="app-forget__form">
-        <mat-tab-group [selectedIndex]="tabSelected.value"
-                        (selectedIndexChange)="changeTab($event)">
-            <mat-tab label="Email" class="app-forget__form__tab">
-                <form [formGroup]="emailValidationForm">
-                    <mat-form-field class="mat-form-field__block" appearance="fill">
-                        <input type="email" matInput placeholder="例:WanDaiMain@gmail.com" formControlName="emailAddress" required [errorStateMatcher]="matcher">
-                        <mat-error class="h3-text--medium" *ngIf="emailAddressFormCtl.invalid">
-                            {{ getEmailAddressErrorMessage() }}
-                        </mat-error>
-                    </mat-form-field>
-                </form>
-            </mat-tab>
-            <mat-tab label="手機" class="app-forget__form__tab">
-                <form fxLayout="row" fxLayoutGap="10px" [formGroup]="mobileValidationForm">
-                    <mat-form-field class="app-forget__form__country__code" appearance="fill">
-                        <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
-                            <ng-container *ngFor="let option of countryCodeOptions">
-                                <mat-option [value]="option.key">{{option.text}}</mat-option>
-                            </ng-container>
-                        </mat-select>
-                        <mat-error class="h3-text--medium" *ngIf="countryCodeFormControl.invalid">
-                            {{ getCountryCodeErrorMessage() }}
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field__block" appearance="fill">
-                        <input type="tel" matInput placeholder="例:0912345678" formControlName="mobile" [errorStateMatcher]="matcher" required>
-                        <mat-error class="h3-text--medium" *ngIf="mobileFormControl.invalid">
-                            {{ getMobileErrorMessage() }}
-                        </mat-error>
-                    </mat-form-field>
-                </form>
-            </mat-tab>
-        </mat-tab-group>
-        <button mat-raised-button class="app-forget__form__login__btn" (click)="sendVerification()">
+        <ng-container *ngTemplateOutlet="showCountdown ? validateCode : tabItems"></ng-container>
+        <ng-template #tabItems>
+            <ng-container *ngTemplateOutlet="validateErrorTimes > 0 ? sendVerificationCode : tabGroup"></ng-container>
+            <ng-template #tabGroup>
+                <mat-tab-group [selectedIndex]="tabSelected.value"
+                        (selectedIndexChange)="changeTab($event)"
+                        *ngIf="!showCountdown">
+                    <mat-tab label="Email" class="app-forget__form__tab">
+                        <form [formGroup]="emailValidationForm">
+                            <mat-form-field class="mat-form-field__block" appearance="fill">
+                                <input type="email" matInput placeholder="例:WanDaiMain@gmail.com" formControlName="emailAddress" required [errorStateMatcher]="matcher">
+                                <mat-error class="h3-text--medium" *ngIf="emailAddressFormCtl.invalid">
+                                    {{ getEmailAddressErrorMessage() }}
+                                </mat-error>
+                            </mat-form-field>
+                        </form>
+                    </mat-tab>
+                    <mat-tab label="手機" class="app-forget__form__tab">
+                        <ng-container *ngTemplateOutlet="sendVerificationCode"></ng-container>
+                    </mat-tab>
+                </mat-tab-group>
+            </ng-template>
+        </ng-template>
+        <ng-template #validateCode>
+            <form fxLayout="column" [formGroup]="validationForm" novalidate>
+                <mat-form-field class="mat-form-field__block" appearance="fill">
+                    <input type="text" matInput placeholder="請輸入驗證碼" formControlName="verificationCode" [errorStateMatcher]="matcher" required>
+                    <mat-error class="h3-text--medium" *ngIf="verificationCodeFormControl.invalid">
+                        {{ getVerificationCodeErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </ng-template>
+        <ng-template #sendVerificationCode>
+            <form fxLayout="row" fxLayoutGap="10px" [formGroup]="mobileValidationForm">
+                <mat-form-field class="app-forget__form__country__code" appearance="fill">
+                    <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of countryCodeOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error class="h3-text--medium" *ngIf="countryCodeFormControl.invalid">
+                        {{ getCountryCodeErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block" appearance="fill">
+                    <input type="tel" matInput placeholder="例:0912345678" formControlName="mobile" [errorStateMatcher]="matcher" required>
+                    <mat-error class="h3-text--medium" *ngIf="mobileFormControl.invalid">
+                        {{ getMobileErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </ng-template>
+        <div class="app-forget__form__countdown" *ngIf="showCountdown">
+            <span class="h2-text--bold">剩餘時間</span><span>{{ getCountdownStr() }}</span>
+        </div>
+        <button mat-raised-button class="app-forget__form__login__btn"
+            [ngClass]="{'app-forget__form__login__btn--no-countdown': !showCountdown}"
+            (click)="sendVerification()">
             {{btnText}}
         </button>
     </div>
 
     <div class="app-forget__other">
-        <a class="h2-text--regular" routerLink="/login">返回登入畫面</a>
+        <span class="h2-text--regular" *ngIf="showCountdown || validateErrorTimes > 0">{{otherTitle}}</span>
+        <a class="h2-text--regular" href="#" (click)="otherAction($event)">{{otherSubtitle}}</a>
     </div>
 </div>

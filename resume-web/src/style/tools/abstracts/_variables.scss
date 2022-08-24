@@ -1,14 +1,14 @@
-// ---- breakpoint -----//
-// desktop
-$large-1: 1920px;
-$large-2: 1440px;
+// media aliases and breakpoints
+$screen-sm-min: 600px;
+$screen-md-min: 960px;
+$screen-lg-min: 1280px;
+$screen-xl-min: 1920px;
 
-// tablet
-$medium-1: 1159px;
-
-// mobile
-$small-1: 919px;
-$small-2: 719px;
+$screen-xs-max: 599px;
+$screen-sm-max: 959px;
+$screen-md-max: 1279px;
+$screen-lg-max: 1919px;
+$screen-xl-max: 5000px;
 
 // user color
 $colorMain: #27303D;

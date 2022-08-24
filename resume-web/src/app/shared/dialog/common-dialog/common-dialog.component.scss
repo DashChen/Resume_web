@@ -13,12 +13,10 @@
             text-align: center;
         }
         &__title {
-            @include Noto-Sans-TCTitle24-Bold;
             color: $colorMain;
             margin-top: 24px;
         }
         &__subtitle {
-            @include Noto-Sans-TCBody14-Regular;
             color: $colorSecond;
             margin-top: 4px;
         }

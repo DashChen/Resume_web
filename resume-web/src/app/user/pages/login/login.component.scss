@@ -12,6 +12,12 @@
             margin-bottom: 115px;
             margin-top: 115px;
             width: 420px;
+
+            @include lt-md {
+                margin: 0;
+                padding-top: 20px;
+                width: 380px;
+            }
         }
         &__prompt {
             align-items: baseline;
@@ -35,6 +41,9 @@
             flex-direction: column;
             gap: 0;
             margin-top: 40px;
+            @include lt-md {
+                margin-top: 35px;
+            }
 
             &__remeber__block {
                 display: flex;
@@ -52,6 +61,9 @@
             }
             &__login__btn {
                 margin-top: 40px;
+                @include lt-md {
+                    margin-top: 30px;
+                }
             }
         }
         &__register {
@@ -70,6 +82,10 @@
             display: flex;
             justify-content: center;
             margin-top: 40px;
+            @include lt-md {
+                margin-top: 30px;
+            }
+
             &::before, &::after {
                 content: '';
                 width: 100%;
@@ -86,6 +102,11 @@
             flex-direction: column;
             gap: 24px;
             margin-top: 24px;
+            @include lt-md {
+                margin-top: 30px;
+                gap: 30px;
+            }
+
             &__name {
                 width: 120px;
             }
@@ -95,8 +116,11 @@
             align-items: center;
             display: flex;
             justify-content: center;
-            margin-top: 42px;
+            margin-top: 40px;
             text-decoration: none;
+            @include lt-md {
+                margin-top: 30px;
+            }
             span {
                 color: $colorOrange03;
                 margin-right: 28px;
