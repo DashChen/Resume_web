@@ -1,7 +1,13 @@
+@import 'public-mixin';
+
 :host {
+  display: flex;
+  flex: 1;
+  justify-content: center;
   $this: '.admin-admin';
 
   #{$this} {
+
     &__mat-toolbar {
       background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
       color: #FFFFFF;

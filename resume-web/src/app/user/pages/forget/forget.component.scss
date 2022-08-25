@@ -1,14 +1,19 @@
 @import 'public-mixin';
 
 :host {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
     $this: '.app-forget';
 
     #{$this} {
         &__content {
-            width: 420px;
+            max-width: 420px;
+            width: 100%;
+
             @include lt-md {
+                max-width: 380px;
                 padding-top: 20px;
-                width: 380px;
             }
         }
         &__other {
@@ -32,9 +37,10 @@
                         justify-content: space-between;
 
                         .mat-tab-label {
-                            width: 205px;
+                            max-width: 205px;
+                            width: 100%;
                             @include lt-md {
-                                width: 185px;
+                                max-width: 185px;
                             }
                             .mat-tab-label-content {
                                 @include Noto-Sans-TCBody14-Bold;

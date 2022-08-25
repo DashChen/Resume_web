@@ -31,7 +31,11 @@
                 display: flex;
                 justify-content: center;
                 height: 60.51px;
-                width: 370px;
+                width: 100%;
+                max-width: 370px;
+                @include lt-md {
+                    padding: 0 20px;
+                }
             }
             &__logo {
                 background-image: url('^assets/common/logo_compony_name.svg');
@@ -39,6 +43,9 @@
                 background-position: center;
                 height: 100%;
                 width: 100%;
+                @include lt-md {
+                    background-size: contain;
+                }
             }
         }
         &__right {
@@ -50,6 +57,7 @@
             overflow-y: auto;
             @include lt-md {
                 align-items: flex-start;
+                padding: 0 20px;
             }
         }
     }

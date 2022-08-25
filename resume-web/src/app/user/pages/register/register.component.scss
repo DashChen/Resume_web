@@ -1,17 +1,22 @@
 @import 'public-mixin';
 
 :host {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
     $this: '.app-register';
 
     #{$this} {
         &__content {
             margin-bottom: 115px;
             margin-top: 115px;
-            width: 420px;
+            max-width: 420px;
+            width: 100%;
+
             @include lt-md {
                 margin: 0;
                 padding-top: 20px;
-                width: 380px;
+                max-width: 380px;
             }
         }
         &__form {

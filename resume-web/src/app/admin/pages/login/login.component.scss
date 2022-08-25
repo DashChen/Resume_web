@@ -1,12 +1,14 @@
 @import 'public-mixin';
 
 :host {
+    flex-grow: 1;
     $this: '.admin-login';
     align-items: center;
     display: flex;
     justify-content: flex-start;
     @include lt-md {
-        width: 380px;
+        width: 100%;
+        max-width: 380px;
     }
     #{$this} {
 
@@ -60,7 +62,7 @@
             align-items: center;
             display: flex;
             justify-content: center;
-            margin-top: 35px;
+            margin: 35px 0;
             text-decoration: none;
             span {
                 color: #FFFFFF;
