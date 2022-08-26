@@ -23,6 +23,7 @@ export class ResumeManagementComponent extends BaseComponent implements OnInit {
   levelOptions: ISelectOption[] = [];
   jobOptions: ISelectOption[] = [];
   statusOptions: ISelectOption[] = [];
+  disabledDelBtn: boolean = true;
 
   displayedColumns: string[] = ['name', 'mobile', 'email', 'job_name', 'level', 'status'];
   dataSource = new MatTableDataSource<ResumeData>([]);
@@ -61,6 +62,18 @@ export class ResumeManagementComponent extends BaseComponent implements OnInit {
   }
 
   search(event: MouseEvent) {
+    
+  }
+
+  sendMsg(event: MouseEvent) {
+    
+  }
+
+  batchEdit(event: MouseEvent) {
+    
+  }
+
+  delItems(event: MouseEvent) {
     
   }
 }

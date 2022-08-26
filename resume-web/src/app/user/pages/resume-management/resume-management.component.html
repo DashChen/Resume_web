@@ -59,8 +59,16 @@
         </div>
     </div>
     <div class="app-resume-management__table__block">
-        <div class="app-resume-management__table__head">
-
+        <div fxLayout="row" fxLayoutGap="20px" class="app-resume-management__table__head">
+            <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" (click)="sendMsg($event)">
+                發送信件&訊息
+            </button>
+            <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" (click)="batchEdit($event)">
+                批次編輯
+            </button>
+            <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" [disabled]="disabledDelBtn" (click)="delItems($event)">
+                刪除
+            </button>
         </div>
         <div class="app-resume-management__table__body">
             <table mat-table [dataSource]="dataSource">
