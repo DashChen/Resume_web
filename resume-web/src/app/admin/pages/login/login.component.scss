@@ -6,6 +6,8 @@
     align-items: center;
     display: flex;
     justify-content: flex-start;
+    max-height: 100vh;
+    overflow-y: auto;
     @include lt-md {
         width: 100%;
         max-width: 380px;
@@ -13,6 +15,7 @@
     #{$this} {
 
         &__content {
+            height: 100%;
             min-width: 420px;
             padding-left: 70px;
             border-left: 1px solid #FFFFFF;

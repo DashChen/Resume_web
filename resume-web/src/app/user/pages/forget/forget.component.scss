@@ -4,11 +4,14 @@
     display: flex;
     flex-grow: 1;
     justify-content: center;
+    max-height: 100vh;
+    overflow-y: auto;
     $this: '.app-forget';
 
     #{$this} {
         &__content {
             max-width: 420px;
+            height: 100%;
             width: 100%;
 
             @include lt-md {

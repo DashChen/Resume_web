@@ -4,6 +4,8 @@
     display: flex;
     flex-grow: 1;
     justify-content: center;
+    max-height: 100vh;
+    overflow-y: auto;
     $this: '.app-login';
 
     #{$this} {
@@ -12,9 +14,9 @@
         justify-content: center;
         width: 695px;
         &__content {
-            margin-bottom: 115px;
-            margin-top: 115px;
+            margin-top: 118px;
             max-width: 420px;
+            height: 100%;
             width: 100%;
 
             @include lt-md {
@@ -121,6 +123,7 @@
             display: flex;
             justify-content: center;
             margin: 40px 0;
+            margin-bottom: 118px;
             text-decoration: none;
             @include lt-md {
                 margin: 30px 0;
