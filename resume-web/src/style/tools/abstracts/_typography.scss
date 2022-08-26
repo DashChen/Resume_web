@@ -1,3 +1,11 @@
+@mixin Noto-Sans-TCTitle28-Bold {
+    font-family: Noto Sans;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: 0em;
+}
+
 @mixin Noto-Sans-TCTitle24-Bold {
     font-family: Noto Sans;
     font-size: 24px;
@@ -7,6 +15,14 @@
 }
 
 @mixin Noto-Sans-TCTitle22-Bold {
+    font-family: Noto Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+    letter-spacing: 0em;
+}
+
+@mixin Noto-Sans-TCTitle20-Bold {
     font-family: Noto Sans;
     font-size: 20px;
     font-weight: 600;

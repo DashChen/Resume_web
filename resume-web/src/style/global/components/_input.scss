@@ -2,13 +2,21 @@ $this: '.mat-form-field';
 
 mat-form-field {
     margin-bottom: 14.5px;
-    &#{$this}__block {
-        width: 100%;
+    &#{$this} {
+        &__block {
+            width: 100%;
+        }
+        &--hide-error {
+            margin-bottom: 0;
+            ::ng-deep .mat-form-field-wrapper {
+                padding-bottom: 0;
+            }
+        }
     }
     #{$this} {
         &__lable--top {
             @include Noto-Sans-TCBody14-Medium;
-            color: #6C7A8E;
+            color: $colorSecond;
             position: absolute;
             left: -10px;
             top: -36px;
@@ -18,7 +26,7 @@ mat-form-field {
     ::ng-deep .mat-form-field-flex {
         align-items: center;
         border-radius: 8px;
-        border: 1px solid #C5D0DF;
+        border: 1px solid $colorLight;
         background: transparent;
         height: 50px;
         padding: 13px 8px;
@@ -44,7 +52,7 @@ mat-form-field {
         ::ng-deep .mat-form-field-wrapper {
             .mat-form-field-flex {
                 border-radius: 8px;
-                border-color: #C5D0DF;
+                border-color: $colorLight;
                 background-color: white;
                 .mat-form-field-infix {
                     input[type="text"], input[type="password"] {
@@ -54,7 +62,7 @@ mat-form-field {
             }
             .mat-form-field-subscript-wrapper {
                 .mat-error {
-                    color: #FBBC05;
+                    color: $colorError2;
                 }
             }
         }

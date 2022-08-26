@@ -1,1 +1,133 @@
-<p>resume-management works!</p>
+<div fxFlex fxLayout="column" fxLayoutGap="24px" class="app-resume-management">
+    <div  class="app-resume-management__head__block">
+        <div fxFlex fxLayout="column" fxLayoutGap="12px" class="app-resume-management__head__title__block">
+            <div class="app-resume-management__head__title__main h1-large-title">
+                履歷管理
+            </div>
+            <div class="app-resume-management__head__title__sub h2-text--regular">
+                履歷管理 / 所有履歷
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" class="app-resume-management__head__btns">
+            <button mat-raised-button class="app-resume-management__head__btn mat-button--blue h2-text--regular" (click)="addPerson($event)">
+                新增人員
+            </button>
+            <button mat-raised-button class="app-resume-management__head__btn mat-button--blue h2-text--regular" (click)="importPersons($event)">
+                匯入人員資料
+            </button>
+        </div>
+
+    </div>
+    <div fxLayout="column" fxLayoutGap="12px" class="app-resume-management__search__block">
+        <div class="app-resume-management__search__title h1-small-title">
+            人員搜尋
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-management__search__conditions__block">
+            <form fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" class="app-resume-management__search__conditions" [formGroup]="searchForm">
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">姓名</label>
+                    <input matInput placeholder="例:王大明" formControlName="name" required [errorStateMatcher]="matcher">
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">階段</label>
+                    <mat-select formControlName="level" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of levelOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">職缺</label>
+                    <mat-select formControlName="job" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of jobOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">填寫狀態</label>
+                    <mat-select formControlName="status" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of statusOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+            <button mat-raised-button class="app-resume-management__head__btn mat-button--orange h2-text--regular" (click)="search($event)">
+                查詢
+            </button>
+        </div>
+    </div>
+    <div class="app-resume-management__table__block">
+        <div class="app-resume-management__table__head">
+
+        </div>
+        <div class="app-resume-management__table__body">
+            <table mat-table [dataSource]="dataSource">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>姓名</th>
+                  <td mat-cell *matCellDef="let element">{{element.name}}</td>
+                </ng-container>
+    
+                <!-- Name Column -->
+                <ng-container matColumnDef="mobile">
+                  <th mat-header-cell *matHeaderCellDef>電話</th>
+                  <td mat-cell *matCellDef="let element">{{element.mobile}}</td>
+                </ng-container>
+              
+                <!-- Weight Column -->
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef>E-mail</th>
+                  <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                </ng-container>
+              
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="job_name">
+                  <th mat-header-cell *matHeaderCellDef>職缺</th>
+                  <td mat-cell *matCellDef="let element">{{element.job_name}}</td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="level">
+                    <th mat-header-cell *matHeaderCellDef>階段</th>
+                    <td mat-cell *matCellDef="let element">{{element.level}}</td>
+                  </ng-container>
+                  <!-- Symbol Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>填寫狀態</th>
+                    <td mat-cell *matCellDef="let element">{{element.status}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row data-empty" *matNoDataRow>
+                    <td class="mat-cell"></td>
+                    <td class="mat-cell h2-text--regular" [attr.colspan]="displayedColumns.length">
+                        您還沒有新增人員，立即新增已進行相關人事處理
+                    </td>
+                </tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+
+    </div>
+</div>

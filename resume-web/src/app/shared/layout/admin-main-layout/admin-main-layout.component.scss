@@ -9,6 +9,15 @@
     &__mat-toolbar {
       background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
       color: #FFFFFF;
+
+      &-logo {
+        background-image: url('^assets/common/logo_compony_name.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        width: 185px;
+        height: 30px;
+      }
     }
 
     &__flex-spacer {
