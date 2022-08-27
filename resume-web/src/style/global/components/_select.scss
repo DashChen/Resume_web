@@ -10,3 +10,13 @@ mat-select {
         }
     }
 }
+
+::ng-deep .mat-form-field-type-mat-native-select.mat-form-field-appearance-fill {
+    .mat-form-field-flex {
+        .mat-form-field-infix {
+            &::after {
+                margin-top: 0;
+            }
+        }
+    }
+}

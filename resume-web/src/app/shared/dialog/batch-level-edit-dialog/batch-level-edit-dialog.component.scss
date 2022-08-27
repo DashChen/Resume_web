@@ -1,0 +1,39 @@
+@import 'public-mixin';
+
+:host {
+    $this: '.app-batch-level-edit-dialog';
+
+    #{$this} {
+        &__head {
+            border-bottom: 1px solid #C5D0DF;
+            margin-bottom: 0;
+            padding: 8.5px 24px;
+            mat-icon {
+                color: $colorSecond;
+                cursor: pointer;
+                width: 17px;
+            }
+        }
+
+        &__content {
+            margin: 0;
+            &__description {
+                margin-top: 40px;
+                margin-bottom: 19px;
+            }
+            &__form {
+                display: flex;
+                flex-direction: column;
+                gap: 19px;
+                padding: 40px 0 0;
+
+                .default-option {
+                    color: $colorLight;
+                }
+            }
+        }
+        &__action {
+            gap: 20px;
+        }
+    }
+}

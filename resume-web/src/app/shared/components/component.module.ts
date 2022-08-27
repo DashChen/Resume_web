@@ -10,7 +10,7 @@ import { InputCountryMobileComponent } from './input-country-mobile/input-countr
 @NgModule({
     declarations: [
         PageTitleComponent,
-        InputCountryMobileComponent
+        InputCountryMobileComponent,
     ],
     exports: [
         PageTitleComponent,

@@ -1,0 +1,9 @@
+<div class="app-message-snackbar" fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="flex-start center" fxLayoutGap="16px" class="app-message-snackbar__text">
+        <mat-icon [svgIcon]="data?.textIcon"></mat-icon>
+        <span>{{data.title}}</span>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" class="app-message-snackbar__action" (click)="snackBarRef.dismiss()">
+        <mat-icon [svgIcon]="data?.actionIcon"></mat-icon>
+    </div>
+</div>

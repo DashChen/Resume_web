@@ -1,0 +1,31 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="app-batch-level-edit-dialog__head" mat-dialog-title>
+    <div class="app-batch-level-edit-dialog__title h1-title">{{data.title}}</div>
+    <mat-icon mat-dialog-close svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+</div>
+<mat-dialog-content class="app-batch-level-edit-dialog__content">
+    <div class="app-batch-level-edit-dialog__content__description h2-text--regular">
+        將對所選取人員進行批次人員階段編輯
+    </div>
+    <form class="app-batch-level-edit-dialog__content__form" [formGroup]="levelForm">
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <label class="mat-form-field__lable--top">階段*</label>
+            <select matNativeControl required formControlName="level" [errorStateMatcher]="matcher">
+                <option class="default-option" label="請選擇"></option>
+                <ng-container *ngFor="let option of levelOptions">
+                    <option [value]="option.key">{{option.text}}</option>
+                </ng-container>
+            </select>
+            <mat-error class="h3-text--medium" *ngIf="levelFormCtl.invalid">
+                {{ getLevelErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="app-batch-level-edit-dialog__action">
+    <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+        {{data.cancelBtnText}}
+    </button>
+    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+        {{data.successBtnText}}
+    </button>
+</mat-dialog-actions>

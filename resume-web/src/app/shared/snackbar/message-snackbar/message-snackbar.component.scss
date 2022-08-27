@@ -1,0 +1,22 @@
+@import 'public-mixin';
+
+:host {
+    $this: '.app-message-snackbar';
+
+    #{$this} {
+        &__text {
+            color: #FFFFFF;
+            mat-icon {
+                height: 20px;
+                width: 20px;
+            }
+        }
+        &__action {
+            cursor: pointer;
+            mat-icon {
+                height: 20px;
+                width: 20px;
+            }
+        }
+    }
+}
