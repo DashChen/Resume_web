@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 import { CompanyJobData } from '@app/core/datas';
+import { CompanyJobAddDialogComponent } from '@app/admin/pages/company-job-add-dialog/company-job-add-dialog.component';
+export interface CompanyJobAddDialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'admin-company-job-list',
@@ -11,6 +17,9 @@ import { CompanyJobData } from '@app/core/datas';
 })
 export class CompanyJobListComponent implements OnInit {
  
+  animal: string = '';
+  name: string = '';
+
   disabledDelBtn: boolean = true;
 
   displayedColumns: string[] = ['select', 'jobName', 'mailTplCode', 'smsTplCode', 'action'];
@@ -34,13 +43,21 @@ export class CompanyJobListComponent implements OnInit {
     this.selection.select(...this.dataSource.data);
   }
 
-  constructor() { }
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
   }
 
-  addItem(event: MouseEvent) {
-    console.log('addItem');
+  showAddDialog(event: MouseEvent): void {
+    const dialogRef = this.dialog.open(CompanyJobAddDialogComponent, {
+      width: '614px',
+      data: {name: this.name, animal: this.animal},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
   
   delItems(event: MouseEvent) {

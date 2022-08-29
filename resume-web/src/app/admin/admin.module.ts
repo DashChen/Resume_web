@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@app/material-module';
 import { ForgetComponent } from './pages/forget/forget.component';
 import { CompanyJobListComponent } from './pages/company-job-list/company-job-list.component';
+import { CompanyJobAddDialogComponent } from './pages/company-job-add-dialog/company-job-add-dialog.component';
+import { CompanyJobEditDialogComponent } from './pages/company-job-edit-dialog/company-job-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { CompanyJobListComponent } from './pages/company-job-list/company-job-li
     HomeComponent,
     ForgetComponent,
     CompanyJobListComponent,
+    CompanyJobAddDialogComponent,
+    CompanyJobEditDialogComponent,
   ],
   imports: [
     BrowserAnimationsModule,
