@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 export interface link {
   link: string;
   title: string;
-  icon?: string;
+  icon: string;
+  active: boolean
 }
 
 @Component({
@@ -16,28 +18,39 @@ export class UserMainLayoutComponent implements OnInit {
     {
       link: '/resume-management',
       title: '履歷管理',
-      icon: '',
+      icon: 'menu-icon01',
+      active: false,
     },
     {
-      link: '/resume-management',
+      link: '/message-management',
       title: '信件簡訊管理',
-      icon: '',
+      icon: 'menu-icon02',
+      active: false,
     },
     {
-      link: '/resume-management',
+      link: '/company-job',
       title: '職缺管理',
-      icon: '',
+      icon: 'menu-icon03',
+      active: false,
     },
     {
-      link: '/resume-management',
+      link: '/member-management',
       title: '會員管理',
-      icon: '',
+      icon: 'menu-icon04',
+      active: false,
     },
   ];
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    console.log(this.route.snapshot);
+    this.links.forEach((l: link) => {
+      const path = this.route.snapshot.firstChild?.routeConfig?.path || '';
+      if (l.link.includes(path)) {
+        l.active = true;
+      }
+    })
   }
 
 }

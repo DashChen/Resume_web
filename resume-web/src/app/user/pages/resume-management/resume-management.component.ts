@@ -140,6 +140,10 @@ export class ResumeManagementComponent extends BaseComponent implements OnInit {
     })
   }
 
+  addReceiver() {
+    
+  }
+
   cancelSend() {
 
   }
