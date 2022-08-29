@@ -17,7 +17,16 @@
         &__sub {}
       }
 
-      &__btns {}
+      &__keyword {
+        mat-form-field {
+          margin: 0 !important;
+
+          ::ng-deep .mat-form-field-wrapper {
+            background-color: #FFFFFF;
+            padding-bottom: 0 !important;
+          }
+        }
+      }
     }
 
     &__table {

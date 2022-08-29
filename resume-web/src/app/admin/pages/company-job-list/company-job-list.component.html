@@ -8,21 +8,79 @@
 				職缺管理 / 所有職缺
 			</div>
 		</div>
-		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
-			請輸入關鍵字
+		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center"
+			fxLayoutAlign.lt-md="start center">
+			<mat-form-field appearance="fill">
+				<input matInput type="type" placeholder="請輸入關鍵字">
+				<mat-icon matSuffix>search</mat-icon>
+			</mat-form-field>
 		</div>
 	</div>
 	<div class="admin-company-job-list__table__block">
 		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px">
-			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular">
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular" (click)="addItem($event)">
 				新增職缺
 			</button>
-			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular">
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
+				[disabled]="disabledDelBtn" (click)="delItems($event)">
 				刪除
 			</button>
 		</div>
 		<div class="admin-company-job-list__table__body">
+			<table mat-table [dataSource]="dataSource">
+				<!-- Checkbox Column -->
+				<ng-container matColumnDef="select">
+					<th mat-header-cell *matHeaderCellDef>
+						<mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+							[indeterminate]="selection.hasValue() && !isAllSelected()">
+						</mat-checkbox>
+					</th>
+					<td mat-cell *matCellDef="let row">
+						<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+							[checked]="selection.isSelected(row)">
+						</mat-checkbox>
+					</td>
+				</ng-container>
 
+				<!-- Position Column -->
+				<ng-container matColumnDef="jobName">
+					<th mat-header-cell *matHeaderCellDef>職缺名稱</th>
+					<td mat-cell *matCellDef="let element">{{element.jobName}}</td>
+				</ng-container>
+
+				<!-- Position Column -->
+				<ng-container matColumnDef="mailTplCode">
+					<th mat-header-cell *matHeaderCellDef>信件樣板</th>
+					<td mat-cell *matCellDef="let element">{{element.mailTplCode}}</td>
+				</ng-container>
+
+				<!-- Position Column -->
+				<ng-container matColumnDef="smsTplCode">
+					<th mat-header-cell *matHeaderCellDef>訊息樣板</th>
+					<td mat-cell *matCellDef="let element">{{element.smsTplCode}}</td>
+				</ng-container>
+
+				<!-- Action Column -->
+				<ng-container matColumnDef="action">
+					<th mat-header-cell *matHeaderCellDef></th>
+					<td mat-cell *matCellDef="let element">
+						<button mat-menu-item (click)="editItem(element)">
+							<mat-icon svgIcon="edit"></mat-icon>
+						</button>
+					</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+				<!-- Row shown when there is no matching data. -->
+				<tr class="mat-row data-empty" *matNoDataRow>
+					<td class="mat-cell"></td>
+					<td class="mat-cell h2-text--regular" [attr.colspan]="displayedColumns.length">
+						您還沒有任何職缺
+					</td>
+				</tr>
+			</table>
 			<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 		</div>
 	</div>

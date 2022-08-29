@@ -28,6 +28,9 @@
             &:hover {
                 background: linear-gradient(270deg, #02B2E1 9.33%, #006CD0 100%);
             }
+            &.mat-raised-button.mat-button-disabled.mat-button-disabled {
+                background: #C5D0DF;
+            }
         }
         &--blue2 {
             background: #006CD0;
