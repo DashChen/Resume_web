@@ -171,7 +171,44 @@
 
     <ng-template #send>
         <div class="app-resume-management__send__message__card">
-
+            <div fxLayout="column">
+                <div class="h2-text--medium">收件者</div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutGap="18px">
+                        <ng-container></ng-container>
+                    </div>
+                    <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
+                        新增人員
+                    </button>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="38px">
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">信件樣板</label>
+                    <mat-select formControlName="level" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of levelOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">簡訊樣板</label>
+                    <mat-select formControlName="level" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of levelOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <div class="h2-text--medium">信件簡訊發送日期</div>
+                <div>
+                    <mat-radio-group aria-label="Select an option">
+                        <mat-radio-button value="1">信件簡訊立即發送</mat-radio-button>
+                        <mat-radio-button value="2">選擇日期</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="18px" class="app-resume-management__send__message__action">
             <button mat-raised-button class="app-resume-management__head__btn h2-text--regular" (click)="cancelSend()">

@@ -4,6 +4,32 @@
   $this: '.app-user-main-layout';
 
   #{$this} {
+    background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+    &__link {
+      display: flex;
+      height: 100%;
+      min-width: 150px;
+      &--active {
+        background: $colorOrange03;
+        border-bottom: 3px solid #FFFFFF;
+      }
+      a {
+        align-items: center;
+        color: #FFFFFF;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        gap: 21px;
+        text-decoration: none;
+        mat-icon {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          height: 18px;
+          width: 17px;
+        }
+      }
+    }
     &__logo {
       background-image: url('^assets/common/logo_compony_name.svg');
       background-repeat: no-repeat;
@@ -14,6 +40,26 @@
     }
     &__flex-spacer {
       flex: 1 1 auto;
+    }
+    &__member {
+      padding: 14.5px 0;
+      &__content {
+        align-items: center;
+        display: flex;
+        &::before {
+          content: '';
+          background-color:#C5D0DF;
+          height: 36px;
+          margin-right: 24px;
+          margin-left: 40px;
+          width: 1px;
+        }
+        button {
+          span {
+            margin: 0 20px 0 11px;
+          }
+        }
+      }
     }
   }
 }
