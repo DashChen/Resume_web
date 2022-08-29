@@ -1,21 +1,29 @@
-<div class="bounds">
-
-	<div class="content" fxLayout="column" fxLayout.xs="row" fxFlexFill>
-
-		<div fxFlex="15" class="sec1" fxFlex.xs="55">
-			first-section
+<div class="admin-company-job-list" fxLayout="column" fxLayoutGap="24px">
+	<div class="admin-company-job-list__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
+		<div fxFlex fxLayout="column" fxLayoutGap="12px">
+			<div class="admin-company-job-list__head__title__main h1-large-title">
+				職缺管理
+			</div>
+			<div class="admin-company-job-list__head__title__sub h2-text--regular">
+				職缺管理 / 所有職缺
+			</div>
 		</div>
-		<div fxFlex="30" class="sec2">
-			second-section
+		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
+			請輸入關鍵字
 		</div>
-		<div fxFlex="55" class="sec3" fxFlex.xs="15">
-			third-section
-		</div>
-
 	</div>
+	<div class="admin-company-job-list__table__block">
+		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px">
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular">
+				新增職缺
+			</button>
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular">
+				刪除
+			</button>
+		</div>
+		<div class="admin-company-job-list__table__body">
 
-</div>
-
-<div style="padding: 13px;">
-  <h1>職缺管理</h1>
+			<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+		</div>
+	</div>
 </div>

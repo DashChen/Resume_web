@@ -1,32 +1,46 @@
-.bounds {
-  background-color:#ddd;
-  height :800px;
-}
+@import 'public-mixin';
 
-.sec1 {
-  background: red;
-  color:white;
-  text-transform: uppercase
-}
+:host {
+  $this: '.admin-company-job-list';
 
-.sec2 {
-  background: yellow;
-  color:blue;
-  
-}
+  #{$this} {
+    background-color: #F4F9FD;
+    min-height: calc(100vh - 64px - 40px);
+    padding: 24px 40px 0;
 
-.sec3 {
-  background: blue;
-  color:white;
-  text-transform: uppercase
-}
+    &__head {
+      &__block {}
 
-.sec1, .sec2, .sec3 {
-  padding-top:20px;
-  text-align:center
-}
+      &__title {
+        &__main {}
 
-.content {
-  min-width: 300px;
-  /*height: 400px;*/
+        &__sub {}
+      }
+
+      &__btns {}
+    }
+
+    &__table {
+      &__block {
+        background: #FFFFFF;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      &__head {
+        padding: 12.5px 20px;
+      }
+
+      &__body {
+        table {
+          width: 100%;
+
+          .data-empty {
+            .mat-cell {
+              color: $colorLight;
+            }
+          }
+        }
+      }
+    }
+  }
 }
