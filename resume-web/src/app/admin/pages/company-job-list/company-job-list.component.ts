@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { CompanyJobData } from '@app/core/datas';
 import { CompanyJobAddDialogComponent } from '@app/admin/pages/company-job-add-dialog/company-job-add-dialog.component';
+import { CompanyJobEditDialogComponent } from '@app/admin/pages/company-job-edit-dialog/company-job-edit-dialog.component';
 export interface CompanyJobAddDialogData {
   animal: string;
   name: string;
