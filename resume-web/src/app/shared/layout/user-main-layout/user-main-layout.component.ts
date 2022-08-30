@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AppService } from '@app/core';
 
 export interface link {
   link: string;
@@ -41,16 +41,17 @@ export class UserMainLayoutComponent implements OnInit {
     },
   ];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private appService: AppService) {}
 
   ngOnInit(): void {
-    console.log(this.route.snapshot);
-    this.links.forEach((l: link) => {
-      const path = this.route.snapshot.firstChild?.routeConfig?.path || '';
-      if (l.link.includes(path)) {
-        l.active = true;
-      }
-    })
+    this.appService.route$.subscribe((route) => {
+      this.links.forEach((l: link) => {
+        const path = route?.routeConfig?.path || '';
+        if (l.link.includes(path)) {
+          l.active = true;
+        }
+      })
+    });
   }
 
 }
