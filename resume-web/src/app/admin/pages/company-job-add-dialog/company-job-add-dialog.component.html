@@ -1,28 +1,48 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="admin-company-job-add-dialog__head">
-  <div class="admin-company-job-add-dialog__title h1-title">新增職缺</div>
-  <mat-icon mat-dialog-close svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+  <div class="admin-company-job-add-dialog__title h1-title">{{ data.title }}</div>
+  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon">
+  </mat-icon>
 </div>
 <div mat-dialog-content class="admin-company-job-add-dialog__content">
-  <form class="admin-company-job-add-dialog__content__form">
+  <form class="admin-company-job-add-dialog__content__form" [formGroup]="addForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
-      <label class="mat-form-field__lable--top">職缺名字</label>
-      <input matInput placeholder="請輸入職缺名字" formControlName="name" required>
+      <label class="mat-form-field__lable--top">職缺名字*</label>
+      <input matInput placeholder="請輸入職缺名字" formControlName="jobName" required>
+      <mat-error class="h3-text--medium" *ngIf="jobNameFormCtl.invalid">
+        {{ getJobNameErrorMessage() }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
-      <label class="mat-form-field__lable--top">信件樣板選擇</label>
-      <select matNativeControl required formControlName="job">
-          <option class="default-option" label="請選擇"></option>
+      <label class="mat-form-field__lable--top">信件樣板選擇*</label>
+      <select matNativeControl formControlName="mailTplCode" required [errorStateMatcher]="matcher">
+        <option class="default-option" label="請選擇"></option>
+        <ng-container *ngFor="let option of mailTplCodeOptions">
+          <option [value]="option.key">{{option.text}}</option>
+        </ng-container>
       </select>
+      <mat-error class="h3-text--medium" *ngIf="mailTplCodeFormCtl.invalid">
+        {{ getMailTplCodeErrorMessage() }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
-      <label class="mat-form-field__lable--top">簡訊樣板選擇</label>
-      <select matNativeControl required formControlName="job">
-          <option class="default-option" label="請選擇"></option>
+      <label class="mat-form-field__lable--top">簡訊樣板選擇*</label>
+      <select matNativeControl formControlName="smsTplCode" required [errorStateMatcher]="matcher">
+        <option class="default-option" label="請選擇"></option>
+        <ng-container *ngFor="let option of smsTplCodeOptions">
+          <option [value]="option.key">{{option.text}}</option>
+        </ng-container>
       </select>
+      <mat-error class="h3-text--medium" *ngIf="smsTplCodeFormCtl.invalid">
+        {{ getSmsTplCodeErrorMessage() }}
+      </mat-error>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions align="center" class="admin-company-job-add-dialog__action">
-  <button mat-raised-button mat-dialog-close [mat-dialog-close]="data.animal">取消</button>
-  <button mat-raised-button cdkFocusInitial cdkFocusInitial class="mat-button--orange" (click)="onNoClick()">確定</button>
+  <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+    {{ data.cancelBtnText }}
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+    {{ data.successBtnText }}
+  </button>
 </div>

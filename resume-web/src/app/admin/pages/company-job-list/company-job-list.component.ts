@@ -4,24 +4,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
 import { CompanyJobData } from '@app/core/datas';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
+import { BaseComponent } from '@app/shared';
 import { CompanyJobAddDialogComponent } from '@app/admin/pages/company-job-add-dialog/company-job-add-dialog.component';
 import { CompanyJobEditDialogComponent } from '@app/admin/pages/company-job-edit-dialog/company-job-edit-dialog.component';
-export interface CompanyJobAddDialogData {
-  animal: string;
-  name: string;
+export interface CompanyJobDialogData extends basicDialog {
+  item: CompanyJobData | null;
 }
-
 @Component({
   selector: 'admin-company-job-list',
   templateUrl: './company-job-list.component.html',
   styleUrls: ['./company-job-list.component.scss']
 })
-export class CompanyJobListComponent implements OnInit {
- 
-  animal: string = '';
-  name: string = '';
+export class CompanyJobListComponent extends BaseComponent implements OnInit {
 
-  disabledDelBtn: boolean = true;
+  override dialogConfig: CompanyJobDialogData = {} as CompanyJobDialogData;
+  disabledDelBtn: boolean = false;
 
   displayedColumns: string[] = ['select', 'jobName', 'mailTplCode', 'smsTplCode', 'action'];
   dataSource = new MatTableDataSource<CompanyJobData>([]);
@@ -44,29 +42,55 @@ export class CompanyJobListComponent implements OnInit {
     this.selection.select(...this.dataSource.data);
   }
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+    super();
+  }
 
   ngOnInit(): void {
   }
 
-  showAddDialog(event: MouseEvent): void {
+  openAddDialog(event: MouseEvent): void {
+    this.dialogConfig.title = '新增職缺';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.item = null;
     const dialogRef = this.dialog.open(CompanyJobAddDialogComponent, {
       width: '614px',
-      data: {name: this.name, animal: this.animal},
+      data: this.dialogConfig,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
+      // todo: 送出新增職缺請求
+      if (result) {
+        this.dataSource.data = [...this.dataSource.data, result];
+      }
     });
   }
-  
+
   delItems(event: MouseEvent) {
-    console.log('delItems');
+    // todo: 送出刪除職缺請求
+    this.selection.selected.forEach(s => {
+      this.dataSource.data = this.dataSource.data.filter(d => d.jobName !== s.jobName);
+    });
+    this.disabledDelBtn = true;
   }
 
   editItem(item: CompanyJobData) {
-    console.log('editItem', item);
+    this.dialogConfig.title = '職缺修改';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.item = item;
+    const dialogRef = this.dialog.open(CompanyJobEditDialogComponent, {
+      width: '614px',
+      data: this.dialogConfig,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      // todo: 送出編輯職缺請求
+      if (result) {
+        console.log(result);
+      }
+    });
+
   }
 
 }
