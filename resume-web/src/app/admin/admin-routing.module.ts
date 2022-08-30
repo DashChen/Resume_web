@@ -12,7 +12,11 @@ const routes: Routes = [
             { path: 'forget', component: ForgetComponent, data: { layout: Layouts.adminLogin }, },
             { path: 'about', component: AboutComponent, data: { layout: Layouts.adminMain }, },
             { path: 'home', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+
+            { path: 'resume', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'message', component: HomeComponent, data: { layout: Layouts.adminMain }, },
             { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'member', component: HomeComponent, data: { layout: Layouts.adminMain }, },
         ]
     },
 ];

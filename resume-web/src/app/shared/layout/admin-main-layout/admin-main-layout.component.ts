@@ -15,13 +15,13 @@ export class AdminMainLayoutComponent implements OnInit {
 
   links: link[] = [
     {
-      link: '/admin/about',
+      link: '/admin/resume',
       title: '履歷管理',
       icon: 'menu-icon01',
       active: false,
     },
     {
-      link: '/admin/about',
+      link: '/admin/message',
       title: '信件/簡訊管理',
       icon: 'menu-icon02',
       active: false,
@@ -33,7 +33,7 @@ export class AdminMainLayoutComponent implements OnInit {
       active: false,
     },
     {
-      link: '/admin/about',
+      link: '/admin/member',
       title: '會員管理',
       icon: 'menu-icon04',
       active: false,
@@ -46,10 +46,9 @@ export class AdminMainLayoutComponent implements OnInit {
     this.appService.route$.subscribe((route) => {
       this.links.forEach((l: link) => {
         const path = route?.routeConfig?.path || '';
-        if (l.link.includes(path)) {
-          l.active = true;
-        }
+        l.active = l.link.includes(path);
       })
+      console.log(this.links);
     });
   }
 
