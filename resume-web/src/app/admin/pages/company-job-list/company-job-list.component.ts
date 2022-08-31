@@ -7,6 +7,7 @@ import { CompanyJobData } from '@app/core/datas';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { BaseComponent } from '@app/shared';
 import { CompanyJobAddDialogComponent } from '@app/admin/pages/company-job-add-dialog/company-job-add-dialog.component';
+import { CompanyJobDeleteDialogComponent } from '@app/admin/pages/company-job-delete-dialog/company-job-delete-dialog.component';
 import { CompanyJobEditDialogComponent } from '@app/admin/pages/company-job-edit-dialog/company-job-edit-dialog.component';
 export interface CompanyJobDialogData extends basicDialog {
   item: CompanyJobData | null;
@@ -68,11 +69,21 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit {
   }
 
   delItems(event: MouseEvent) {
-    // todo: 送出刪除職缺請求
-    this.selection.selected.forEach(s => {
-      this.dataSource.data = this.dataSource.data.filter(d => d.jobName !== s.jobName);
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    const dialogRef = this.dialog.open(CompanyJobDeleteDialogComponent, {
+      width: '614px',
+      data: this.dialogConfig,
     });
-    this.disabledDelBtn = true;
+    dialogRef.afterClosed().subscribe(result => {
+      // todo: 送出刪除職缺請求
+      if (result) {
+        this.selection.selected.forEach(s => {
+          this.dataSource.data = this.dataSource.data.filter(d => d.jobName !== s.jobName);
+        });
+        this.disabledDelBtn = true;
+      }
+    });
   }
 
   editItem(item: CompanyJobData) {
@@ -90,7 +101,6 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit {
         console.log(result);
       }
     });
-
   }
 
 }

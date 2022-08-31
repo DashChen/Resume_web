@@ -1,0 +1,16 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="admin-company-job-delete-dialog__head">
+  <div class="admin-company-job-edit-dialog__title h1-title">{{ data.title }}</div>
+</div>
+<div mat-dialog-content class="admin-company-job-delete-dialog__content">
+  <mat-icon svgIcon="error" aria-hidden="false" aria-label="error icon"></mat-icon>
+  <div class="admin-company-job-delete-dialog__content__title">刪除職缺項目</div>
+  <div class="admin-company-job-delete-dialog__content__text">確定要刪除所選擇的項目嗎？</div>
+</div>
+<div mat-dialog-actions align="center" class="admin-company-job-delete-dialog__action">
+  <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+    {{ data.cancelBtnText }}
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+    {{ data.successBtnText }}
+  </button>
+</div>
