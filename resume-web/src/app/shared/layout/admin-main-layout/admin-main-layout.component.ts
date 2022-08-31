@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppService } from '@app/core';
 export interface link {
   link: string;
@@ -12,6 +13,8 @@ export interface link {
   styleUrls: ['./admin-main-layout.component.scss']
 })
 export class AdminMainLayoutComponent implements OnInit {
+  username: string = '王大明';
+  email: string = 'WuDaMing@gmail.com';
 
   links: link[] = [
     {
@@ -40,7 +43,10 @@ export class AdminMainLayoutComponent implements OnInit {
     },
   ];
 
-  constructor(private appService: AppService) {}
+  constructor(
+    private appService: AppService,
+    private router: Router
+    ) {}
 
   ngOnInit(): void {
     this.appService.route$.subscribe((route) => {
@@ -52,4 +58,8 @@ export class AdminMainLayoutComponent implements OnInit {
     });
   }
 
+  logout() {
+    // TODO: Logout update store
+    this.router.navigate(['/admin/login']);
+  }
 }

@@ -29,13 +29,21 @@
             <button mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal"
               matTooltip="Select a personal of the documentation">
               <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
-              <span class="h2-text--regular">王大明</span>
+              <span class="h2-text--regular">{{username}}</span>
               <mat-icon>arrow_drop_down</mat-icon>
             </button>
-            <mat-menu #personalPicker="matMenu" xPosition="before">
-              <button mat-menu-item>
-                ．．．．
+            <mat-menu #personalPicker="matMenu" xPosition="before" class="app-admin-main-layout__member__content__menu">
+              <button mat-menu-item class="app-admin-main-layout__member__content__menu__info">
+                <div fxLayout="column" fxLayoutAlign="center center">
+                  <div class="h2-text--regular">{{username}}</div>
+                  <div class="h2-text--regular">{{email}}</div>
+                </div>
               </button>
+              <div mat-menu-item class="app-admin-main-layout__member__content__menu__logout" (click)="logout()">
+                <div class="h2-text--regular">
+                  登出
+                </div>
+              </div>
             </mat-menu>
           </div>
         </div>

@@ -1,8 +1,8 @@
 @import 'public-mixin';
 
-:host {
-  $this: '.app-admin-main-layout';
+$this: '.app-admin-main-layout';
 
+:host {
   #{$this} {
     height: 100vh;
 
@@ -87,6 +87,43 @@
       background: linear-gradient(0deg, #006CD0 0%, #02B2E1 100%);
       color: #FFFFFF;
       width: 227px;
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this}__member__content {
+    &__menu {
+      background: #FFFFFF;
+      box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(117, 127, 152, 0.3);
+      border-radius: 5px;
+      width: 271px;
+
+      .mat-menu-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-top: 0;
+        padding-bottom: 4px;
+      }
+
+      &__info {
+        border-bottom: 1px solid #C5D0DF;
+        height: 100%;
+        padding: 16px;
+        .h2-text--regular:nth-child(1) {
+          color: $colorMain;
+          line-height: 19px;
+        }
+        .h2-text--regular:nth-child(2) {
+          color: $colorSecond;
+        }
+      }
+      &__logout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }
