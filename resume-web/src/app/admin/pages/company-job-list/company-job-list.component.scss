@@ -40,13 +40,60 @@
       }
 
       &__body {
-        table {
-          width: 100%;
+        .mat-table {
+          min-width: 100%;
+        }
 
-          .data-empty {
-            .mat-cell {
-              color: $colorLight;
-            }
+        .mat-table .mat-header-cell {
+          display: none;
+        }
+
+        .mat-table .mat-cell:not(:first-of-type):not(:last-of-type) {
+          display: block;
+        }
+
+        .mat-table .mat-cell:not(:first-of-type):not(:last-of-type):before {
+          display: inline-block;
+          content: attr(data-th) "";
+          width: 6.5em;
+          padding: 20px 0 20px 12px;
+          margin-right: 12px;
+        }
+
+        .mat-table .mat-header-cell,
+        .mat-table .mat-cell:before {
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 20px;
+          background: #F4F9FD;
+        }
+
+        .mat-table .mat-cell:first-child {
+          width: 45px;
+          vertical-align: text-top;
+        }
+
+        .mat-table .mat-cell:last-child {
+          width: 45px;
+          vertical-align: text-top;
+          text-align-last: end;
+          padding-right: 0;
+        }
+
+        @media (min-width: 1000px) {
+          .mat-table .mat-cell:not(:first-of-type):not(:last-of-type):before {
+            display: none;
+          }
+
+          .mat-table .mat-header-cell {
+            display: table-cell;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 25px;
+          }
+
+          .mat-table .mat-cell:not(:first-of-type):not(:last-of-type) {
+            display: table-cell;
           }
         }
       }

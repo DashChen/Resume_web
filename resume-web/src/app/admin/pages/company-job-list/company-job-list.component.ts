@@ -48,6 +48,14 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataSource.data = [...this.dataSource.data, ...[
+      { id: '1', jobName: '工程師', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+      { id: '2', jobName: '工程師１', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+      { id: '3', jobName: '工程師２', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+      { id: '4', jobName: '工程師３', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+      { id: '5', jobName: '工程師４', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+      { id: '6', jobName: '工程師５', mailTplCode: '第一階段', smsTplCode: '第一階段',creationTime: null, creatorId: null, lastModificationTime: null, lastModifierId: null, isDeleted: false, deleterId: null, deletionTime: null, code: null, companyId: null, jobType: null, jobOpening: false },
+    ]];
   }
 
   openAddDialog(event: MouseEvent): void {
