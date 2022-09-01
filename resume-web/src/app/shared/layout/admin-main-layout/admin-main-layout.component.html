@@ -1,11 +1,33 @@
 <div class="app-admin-main-layout" color="primary">
   <mat-sidenav-container fxFlexFill class="app-admin-main-layout__container">
     <mat-sidenav #sidenav fxLayout="column" class="app-admin-main-layout__mat-drawer" position="end">
-      <div fxLayout="column">
-        <a href="#" mat-button routerLink="/admin/about">履歷管理</a>
-        <a href="#" mat-button routerLink="/admin/about">信件/簡訊管理</a>
-        <a href="#" mat-button routerLink="/admin/company-job">職缺管理</a>
-        <a href="#" mat-button routerLink="/admin/about">會員管理</a>
+      <div fxLayout="column" class="app-admin-main-layout__mat-drawer__block">
+        <div class="app-admin-main-layout__member__content__menu__info">
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap.lt-md="11px">
+            <div fxLayout="row" fxLayoutGap="11px" class="h2-text--regular">
+              <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
+              <span>{{username}}</span>
+            </div>
+            <div class="h2-text--regular">{{email}}</div>
+          </div>
+        </div>
+
+        <ng-container *ngFor="let item of links">
+          <div class="app-admin-main-layout__link" [ngClass]="{'app-admin-main-layout__link--active': item.active}">
+            <a [routerLink]="item.link">
+              <div fxLayout="row" fxLayoutAlign="center center" class="app-admin-main-layout__link__icon">
+                <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+              </div>
+              <span class="h2-text--bold">{{ item.title }}</span>
+            </a>
+          </div>
+        </ng-container>
+
+        <div mat-menu-item class="app-admin-main-layout__member__content__menu__logout" (click)="logout()">
+          <div class="h2-text--regular">
+            登出
+          </div>
+        </div>
       </div>
     </mat-sidenav>
 

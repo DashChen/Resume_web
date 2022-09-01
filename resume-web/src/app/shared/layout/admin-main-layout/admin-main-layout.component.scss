@@ -25,9 +25,35 @@ $this: '.app-admin-main-layout';
       height: 100%;
       min-width: 150px;
 
+      @include lt-md {
+        flex: 0;
+        height: 59px;
+        position: relative;
+      }
+
       &--active {
         background: $colorOrange03;
         border-bottom: 3px solid #FFFFFF;
+
+        @include lt-md {
+          border-bottom: none;
+
+          &::before {
+            content: '';
+            border-left: 3px solid #FFFFFF;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            width: 3px;
+          }
+        }
+      }
+
+      &__icon {
+        @include lt-md {
+          width: 76px;
+          height: inherit;
+        }
       }
 
       a {
@@ -38,6 +64,16 @@ $this: '.app-admin-main-layout';
         justify-content: center;
         gap: 21px;
         text-decoration: none;
+
+        @include lt-md {
+          height: inherit;
+          justify-content: space-between;
+
+          span {
+            flex-grow: 1;
+            text-align: center;
+          }
+        }
 
         mat-icon {
           align-items: center;
@@ -87,6 +123,10 @@ $this: '.app-admin-main-layout';
       background: linear-gradient(0deg, #006CD0 0%, #02B2E1 100%);
       color: #FFFFFF;
       width: 227px;
+
+      &__block {
+        height: inherit;
+      }
     }
   }
 }
@@ -111,18 +151,39 @@ $this: '.app-admin-main-layout';
         border-bottom: 1px solid #C5D0DF;
         height: 100%;
         padding: 16px;
+        @include lt-md {
+          padding: 31px;
+        }
+
         .h2-text--regular:nth-child(1) {
           color: $colorMain;
           line-height: 19px;
+          @include lt-md {
+            color: #FFFFFF;
+          }
         }
         .h2-text--regular:nth-child(2) {
           color: $colorSecond;
+          @include lt-md {
+            color: #FFFFFF;
+          }
+        }
+
+        @include lt-md {
+          flex: 0;
         }
       }
       &__logout {
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @include lt-md {
+          color: #FFFFFF;
+          flex-shrink: 0;
+          height: 80px;
+          margin-top: auto;
+        }
       }
     }
   }
