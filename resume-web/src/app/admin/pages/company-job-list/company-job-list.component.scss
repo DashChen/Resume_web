@@ -1,8 +1,8 @@
 @import 'public-mixin';
 
-:host {
-  $this: '.admin-company-job-list';
+$this: '.admin-company-job-list';
 
+:host {
   #{$this} {
     background-color: #F4F9FD;
     min-height: calc(100vh - 64px - 40px);
@@ -21,6 +21,10 @@
         mat-form-field {
           margin: 0 !important;
 
+          @include lt-md {
+            width: 100%;
+          }
+
           ::ng-deep .mat-form-field-wrapper {
             background-color: #FFFFFF;
             padding-bottom: 0 !important;
@@ -37,6 +41,41 @@
 
       &__head {
         padding: 12.5px 20px;
+
+        @include lt-md {
+          display: none;
+          justify-content: flex-end;
+          padding: 23px 24px 22px;
+        }
+
+        &__btn {
+          @include lt-md {
+            display: none;
+          }
+
+          &__icons {
+            @include lt-md {
+              display: block;
+              float: right;
+            }
+          }
+          &__icon {
+            background: $colorCis;
+            border: none;
+            border-radius: 4px;
+            height: 30px;
+            min-width: 30px;
+            width: 30px;
+            mat-icon {
+              height: 100%;
+              width: 100%;
+              line-height: inherit;
+            }
+            &[disabled] {
+              background: $colorLight;
+            }
+          }
+        }
       }
 
       &__body {
@@ -68,15 +107,20 @@
           text-align-last: end;
         }
 
-        @media (max-width: 1000px) {
-          .mat-table .mat-header-cell {
+        @include lt-md {
+          .mat-table .mat-header-cell:first-of-type {
+            background: transparent;
+            padding: 23px 24px 22px;
+          }
+
+          .mat-table .mat-header-cell:not(:first-of-type) {
             display: none;
           }
-  
+
           .mat-table .mat-cell:not(:first-of-type):not(:last-of-type) {
             display: block;
           }
-  
+
           .mat-table .mat-cell:not(:first-of-type):not(:last-of-type):before {
             display: inline-block;
             content: attr(data-th) "";
@@ -102,6 +146,87 @@
             padding-right: 0;
           }
         }
+      }
+    }
+  }
+
+  .paginator {
+    &__block {
+      padding: 24px 50px;
+      position: relative;
+
+      @include lt-md {
+        padding: 13px 17px;
+      }
+    }
+    &__item {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+
+      @include lt-md {
+        display: none;
+      }
+
+      &__text {
+        white-space: nowrap;
+      }
+      &__select {
+        ::ng-deep .mat-select-trigger {
+          .mat-select-value {
+            padding-right: 20px;
+          }
+          .mat-select-arrow-wrapper {
+            top: 0;
+          }
+        }
+      }
+    }
+    &__page-info {
+      margin: 0 !important;
+      .paginator__item__text {
+        line-height: 20px;
+      }
+    }
+    &__btns {}
+
+    &__btn {
+      height: 14px;
+      margin: 0;
+      width: 14px;
+      line-height: 14px;
+
+      @include lt-md {
+        height: 12px;
+        width: 12px;
+        line-height: 12px;
+      }
+
+      mat-icon {
+        height: 100%;
+        width: 100%;
+        line-height: inherit;
+      }
+      &--prev {}
+      &--next {}
+    }
+
+
+    &__component {
+      visibility: hidden;
+      position: absolute;
+      bottom: 0;
+      margin: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this} {
+    &__dialog {
+      &--add, &--edit {
+        max-width: calc(100vw - 48px) !important;
       }
     }
   }

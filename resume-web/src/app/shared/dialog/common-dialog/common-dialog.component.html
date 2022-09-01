@@ -6,10 +6,15 @@
     <div class="app-common-dialog__subtitle h2-text--regular">{{data.subTitle}}</div>
 </mat-dialog-content>
 <mat-dialog-actions align="center" class="app-common-dialog__action">
-    <button mat-button mat-dialog-close *ngIf="data.showCancelBtn" (click)="isSuccess = false">
+    <button mat-raised-button
+        *ngIf="data.showCancelBtn"
+        (click)="closeDialog(false)">
         {{data.cancelBtnText}}
     </button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial *ngIf="data.showSuccessBtn" (click)="isSuccess = true">
+    <button mat-raised-button cdkFocusInitial
+        class="mat-button--orange"
+        *ngIf="data.showSuccessBtn"
+        (click)="closeDialog(true)">
         {{data.successBtnText}}
     </button>
 </mat-dialog-actions>

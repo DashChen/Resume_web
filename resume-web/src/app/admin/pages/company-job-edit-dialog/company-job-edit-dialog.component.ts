@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormErrorStateMatcher } from '@app/core';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { CompanyJobDialogData } from '@app/admin/pages/company-job-list/company-job-list.component';
+import { CompanyJobData } from '@app/core/datas';
 
 @Component({
   selector: 'admin-company-job-edit-dialog',
@@ -84,7 +85,11 @@ export class CompanyJobEditDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close(this.isSuccess ? this.editForm.value : false);
+    const passData = Object.assign({}, this.data.item) as CompanyJobData;
+    passData.jobName = this.jobNameFormCtl.value;
+    passData.mailTplCode = this.mailTplCodeFormCtl.value;
+    passData.smsTplCode = this.smsTplCodeFormCtl.value;
+    this.dialogRef.close(this.isSuccess ? passData : false);
   }
 
 }

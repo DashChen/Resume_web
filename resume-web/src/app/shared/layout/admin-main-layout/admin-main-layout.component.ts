@@ -54,7 +54,6 @@ export class AdminMainLayoutComponent implements OnInit {
         const path = route?.routeConfig?.path || '';
         l.active = l.link.includes(path);
       })
-      console.log(this.links);
     });
   }
 

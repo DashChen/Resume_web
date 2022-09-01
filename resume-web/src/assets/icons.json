@@ -1,5 +1,7 @@
 {
   "arrow": "arrow.svg",
+  "arrow-left": "arrow-left.svg",
+  "arrow-right": "arrow-right.svg",
   "calendar": "calendar.svg",
   "check-circle": "check-circle.svg",
   "close-icon": "close-02.svg",
@@ -12,8 +14,10 @@
   "fb-icon": "fb-icon.svg",
   "google-icon": "google-icon.svg",
   "line-icon": "line-icon.svg",
+  "plus": "plus.svg",
   "search-icon": "search-icon.svg",
   "success": "success.svg",
+  "trash": "trash.svg",
   "unsuccessful": "unsuccessful.svg",
   "menu-icon01": "menu-icon01.svg",
   "menu-icon02": "menu-icon02.svg",

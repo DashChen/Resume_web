@@ -11,13 +11,13 @@
 		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center"
 			fxLayoutAlign.lt-md="start center">
 			<mat-form-field appearance="fill">
-				<input matInput type="type" placeholder="請輸入關鍵字">
+				<input matInput type="type" placeholder="請輸入關鍵字" [(ngModel)]="keyword" (ngModelChange)="searchKeyword($event)">
 				<mat-icon matSuffix>search</mat-icon>
 			</mat-form-field>
 		</div>
 	</div>
 	<div class="admin-company-job-list__table__block">
-		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px">
+		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="15px" fxHide.lt-md="true">
 			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
 				(click)="openAddDialog($event)">
 				新增職缺
@@ -31,13 +31,22 @@
 			<table mat-table [dataSource]="dataSource">
 				<!-- Checkbox Column -->
 				<ng-container matColumnDef="select">
-					<th mat-header-cell *matHeaderCellDef>
+					<th mat-header-cell *matHeaderCellDef [attr.colspan]="headerColspan">
 						<mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
 							[indeterminate]="selection.hasValue() && !isAllSelected()">
 						</mat-checkbox>
+
+						<div fxLayout="row" fxLayoutGap.lt-md="15px" class="admin-company-job-list__table__head__btn__icons">
+							<button class="admin-company-job-list__table__head__btn__icon mat-button--blue" (click)="openAddDialog($event)">
+								<mat-icon [svgIcon]="'plus'" aria-hidden="false" aria-label="next icon"></mat-icon>
+							</button>
+							<button class="admin-company-job-list__table__head__btn__icon mat-button--blue" [disabled]="disabledDelBtn" (click)="delItems($event)">
+								<mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="next icon"></mat-icon>
+							</button>
+						</div>
 					</th>
 					<td mat-cell *matCellDef="let row">
-						<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+						<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? rowToggle(row) : null"
 							[checked]="selection.isSelected(row)">
 						</mat-checkbox>
 					</td>
@@ -82,7 +91,48 @@
 					</td>
 				</tr>
 			</table>
-			<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+			<div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
+				<div class="paginator__item">
+					<div class="paginator__item__text h2-text--regular">顯示資料</div>
+					<mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
+						<ng-container *ngFor="let num of pageSizeOptions">
+							<mat-option [value]="num">{{num}}</mat-option>
+						</ng-container>
+					</mat-select>
+				</div>
+				<div class="paginator__item">
+					<div class="paginator__item__text h2-text--regular">當前頁數</div>
+					<mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)" class="paginator__item__select">
+						<ng-container *ngFor="let num of totalPageList">
+							<mat-option [value]="num">{{num + 1}}</mat-option>
+						</ng-container>
+					</mat-select>
+				</div>
+				<div fxLayout="row" fxLayoutAlign="center flex-start" fxLayoutGap="40px" class="paginator__page-info">
+					<div fxLayout="row" fxLayoutGap="2px">
+						<div class="paginator__item__text h2-text--regular">共{{totalPage}}頁</div>
+						<div>-</div>
+						<div class="paginator__item__text h2-text--regular">第{{manualPage + 1 }}頁</div>
+					</div>
+
+					<div fxLayout="row" fxLayoutGap="16px" class="paginator__btns">
+						<button mat-icon-button class="paginator__btn paginator__btn--prev" (click)="page.previousPage()" [disabled]="disablePrev">
+							<mat-icon [svgIcon]="'arrow-left'" aria-hidden="false" aria-label="prev icon"></mat-icon>
+						</button>
+						<button mat-icon-button class="paginator__btn paginator__btn--next" (click)="page.nextPage()" [disabled]="disableNext">
+							<mat-icon [svgIcon]="'arrow-right'" aria-hidden="false" aria-label="next icon"></mat-icon>
+						</button>
+					</div>
+				</div>
+
+				<mat-paginator #page class="paginator__component"
+					[length]="length"
+					[pageIndex]="manualPage"
+					[pageSize]="pageSize"
+					[pageSizeOptions]="pageSizeOptions"
+					(page)="getPaginatorData($event)"></mat-paginator>
+			</div>
 		</div>
 	</div>
 </div>

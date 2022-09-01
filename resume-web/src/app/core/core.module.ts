@@ -1,7 +1,7 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_INITIALIZER, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import {  DataService  } from './services';
+import { AppService, DataService, ResizeService  } from './services';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class FormErrorStateMatcher implements ErrorStateMatcher {
@@ -15,9 +15,18 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
   imports: [
   ],
   providers: [
-    DataService
+    {
+      multi: true,
+      provide: APP_INITIALIZER,
+      useFactory: function initializeRoutes(appService: AppService) {
+        return () => appService.ngOnAppInit();
+      },
+      deps: [AppService]
+    },
+    DataService,
+    ResizeService,
   ],
-  declarations: []
+  declarations: [],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() core:CoreModule ){

@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { InjectionToken } from '@angular/core';
 import { BREAKPOINTS, DEFAULT_BREAKPOINTS, BreakPoint, FlexLayoutModule } from '@angular/flex-layout';
@@ -17,7 +17,8 @@ import * as icons from '@assets/icons.json';
 import { IconProps } from './core/interfaces/icons';
 import * as country from '@assets/country.json';
 import { ICountry } from './core/interfaces/country';
-import { AppService } from './core';
+import { BreakPointType } from './core/interfaces/breakpoints';
+import { CoreModule } from './core';
 
 const iconObj: IconProps = JSON.parse(JSON.stringify(icons));
 const countryObj: ICountry = JSON.parse(JSON.stringify(country));
@@ -50,12 +51,27 @@ function updateBreakpoints(bp: BreakPoint) {
   return bp;
 }
 
+export const APP_BREAK_POINT_OPTION: BreakPointType = {
+  desktop: 1440,
+  tablet: 1279,
+  mobile: 1000,
+  mobile2: 719
+};
+
+export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('breakpoint token',
+{
+  providedIn: 'root',
+  factory: () => (APP_BREAK_POINT_OPTION)
+});
+
+
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
     BrowserModule,
+    CoreModule,
     LayoutModule,
     ComponentModule,
     DialogModule,
@@ -67,17 +83,10 @@ function updateBreakpoints(bp: BreakPoint) {
     FlexLayoutModule,
   ],
   providers: [
-    {
-      multi: true,
-      provide: APP_INITIALIZER,
-      useFactory: function initializeRoutes(appService: AppService) {
-        return () => appService.ngOnAppInit();
-      },
-      deps: [AppService]
-    },
     { provide: 'API_BASE_URL', useValue: environment.apiBaseUrl },
     { provide: ICONS_TOKEN, useValue: iconObj },
     { provide: COUNTRY_TOKEN, useValue: countryObj },
+    { provide: BREAK_POINT_OPTION_TOKEN, useValue: APP_BREAK_POINT_OPTION },
     {
       provide: BREAKPOINTS,
       useFactory: function customizeBreakPoints() {

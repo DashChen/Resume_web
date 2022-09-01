@@ -9,13 +9,12 @@ import { basicDialog } from '@app/core/interfaces/basic-dialog';
   styleUrls: ['./common-dialog.component.scss']
 })
 export class CommonDialogComponent {
-  isSuccess: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CommonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: basicDialog) { }
 
-  closeDialog() {
-    this.dialogRef.close(this.isSuccess);
+  closeDialog(isSuccess: boolean) {
+    this.dialogRef.close(isSuccess);
   }
 }
