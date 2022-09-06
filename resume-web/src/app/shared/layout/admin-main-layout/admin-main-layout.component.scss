@@ -161,6 +161,30 @@ $this: '.app-admin-main-layout';
         height: inherit;
       }
     }
+
+    mat-sidenav-content {
+      overflow: hidden;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    &__footer {
+      color: $colorLight;
+      margin-top: auto;
+      min-height: 39px;
+      padding: 0 40px;
+      width: auto;
+
+      @include lt-md {
+        height: 36px;
+      }
+    }
   }
 }
 

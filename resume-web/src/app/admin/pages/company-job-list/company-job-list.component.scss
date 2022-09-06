@@ -8,7 +8,7 @@ $this: '.admin-company-job-list';
   #{$this} {
     background-color: #F4F9FD;
     min-height: calc(100vh - 64px - 40px);
-    padding: 24px 40px 0;
+    padding: 24px 40px;
 
     &__head {
       &__block {}

@@ -76,8 +76,14 @@
           </button>
         </div>
       </mat-toolbar>
+      <div class="app-admin-main-layout__content">
+        <router-outlet></router-outlet>
 
-      <router-outlet></router-outlet>
+        <div class="app-admin-main-layout__footer h2-text--medium">
+          JB傑報人力資源服務集團 © {{startYear}}-{{currentYear}}
+        </div>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '@app/core';
+import { DateTime } from 'luxon';
 export interface link {
   link: string;
   title: string;
@@ -13,6 +14,8 @@ export interface link {
   styleUrls: ['./admin-main-layout.component.scss']
 })
 export class AdminMainLayoutComponent implements OnInit {
+  startYear: string = '2022/3';
+  currentYear: string = '';
   username: string = '王大明';
   email: string = 'WuDaMing@gmail.com';
 
@@ -49,6 +52,7 @@ export class AdminMainLayoutComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
+    this.currentYear = DateTime.now().toFormat('yyyy/M');
     this.appService.route$.subscribe((route) => {
       this.links.forEach((l: link) => {
         const path = route?.routeConfig?.path || '';
