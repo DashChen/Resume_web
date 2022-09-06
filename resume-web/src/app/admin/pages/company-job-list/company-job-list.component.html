@@ -36,7 +36,7 @@
 							[indeterminate]="selection.hasValue() && !isAllSelected()">
 						</mat-checkbox>
 
-						<div fxLayout="row" fxLayoutGap.lt-md="15px" class="admin-company-job-list__table__head__btn__icons">
+						<div fxHide="true" fxShow.lt-md="true" fxLayout="row" fxLayoutGap.lt-md="15px" class="admin-company-job-list__table__head__btn__icons">
 							<button class="admin-company-job-list__table__head__btn__icon mat-button--blue" (click)="openAddDialog($event)">
 								<mat-icon [svgIcon]="'plus'" aria-hidden="false" aria-label="next icon"></mat-icon>
 							</button>
