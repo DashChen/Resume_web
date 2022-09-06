@@ -88,6 +88,8 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
       console.log('ViewportSize', size);
       if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
         this.headerColspan = this.displayedColumns.length;
+      } else {
+        this.headerColspan = 0;
       }
     });
 
