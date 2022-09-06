@@ -1,18 +1,23 @@
 @import 'public-mixin';
 
 :host {
+    align-items: center;
     display: flex;
     flex-grow: 1;
     justify-content: center;
-    max-height: 100vh;
-    overflow-y: auto;
+    max-height: calc(100vh - 39px);
+    width: 100%;
+    @include lt-md {
+        max-height: none;
+    }
+
     $this: '.app-register-info';
 
     #{$this} {
         &__content {
             margin: 150px 0;
             max-width: 420px;
-            height: 100%;
+            height: auto;
             width: 100%;
 
             @include lt-md {

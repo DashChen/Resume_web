@@ -33,7 +33,7 @@ $this: '.app-admin-main-layout';
 
       &--active {
         background: $colorOrange03;
-        border-bottom: 3px solid #FFFFFF;
+        border-bottom: 4px solid #FFFFFF;
 
         @include lt-md {
           border-bottom: none;
@@ -63,7 +63,40 @@ $this: '.app-admin-main-layout';
         flex: 1;
         justify-content: center;
         gap: 21px;
+        padding: 4px 0;
+        position: relative;
         text-decoration: none;
+        transition: color .2s ease;
+
+        &:hover {
+          color: #FFFFFF;
+
+          &::after,
+          &::before {
+            width: 100%;
+            left: 0;
+          }
+        }
+
+        &::after,
+        &::before {
+          content: '';
+          position: absolute;
+          top: calc(100% - 4px);
+          width: 0;
+          right: 0;
+          height: 4px;
+        }
+
+        &::before {
+          transition: width .4s cubic-bezier(0.51, 0.18, 0, 0.88) .1s;
+          background: #F44336;
+        }
+
+        &::after {
+          transition: width .2s cubic-bezier(0.29, 0.18, 0.26, 0.83);
+          background: #FFFFFF;
+        }
 
         @include lt-md {
           height: inherit;

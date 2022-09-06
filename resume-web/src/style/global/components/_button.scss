@@ -25,8 +25,24 @@
         &--blue {
             background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
             color: #FFFFFF;
-            &:hover {
-                background: linear-gradient(270deg, #02B2E1 9.33%, #006CD0 100%);
+            overflow: hidden;
+            position: relative;
+            &::before {
+                aspect-ratio: 1;
+                background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+                border-radius: 50%;
+                content: "";
+                left: -100%;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%) scale(1);
+                transform-origin: left center;
+                transition: transform 0.2s ease;
+                width: 100%;
+            }
+
+            &:hover:before {
+                transform: translateY(-50%) scale(2);
             }
             &.mat-raised-button.mat-button-disabled.mat-button-disabled {
                 background: #C5D0DF;

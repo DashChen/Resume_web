@@ -1,1 +1,24 @@
-<p>forget works!</p>
+<div class="admin-forget__content">
+    <div class="admin-forget__prompt">
+        <span class="h1-title">{{title}}</span>
+        <small class="h2-text--regular">{{subtitle}}</small>
+    </div>
+    <form class="admin-forget__form" [formGroup]="emailValidationForm">
+        <mat-form-field class="mat-form-field__block mat-form-field--white" appearance="fill">
+            <input type="email" matInput placeholder="例:WanDaiMain@gmail.com" formControlName="emailAddress" required [errorStateMatcher]="matcher">
+            <mat-error class="h3-text--medium" *ngIf="emailAddressFormCtl.invalid">
+                {{ getEmailAddressErrorMessage() }}
+            </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button
+            class="admin-forget__form__btn mat-button--block mat-button--orange h2-text--bold"
+            (click)="sendForgetEmail($event)">{{btnText}}</button>
+
+    </form>
+
+    <a class="admin-forget__route__admin" routerLink="/admin/login">
+        <span class="h2-text--regular">{{otherTitle}}</span>
+    </a>
+</div>
+

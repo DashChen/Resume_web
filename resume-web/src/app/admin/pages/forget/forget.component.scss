@@ -1,0 +1,72 @@
+@import 'public-mixin';
+
+:host {
+    flex-grow: 1;
+    $this: '.admin-forget';
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    @include lt-md {
+        width: 100%;
+        max-width: 380px;
+    }
+    @media screen and (max-height: 700px) {
+        min-height: 550px;
+    }
+    #{$this} {
+
+        &__content {
+            height: 100%;
+            min-width: 420px;
+            padding-left: 70px;
+            border-left: 1px solid #FFFFFF;
+            @include lt-md {
+                min-width: 100%;
+                padding-left: 0;
+                border-left: none;
+            }
+        }
+        &__prompt {
+            align-items: baseline;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            span {
+                color: #FFFFFF;
+            }
+            small {
+                color: #FFFFFF;
+            }
+            &--error {
+                position: absolute;
+                bottom: -26px;
+                color: $colorError2;
+            }
+        }
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+            margin-top: 40px;
+
+            &__btn {}
+        }
+
+        &__route__admin {
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            margin: 35px 0;
+            text-decoration: none;
+            span {
+                color: #FFFFFF;
+                margin-right: 28px;
+            }
+            mat-icon {
+                color: #FFFFFF;
+                height: 16px;
+                transform: rotate(-90deg);
+            }
+        }
+    }
+}

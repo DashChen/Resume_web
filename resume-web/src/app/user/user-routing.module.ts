@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ResumeManagementComponent } from '.';
 import { Layouts } from '../app.component';
 import { ForgetComponent } from './pages/forget/forget.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -43,13 +42,6 @@ const routes: Routes = [
       component: ResetPasswordComponent,
       data: {
         layout: Layouts.userLogin
-      }
-    },
-    {
-      path: 'resume-management',
-      component: ResumeManagementComponent,
-      data: {
-        layout: Layouts.userMain
       }
     },
 ];
