@@ -25,3 +25,21 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+
+
+5.1 使用者前台功能需求
+    5.1.1 註冊
+    5.1.2 系統登入
+    5.1.3 登入後選單列表
+    5.1.4 忘記/修改密碼
+    5.1.5 會員管理
+    5.1.6 履歷管理
+
+5.2 後台功能需求
+    5.2.1 管理者登入
+    5.2.2 履歷管理
+    5.2.3 信件/簡訊管理
+    5.2.4 會員管理
+    5.2.5 職缺管理
