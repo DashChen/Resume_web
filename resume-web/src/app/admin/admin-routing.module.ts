@@ -10,6 +10,7 @@ import {
     HomeComponent,
     ResetPasswordComponent,
     ResumeManagementComponent,
+    ResumeInvitationListComponent,
     ResumeInvitationsComponent,
 } from './pages';
 
@@ -21,8 +22,9 @@ const routes: Routes = [
             { path: 'forget', component: ForgetComponent, data: { layout: Layouts.adminLogin }, },
             { path: 'reset-password', component: ResetPasswordComponent, data: { layout: Layouts.adminLogin }, },
 
-            { path: 'resume-invitation', component: ResumeInvitationsComponent, data: { layout: Layouts.adminMain }, },
-            { path: 'message', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'message', component: ResumeInvitationListComponent, data: { layout: Layouts.adminMain }, },
+            // { path: 'resume-invitation', component: ResumeInvitationsComponent, data: { layout: Layouts.adminMain }, },
+            // { path: 'message', component: HomeComponent, data: { layout: Layouts.adminMain }, },
             { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
             { path: 'member', component: HomeComponent, data: { layout: Layouts.adminMain }, },
             { path: 'resume-management', component: ResumeManagementComponent, data: { layout: Layouts.adminMain }, },

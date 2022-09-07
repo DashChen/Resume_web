@@ -5,6 +5,7 @@ $this: '.admin-company-job-list';
 :host {
   height: 100%;
   width: 100%;
+
   #{$this} {
     background-color: #F4F9FD;
     min-height: calc(100vh - 64px - 40px);
@@ -106,7 +107,8 @@ $this: '.admin-company-job-list';
 
         .mat-table .mat-cell:last-child {
           width: 45px;
-          text-align-last: end;
+          color: #C5D0DF;
+          text-align-last: start;
         }
 
         @include lt-md {

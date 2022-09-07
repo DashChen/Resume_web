@@ -43,6 +43,14 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   disabledDelBtn: boolean = true;
 
+  // ---- SnackBar ----
+  configSuccess: MatSnackBarConfig = {
+    panelClass: 'success-snackbar',
+    duration: 100000,
+    // horizontalPosition: 'left',
+    // verticalPosition: 'bottom',
+  };
+
   //
   headerColspan: number = 1;
 
@@ -62,6 +70,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   constructor(
     public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) {
     super();
   }
@@ -184,6 +193,18 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   editItem(item: ResumeData) {
     console.log('editItem', item);
+  }
+
+  copyUrl(item: ResumeData) {
+    console.log('copyUrl', item);
+    this.snackBar.openFromComponent(MessageSnackbarComponent, {
+      ...this.configSuccess,
+      data: {
+        title: '連結複製成功',
+        textIcon: 'check-circle',
+        actionIcon: 'close-icon',
+      }
+    })
   }
 
   openAddDialog(event: MouseEvent): void {

@@ -35,6 +35,7 @@
         <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">階段</label>
           <mat-select formControlName="level" [errorStateMatcher]="matcher">
+            <mat-option>請選擇</mat-option>
             <ng-container *ngFor="let option of levelOptions">
               <mat-option [value]="option.key">{{option.text}}</mat-option>
             </ng-container>
@@ -43,6 +44,7 @@
         <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">職缺</label>
           <mat-select formControlName="job" [errorStateMatcher]="matcher">
+            <mat-option>請選擇</mat-option>
             <ng-container *ngFor="let option of jobOptions">
               <mat-option [value]="option.key">{{option.text}}</mat-option>
             </ng-container>
@@ -51,6 +53,7 @@
         <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">填寫狀態</label>
           <mat-select formControlName="status" [errorStateMatcher]="matcher">
+            <mat-option>請選擇</mat-option>
             <ng-container *ngFor="let option of statusOptions">
               <mat-option [value]="option.key">{{option.text}}</mat-option>
             </ng-container>
@@ -104,31 +107,59 @@
           </td>
         </ng-container>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="jobName">
-          <th mat-header-cell *matHeaderCellDef>職缺名稱</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺名稱'">{{element.jobName}}</td>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>姓名</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'姓名'">{{element.name}}</td>
         </ng-container>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="mailTplCode">
-          <th mat-header-cell *matHeaderCellDef>信件樣板</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'信件樣板'">{{element.mailTplCode}}</td>
+        <!-- Mobile Column -->
+        <ng-container matColumnDef="mobile">
+          <th mat-header-cell *matHeaderCellDef>電話</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'電話'">{{element.mobile}}</td>
         </ng-container>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="smsTplCode">
-          <th mat-header-cell *matHeaderCellDef>訊息樣板</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'訊息樣板'">{{element.smsTplCode}}</td>
+        <!-- E-mail Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'E-mail'">{{element.email}}</td>
+        </ng-container>
+
+        <!-- Job Column -->
+        <ng-container matColumnDef="job">
+          <th mat-header-cell *matHeaderCellDef>職缺</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺'">{{element.job}}</td>
+        </ng-container>
+
+        <!-- Level Column -->
+        <ng-container matColumnDef="level">
+          <th mat-header-cell *matHeaderCellDef>階段</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'階段'">{{element.level}}</td>
+        </ng-container>
+
+        <!-- Level Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>填寫狀態</th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'填寫狀態'">{{element.status}}</td>
         </ng-container>
 
         <!-- Action Column -->
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
-            <button mat-menu-item (click)="editItem(element)">
-              <mat-icon svgIcon="edit"></mat-icon>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+              <mat-icon>more_vert</mat-icon>
             </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editItem(element)">
+                <mat-icon svgIcon="edit"></mat-icon>
+                <span>編輯</span>
+              </button>
+              <button mat-menu-item (click)="copyUrl(element)">
+                <mat-icon svgIcon="connected"></mat-icon>
+                <span>複製連結</span>
+              </button>
+            </mat-menu>
           </td>
         </ng-container>
 
@@ -139,7 +170,7 @@
         <tr class="mat-row data-empty" *matNoDataRow>
           <td class="mat-cell"></td>
           <td class="mat-cell h2-text--regular" [attr.colspan]="displayedColumns.length">
-            您還沒有任何職缺
+            您還沒有新增人員，立即新增已進行相關人事處理
           </td>
         </tr>
       </table>
