@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { Layouts } from '../app.component';
 import {
-    AdminLoginComponent, AdminComponent,
-    CompanyJobListComponent, HomeComponent, ResumeManagementComponent
+    AdminLoginComponent,
+    AdminComponent,
+    CompanyJobListComponent,
+    ForgetComponent,
+    HomeComponent,
+    ResetPasswordComponent,
+    ResumeManagementComponent,
+    ResumeInvitationsComponent,
 } from './pages';
-import { ForgetComponent } from './pages/forget/forget.component';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 const routes: Routes = [
     {
@@ -16,7 +21,7 @@ const routes: Routes = [
             { path: 'forget', component: ForgetComponent, data: { layout: Layouts.adminLogin }, },
             { path: 'reset-password', component: ResetPasswordComponent, data: { layout: Layouts.adminLogin }, },
 
-            { path: 'resume', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'resume-invitation', component: ResumeInvitationsComponent, data: { layout: Layouts.adminMain }, },
             { path: 'message', component: HomeComponent, data: { layout: Layouts.adminMain }, },
             { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
             { path: 'member', component: HomeComponent, data: { layout: Layouts.adminMain }, },
