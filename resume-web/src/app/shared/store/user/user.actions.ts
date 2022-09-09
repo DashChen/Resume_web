@@ -1,5 +1,5 @@
-import { VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
 import { createAction, props } from '@ngrx/store';
+import { VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
 
 export const setRegisterPhone = createAction(
     '[Register Page] Set Phone',
