@@ -365,7 +365,6 @@ export interface ResumeCommunicationsCommunicationUpdateDto {
 
 export interface ResumeCompanyJobsCompanyJobCreateDto {
   code?: string | null;
-  companyId?: string | null;
   jobName?: string | null;
   jobType?: string | null;
   jobOpening?: boolean;
@@ -1225,6 +1224,11 @@ export interface ResumeMailQuenesMailQueneCreateDto {
 
   /** @format date-time */
   send_Date?: string;
+  isOpened?: boolean;
+  companyId: string;
+  resumeCode?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
 }
 
 export interface ResumeMailQuenesMailQueneDto {
@@ -1261,6 +1265,11 @@ export interface ResumeMailQuenesMailQueneDto {
 
   /** @format date-time */
   send_Date?: string;
+  isOpened?: boolean;
+  companyId?: string | null;
+  resumeCode?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
 }
 
 export interface ResumeMailQuenesMailQueneUpdateDto {
@@ -1280,6 +1289,11 @@ export interface ResumeMailQuenesMailQueneUpdateDto {
 
   /** @format date-time */
   send_Date?: string;
+  isOpened?: boolean;
+  companyId: string;
+  resumeCode?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
 }
 
 export interface ResumeMailTplsMailTplCreateDto {
@@ -1402,6 +1416,23 @@ export interface ResumeMemosMemoUpdateDto {
   validCode?: string | null;
 }
 
+export interface ResumeRegisterRegisterInputDto {
+  extraProperties?: Record<string, any>;
+  userName: string;
+
+  /** @format email */
+  emailAddress: string;
+
+  /** @format password */
+  password: string;
+  appName: string;
+  returnUrl?: string | null;
+  returnUrlHash?: string | null;
+  captchaResponse?: string | null;
+  phone?: string | null;
+  idno?: string | null;
+}
+
 export interface ResumeResumeInvitationsResumeInvitationCreateDto {
   code?: string | null;
   companyName?: string | null;
@@ -1419,6 +1450,11 @@ export interface ResumeResumeInvitationsResumeInvitationCreateDto {
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
+  phone: string;
+
+  /** @format email */
+  email: string;
+  companyId?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationDto {
@@ -1459,6 +1495,10 @@ export interface ResumeResumeInvitationsResumeInvitationDto {
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  companyId?: string | null;
+  url?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
@@ -1478,6 +1518,11 @@ export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
+  phone: string;
+
+  /** @format email */
+  email: string;
+  companyId?: string | null;
 }
 
 export interface ResumeResumeMainsResumeMainCreateDto {
@@ -1660,6 +1705,144 @@ export interface ResumeShareCodesShareCodeUpdateDto {
   display?: boolean;
 }
 
+export interface ResumeSMSQuenesSMSQueneCreateDto {
+  systemCode: string;
+  code: string;
+  from_Phone?: string | null;
+  from_Name?: string | null;
+  to_Phone?: string | null;
+  to_Name?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  success?: boolean;
+
+  /** @format date-time */
+  send_Date?: string;
+  isOpened?: boolean;
+  companyId: string;
+}
+
+export interface ResumeSMSQuenesSMSQueneDto {
+  /** @format uuid */
+  id?: string;
+
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format date-time */
+  lastModificationTime?: string | null;
+
+  /** @format uuid */
+  lastModifierId?: string | null;
+  isDeleted?: boolean;
+
+  /** @format uuid */
+  deleterId?: string | null;
+
+  /** @format date-time */
+  deletionTime?: string | null;
+  systemCode?: string | null;
+  code?: string | null;
+  from_Phone?: string | null;
+  from_Name?: string | null;
+  to_Phone?: string | null;
+  to_Name?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  success?: boolean;
+
+  /** @format date-time */
+  send_Date?: string;
+  isOpened?: boolean;
+  companyId?: string | null;
+}
+
+export interface ResumeSMSQuenesSMSQueneUpdateDto {
+  systemCode: string;
+  code: string;
+  from_Phone?: string | null;
+  from_Name?: string | null;
+  to_Phone?: string | null;
+  to_Name?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  success?: boolean;
+
+  /** @format date-time */
+  send_Date?: string;
+  isOpened?: boolean;
+  companyId: string;
+}
+
+export interface ResumeSMSTplsSMSTplCreateDto {
+  systemCode: string;
+  key1?: string | null;
+  key2?: string | null;
+  key3?: string | null;
+  code?: string | null;
+  name?: string | null;
+  statement?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  note?: string | null;
+  sort?: string | null;
+  status?: string | null;
+}
+
+export interface ResumeSMSTplsSMSTplDto {
+  /** @format uuid */
+  id?: string;
+
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format date-time */
+  lastModificationTime?: string | null;
+
+  /** @format uuid */
+  lastModifierId?: string | null;
+  isDeleted?: boolean;
+
+  /** @format uuid */
+  deleterId?: string | null;
+
+  /** @format date-time */
+  deletionTime?: string | null;
+  systemCode?: string | null;
+  key1?: string | null;
+  key2?: string | null;
+  key3?: string | null;
+  code?: string | null;
+  name?: string | null;
+  statement?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  note?: string | null;
+  sort?: string | null;
+  status?: string | null;
+}
+
+export interface ResumeSMSTplsSMSTplUpdateDto {
+  systemCode: string;
+  key1?: string | null;
+  key2?: string | null;
+  key3?: string | null;
+  code?: string | null;
+  name?: string | null;
+  statement?: string | null;
+  subject?: string | null;
+  body?: string | null;
+  note?: string | null;
+  sort?: string | null;
+  status?: string | null;
+}
+
 export interface ResumeTestBobsTestBobCreateDto {
   test?: string | null;
 }
@@ -1729,10 +1912,55 @@ export interface ResumeTestCardsTestCardUpdateDto {
   cardId?: string | null;
 }
 
+export interface ResumeThirdPartiesThirdPartyCreateDto {
+  /** @format uuid */
+  userCode?: string;
+  thirdPartyAccountCode: string;
+  thirdPartyTypeCode: string;
+}
+
+export interface ResumeThirdPartiesThirdPartyDto {
+  /** @format uuid */
+  id?: string;
+
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format date-time */
+  lastModificationTime?: string | null;
+
+  /** @format uuid */
+  lastModifierId?: string | null;
+  isDeleted?: boolean;
+
+  /** @format uuid */
+  deleterId?: string | null;
+
+  /** @format date-time */
+  deletionTime?: string | null;
+
+  /** @format uuid */
+  userCode?: string;
+  thirdPartyAccountCode?: string | null;
+  thirdPartyTypeCode?: string | null;
+}
+
+export interface ResumeThirdPartiesThirdPartyUpdateDto {
+  /** @format uuid */
+  userCode?: string;
+  thirdPartyAccountCode: string;
+  thirdPartyTypeCode: string;
+}
+
 export interface ResumeUserDatasUserDataCreateDto {
   /** @format uuid */
   accountId: string;
-  birthDay?: string | null;
+
+  /** @format date-time */
+  birthDay?: string;
 }
 
 export interface ResumeUserDatasUserDataDto {
@@ -1760,19 +1988,64 @@ export interface ResumeUserDatasUserDataDto {
 
   /** @format uuid */
   accountId?: string;
-  birthDay?: string | null;
-  phone?: string | null;
-  phoneVerified?: boolean;
-  email?: string | null;
-  emailVerified?: boolean;
-  userName?: string | null;
-  name?: string | null;
+
+  /** @format date-time */
+  birthDay?: string;
 }
 
 export interface ResumeUserDatasUserDataUpdateDto {
   /** @format uuid */
   accountId: string;
-  birthDay?: string | null;
+
+  /** @format date-time */
+  birthDay?: string;
+}
+
+export interface ResumeVerifyCodesVerifyCodeCreateDto {
+  verifyPhone: string;
+}
+
+export interface ResumeVerifyCodesVerifyCodeDto {
+  /** @format uuid */
+  id?: string;
+
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format date-time */
+  lastModificationTime?: string | null;
+
+  /** @format uuid */
+  lastModifierId?: string | null;
+  isDeleted?: boolean;
+
+  /** @format uuid */
+  deleterId?: string | null;
+
+  /** @format date-time */
+  deletionTime?: string | null;
+  code?: string | null;
+  verifyPhone?: string | null;
+
+  /** @format date-time */
+  beginTime?: string;
+
+  /** @format date-time */
+  endTime?: string;
+}
+
+export interface ResumeVerifyCodesVerifyCodeUpdateDto {
+  code?: string | null;
+  verifyPhone: string;
+
+  /** @format date-time */
+  beginTime?: string;
+
+  /** @format date-time */
+  endTime?: string;
 }
 
 /**
@@ -2123,6 +2396,10 @@ export interface VoloAbpApplicationDtosListResultDto1ResumeAppendicesAppendixDto
   items?: ResumeAppendicesAppendixDto[] | null;
 }
 
+export interface VoloAbpApplicationDtosListResultDto1ResumeAutobiographiesAutobiographyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
+  items?: ResumeAutobiographiesAutobiographyDto[] | null;
+}
+
 export interface VoloAbpApplicationDtosListResultDto1ResumeBaseBasicsBaseBasicDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
   items?: ResumeBaseBasicsBaseBasicDto[] | null;
 }
@@ -2338,6 +2615,20 @@ export interface VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeD
   totalCount?: number;
 }
 
+export interface VoloAbpApplicationDtosPagedResultDto1ResumeSMSQuenesSMSQueneDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
+  items?: ResumeSMSQuenesSMSQueneDto[] | null;
+
+  /** @format int64 */
+  totalCount?: number;
+}
+
+export interface VoloAbpApplicationDtosPagedResultDto1ResumeSMSTplsSMSTplDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
+  items?: ResumeSMSTplsSMSTplDto[] | null;
+
+  /** @format int64 */
+  totalCount?: number;
+}
+
 export interface VoloAbpApplicationDtosPagedResultDto1ResumeTestBobsTestBobDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
   items?: ResumeTestBobsTestBobDto[] | null;
 
@@ -2352,8 +2643,22 @@ export interface VoloAbpApplicationDtosPagedResultDto1ResumeTestCardsTestCardDto
   totalCount?: number;
 }
 
+export interface VoloAbpApplicationDtosPagedResultDto1ResumeThirdPartiesThirdPartyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
+  items?: ResumeThirdPartiesThirdPartyDto[] | null;
+
+  /** @format int64 */
+  totalCount?: number;
+}
+
 export interface VoloAbpApplicationDtosPagedResultDto1ResumeUserDatasUserDataDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
   items?: ResumeUserDatasUserDataDto[] | null;
+
+  /** @format int64 */
+  totalCount?: number;
+}
+
+export interface VoloAbpApplicationDtosPagedResultDto1ResumeVerifyCodesVerifyCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
+  items?: ResumeVerifyCodesVerifyCodeDto[] | null;
 
   /** @format int64 */
   totalCount?: number;
@@ -3086,6 +3391,74 @@ export interface VoloAbpIdentityIdentitySignInSettingsDto {
   requireConfirmedPhoneNumber?: boolean;
 }
 
+export interface VoloAbpIdentityIdentityUser {
+  /** @format uuid */
+  id?: string;
+  extraProperties?: Record<string, any>;
+  concurrencyStamp?: string | null;
+
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format date-time */
+  lastModificationTime?: string | null;
+
+  /** @format uuid */
+  lastModifierId?: string | null;
+  isDeleted?: boolean;
+
+  /** @format uuid */
+  deleterId?: string | null;
+
+  /** @format date-time */
+  deletionTime?: string | null;
+
+  /** @format uuid */
+  tenantId?: string | null;
+  userName?: string | null;
+  normalizedUserName?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  email?: string | null;
+  normalizedEmail?: string | null;
+  emailConfirmed?: boolean;
+  passwordHash?: string | null;
+  securityStamp?: string | null;
+  isExternal?: boolean;
+  phoneNumber?: string | null;
+  phoneNumberConfirmed?: boolean;
+  isActive?: boolean;
+  twoFactorEnabled?: boolean;
+
+  /** @format date-time */
+  lockoutEnd?: string | null;
+  lockoutEnabled?: boolean;
+
+  /** @format int32 */
+  accessFailedCount?: number;
+  roles?: VoloAbpIdentityIdentityUserRole[] | null;
+  claims?: VoloAbpIdentityIdentityUserClaim[] | null;
+  logins?: VoloAbpIdentityIdentityUserLogin[] | null;
+  tokens?: VoloAbpIdentityIdentityUserToken[] | null;
+  organizationUnits?: VoloAbpIdentityIdentityUserOrganizationUnit[] | null;
+}
+
+export interface VoloAbpIdentityIdentityUserClaim {
+  /** @format uuid */
+  id?: string;
+
+  /** @format uuid */
+  tenantId?: string | null;
+  claimType?: string | null;
+  claimValue?: string | null;
+
+  /** @format uuid */
+  userId?: string;
+}
+
 export interface VoloAbpIdentityIdentityUserClaimDto {
   /** @format uuid */
   userId?: string;
@@ -3152,9 +3525,59 @@ export interface VoloAbpIdentityIdentityUserDto {
   accessFailedCount?: number;
 }
 
+export interface VoloAbpIdentityIdentityUserLogin {
+  /** @format uuid */
+  tenantId?: string | null;
+
+  /** @format uuid */
+  userId?: string;
+  loginProvider?: string | null;
+  providerKey?: string | null;
+  providerDisplayName?: string | null;
+}
+
+export interface VoloAbpIdentityIdentityUserOrganizationUnit {
+  /** @format date-time */
+  creationTime?: string;
+
+  /** @format uuid */
+  creatorId?: string | null;
+
+  /** @format uuid */
+  tenantId?: string | null;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  organizationUnitId?: string;
+}
+
+export interface VoloAbpIdentityIdentityUserRole {
+  /** @format uuid */
+  tenantId?: string | null;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  roleId?: string;
+}
+
 export interface VoloAbpIdentityIdentityUserSettingsDto {
   isUserNameUpdateEnabled?: boolean;
   isEmailUpdateEnabled?: boolean;
+}
+
+export interface VoloAbpIdentityIdentityUserToken {
+  /** @format uuid */
+  tenantId?: string | null;
+
+  /** @format uuid */
+  userId?: string;
+  loginProvider?: string | null;
+  name?: string | null;
+  value?: string | null;
 }
 
 export interface VoloAbpIdentityIdentityUserUpdateDto {
@@ -5285,10 +5708,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/app/appendices
      * @secure
      */
-    appAppendicesCreate: (data: ResumeAppendicesAppendixCreateDto, params: RequestParams = {}) =>
+    appAppendicesCreate: (
+      query: { Name: string },
+      data: ResumeAppendicesAppendixCreateDto,
+      params: RequestParams = {},
+    ) =>
       this.request<ResumeAppendicesAppendixDto, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/appendices`,
         method: "POST",
+        query: query,
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -5365,6 +5793,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Appendix
+     * @name AppAppendicesCreateList
+     * @request GET:/api/app/appendices/Create
+     * @secure
+     */
+    appAppendicesCreateList: (query: { Name: string }, data: { File?: File }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/appendices/Create`,
+        method: "GET",
+        query: query,
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
         format: "json",
         ...params,
       }),
@@ -5662,6 +6110,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/autobiographies/${id}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Autobiography
+     * @name AppAutobiographiesGetListByResumeCodeList
+     * @request GET:/api/app/autobiographies/GetListByResumeCode
+     * @secure
+     */
+    appAutobiographiesGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosListResultDto1ResumeAutobiographiesAutobiographyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/autobiographies/GetListByResumeCode`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -6359,6 +6828,466 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/company-jobs/${id}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CompanyJob
+     * @name AppCompanyJobsGetListByCompanyIdList
+     * @request GET:/api/app/company-jobs/GetListByCompanyId
+     * @secure
+     */
+    appCompanyJobsGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeCompanyJobsCompanyJobDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/company-jobs/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserFindResultByPhoneCreate
+     * @request POST:/api/app/custom-identity-user/find-result-by-phone
+     * @secure
+     */
+    appCustomIdentityUserFindResultByPhoneCreate: (query?: { Phone?: string }, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUser, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/find-result-by-phone`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserDetail
+     * @request GET:/api/app/custom-identity-user/{id}
+     * @secure
+     */
+    appCustomIdentityUserDetail: (id: string, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserUpdate
+     * @request PUT:/api/app/custom-identity-user/{id}
+     * @secure
+     */
+    appCustomIdentityUserUpdate: (id: string, data: VoloAbpIdentityIdentityUserUpdateDto, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserDelete
+     * @request DELETE:/api/app/custom-identity-user/{id}
+     * @secure
+     */
+    appCustomIdentityUserDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserList
+     * @request GET:/api/app/custom-identity-user
+     * @secure
+     */
+    appCustomIdentityUserList: (
+      query?: {
+        Filter?: string;
+        RoleId?: string;
+        OrganizationUnitId?: string;
+        UserName?: string;
+        PhoneNumber?: string;
+        EmailAddress?: string;
+        IsLockedOut?: boolean;
+        NotActive?: boolean;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1VoloAbpIdentityIdentityUserDtoVoloAbpIdentityProApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/custom-identity-user`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserCreate
+     * @request POST:/api/app/custom-identity-user
+     * @secure
+     */
+    appCustomIdentityUserCreate: (data: VoloAbpIdentityIdentityUserCreateDto, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserRolesDetail
+     * @request GET:/api/app/custom-identity-user/{id}/roles
+     * @secure
+     */
+    appCustomIdentityUserRolesDetail: (id: string, params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosListResultDto1VoloAbpIdentityIdentityRoleDtoVoloAbpIdentityProApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/custom-identity-user/${id}/roles`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserRolesUpdate
+     * @request PUT:/api/app/custom-identity-user/{id}/roles
+     * @secure
+     */
+    appCustomIdentityUserRolesUpdate: (
+      id: string,
+      data: VoloAbpIdentityIdentityUserUpdateRolesDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/roles`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserAssignableRolesList
+     * @request GET:/api/app/custom-identity-user/assignable-roles
+     * @secure
+     */
+    appCustomIdentityUserAssignableRolesList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosListResultDto1VoloAbpIdentityIdentityRoleDtoVoloAbpIdentityProApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/custom-identity-user/assignable-roles`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserAvailableOrganizationUnitsList
+     * @request GET:/api/app/custom-identity-user/available-organization-units
+     * @secure
+     */
+    appCustomIdentityUserAvailableOrganizationUnitsList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosListResultDto1VoloAbpIdentityOrganizationUnitWithDetailsDtoVoloAbpIdentityProApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/custom-identity-user/available-organization-units`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserClaimTypesList
+     * @request GET:/api/app/custom-identity-user/claim-types
+     * @secure
+     */
+    appCustomIdentityUserClaimTypesList: (params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityClaimTypeDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/claim-types`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserClaimsDetail
+     * @request GET:/api/app/custom-identity-user/{id}/claims
+     * @secure
+     */
+    appCustomIdentityUserClaimsDetail: (id: string, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserClaimDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/claims`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserClaimsUpdate
+     * @request PUT:/api/app/custom-identity-user/{id}/claims
+     * @secure
+     */
+    appCustomIdentityUserClaimsUpdate: (
+      id: string,
+      data: VoloAbpIdentityIdentityUserClaimDto[],
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/claims`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserOrganizationUnitsDetail
+     * @request GET:/api/app/custom-identity-user/{id}/organization-units
+     * @secure
+     */
+    appCustomIdentityUserOrganizationUnitsDetail: (id: string, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityOrganizationUnitDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/organization-units`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserLockCreate
+     * @request POST:/api/app/custom-identity-user/{id}/lock
+     * @secure
+     */
+    appCustomIdentityUserLockCreate: (id: string, query?: { lockoutEnd?: string }, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/lock`,
+        method: "POST",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserUnlockCreate
+     * @request POST:/api/app/custom-identity-user/{id}/unlock
+     * @secure
+     */
+    appCustomIdentityUserUnlockCreate: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/unlock`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserPasswordUpdate
+     * @request PUT:/api/app/custom-identity-user/{id}/password
+     * @secure
+     */
+    appCustomIdentityUserPasswordUpdate: (
+      id: string,
+      data: VoloAbpIdentityIdentityUserUpdatePasswordInput,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/password`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserFindByUsernameCreate
+     * @request POST:/api/app/custom-identity-user/find-by-username
+     * @secure
+     */
+    appCustomIdentityUserFindByUsernameCreate: (query?: { username?: string }, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/find-by-username`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserFindByEmailCreate
+     * @request POST:/api/app/custom-identity-user/find-by-email
+     * @secure
+     */
+    appCustomIdentityUserFindByEmailCreate: (query?: { email?: string }, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/find-by-email`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserTwoFactorEnabledDetail
+     * @request GET:/api/app/custom-identity-user/{id}/two-factor-enabled
+     * @secure
+     */
+    appCustomIdentityUserTwoFactorEnabledDetail: (id: string, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/two-factor-enabled`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserSetTwoFactorEnabledCreate
+     * @request POST:/api/app/custom-identity-user/{id}/set-two-factor-enabled
+     * @secure
+     */
+    appCustomIdentityUserSetTwoFactorEnabledCreate: (
+      id: string,
+      query?: { enabled?: boolean },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/${id}/set-two-factor-enabled`,
+        method: "POST",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserRoleLookupList
+     * @request GET:/api/app/custom-identity-user/role-lookup
+     * @secure
+     */
+    appCustomIdentityUserRoleLookupList: (params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityRoleLookupDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/role-lookup`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserOrganizationUnitLookupList
+     * @request GET:/api/app/custom-identity-user/organization-unit-lookup
+     * @secure
+     */
+    appCustomIdentityUserOrganizationUnitLookupList: (params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityOrganizationUnitLookupDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/organization-unit-lookup`,
+        method: "GET",
+        secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -8156,6 +9085,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags JobCondition
+     * @name AppJobConditionsDeleteListDelete
+     * @request DELETE:/api/app/job-conditions/DeleteList
+     * @secure
+     */
+    appJobConditionsDeleteListDelete: (query?: { id?: string[] }, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/job-conditions/DeleteList`,
+        method: "DELETE",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags JobGroupSetting
      * @name AppJobGroupSettingsList
      * @request GET:/api/app/job-group-settings
@@ -8961,6 +9907,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         Success?: boolean;
         Send_DateMin?: string;
         Send_DateMax?: string;
+        IsOpened?: boolean;
+        CompanyId?: string;
+        ResumeCode?: string;
+        Stage?: string;
+        JobName?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -9047,6 +9998,60 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/mail-quenes/${id}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesReSendCreate
+     * @request POST:/api/app/mail-quenes/ReSend
+     * @secure
+     */
+    appMailQuenesReSendCreate: (data: string[], params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/ReSend`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesGetListByCompanyIdList
+     * @request GET:/api/app/mail-quenes/GetListByCompanyId
+     * @secure
+     */
+    appMailQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeMailQuenesMailQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesUpdateOpenedStatusUpdate
+     * @request PUT:/api/app/mail-quenes/UpdateOpenedStatus
+     * @secure
+     */
+    appMailQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
+      this.request<ResumeMailQuenesMailQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/UpdateOpenedStatus`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -9765,6 +10770,399 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Register
+     * @name AppRegisterResumeRegisterCreate
+     * @request POST:/api/app/register/resume-register
+     * @secure
+     */
+    appRegisterResumeRegisterCreate: (data: ResumeRegisterRegisterInputDto, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/resume-register`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterResumeSendVerifyCodeCreate
+     * @request POST:/api/app/register/resume-send-verify-code
+     * @secure
+     */
+    appRegisterResumeSendVerifyCodeCreate: (query?: { Phone?: string }, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/resume-send-verify-code`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterResumeMailVerifyCodeCreate
+     * @request POST:/api/app/register/resume-mail-verify-code
+     * @secure
+     */
+    appRegisterResumeMailVerifyCodeCreate: (query?: { Email?: string }, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/resume-mail-verify-code`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterConfirmVerifyCodeCreate
+     * @request POST:/api/app/register/confirm-verify-code
+     * @secure
+     */
+    appRegisterConfirmVerifyCodeCreate: (query?: { Phone?: string; Code?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/confirm-verify-code`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterResumeResetPasswordCreate
+     * @request POST:/api/app/register/resume-reset-password
+     * @secure
+     */
+    appRegisterResumeResetPasswordCreate: (
+      query?: { PhoneOrEmail?: string; newPassword?: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/resume-reset-password`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterProfilePictureCreate
+     * @request POST:/api/app/register/profile-picture
+     * @secure
+     */
+    appRegisterProfilePictureCreate: (params: RequestParams = {}) =>
+      this.request<VoloAbpAccountProfilePictureSourceDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/profile-picture`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterRegisterCreate
+     * @request POST:/api/app/register/register
+     * @secure
+     */
+    appRegisterRegisterCreate: (data: VoloAbpAccountRegisterDto, params: RequestParams = {}) =>
+      this.request<VoloAbpIdentityIdentityUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/register`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSendPasswordResetCodeCreate
+     * @request POST:/api/app/register/send-password-reset-code
+     * @secure
+     */
+    appRegisterSendPasswordResetCodeCreate: (
+      data: VoloAbpAccountSendPasswordResetCodeDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/send-password-reset-code`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterResetPasswordCreate
+     * @request POST:/api/app/register/reset-password
+     * @secure
+     */
+    appRegisterResetPasswordCreate: (data: VoloAbpAccountResetPasswordDto, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/reset-password`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterConfirmationStateDetail
+     * @request GET:/api/app/register/{id}/confirmation-state
+     * @secure
+     */
+    appRegisterConfirmationStateDetail: (id: string, params: RequestParams = {}) =>
+      this.request<VoloAbpAccountIdentityUserConfirmationStateDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/${id}/confirmation-state`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSendPhoneNumberConfirmationTokenCreate
+     * @request POST:/api/app/register/send-phone-number-confirmation-token
+     * @secure
+     */
+    appRegisterSendPhoneNumberConfirmationTokenCreate: (
+      data: VoloAbpAccountSendPhoneNumberConfirmationTokenDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/send-phone-number-confirmation-token`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSendEmailConfirmationTokenCreate
+     * @request POST:/api/app/register/send-email-confirmation-token
+     * @secure
+     */
+    appRegisterSendEmailConfirmationTokenCreate: (
+      data: VoloAbpAccountSendEmailConfirmationTokenDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/send-email-confirmation-token`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterConfirmPhoneNumberCreate
+     * @request POST:/api/app/register/confirm-phone-number
+     * @secure
+     */
+    appRegisterConfirmPhoneNumberCreate: (data: VoloAbpAccountConfirmPhoneNumberInput, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/confirm-phone-number`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterConfirmEmailCreate
+     * @request POST:/api/app/register/confirm-email
+     * @secure
+     */
+    appRegisterConfirmEmailCreate: (data: VoloAbpAccountConfirmEmailInput, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/confirm-email`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSetProfilePictureCreate
+     * @request POST:/api/app/register/set-profile-picture
+     * @secure
+     */
+    appRegisterSetProfilePictureCreate: (
+      data: { ImageContent?: File },
+      query?: { Type?: VoloAbpAccountProfilePictureType },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/set-profile-picture`,
+        method: "POST",
+        query: query,
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterProfilePictureDetail
+     * @request GET:/api/app/register/{id}/profile-picture
+     * @secure
+     */
+    appRegisterProfilePictureDetail: (id: string, params: RequestParams = {}) =>
+      this.request<VoloAbpAccountProfilePictureSourceDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/${id}/profile-picture`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterProfilePictureFileDetail
+     * @request GET:/api/app/register/{id}/profile-picture-file
+     * @secure
+     */
+    appRegisterProfilePictureFileDetail: (id: string, params: RequestParams = {}) =>
+      this.request<File, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/${id}/profile-picture-file`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterTwoFactorProvidersList
+     * @request GET:/api/app/register/two-factor-providers
+     * @secure
+     */
+    appRegisterTwoFactorProvidersList: (query: { UserId: string; Token: string }, params: RequestParams = {}) =>
+      this.request<string[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/two-factor-providers`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSendTwoFactorCodeCreate
+     * @request POST:/api/app/register/send-two-factor-code
+     * @secure
+     */
+    appRegisterSendTwoFactorCodeCreate: (data: VoloAbpAccountSendTwoFactorCodeInput, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/send-two-factor-code`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterSecurityLogListList
+     * @request GET:/api/app/register/security-log-list
+     * @secure
+     */
+    appRegisterSecurityLogListList: (
+      query?: {
+        StartTime?: string;
+        EndTime?: string;
+        ApplicationName?: string;
+        Identity?: string;
+        Action?: string;
+        UserName?: string;
+        ClientId?: string;
+        CorrelationId?: string;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1VoloAbpIdentityIdentitySecurityLogDtoVoloAbpIdentityProApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/register/security-log-list`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags ResumeInvitation
      * @name AppResumeInvitationsList
      * @request GET:/api/app/resume-invitations
@@ -9787,6 +11185,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         AccountCode?: string;
         Stage?: string;
         ResumeCode?: string;
+        Phone?: string;
+        Email?: string;
+        CompanyId?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -9876,6 +11277,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/resume-invitations/${id}`,
         method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
+     * @name AppResumeInvitationsGetListByCompanyIdList
+     * @request GET:/api/app/resume-invitations/GetListByCompanyId
+     * @secure
+     */
+    appResumeInvitationsGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
+     * @name AppResumeInvitationsDeleteListDelete
+     * @request DELETE:/api/app/resume-invitations/DeleteList
+     * @secure
+     */
+    appResumeInvitationsDeleteListDelete: (query?: { id?: string[] }, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/DeleteList`,
+        method: "DELETE",
+        query: query,
         secure: true,
         ...params,
       }),
@@ -10558,6 +11993,285 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags SMSQuene
+     * @name AppSmsQuenesList
+     * @request GET:/api/app/s-mSQuenes
+     * @secure
+     */
+    appSMSQuenesList: (
+      query?: {
+        FilterText?: string;
+        SystemCode?: string;
+        Code?: string;
+        From_Phone?: string;
+        From_Name?: string;
+        To_Phone?: string;
+        To_Name?: string;
+        Subject?: string;
+        Body?: string;
+        Success?: boolean;
+        Send_DateMin?: string;
+        Send_DateMax?: string;
+        IsOpened?: boolean;
+        CompanyId?: string;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeSMSQuenesSMSQueneDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/s-mSQuenes`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesCreate
+     * @request POST:/api/app/s-mSQuenes
+     * @secure
+     */
+    appSMSQuenesCreate: (data: ResumeSMSQuenesSMSQueneCreateDto, params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesDetail
+     * @request GET:/api/app/s-mSQuenes/{id}
+     * @secure
+     */
+    appSMSQuenesDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesUpdate
+     * @request PUT:/api/app/s-mSQuenes/{id}
+     * @secure
+     */
+    appSMSQuenesUpdate: (id: string, data: ResumeSMSQuenesSMSQueneUpdateDto, params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesDelete
+     * @request DELETE:/api/app/s-mSQuenes/{id}
+     * @secure
+     */
+    appSMSQuenesDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesGetListByCompanyIdList
+     * @request GET:/api/app/s-mSQuenes/GetListByCompanyId
+     * @secure
+     */
+    appSMSQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesReSendCreate
+     * @request POST:/api/app/s-mSQuenes/ReSend
+     * @secure
+     */
+    appSMSQuenesReSendCreate: (data: string[], params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/ReSend`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesUpdateOpenedStatusUpdate
+     * @request PUT:/api/app/s-mSQuenes/UpdateOpenedStatus
+     * @secure
+     */
+    appSMSQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/UpdateOpenedStatus`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSTpl
+     * @name AppSmsTplsList
+     * @request GET:/api/app/s-mSTpls
+     * @secure
+     */
+    appSMSTplsList: (
+      query?: {
+        FilterText?: string;
+        SystemCode?: string;
+        Key1?: string;
+        Key2?: string;
+        Key3?: string;
+        Code?: string;
+        Name?: string;
+        Statement?: string;
+        Subject?: string;
+        Body?: string;
+        Note?: string;
+        Sort?: string;
+        Status?: string;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeSMSTplsSMSTplDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/s-mSTpls`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSTpl
+     * @name AppSmsTplsCreate
+     * @request POST:/api/app/s-mSTpls
+     * @secure
+     */
+    appSMSTplsCreate: (data: ResumeSMSTplsSMSTplCreateDto, params: RequestParams = {}) =>
+      this.request<ResumeSMSTplsSMSTplDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSTpls`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSTpl
+     * @name AppSmsTplsDetail
+     * @request GET:/api/app/s-mSTpls/{id}
+     * @secure
+     */
+    appSMSTplsDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ResumeSMSTplsSMSTplDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSTpls/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSTpl
+     * @name AppSmsTplsUpdate
+     * @request PUT:/api/app/s-mSTpls/{id}
+     * @secure
+     */
+    appSMSTplsUpdate: (id: string, data: ResumeSMSTplsSMSTplUpdateDto, params: RequestParams = {}) =>
+      this.request<ResumeSMSTplsSMSTplDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSTpls/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSTpl
+     * @name AppSmsTplsDelete
+     * @request DELETE:/api/app/s-mSTpls/{id}
+     * @secure
+     */
+    appSMSTplsDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSTpls/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Tenant
      * @name SaasTenantsDetail
      * @request GET:/api/saas/tenants/{id}
@@ -11055,6 +12769,170 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/api/text-template-management/template-definitions/${name}`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesList
+     * @request GET:/api/app/third-parties
+     * @secure
+     */
+    appThirdPartiesList: (
+      query?: {
+        FilterText?: string;
+        UserCode?: string;
+        ThirdPartyAccountCode?: string;
+        ThirdPartyTypeCode?: string;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeThirdPartiesThirdPartyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/third-parties`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesCreate
+     * @request POST:/api/app/third-parties
+     * @secure
+     */
+    appThirdPartiesCreate: (data: ResumeThirdPartiesThirdPartyCreateDto, params: RequestParams = {}) =>
+      this.request<ResumeThirdPartiesThirdPartyDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesDetail
+     * @request GET:/api/app/third-parties/{id}
+     * @secure
+     */
+    appThirdPartiesDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ResumeThirdPartiesThirdPartyDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesUpdate
+     * @request PUT:/api/app/third-parties/{id}
+     * @secure
+     */
+    appThirdPartiesUpdate: (id: string, data: ResumeThirdPartiesThirdPartyUpdateDto, params: RequestParams = {}) =>
+      this.request<ResumeThirdPartiesThirdPartyDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesDelete
+     * @request DELETE:/api/app/third-parties/{id}
+     * @secure
+     */
+    appThirdPartiesDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesLoginCreate
+     * @request POST:/api/app/third-parties/Login
+     * @secure
+     */
+    appThirdPartiesLoginCreate: (data: ResumeThirdPartiesThirdPartyCreateDto, params: RequestParams = {}) =>
+      this.request<string, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/Login`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesAuthList
+     * @request GET:/api/app/third-parties/Auth
+     * @secure
+     */
+    appThirdPartiesAuthList: (
+      query: { UserCode?: string; ThirdPartyAccountCode: string; ThirdPartyTypeCode: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/Auth`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ThirdParty
+     * @name AppThirdPartiesUnAuthList
+     * @request GET:/api/app/third-parties/UnAuth
+     * @secure
+     */
+    appThirdPartiesUnAuthList: (
+      query: { UserCode?: string; ThirdPartyAccountCode: string; ThirdPartyTypeCode: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/third-parties/UnAuth`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -11635,7 +13513,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         FilterText?: string;
         AccountId?: string;
-        BirthDay?: string;
+        BirthDayMin?: string;
+        BirthDayMax?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -11729,14 +13608,69 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags UserData
-     * @name AppUserDatasGetDataByAccountIdList
-     * @request GET:/api/app/user-datas/GetDataByAccountId
+     * @name AppUserDatasUpdateNameUpdate
+     * @request PUT:/api/app/user-datas/UpdateName
      * @secure
      */
-    appUserDatasGetDataByAccountIdList: (params: RequestParams = {}) =>
-      this.request<ResumeUserDatasUserDataDto, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/user-datas/GetDataByAccountId`,
-        method: "GET",
+    appUserDatasUpdateNameUpdate: (query?: { Name?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/UpdateName`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags UserData
+     * @name AppUserDatasUpdateEmailUpdate
+     * @request PUT:/api/app/user-datas/UpdateEmail
+     * @secure
+     */
+    appUserDatasUpdateEmailUpdate: (query?: { Email?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/UpdateEmail`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags UserData
+     * @name AppUserDatasUpdatePhoneUpdate
+     * @request PUT:/api/app/user-datas/UpdatePhone
+     * @secure
+     */
+    appUserDatasUpdatePhoneUpdate: (query?: { Phone?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/UpdatePhone`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags UserData
+     * @name AppUserDatasUpdateBirthdayUpdate
+     * @request PUT:/api/app/user-datas/UpdateBirthday
+     * @secure
+     */
+    appUserDatasUpdateBirthdayUpdate: (query?: { Birthday?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/UpdateBirthday`,
+        method: "PUT",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -11811,6 +13745,130 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     identityUsersLookupCountList: (query?: { Filter?: string }, params: RequestParams = {}) =>
       this.request<number, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/identity/users/lookup/count`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesList
+     * @request GET:/api/app/verify-codes
+     * @secure
+     */
+    appVerifyCodesList: (
+      query?: {
+        FilterText?: string;
+        Code?: string;
+        VerifyPhone?: string;
+        BeginTimeMin?: string;
+        BeginTimeMax?: string;
+        EndTimeMin?: string;
+        EndTimeMax?: string;
+        Sorting?: string;
+        SkipCount?: number;
+        MaxResultCount?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeVerifyCodesVerifyCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/verify-codes`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesCreate
+     * @request POST:/api/app/verify-codes
+     * @secure
+     */
+    appVerifyCodesCreate: (data: ResumeVerifyCodesVerifyCodeCreateDto, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/verify-codes`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesDetail
+     * @request GET:/api/app/verify-codes/{id}
+     * @secure
+     */
+    appVerifyCodesDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/verify-codes/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesUpdate
+     * @request PUT:/api/app/verify-codes/{id}
+     * @secure
+     */
+    appVerifyCodesUpdate: (id: string, data: ResumeVerifyCodesVerifyCodeUpdateDto, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/verify-codes/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesDelete
+     * @request DELETE:/api/app/verify-codes/{id}
+     * @secure
+     */
+    appVerifyCodesDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/verify-codes/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags VerifyCode
+     * @name AppVerifyCodesConfirmList
+     * @request GET:/api/app/verify-codes/Confirm
+     * @secure
+     */
+    appVerifyCodesConfirmList: (query?: { PhoneNumber?: string; VerifyCode?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/verify-codes/Confirm`,
         method: "GET",
         query: query,
         secure: true,

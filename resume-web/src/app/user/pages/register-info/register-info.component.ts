@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { catchError, from, map, mapTo, of, tap } from 'rxjs';
+
+import { Selectors as UserSelectors } from '@app/shared/store/user';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { TermDialogComponent } from '@app/shared/dialog/term-dialog/term-dialog.component';
-import { catchError, from, of, tap } from 'rxjs';
+import { setUser } from '@app/shared/store/user/user.actions';
 
 @Component({
   selector: 'app-register-info',
@@ -16,6 +20,9 @@ import { catchError, from, of, tap } from 'rxjs';
   styleUrls: ['./register-info.component.scss']
 })
 export class RegisterInfoComponent extends BaseComponent implements OnInit {
+  registerPhone$ = this.store.select(UserSelectors.selectRegisterPhone);
+  phone: string = '';
+
   title: string = '註冊資訊';
   subtitle: string = '請輸入下方資訊，已完成註冊';
   showPassword: boolean = false;
@@ -87,12 +94,14 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
+    public store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
   }
 
   ngOnInit(): void {
+    this.registerPhone$.subscribe(phone => this.phone = phone);
   }
 
   submitForm() {
@@ -104,21 +113,18 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
       }
       this.disabledBtn = true;
 
-      const observable$ = from(this.dataService.api.accountRegisterCreate({
+      const observable$ = from(this.dataService.api.appRegisterResumeRegisterCreate({
         userName: this.userNameFormCtl.value,
         emailAddress: this.emailAddressFormCtl.value,
         password: this.passwordFormCtl.value,
-        appName: ''
+        appName: 'MVC',
+        phone: this.phone
       }))
       .pipe(
         catchError(err => of(err)),
-        tap((err) => {
-          console.error(err)
-        })
       )
       .subscribe((next) => {
         // test
-        next = {ok: true};
         this.dialogConfig.icon = next.ok ? 'success' : 'unsuccessful';
         this.dialogConfig.title = next.ok ? '註冊成功' : '註冊失敗';
         this.dialogConfig.subTitle = next.ok ? '您已經成功註冊帳號' : next.error.error.message;
@@ -131,6 +137,8 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
+            // user data to store
+            this.store.dispatch(setUser(next.data));
             this.router.navigate(['/login']);
           }
         });

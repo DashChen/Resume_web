@@ -8,6 +8,8 @@ import { Api, ApiConfig } from '../models/Api';
   providedIn: 'root'
 })
 export class DataService<SecurityDataType extends unknown> extends Api<SecurityDataType> {
+  authenticationType: string = 'Bearer ';
+  token: string = '';
 
   constructor(
     @Inject('API_BASE_URL') apiBaseUrl: string
@@ -15,6 +17,18 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
       super({
         baseUrl: apiBaseUrl
       } as ApiConfig)
+  }
+
+  getToken() {
+    return this.request({
+      path: '/connect/token',
+      method: "POST",
+      secure: true,
+      format: "json",
+      query: {
+        __tenant: "Resume"
+      }
+    });
   }
 
   handleError(error: HttpErrorResponse) {

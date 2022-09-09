@@ -51,7 +51,19 @@ export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(selectedValue => {
       this.showLoginError = false;
-    })
+    });
+    from(this.dataService.getToken())
+    .pipe(
+      tap((res) => {
+        console.log(res);
+      }),
+      catchError(err => of(err)),
+      tap((err) => {
+        console.error(err)
+      })
+    ).subscribe((next) => {
+      console.log(next);
+    });
   }
 
   getAccountErrorMessage() {

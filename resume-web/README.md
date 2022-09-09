@@ -27,7 +27,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 
-
+## Generate api via swagger scheme.
+```powershell
+npx swagger-typescript-api -p ./swagger.json -o ./src/app/core/models
+```
 
 5.1 使用者前台功能需求
     5.1.1 註冊

@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
+import { Selectors as UserSelectors } from '@app/shared/store/user';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
@@ -14,7 +17,10 @@ import { catchError, from, of, tap } from 'rxjs';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
-export class ResetPasswordComponent extends BaseComponent {
+export class ResetPasswordComponent extends BaseComponent implements OnInit {
+  tempAccount$ = this.store.select(UserSelectors.selectTempAccount);
+  tempAccount: string = '';
+
   title: string = '重新設定密碼';
   showPassword: boolean = false;
   showConfirmPwd: boolean = false;
@@ -52,33 +58,34 @@ export class ResetPasswordComponent extends BaseComponent {
 
   constructor(
     public router: Router,
+    public store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
+  }
+
+  ngOnInit(): void {
+      this.tempAccount$.subscribe(account => this.tempAccount = account);
   }
 
   submitForm() {
     if (this.resetForm.valid) {
       this.disabledBtn = true;
 
-      const observable$ = from(this.dataService.api.accountResetPasswordCreate({
-        resetToken: '',
-        password: this.passwordFormCtl.value,
+      const observable$ = from(this.dataService.api.appRegisterResumeResetPasswordCreate({
+        PhoneOrEmail: this.tempAccount,
+        newPassword: this.passwordFormCtl.value,
       }))
       .pipe(
         catchError(err => of(err)),
-        tap((err) => {
-          console.error(err)
-        })
       )
       .subscribe((next: any) => {
-        // test
-        next = {ok: true};
-        this.dialogConfig.icon = next.ok ? 'success' : 'unsuccessful';
-        this.dialogConfig.title = next.ok ? '密碼設定成功' : '密碼設定失敗';
-        this.dialogConfig.subTitle = next.ok ? '您的密碼設定成功' : next.error.error.message;
+        console.log(next);
+        this.dialogConfig.icon = next.data ? 'success' : 'unsuccessful';
+        this.dialogConfig.title = next.data ? '密碼設定成功' : '密碼設定失敗';
+        this.dialogConfig.subTitle = next.data ? '您的密碼設定成功' : next.error.error.message;
         this.dialogConfig.showSuccessBtn = true;
-        this.dialogConfig.successBtnText = next.ok ? '返回登入畫面' : '再試一次';
+        this.dialogConfig.successBtnText = next.data ? '返回登入畫面' : '再試一次';
         const dialogRef = this.dialog.open(CommonDialogComponent, {
           height: '311px',
           width: '614px',

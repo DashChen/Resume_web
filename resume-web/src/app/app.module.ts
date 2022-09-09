@@ -1,12 +1,14 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { InjectionToken } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BREAKPOINTS, DEFAULT_BREAKPOINTS, BreakPoint, FlexLayoutModule } from '@angular/flex-layout';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+
+import * as Stores from './shared/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LayoutModule, DialogModule, ComponentModule } from './shared';
 import { AdminModule } from './admin';
@@ -72,6 +74,7 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
   imports: [
     BrowserModule,
     CoreModule,
+    StoreModule.forRoot(Stores.default),
     LayoutModule,
     ComponentModule,
     DialogModule,

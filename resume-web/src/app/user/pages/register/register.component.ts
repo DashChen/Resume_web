@@ -11,8 +11,10 @@ import { ISelectOption } from '@app/core/interfaces/select-option';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { interval, Observable } from 'rxjs';
-import { map, shareReplay, startWith, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Actions as UserActions } from '@app/shared/store/user';
+import { Store } from '@ngrx/store';
+import { from, interval, Observable, of } from 'rxjs';
+import { catchError, map, shareReplay, startWith, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +27,8 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   btnText: string = '發送驗證碼';
   otherTitle: string = '已經有帳號?';
   otherActionText: string = '登入';
+
+  tempPhone: string = '';
 
   beforeValidationForm = new FormGroup({
     countryCode: new FormControl('TW', [Validators.required]),
@@ -65,10 +69,11 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   disabledSendAgain: boolean = true;
 
   constructor(
-    private router: Router,
+    public router: Router,
+    public store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
-    @Inject(COUNTRY_TOKEN) countryObj: ICountry) {
+    @Inject(COUNTRY_TOKEN) public countryObj: ICountry) {
       super();
       Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
         this.countryCodeOptions.push({
@@ -117,18 +122,35 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     return minunte + ':' + seconds;
   }
 
+  getCountryCode(id: string): string {
+    return this.countryObj.id_to_countrycode[id].toString();
+  }
+
   submitForm() {
     // 代表等待送出驗證碼
     if (this.showCountdown) {
       if (this.validationForm.valid) {
-        this.router.navigate(['/register-info']);
-        if (true) {
-          this.validateError = true;
-          this.showCountdown = false;
-          this.title = '驗證失敗';
-          this.subtitle = '請輸入您的手機號碼，進行驗證';
-          this.btnText = '確認';
-        }
+        from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
+          Phone: this.tempPhone,
+          Code: this.verificationCodeFormControl.value,
+        }))
+        .pipe(
+          catchError(err => of(err)),
+        ).subscribe((next) => {
+          console.log(next);
+          if (next.data) {
+            this.store.dispatch(UserActions.setRegisterPhone({ phone: this.tempPhone }));
+            this.router.navigate(['/register-info']);
+          } else {
+            this.validateError = true;
+            this.showCountdown = false;
+            this.title = '驗證失敗';
+            this.subtitle = '請輸入您的手機號碼，進行驗證';
+            this.btnText = '確認';
+            this.beforeValidationForm.reset();
+            this.countryCodeFormControl.setValue('TW');
+          }
+        });
       } else {
         this.validateAllFormFields(this.validationForm);
       }
@@ -146,23 +168,32 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   sendVerificationCode() {
     // 代表等待送出驗證碼
     if (this.validateErrorTimes < 3) {
-      this.validateErrorTimes ++;
-      this.title = '驗證碼已發送';
-      this.subtitle = `請輸入傳送到${this.maskPhone(this.countryCodeFormControl.value)}的驗證碼以繼續`;
-      this.showCountdown = true;
-      this.countdown = 60;
-      this.otherTitle = '沒有收到驗證碼嗎?';
-      this.otherActionText = '再次發送驗證碼';
-      this.timer$.pipe(
-        map(n => this.countdown = this.basicCountdown - n - 1),
-        tap(() => {
-          this.disabledSendAgain = this.countdown > 0;
-        }),
-        take(this.basicCountdown),
-        startWith(this.basicCountdown),
-        takeUntil(this.destroy$)
-      ).subscribe();
-      this.validationForm.reset();
+      this.tempPhone = this.getCountryCode(this.countryCodeFormControl.value) + this.mobileFormControl.value;
+      from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+        Phone: this.tempPhone
+      }))
+      .pipe(
+        catchError(err => of(err)),
+      ).subscribe((next) => {
+        console.log(next);
+        this.validateErrorTimes ++;
+        this.title = '驗證碼已發送';
+        this.subtitle = `請輸入傳送到${this.maskPhone(this.tempPhone)}的驗證碼以繼續`;
+        this.showCountdown = true;
+        this.countdown = 60;
+        this.otherTitle = '沒有收到驗證碼嗎?';
+        this.otherActionText = '再次發送驗證碼';
+        this.timer$.pipe(
+          map(n => this.countdown = this.basicCountdown - n - 1),
+          tap(() => {
+            this.disabledSendAgain = this.countdown > 0;
+          }),
+          take(this.basicCountdown),
+          startWith(this.basicCountdown),
+          takeUntil(this.destroy$)
+        ).subscribe();
+        this.validationForm.reset();
+      });
     } else {
       this.dialogConfig.icon = 'error';
       this.dialogConfig.title = '重新輸入手機號碼';

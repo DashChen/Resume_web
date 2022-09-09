@@ -10,7 +10,7 @@ import { ISelectOption } from '@app/core/interfaces/select-option';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { EMPTY, interval, map, startWith, take, takeUntil, tap } from 'rxjs';
+import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap } from 'rxjs';
 
 
 @Component({
@@ -25,6 +25,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   otherTitle: string = '沒有收到驗證碼';
   otherSubtitle: string = '返回登入畫面';
 
+  tempPhone: string = '';
   tabSelected = new FormControl(0);
 
   emailValidationForm = new FormGroup({
@@ -87,7 +88,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
-    @Inject(COUNTRY_TOKEN) countryObj: ICountry) {
+    @Inject(COUNTRY_TOKEN) public countryObj: ICountry) {
       super();
       Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
         this.countryCodeOptions.push({
@@ -142,26 +143,34 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
   sendVerification() {
     if (this.tabSelected.value === 0) {
-      this.dialogConfig.icon = 'success';
-      this.dialogConfig.title = '信件發送成功';
-      this.dialogConfig.subTitle = '信件已發送至信箱';
-      this.dialogConfig.successBtnText = '返回登入畫面';
+      from(this.dataService.api.appRegisterResumeMailVerifyCodeCreate({
+        Email: this.emailAddressFormCtl.value,
+      }))
+      .pipe(
+        catchError(err => of(err)),
+      ).subscribe((next) => {
+        console.log(next);
+        this.dialogConfig.icon = 'success';
+        this.dialogConfig.title = '信件發送成功';
+        this.dialogConfig.subTitle = '信件已發送至信箱';
+        this.dialogConfig.successBtnText = '返回登入畫面';
 
-      const dialogRef = this.dialog.open(CommonDialogComponent, {
-        height: '311px',
-        width: '614px',
-        data: this.dialogConfig
-      });
+        const dialogRef = this.dialog.open(CommonDialogComponent, {
+          height: '311px',
+          width: '614px',
+          data: this.dialogConfig
+        });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.router.navigate(['/login']);
-        }
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.router.navigate(['/login']);
+          }
+        });
       });
     } else if (this.tabSelected.value === 1 && !this.showCountdown) {
       this.sendVerificationCode();
     } else {
-      // 送出驗證碼
+      // 送出簡訊驗證碼
       if (this.validationForm.valid) {
         this.sendConfirmVerificationCode();
       }
@@ -169,42 +178,62 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   }
 
   sendConfirmVerificationCode() {
-    // TODO: 測試錯誤
-    this.validateErrorTimes += 1;
-    if (this.validateErrorTimes <= 2) {
-      this.showCountdown = false;
-      this.title = '驗證失敗';
-      this.subtitle = '請輸入您的手機號碼，進行驗證';
-      this.otherTitle = '沒有收到驗證碼嗎?';
-      this.otherSubtitle = '再次發送驗證碼';
-      this.mobileValidationForm.reset();
-      this.countryCodeFormControl.setValue('TW');
-      return EMPTY;
-    }
-    // TODO: 假定成功
-    return this.router.navigate(['/reset-password']);
+    from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
+      Phone: this.tempPhone,
+      Code: this.verificationCodeFormControl.value,
+    }))
+    .pipe(
+      catchError(err => of(err)),
+    ).subscribe((next) => {
+      console.log(next);
+      if (!next.ok) {
+        this.validateErrorTimes++;
+        this.showCountdown = false;
+        this.title = '驗證失敗';
+        this.subtitle = '請輸入您的手機號碼，進行驗證';
+        this.otherTitle = '沒有收到驗證碼嗎?';
+        this.otherSubtitle = '再次發送驗證碼';
+        this.mobileValidationForm.reset();
+        this.countryCodeFormControl.setValue('TW');
+      } else {
+        this.router.navigate(['/reset-password']);
+      }
+    });
+  }
+
+  getCountryCode(id: string): string {
+    return this.countryObj.id_to_countrycode[id].toString();
   }
 
   sendVerificationCode() {
+    this.tempPhone = this.getCountryCode(this.countryCodeFormControl.value) + this.mobileFormControl.value;
+
     // 代表等待送出驗證碼
     if (this.validateErrorTimes < 3) {
-      this.validateErrorTimes ++;
-      this.title = '驗證碼已發送';
-      this.subtitle = `請輸入傳送到${this.maskPhone(this.countryCodeFormControl.value)}的驗證碼以繼續`;
-      this.showCountdown = true;
-      this.countdown = 60;
-      this.otherTitle = '沒有收到驗證碼嗎?';
-      this.otherSubtitle = '再次發送驗證碼';
-      this.timer$.pipe(
-        map(n => this.countdown = this.basicCountdown - n - 1),
-        tap(() => {
-          this.disabledSendAgain = this.countdown > 0;
-        }),
-        take(this.basicCountdown),
-        startWith(this.basicCountdown),
-        takeUntil(this.destroy$)
-      ).subscribe();
-      this.validationForm.reset();
+      from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+        Phone: this.tempPhone,
+      }))
+      .pipe(
+        catchError(err => of(err)),
+      ).subscribe((next) => {
+        console.log(next);
+        this.title = '驗證碼已發送';
+        this.subtitle = `請輸入傳送到${this.maskPhone(this.countryCodeFormControl.value)}的驗證碼以繼續`;
+        this.showCountdown = true;
+        this.countdown = 60;
+        this.otherTitle = '沒有收到驗證碼嗎?';
+        this.otherSubtitle = '再次發送驗證碼';
+        this.timer$.pipe(
+          map(n => this.countdown = this.basicCountdown - n - 1),
+          tap(() => {
+            this.disabledSendAgain = this.countdown > 0;
+          }),
+          take(this.basicCountdown),
+          startWith(this.basicCountdown),
+          takeUntil(this.destroy$)
+        ).subscribe();
+        this.validationForm.reset();
+      });
     } else {
       this.dialogConfig.icon = 'error';
       this.dialogConfig.title = '重新輸入手機號碼';
