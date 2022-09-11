@@ -4,13 +4,9 @@ import { AppService } from '@app/core';
 import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
 import { Actions as AdminActions } from '@app/shared/store/admin';
+import { link } from '@app/core/interfaces/menu.model';
 
-export interface link {
-  link: string;
-  title: string;
-  icon: string;
-  active: boolean
-}
+
 @Component({
   selector: 'app-admin-main-layout',
   templateUrl: './admin-main-layout.component.html',
@@ -25,24 +21,44 @@ export class AdminMainLayoutComponent implements OnInit {
   links: link[] = [
     {
       link: '/admin/resume-management',
+      key: 'resume-management',
       title: '履歷管理',
       icon: 'menu-icon01',
       active: false,
     },
     {
       link: '/admin/message',
+      key: 'message',
       title: '信件/簡訊管理',
       icon: 'menu-icon02',
       active: false,
+      children: [
+        {
+          link: '/admin/message?type=email',
+          key: 'message-email',
+          title: '信件管理',
+          icon: '',
+          active: false,
+        },
+        {
+          link: '/admin/message?type=sms',
+          key: 'message-sms',
+          title: '簡訊管理',
+          icon: '',
+          active: false,
+        },
+      ]
     },
     {
       link: '/admin/company-job',
+      key: 'company-job',
       title: '職缺管理',
       icon: 'menu-icon03',
       active: false,
     },
     {
       link: '/admin/member',
+      key: 'member',
       title: '會員管理',
       icon: 'menu-icon04',
       active: false,

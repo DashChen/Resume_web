@@ -5,16 +5,19 @@ import { MaterialModule } from '@app/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { InputCountryMobileComponent } from './input-country-mobile/input-country-mobile.component';
+import { MenuPanelComponent } from './menu-panel/menu-panel.component';
 
 
 @NgModule({
     declarations: [
         PageTitleComponent,
         InputCountryMobileComponent,
+        MenuPanelComponent,
     ],
     exports: [
         PageTitleComponent,
-        InputCountryMobileComponent
+        InputCountryMobileComponent,
+        MenuPanelComponent,
     ],
     imports: [
         CommonModule,

@@ -7,6 +7,7 @@ import { MaterialModule } from '@app/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AdminLoginLayoutComponent } from './admin-login-layout/admin-login-layout.component';
 import { AdminMainLayoutComponent } from './admin-main-layout/admin-main-layout.component';
+import { ComponentModule } from '../components/component.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AdminMainLayoutComponent } from './admin-main-layout/admin-main-layout.
     RouterModule.forChild([]),
     MaterialModule,
     FlexLayoutModule,
+    ComponentModule,
   ],
   exports: [
     UserLoginLayoutComponent,

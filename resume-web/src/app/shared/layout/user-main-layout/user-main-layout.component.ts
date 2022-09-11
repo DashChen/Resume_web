@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '@app/core';
+import { link } from '@app/core/interfaces/menu.model';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
-
-export interface link {
-  link: string;
-  title: string;
-  icon: string;
-  active: boolean
-}
 
 @Component({
   selector: 'app-user-main-layout',
@@ -30,12 +24,14 @@ export class UserMainLayoutComponent implements OnInit {
   links: link[] = [
     {
       link: '/resume-management',
+      key: 'resume-management',
       title: '履歷管理',
       icon: 'menu-icon01',
       active: false,
     },
     {
       link: '/member-management',
+      key: 'member-management',
       title: '會員管理',
       icon: 'menu-icon04',
       active: false,
