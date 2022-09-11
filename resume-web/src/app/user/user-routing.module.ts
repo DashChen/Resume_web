@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Layouts } from '../app.component';
 import { ForgetComponent } from './pages/forget/forget.component';
 import { LoginComponent } from './pages/login/login.component';
+import { MemberManagementComponent } from './pages/member-management/member-management.component';
 import { RegisterInfoComponent } from './pages/register-info/register-info.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
@@ -44,6 +45,13 @@ const routes: Routes = [
         layout: Layouts.userLogin
       }
     },
+    {
+      path: 'member-management',
+      component: MemberManagementComponent,
+      data: {
+        layout: Layouts.userMain
+      }
+    }
 ];
 
 @NgModule({

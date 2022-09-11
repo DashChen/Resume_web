@@ -1,29 +1,90 @@
-<mat-toolbar class="app-user-main-layout" color="primary">
-  <div class="app-user-main-layout__logo"></div>
-  <span class="app-user-main-layout__flex-spacer"></span>
-  <ng-container *ngFor="let item of links">
-    <div class="app-user-main-layout__link" [ngClass]="{'app-user-main-layout__link--active': item.active}">
-      <a [routerLink]="item.link">
-        <mat-icon [svgIcon]="item.icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
-        <span class="h2-text--bold">{{ item.title }}</span>
-      </a>
-    </div>
-  </ng-container>
-  <div class="app-user-main-layout__member">
-    <div class="app-user-main-layout__member__content">
-      <button  mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal"
-        matTooltip="Select a personal of the documentation">
-        <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
-        <span class="h2-text--regular">王大明</span>
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-      <mat-menu #personalPicker="matMenu" xPosition="before">
-        <button mat-menu-item>
-          ．．．．
-        </button>
-      </mat-menu>
-    </div>
-  </div>
-</mat-toolbar>
+<div class="app-user-main-layout" color="primary">
+  <mat-sidenav-container fxFlexFill class="app-user-main-layout__container">
+    <mat-sidenav #sidenav fxLayout="column" class="app-user-main-layout__mat-drawer" position="end">
+      <div fxLayout="column" class="app-user-main-layout__mat-drawer__block">
+        <div class="app-user-main-layout__member__content__menu__info">
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap.lt-md="11px">
+            <div fxLayout="row" fxLayoutGap="11px" class="h2-text--regular">
+              <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
+              <span>{{username}}</span>
+            </div>
+            <div class="h2-text--regular">{{email}}</div>
+          </div>
+        </div>
 
-<router-outlet></router-outlet>
+        <ng-container *ngFor="let item of links">
+          <div class="app-user-main-layout__link" [ngClass]="{'app-user-main-layout__link--active': item.active}">
+            <a [routerLink]="item.link">
+              <div fxLayout="row" fxLayoutAlign="center center" class="app-user-main-layout__link__icon">
+                <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+              </div>
+              <span class="h2-text--bold">{{ item.title }}</span>
+            </a>
+          </div>
+        </ng-container>
+
+        <div mat-menu-item class="app-user-main-layout__member__content__menu__logout" (click)="logout()">
+          <div class="h2-text--regular">
+            登出
+          </div>
+        </div>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content fxFlexFill>
+      <mat-toolbar class="app-user-main-layout__mat-toolbar">
+        <div class="app-user-main-layout__mat-toolbar-logo"></div>
+
+        <span class="app-user-main-layout__flex-spacer"></span>
+
+        <ng-container *ngFor="let item of links">
+          <div fxShow="true" fxHide.lt-md="true" class="app-user-main-layout__link" [ngClass]="{'app-user-main-layout__link--active': item.active}">
+            <a [routerLink]="item.link">
+              <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+              <span class="h2-text--bold">{{ item.title }}</span>
+            </a>
+          </div>
+        </ng-container>
+
+        <div fxShow="true" fxHide.lt-md="true" class="app-user-main-layout__member">
+          <div class="app-user-main-layout__member__content">
+            <button mat-button [matMenuTriggerFor]="personalPicker" aria-label="Select a personal"
+              matTooltip="Select a personal of the documentation">
+              <mat-icon svgIcon="member-icon" aria-hidden="false" aria-label="Member icon"></mat-icon>
+              <span class="h2-text--regular">{{username}}</span>
+              <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #personalPicker="matMenu" xPosition="before" class="app-user-main-layout__member__content__menu">
+              <button mat-menu-item class="app-user-main-layout__member__content__menu__info">
+                <div fxLayout="column" fxLayoutAlign="center center">
+                  <div class="h2-text--regular">{{username}}</div>
+                  <div class="h2-text--regular">{{email}}</div>
+                </div>
+              </button>
+              <div mat-menu-item class="app-user-main-layout__member__content__menu__logout" (click)="logout()">
+                <div class="h2-text--regular">
+                  登出
+                </div>
+              </div>
+            </mat-menu>
+          </div>
+        </div>
+
+        <div fxShow="true" fxHide.gt-sm="true">
+          <button mat-icon-button class="example-icon" (click)="sidenav.toggle()" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+      </mat-toolbar>
+      <div class="app-user-main-layout__content">
+        <router-outlet></router-outlet>
+
+        <div class="app-user-main-layout__footer h2-text--medium">
+          <span>JB傑報人力資源服務集團 © {{startYear}}-{{currentYear}}</span>
+          <span>V{{version}}</span>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>

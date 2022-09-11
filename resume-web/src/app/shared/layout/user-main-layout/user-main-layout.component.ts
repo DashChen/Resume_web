@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppService } from '@app/core';
+import { Actions as UserActions } from '@app/shared/store/user';
+import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
+import { Store } from '@ngrx/store';
+import { DateTime } from 'luxon';
 
 export interface link {
   link: string;
@@ -14,23 +19,19 @@ export interface link {
   styleUrls: ['./user-main-layout.component.scss']
 })
 export class UserMainLayoutComponent implements OnInit {
+  currentUser$ = this.store.select(selectCurrentUser);
+  username: string = '';
+  email: string = '';
+
+  startYear: string = '2022/3';
+  currentYear: string = '';
+  version: string = '1.1.0';
+
   links: link[] = [
     {
       link: '/resume-management',
       title: '履歷管理',
       icon: 'menu-icon01',
-      active: false,
-    },
-    {
-      link: '/message-management',
-      title: '信件簡訊管理',
-      icon: 'menu-icon02',
-      active: false,
-    },
-    {
-      link: '/company-job',
-      title: '職缺管理',
-      icon: 'menu-icon03',
       active: false,
     },
     {
@@ -41,9 +42,14 @@ export class UserMainLayoutComponent implements OnInit {
     },
   ];
 
-  constructor(private appService: AppService) {}
+  constructor(
+    private appService: AppService,
+    public router: Router,
+    public store: Store,
+    ) {}
 
   ngOnInit(): void {
+    this.currentYear = DateTime.now().toFormat('yyyy/M');
     this.appService.route$.subscribe((route) => {
       this.links.forEach((l: link) => {
         const path = route?.routeConfig?.path || '';
@@ -52,6 +58,14 @@ export class UserMainLayoutComponent implements OnInit {
         }
       })
     });
+    this.currentUser$.subscribe(user => {
+      this.username = user.userName || '王大明';
+      this.email = user.email || 'WuDaMing@gmail.com';
+    })
   }
 
+  logout() {
+    this.store.dispatch(UserActions.setLoggedIn({ logged: false }));
+    this.router.navigate(['/admin/login']);
+  }
 }

@@ -23,9 +23,9 @@
 </mat-dialog-content>
 <mat-dialog-actions align="center" class="app-batch-level-edit-dialog__action">
     <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
-        {{data.cancelBtnText}}
+        <span>{{data.cancelBtnText}}</span>
     </button>
     <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
-        {{data.successBtnText}}
+        <span>{{data.successBtnText}}</span>
     </button>
 </mat-dialog-actions>

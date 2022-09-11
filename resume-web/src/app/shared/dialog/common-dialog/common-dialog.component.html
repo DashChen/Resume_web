@@ -9,12 +9,12 @@
     <button mat-raised-button
         *ngIf="data.showCancelBtn"
         (click)="closeDialog(false)">
-        {{data.cancelBtnText}}
+        <span>{{data.cancelBtnText}}</span>
     </button>
     <button mat-raised-button cdkFocusInitial
         class="mat-button--orange"
         *ngIf="data.showSuccessBtn"
         (click)="closeDialog(true)">
-        {{data.successBtnText}}
+        <span>{{data.successBtnText}}</span>
     </button>
 </mat-dialog-actions>

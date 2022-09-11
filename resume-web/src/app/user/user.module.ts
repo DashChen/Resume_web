@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ComponentModule } from '@app/shared';
 import { RegisterInfoComponent } from './pages/register-info/register-info.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { MemberManagementComponent } from './pages/member-management/member-management.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
       LoginComponent,
       RegisterComponent,
       RegisterInfoComponent,
-      ResetPasswordComponent
+      ResetPasswordComponent,
+      MemberManagementComponent
   ],
   imports: [
     CommonModule,

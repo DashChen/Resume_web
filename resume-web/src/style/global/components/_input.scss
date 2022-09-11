@@ -6,6 +6,9 @@ mat-form-field {
         &__block {
             width: 100%;
         }
+        &__label {
+            margin-top: 20px;
+        }
         &--hide-error {
             margin-bottom: 0;
             ::ng-deep .mat-form-field-wrapper {

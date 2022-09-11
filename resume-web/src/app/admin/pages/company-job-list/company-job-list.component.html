@@ -20,11 +20,11 @@
 		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="15px" fxHide.lt-md="true">
 			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
 				(click)="openAddDialog($event)">
-				新增職缺
+				<span>新增職缺</span>
 			</button>
 			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
 				[disabled]="disabledDelBtn" (click)="delItems($event)">
-				刪除
+				<span>刪除</span>
 			</button>
 		</div>
 		<div class="admin-company-job-list__table__body">

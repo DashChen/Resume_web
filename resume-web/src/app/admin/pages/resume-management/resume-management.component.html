@@ -18,10 +18,10 @@
         </div>
         <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" class="app-resume-management__head__btns" *ngIf="!showSend">
             <button mat-raised-button class="app-resume-management__head__btn mat-button--blue h2-text--regular" (click)="addPerson($event)">
-                新增人員
+                <span>新增人員</span>
             </button>
             <button mat-raised-button class="app-resume-management__head__btn mat-button--blue h2-text--regular" (click)="importPersons($event)">
-                匯入人員資料
+                <span>匯入人員資料</span>
             </button>
         </div>
     </div>
@@ -64,20 +64,20 @@
                     </mat-form-field>
                 </form>
                 <button mat-raised-button class="app-resume-management__head__btn mat-button--orange h2-text--regular" (click)="search($event)">
-                    查詢
+                    <span>查詢</span>
                 </button>
             </div>
         </div>
         <div class="app-resume-management__table__block">
             <div fxLayout="row" fxLayoutGap="20px" class="app-resume-management__table__head">
                 <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" (click)="showSendMsg(true)">
-                    發送信件&訊息
+                    <span>發送信件&訊息</span>
                 </button>
                 <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" (click)="batchEdit($event)">
-                    批次編輯
+                    <span>批次編輯</span>
                 </button>
                 <button mat-raised-button class="app-resume-management__table__head__btn mat-button--blue h2-text--regular" [disabled]="disabledDelBtn" (click)="delItems($event)">
-                    刪除
+                    <span>刪除</span>
                 </button>
             </div>
             <div class="app-resume-management__table__body">
@@ -178,7 +178,7 @@
                         <ng-container></ng-container>
                     </div>
                     <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
-                        新增人員
+                        <span>新增人員</span>
                     </button>
                 </div>
             </div>
@@ -212,10 +212,10 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="18px" class="app-resume-management__send__message__action">
             <button mat-raised-button class="app-resume-management__head__btn h2-text--regular" (click)="cancelSend()">
-                取消
+                <span>取消</span>
             </button>
             <button mat-raised-button class="app-resume-management__head__btn mat-button--blue h2-text--regular" (click)="sendMessage()">
-                確定
+                <span>確定</span>
             </button>
         </div>
     </ng-template>

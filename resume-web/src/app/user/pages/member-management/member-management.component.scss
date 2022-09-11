@@ -1,0 +1,43 @@
+@import 'public-mixin';
+
+$this: '.app-member-management';
+
+:host {
+    #{$this} {
+        margin-bottom: 24px;
+        padding: 24px 40px 0;
+        &__head {
+            &__block {
+
+            }
+            &__title {
+                &__main {
+
+                }
+                &__sub {}
+            }
+        }
+        &__card {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+            padding: 40px 24px 4px;
+
+            &__body {
+                &__title {
+                    margin-bottom: 35px;
+                }
+
+                &__column--one {
+                    mat-form-field {
+                        max-width: calc(50% - 19px);
+                    }
+                    [mat-raised-button] {
+                        margin-top: 20px;
+                    }
+                }
+                mat-form-field:disabled {
+                    background: $colorBg;
+                }
+            }
+        }
+    }
+}

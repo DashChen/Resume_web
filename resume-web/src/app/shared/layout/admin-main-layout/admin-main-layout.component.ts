@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '@app/core';
+import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
+import { Actions as AdminActions } from '@app/shared/store/admin';
+
 export interface link {
   link: string;
   title: string;
@@ -48,7 +51,8 @@ export class AdminMainLayoutComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private router: Router
+    private router: Router,
+    public store: Store,
     ) {}
 
   ngOnInit(): void {
@@ -59,10 +63,11 @@ export class AdminMainLayoutComponent implements OnInit {
         l.active = l.link.includes(path);
       })
     });
+    // TODO Update username from store
   }
 
   logout() {
-    // TODO: Logout update store
+    this.store.dispatch(AdminActions.setLoggedIn({ logged: false }));
     this.router.navigate(['/admin/login']);
   }
 }

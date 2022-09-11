@@ -32,6 +32,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 npx swagger-typescript-api -p ./swagger.json -o ./src/app/core/models
 ```
 
+https://cloud.jbhr.com.tw/Resume/swagger/index.html
+
 5.1 使用者前台功能需求
     5.1.1 註冊
     5.1.2 系統登入

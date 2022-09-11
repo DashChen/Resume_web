@@ -1,18 +1,61 @@
 @import 'public-mixin';
 
-:host {
-  $this: '.app-user-main-layout';
+$this: '.app-user-main-layout';
 
+:host {
   #{$this} {
-    background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+    height: 100vh;
+
+    &__mat-toolbar {
+      background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+      color: #FFFFFF;
+
+      &-logo {
+        background-image: url('^assets/common/logo_compony_name.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        width: 185px;
+        height: 30px;
+      }
+    }
+
     &__link {
       display: flex;
       height: 100%;
       min-width: 150px;
+
+      @include lt-md {
+        flex: 0;
+        height: 59px;
+        position: relative;
+      }
+
       &--active {
         background: $colorOrange03;
-        border-bottom: 3px solid #FFFFFF;
+        border-bottom: 4px solid #FFFFFF;
+
+        @include lt-md {
+          border-bottom: none;
+
+          &::before {
+            content: '';
+            border-left: 3px solid #FFFFFF;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            width: 3px;
+          }
+        }
       }
+
+      &__icon {
+        @include lt-md {
+          width: 76px;
+          height: inherit;
+        }
+      }
+
       a {
         align-items: center;
         color: #FFFFFF;
@@ -20,7 +63,51 @@
         flex: 1;
         justify-content: center;
         gap: 21px;
+        padding: 4px 0;
+        position: relative;
         text-decoration: none;
+        transition: color .2s ease;
+
+        &:hover {
+          color: #FFFFFF;
+
+          &::after,
+          &::before {
+            width: 100%;
+            left: 0;
+          }
+        }
+
+        &::after,
+        &::before {
+          content: '';
+          position: absolute;
+          top: calc(100% - 4px);
+          width: 0;
+          right: 0;
+          height: 4px;
+        }
+
+        &::before {
+          transition: width .4s cubic-bezier(0.51, 0.18, 0, 0.88) .1s;
+          background: #F44336;
+        }
+
+        &::after {
+          transition: width .2s cubic-bezier(0.29, 0.18, 0.26, 0.83);
+          background: #FFFFFF;
+        }
+
+        @include lt-md {
+          height: inherit;
+          justify-content: space-between;
+
+          span {
+            flex-grow: 1;
+            text-align: center;
+          }
+        }
+
         mat-icon {
           align-items: center;
           display: flex;
@@ -30,34 +117,132 @@
         }
       }
     }
-    &__logo {
-      background-image: url('^assets/common/logo_compony_name.svg');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      height: 30px;
-      width: 184px;
-    }
-    &__flex-spacer {
-      flex: 1 1 auto;
-    }
+
     &__member {
       padding: 14.5px 0;
+
       &__content {
         align-items: center;
         display: flex;
+
         &::before {
           content: '';
-          background-color:#C5D0DF;
+          background-color: #C5D0DF;
           height: 36px;
           margin-right: 24px;
           margin-left: 40px;
           width: 1px;
         }
+
         button {
           span {
             margin: 0 20px 0 11px;
           }
+        }
+      }
+    }
+
+    &__flex-spacer {
+      flex: 1 1 auto;
+    }
+
+    &__menu-text {
+      margin-top: 5px;
+      margin-left: 5px;
+      /* optional */
+    }
+
+    &__mat-drawer {
+      background: linear-gradient(0deg, #006CD0 0%, #02B2E1 100%);
+      color: #FFFFFF;
+      width: 227px;
+
+      &__block {
+        height: inherit;
+      }
+    }
+
+    mat-sidenav-content {
+      overflow: hidden;
+    }
+
+    &__content {
+      background: $colorBg;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    &__footer {
+      color: $colorLight;
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      min-height: 39px;
+      padding: 0 40px;
+      width: auto;
+
+      @include lt-md {
+        height: 36px;
+      }
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this}__member__content {
+    &__menu {
+      background: #FFFFFF;
+      box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(117, 127, 152, 0.3);
+      border-radius: 5px;
+      width: 271px;
+
+      .mat-menu-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-top: 0;
+        padding-bottom: 4px;
+      }
+
+      &__info {
+        border-bottom: 1px solid #C5D0DF;
+        height: 100%;
+        padding: 16px;
+        @include lt-md {
+          padding: 31px;
+        }
+
+        .h2-text--regular:nth-child(1) {
+          color: $colorMain;
+          line-height: 19px;
+          @include lt-md {
+            color: #FFFFFF;
+          }
+        }
+        .h2-text--regular:nth-child(2) {
+          color: $colorSecond;
+          @include lt-md {
+            color: #FFFFFF;
+          }
+        }
+
+        @include lt-md {
+          flex: 0;
+        }
+      }
+      &__logout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include lt-md {
+          color: #FFFFFF;
+          flex-shrink: 0;
+          height: 80px;
+          margin-top: auto;
         }
       }
     }

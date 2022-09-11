@@ -23,13 +23,15 @@
             }
         }
         &--blue {
-            background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
-            color: #FFFFFF;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: button;
+            background-color: $colorCis;
+            background-image: none;
             overflow: hidden;
             position: relative;
             &::before {
                 aspect-ratio: 1;
-                background: linear-gradient(270deg, #006CD0 9.33%, #02B2E1 100%);
+                background: linear-gradient(270deg, #02B2E1 9.33%, #006CD0 100%);
                 border-radius: 50%;
                 content: "";
                 left: -100%;
@@ -46,6 +48,11 @@
             }
             &.mat-raised-button.mat-button-disabled.mat-button-disabled {
                 background: #C5D0DF;
+            }
+
+            span {
+                color: #FFFFFF;
+                mix-blend-mode: lighten;
             }
         }
         &--blue2 {
