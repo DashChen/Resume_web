@@ -2,6 +2,7 @@ import { APP_INITIALIZER, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AppService, DataService, ResizeService  } from './services';
+import { CookieService } from './services/cookie.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class FormErrorStateMatcher implements ErrorStateMatcher {
@@ -23,6 +24,7 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
       },
       deps: [AppService]
     },
+    CookieService,
     DataService,
     ResizeService,
   ],

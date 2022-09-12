@@ -4,10 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
-import { ApiConfig } from '@app/core/models/Api';
+import { ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
+import { loginRequestDto, loginResponseDto } from '@app/core/models/login.model';
+import { CookieService } from '@app/core/services/cookie.service';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, from, of, tap } from 'rxjs';
+import { catchError, from, of, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +45,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
+    public cookie: CookieService,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
@@ -51,18 +54,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(selectedValue => {
       this.showLoginError = false;
-    });
-    from(this.dataService.getToken())
-    .pipe(
-      tap((res) => {
-        console.log(res);
-      }),
-      catchError(err => of(err)),
-      tap((err) => {
-        console.error(err)
-      })
-    ).subscribe((next) => {
-      console.log(next);
     });
   }
 
@@ -94,20 +85,53 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.api.accountLoginCreate(this.loginForm.value))
+    const observable$ = from(this.dataService.request<loginResponseDto, VoloAbpHttpRemoteServiceErrorResponse>({
+      path: '/connect/token',
+      method: "POST",
+      query: {
+        token: 'Resume'
+      },
+      body: {
+        Client_id: 'Resume_App',
+        Client_secret: '1q2w3e*',
+        username: this.accountFormCtl.value,
+        password: this.passwordFormCtl.value,
+        scope: 'Resume',
+        grant_type: 'password',
+      } as loginRequestDto,
+      secure: true,
+      type: ContentType.Json,
+      format: "json",
+    }))
     .pipe(
-      catchError(err => of(err)),
-      tap((err) => {
-        console.error(err)
-      })
+      catchError(err => {
+        console.log('Handling error locally and rethrowing it...', err);
+        return throwError(() => new Error(err));
+      }),
     )
     .subscribe((next) => {
-      console.log(this.accountFormCtl, this.passwordFormCtl)
-      this.disableLoginBtn = false;
+      console.log(next, this.loginForm.value)
+      if (next.ok && next.data.access_token) {
+        if (this.rememberMeFormCtl.value) {
+          this.cookie.setCookie({
+            name: 'JbToken',
+            value: next.data.access_token,
+            session: true
+          })
+        }
+        this.router.navigate(['/resume-management']);
+      }
+    },
+    (err) => {
+      console.error(err);
       if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
         console.log('login');
         return this.router.navigate(['/resume-management']);
       }
+      return null;
+    },
+    () => {
+      this.disableLoginBtn = false;
       this.showLoginError = true;
       return null;
     });
