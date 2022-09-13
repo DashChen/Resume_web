@@ -1,1 +1,7 @@
-<p>resume-invitations works!</p>
+<ng-container *ngTemplateOutlet="showSend ? send : table"></ng-container>
+<ng-template #table>
+  <admin-resume-invitation-list></admin-resume-invitation-list>  
+</ng-template>
+<ng-template #send>
+  <admin-resume-invitation-send-form></admin-resume-invitation-send-form>
+</ng-template>

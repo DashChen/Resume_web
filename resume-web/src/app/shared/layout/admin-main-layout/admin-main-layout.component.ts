@@ -20,7 +20,7 @@ export class AdminMainLayoutComponent implements OnInit {
 
   links: link[] = [
     {
-      link: '/admin/resume-management',
+      link: '/admin/resume-invitation',
       key: 'resume-management',
       title: '履歷管理',
       icon: 'menu-icon01',

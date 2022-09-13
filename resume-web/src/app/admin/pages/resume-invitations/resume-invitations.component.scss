@@ -1,0 +1,10 @@
+@import 'public-mixin';
+
+$this: '.admin-resume-invitations';
+
+:host {
+  height: 100%;
+  width: 100%;
+
+  #{$this} {}
+}

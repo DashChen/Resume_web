@@ -1,1 +1,66 @@
-<p>resume-invitation-send-form works!</p>
+<div class="admin-resume-invitation-send-form" fxLayout="column" fxLayoutGap="24px">
+  <div class="admin-resume-invitation-send-form__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
+    <div fxFlex fxLayout="column" fxLayoutGap="12px">
+      <div class="admin-resume-invitation-send-form__head__title__back" (click)="showSendMsg(false)">
+        <mat-icon svgIcon="edit"></mat-icon>
+        <span class="h2-text--bold">返回</span>
+      </div>
+      <div class="admin-resume-invitation-send-form__head__title__main h1-large-title">
+        履歷管理
+      </div>
+      <div class="admin-resume-invitation-send-form__head__title__sub h2-text--regular">
+        履歷管理 / 所有履歷 / 發送信件&訊息
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-resume-invitation-send-form__card">
+    <div fxLayout="column">
+      <div class="h2-text--medium">收件者</div>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutGap="18px">
+          <ng-container></ng-container>
+        </div>
+        <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
+          <span>新增人員</span>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="38px">
+      <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+        <label class="mat-form-field__lable--top">信件樣板</label>
+        <mat-select formControlName="level" [errorStateMatcher]="matcher">
+          <ng-container *ngFor="let option of levelOptions">
+            <mat-option [value]="option.key">{{option.text}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+        <label class="mat-form-field__lable--top">簡訊樣板</label>
+        <mat-select formControlName="level" [errorStateMatcher]="matcher">
+          <ng-container *ngFor="let option of levelOptions">
+            <mat-option [value]="option.key">{{option.text}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <div class="h2-text--medium">信件簡訊發送日期</div>
+      <div>
+        <mat-radio-group aria-label="Select an option">
+          <mat-radio-button value="1">信件簡訊立即發送</mat-radio-button>
+          <mat-radio-button value="2">選擇日期</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="18px" class="admin-resume-invitation-send-form__action">
+    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn h2-text--regular" (click)="cancelSend()">
+      <span>取消</span>
+    </button>
+    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn mat-button--blue h2-text--regular" (click)="sendMessage()">
+      <span>確定</span>
+    </button>
+  </div>
+</div>

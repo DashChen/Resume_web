@@ -1,11 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
-
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
 
 import { ResumeData } from '@app/core/datas';
 import { ISelectOption } from '@app/core/interfaces/select-option';
@@ -13,17 +13,19 @@ import { BaseComponent } from '@app/shared';
 import { AddPersonDialogComponent } from '@app/shared/dialog/add-person-dialog/add-person-dialog.component';
 import { BatchLevelEditDialogComponent } from '@app/shared/dialog/batch-level-edit-dialog/batch-level-edit-dialog.component';
 import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/message-snackbar.component';
+import { ResumeInvitationService } from '../';
 
 @Component({
   selector: 'admin-resume-invitation-list',
   templateUrl: './resume-invitation-list.component.html',
   styleUrls: ['./resume-invitation-list.component.scss']
 })
-export class ResumeInvitationListComponent extends BaseComponent implements OnInit {
+export class ResumeInvitationListComponent extends BaseComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  showSend: boolean = false;
+  showSend!: boolean;
+  showSendSubscription!: Subscription;
 
   searchForm = new FormGroup({
     name: new FormControl(''),
@@ -71,13 +73,23 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   constructor(
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    private resumeInvitationService: ResumeInvitationService,
   ) {
     super();
   }
 
   ngOnInit(): void {
-
     this.updatePageInfo(this.dataSource.data.length);
+
+    this.showSendSubscription = this.resumeInvitationService.getShowSend().subscribe(value => {
+      this.showSend = value;
+    });
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.showSendSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -167,7 +179,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   showSendMsg(show: boolean) {
     console.log('showSendMsg', show);
-    this.showSend = show;
+    this.resumeInvitationService.setShowSend(show);
   }
 
   batchEdit(event: MouseEvent) {

@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,7 +8,6 @@ import { CompanyJobData } from '@app/core/datas';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { BaseComponent } from '@app/shared';
 import { CompanyJobAddDialogComponent } from '@app/admin/pages/company-job-add-dialog/company-job-add-dialog.component';
-import { CompanyJobDeleteDialogComponent } from '@app/admin/pages/company-job-delete-dialog/company-job-delete-dialog.component';
 import { CompanyJobEditDialogComponent } from '@app/admin/pages/company-job-edit-dialog/company-job-edit-dialog.component';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { pullAllBy } from 'lodash';
