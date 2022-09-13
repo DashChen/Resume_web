@@ -24,7 +24,9 @@ export interface CompanyJobDialogData extends basicDialog {
   styleUrls: ['./company-job-list.component.scss']
 })
 export class CompanyJobListComponent extends BaseComponent implements OnInit, AfterViewInit {
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   override dialogConfig: CompanyJobDialogData = {} as CompanyJobDialogData;
   disabledDelBtn: boolean = true;
 
@@ -108,7 +110,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         code: null,
         companyId: null,
         jobType: null,
-        jobOpening: false
+        jobOpening: false,
       } as CompanyJobData;
     })
 

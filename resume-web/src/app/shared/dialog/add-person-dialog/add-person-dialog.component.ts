@@ -2,9 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import { FormErrorStateMatcher } from '@app/core';
-import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
+import { ResumeDialogData } from '@app/admin/pages/resume-invitation-list/resume-invitation-list.component';
+import { ResumeData } from '@app/core/datas';
 
 @Component({
   selector: 'app-add-person-dialog',
@@ -25,17 +27,17 @@ export class AddPersonDialogComponent implements OnInit {
   ];
 
   addForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
-    mobile: new FormControl('', [
+    name: new FormControl(this.data.item?.name, [Validators.required, Validators.pattern('[\\W]+')]),
+    mobile: new FormControl(this.data.item?.mobile, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
       Validators.minLength(9),
       Validators.maxLength(13)
     ]),
-    identityId: new FormControl('', [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    job: new FormControl(''),
-    level: new FormControl('')
+    identityId: new FormControl(this.data.item?.identityId, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
+    email: new FormControl(this.data.item?.email, [Validators.required, Validators.email]),
+    job: new FormControl(this.data.item?.job),
+    level: new FormControl(this.data.item?.level)
   });
 
   get nameFormCtl() {
@@ -97,7 +99,8 @@ export class AddPersonDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddPersonDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: basicDialog) { }
+    @Inject(MAT_DIALOG_DATA) public data: ResumeDialogData,
+  ) { }
 
   ngOnInit(): void {}
 
@@ -115,7 +118,14 @@ export class AddPersonDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close(this.isSuccess ? this.addForm.value : false);
+    const passData = Object.assign({}, this.data.item) as ResumeData;
+    passData.name = this.nameFormCtl.value;
+    passData.mobile = this.mobileFormCtl.value;
+    passData.identityId = this.identityIdFormCtl.value;
+    passData.email = this.emailFormCtl.value;
+    passData.job = this.jobFormCtl.value;
+    passData.level = this.levelFormCtl.value;
+    this.dialogRef.close(this.isSuccess ? passData : false);
   }
 }
 

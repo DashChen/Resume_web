@@ -9,7 +9,6 @@ export * from './home/home.component';
 export * from './login/login.component';
 export * from './message/message.component';
 export * from './reset-password/reset-password.component';
-export * from './resume-invitation-add-dialog/resume-invitation-add-dialog.component';
 export * from './resume-invitation-delete-dialog/resume-invitation-delete-dialog.component';
 export * from './resume-invitation-import-dialog/resume-invitation-import-dialog.component';
 export * from './resume-invitation-list/resume-invitation-list.component';

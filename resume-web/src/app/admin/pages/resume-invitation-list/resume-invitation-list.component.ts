@@ -8,12 +8,17 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 
 import { ResumeData } from '@app/core/datas';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
 import { AddPersonDialogComponent } from '@app/shared/dialog/add-person-dialog/add-person-dialog.component';
 import { BatchLevelEditDialogComponent } from '@app/shared/dialog/batch-level-edit-dialog/batch-level-edit-dialog.component';
 import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/message-snackbar.component';
 import { ResumeInvitationService } from '../';
+
+export interface ResumeDialogData extends basicDialog {
+  item: ResumeData | null;
+}
 
 @Component({
   selector: 'admin-resume-invitation-list',
@@ -23,6 +28,8 @@ import { ResumeInvitationService } from '../';
 export class ResumeInvitationListComponent extends BaseComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  override dialogConfig: ResumeDialogData = {} as ResumeDialogData;
 
   showSend!: boolean;
   showSendSubscription!: Subscription;
@@ -40,6 +47,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   // ---- table ----
   displayedColumns: string[] = ['select', 'name', 'mobile', 'email', 'job', 'level', 'status', 'action'];
+  originalData: ResumeData[] = [];
   dataSource = new MatTableDataSource<ResumeData>([]);
   selection = new SelectionModel<ResumeData>(true, []);
 
@@ -84,6 +92,45 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.showSendSubscription = this.resumeInvitationService.getShowSend().subscribe(value => {
       this.showSend = value;
     });
+
+    this.originalData = Array.from(Array(20).keys()).map((val) => {
+      return {
+        // id: val.toString(),
+        // creationTime: "2022-09-13T15:31:53.069Z",
+        // creatorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        // lastModificationTime: "2022-09-13T15:31:53.069Z",
+        // lastModifierId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        // isDeleted: true,
+        // deleterId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        // deletionTime: "2022-09-13T15:31:53.069Z",
+        // code: "string",
+        // companyName: "string",
+        // jobName: "行銷小編",
+        // sendType: "string",
+        // sendStatus: "string",
+        // isOpening: true,
+        // dateA: "2022-09-13T15:31:53.069Z",
+        // dateD: "2022-09-13T15:31:53.069Z",
+        // validCode: "string",
+        // accountCode: "string",
+        // stage: "1",
+        // resumeCode: "string",
+        // phone: "0912123456",
+        // email: "da-ming.wa@gmail.com",
+        // companyId: "string",
+        // url: "string"
+
+        id: val.toString(),
+        name: '工程師' + val.toString(),
+        identityId: 'A123456789',
+        mobile: '0912123456',
+        email: 'da-ming.wa@gmail.com',
+        job: 'sm',
+        level: '1',
+      } as ResumeData;
+    })
+
+    this.dataSource.data = [...this.originalData];
   }
 
   override ngOnDestroy(): void {
@@ -154,6 +201,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.title = '新增人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.item = null;
     const dialogRef = this.dialog.open(AddPersonDialogComponent, {
       height: '783px',
       width: '614px',
@@ -204,7 +252,26 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   editItem(item: ResumeData) {
-    console.log('editItem', item);
+    this.dialogConfig.title = '職缺修改';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.item = item;
+    const dialogRef = this.dialog.open(AddPersonDialogComponent, {
+      width: '614px',
+      panelClass: 'admin-resume-invitation-list__dialog--edit',
+      data: this.dialogConfig,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      // todo: 送出編輯職缺請求
+      if (result) {
+        console.log(result);
+        const editIndex = this.originalData.findIndex(d => d.id === result.id);
+        if (editIndex > -1) {
+          this.originalData.splice(editIndex, 1, result);
+        }
+        this.dataSource.data = [...this.originalData];
+      }
+    });
   }
 
   copyUrl(item: ResumeData) {
@@ -220,7 +287,6 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   openAddDialog(event: MouseEvent): void {
-    ///
+    //
   }
-
 }
