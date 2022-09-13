@@ -62,6 +62,6 @@ export class UserMainLayoutComponent implements OnInit {
 
   logout() {
     this.store.dispatch(UserActions.setLoggedIn({ logged: false }));
-    this.router.navigate(['/admin/login']);
+    this.router.navigate(['/login']);
   }
 }

@@ -142,6 +142,12 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
             this.router.navigate(['/login']);
           }
         });
+      },
+      (err) => {
+        console.error(err);
+      },
+      () => {
+        this.disabledBtn = false;
       });
     }
   }

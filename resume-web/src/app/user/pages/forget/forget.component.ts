@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -10,7 +11,7 @@ import { ISelectOption } from '@app/core/interfaces/select-option';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap } from 'rxjs';
+import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap, throwError } from 'rxjs';
 
 
 @Component({
@@ -147,25 +148,47 @@ export class ForgetComponent extends BaseComponent implements OnInit {
         Email: this.emailAddressFormCtl.value,
       }))
       .pipe(
-        catchError(err => of(err)),
+        catchError((err: HttpErrorResponse) => {
+          // console.log(err);
+          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+        }),
       ).subscribe((next) => {
         console.log(next);
-        this.dialogConfig.icon = 'success';
-        this.dialogConfig.title = '信件發送成功';
-        this.dialogConfig.subTitle = '信件已發送至信箱';
-        this.dialogConfig.successBtnText = '返回登入畫面';
+        if (next.ok) {
+          this.dialogConfig.icon = 'success';
+          this.dialogConfig.title = '信件發送成功';
+          this.dialogConfig.subTitle = '信件已發送至信箱';
+          this.dialogConfig.successBtnText = '返回登入畫面';
+          this.dialogConfig.showSuccessBtn = true;
 
-        const dialogRef = this.dialog.open(CommonDialogComponent, {
+          const dialogRef = this.dialog.open(CommonDialogComponent, {
+            height: '311px',
+            width: '614px',
+            data: this.dialogConfig
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result && next.ok) {
+              this.router.navigate(['/login']);
+            }
+          });
+        }
+      },
+      (err: Error) => {
+        this.dialogConfig.icon = 'unsuccessful';
+        this.dialogConfig.title = '信件發送失敗';
+        this.dialogConfig.subTitle = err.message;
+        this.dialogConfig.showSuccessBtn = true;
+        this.dialogConfig.successBtnText = '再試一次';
+        this.dialog.open(CommonDialogComponent, {
           height: '311px',
           width: '614px',
           data: this.dialogConfig
         });
-
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            this.router.navigate(['/login']);
-          }
-        });
+        return null;
+      },
+      () => {
+        return null;
       });
     } else if (this.tabSelected.value === 1 && !this.showCountdown) {
       this.sendVerificationCode();
@@ -183,10 +206,15 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       Code: this.verificationCodeFormControl.value,
     }))
     .pipe(
-      catchError(err => of(err)),
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
     ).subscribe((next) => {
       console.log(next);
-      if (!next.ok) {
+      if (next.ok && next.data) {
+        this.router.navigate(['/reset-password']);
+      } else {
         this.validateErrorTimes++;
         this.showCountdown = false;
         this.title = '驗證失敗';
@@ -195,9 +223,23 @@ export class ForgetComponent extends BaseComponent implements OnInit {
         this.otherSubtitle = '再次發送驗證碼';
         this.mobileValidationForm.reset();
         this.countryCodeFormControl.setValue('TW');
-      } else {
-        this.router.navigate(['/reset-password']);
       }
+    },
+    (err: Error) => {
+      this.dialogConfig.icon = 'unsuccessful';
+      this.dialogConfig.title = '驗證失敗';
+      this.dialogConfig.subTitle = err.message;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = '再試一次';
+      this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
+      return null;
+    },
+    () => {
+      return null;
     });
   }
 

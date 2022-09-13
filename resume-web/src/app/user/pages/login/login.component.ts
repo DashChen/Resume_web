@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -85,49 +86,38 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.request<loginResponseDto, VoloAbpHttpRemoteServiceErrorResponse>({
-      path: '/connect/token',
-      method: "POST",
-      query: {
-        token: 'Resume'
-      },
-      body: {
-        Client_id: 'Resume_App',
-        Client_secret: '1q2w3e*',
-        username: this.accountFormCtl.value,
-        password: this.passwordFormCtl.value,
-        scope: 'Resume',
-        grant_type: 'password',
-      } as loginRequestDto,
-      secure: true,
-      type: ContentType.Json,
-      format: "json",
-    }))
+    const observable$ = from(this.dataService.getToken(this.accountFormCtl.value, this.passwordFormCtl.value))
     .pipe(
-      catchError(err => {
-        console.log('Handling error locally and rethrowing it...', err);
-        return throwError(() => new Error(err));
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error_description}`));
       }),
     )
     .subscribe((next) => {
-      console.log(next, this.loginForm.value)
       if (next.ok && next.data.access_token) {
         if (this.rememberMeFormCtl.value) {
           this.cookie.setCookie({
             name: 'JbToken',
             value: next.data.access_token,
-            session: true
+            expireDays: (next.data.expires_in / 60 / 60 / 24) || 1
           })
         }
-        this.router.navigate(['/resume-management']);
+        this.router.navigate(['/member-management']);
       }
     },
-    (err) => {
-      console.error(err);
+    (err: Error) => {
       if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
-        console.log('login');
-        return this.router.navigate(['/resume-management']);
+        return this.router.navigate(['/member-management']);
       }
+      this.dialogConfig.icon = 'unsuccessful';
+      this.dialogConfig.title = '登入失敗';
+      this.dialogConfig.subTitle = err.message;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = '再試一次';
+      this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
       return null;
     },
     () => {

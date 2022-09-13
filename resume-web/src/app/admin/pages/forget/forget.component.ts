@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,6 +7,7 @@ import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { from, catchError, of, throwError } from 'rxjs';
 
 @Component({
   selector: 'admin-forget',
@@ -52,20 +54,50 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       this.emailAddressFormCtl.markAllAsTouched();
       return;
     }
+    from(this.dataService.api.appRegisterResumeMailVerifyCodeCreate({
+      Email: this.emailAddressFormCtl.value,
+    }))
+    .pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+    ).subscribe((next) => {
+      // console.log(next);
+      if (next.ok) {
+        this.dialogConfig.icon ='success';
+        this.dialogConfig.title ='信件發送成功';
+        this.dialogConfig.subTitle ='信件已發送至信箱';
+        this.dialogConfig.successBtnText ='返回登入畫面';
+        this.dialogConfig.showSuccessBtn = true;
 
-    this.dialogConfig.icon = 'success';
-    this.dialogConfig.title = '信件發送成功';
-    this.dialogConfig.successBtnText = '信件已發送至信箱';
-    this.dialogConfig.showSuccessBtn = true;
-    this.dialogConfig.successBtnText = '返回登入畫面';
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '614px',
-      data: this.dialogConfig
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        this.router.navigate(['/admin/login']);
+        const dialogRef = this.dialog.open(CommonDialogComponent, {
+          width: '614px',
+          data: this.dialogConfig
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.router.navigate(['/admin/login']);
+          }
+        });
       }
-    })
+    },
+    (err: Error) => {
+      this.dialogConfig.icon = 'unsuccessful';
+      this.dialogConfig.title = '信件發送失敗';
+      this.dialogConfig.subTitle = err.message;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = '再試一次';
+      this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
+      return null;
+    },
+    () => {
+      return null;
+    });
   }
 }

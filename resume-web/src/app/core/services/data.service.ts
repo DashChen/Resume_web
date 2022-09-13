@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams  } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { retry, catchError, tap } from 'rxjs/operators';
-import { Api, ApiConfig } from '../models/Api';
+import { Api, ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '../models/Api';
+import { loginRequestDto, loginResponseDto } from '../models/login.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,24 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
       } as ApiConfig)
   }
 
-  getToken() {
-    return this.request({
+  getToken(username: string, password: string) {
+    return this.request<loginResponseDto, VoloAbpHttpRemoteServiceErrorResponse>({
       path: '/connect/token',
       method: "POST",
-      secure: true,
-      format: "json",
       query: {
-        __tenant: "Resume"
-      }
+        __tenant: 'Resume'
+      },
+      body: {
+        Client_id: 'Resume_App',
+        Client_secret: '1q2w3e*',
+        username: username,
+        password: password,
+        scope: 'Resume',
+        grant_type: 'password',
+      } as loginRequestDto,
+      secure: true,
+      type: ContentType.UrlEncoded,
+      format: "json",
     });
   }
 

@@ -1,11 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
+import { CookieService } from '@app/core/services/cookie.service';
 import { BaseComponent } from '@app/shared';
-import { catchError, from, of, tap } from 'rxjs';
+import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { catchError, from, of, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'admin-login',
@@ -42,6 +45,7 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
+    public cookie: CookieService,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
@@ -81,19 +85,43 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.api.accountLoginCreate(this.loginForm.value))
+    const observable$ = from(this.dataService.getToken(this.accountFormCtl.value, this.passwordFormCtl.value))
     .pipe(
-      catchError(err => of(err)),
-      tap((err) => {
-        console.error(err)
-      })
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error_description}`));
+      }),
     )
     .subscribe((next) => {
-      this.disableLoginBtn = false;
+      if (next.ok && next.data.access_token) {
+        if (this.rememberMeFormCtl.value) {
+          this.cookie.setCookie({
+            name: 'JbToken',
+            value: next.data.access_token,
+            expireDays: (next.data.expires_in / 60 / 60 / 24) || 1
+          })
+        }
+        this.router.navigate(['/admin/company-job']);
+      }
+    },
+    (err) => {
       if (this.accountFormCtl.value === 'admin' && this.passwordFormCtl.value === 'admin1234') {
         console.log('login');
         return this.router.navigate(['/admin/company-job']);
       }
+      this.dialogConfig.icon = 'unsuccessful';
+      this.dialogConfig.title = '登入失敗';
+      this.dialogConfig.subTitle = err.message;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = '再試一次';
+      this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
+      return null;
+    },
+    () => {
+      this.disableLoginBtn = false;
       this.showLoginError = true;
       return null;
     });
