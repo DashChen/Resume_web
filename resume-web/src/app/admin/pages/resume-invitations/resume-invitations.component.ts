@@ -12,21 +12,21 @@ export class ResumeInvitationsComponent implements OnInit, OnDestroy {
 
   showSend!: boolean;
 
-  showSendSubscription!: Subscription;
+  showSend$!: Subscription;
 
   constructor(
     private resumeInvitationService: ResumeInvitationService,
   ) { }
 
   ngOnInit(): void {
-    this.resumeInvitationService.setShowSend(false);
-    this.showSendSubscription = this.resumeInvitationService.getShowSend().subscribe(value => {
+    this.resumeInvitationService.updateShowSend(false);
+    this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
       this.showSend = value;
     });
   }
 
   ngOnDestroy(): void {
-    this.showSendSubscription.unsubscribe();
+    this.showSend$.unsubscribe();
   }
 
 }

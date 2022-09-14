@@ -32,7 +32,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   override dialogConfig: ResumeDialogData = {} as ResumeDialogData;
 
   showSend!: boolean;
-  showSendSubscription!: Subscription;
+  showSend$!: Subscription;
+
+  resumes: ResumeData[] = [];
+  resumes$!: Subscription;
 
   searchForm = new FormGroup({
     name: new FormControl(''),
@@ -89,54 +92,27 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   ngOnInit(): void {
     this.updatePageInfo(this.dataSource.data.length);
 
-    this.showSendSubscription = this.resumeInvitationService.getShowSend().subscribe(value => {
+    this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
       this.showSend = value;
     });
 
-    this.originalData = Array.from(Array(20).keys()).map((val) => {
-      return {
-        // id: val.toString(),
-        // creationTime: "2022-09-13T15:31:53.069Z",
-        // creatorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        // lastModificationTime: "2022-09-13T15:31:53.069Z",
-        // lastModifierId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        // isDeleted: true,
-        // deleterId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        // deletionTime: "2022-09-13T15:31:53.069Z",
-        // code: "string",
-        // companyName: "string",
-        // jobName: "行銷小編",
-        // sendType: "string",
-        // sendStatus: "string",
-        // isOpening: true,
-        // dateA: "2022-09-13T15:31:53.069Z",
-        // dateD: "2022-09-13T15:31:53.069Z",
-        // validCode: "string",
-        // accountCode: "string",
-        // stage: "1",
-        // resumeCode: "string",
-        // phone: "0912123456",
-        // email: "da-ming.wa@gmail.com",
-        // companyId: "string",
-        // url: "string"
+    this.resumes$ = this.resumeInvitationService.resumes$.subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+      },
+    });
+    this.fetchTasks();
+  }
 
-        id: val.toString(),
-        name: '工程師' + val.toString(),
-        identityId: 'A123456789',
-        mobile: '0912123456',
-        email: 'da-ming.wa@gmail.com',
-        job: 'sm',
-        level: '1',
-      } as ResumeData;
-    })
-
-    this.dataSource.data = [...this.originalData];
+  fetchTasks() {
+    this.resumeInvitationService.getResumes();
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.showSendSubscription.unsubscribe();
+    this.showSend$.unsubscribe();
+    this.resumes$.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -227,7 +203,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   showSendMsg(show: boolean) {
     console.log('showSendMsg', show);
-    this.resumeInvitationService.setShowSend(show);
+    this.resumeInvitationService.updateShowSend(show);
   }
 
   batchEdit(event: MouseEvent) {

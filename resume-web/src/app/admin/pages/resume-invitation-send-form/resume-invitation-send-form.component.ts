@@ -13,7 +13,7 @@ import { ResumeInvitationService } from '../';
 export class ResumeInvitationSendFormComponent extends BaseComponent implements OnInit, OnDestroy {
 
   showSend!: boolean;
-  showSendSubscription!: Subscription;
+  showSend$!: Subscription;
 
   levelOptions: ISelectOption[] = [];
 
@@ -24,7 +24,7 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   }
 
   ngOnInit(): void {
-    this.showSendSubscription = this.resumeInvitationService.getShowSend().subscribe(value => {
+    this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
       this.showSend = value;
     });
   }
@@ -32,12 +32,12 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.showSendSubscription.unsubscribe();
+    this.showSend$.unsubscribe();
   }
 
   showSendMsg(show: boolean) {
     console.log('showSendMsg', show);
-    this.resumeInvitationService.setShowSend(show);
+    this.resumeInvitationService.updateShowSend(show);
   }
 
   addReceiver() {
