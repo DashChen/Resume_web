@@ -15,6 +15,7 @@ import { AddPersonDialogComponent } from '@app/shared/dialog/add-person-dialog/a
 import { BatchLevelEditDialogComponent } from '@app/shared/dialog/batch-level-edit-dialog/batch-level-edit-dialog.component';
 import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/message-snackbar.component';
 import { ResumeInvitationService } from '../';
+import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeData | null;
@@ -101,10 +102,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         this.dataSource.data = data;
       },
     });
-    this.fetchTasks();
+    this.fetchResumes();
   }
 
-  fetchTasks() {
+  fetchResumes() {
     this.resumeInvitationService.getResumes();
   }
 
@@ -189,8 +190,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 送出新增人員請求
-        this.dataSource.data.push(result);
-        this.dataSource.data = this.dataSource.data;
+        this.resumeInvitationService.createResume(result);
       }
     });
   }
@@ -220,11 +220,32 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 變更被選擇的階段
+        this.selection.selected.forEach(({ id }) => this.resumeInvitationService.updateResume(id, result));
+        this.selection.clear();
       }
     });
   }
 
   delItems(event: MouseEvent) {
+    this.dialogConfig.title = '刪除履歷項目';
+    this.dialogConfig.subTitle = '確定要刪除所選擇的項目嗎？';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.showSuccessBtn = true;
+    this.dialogConfig.showCancelBtn = true;
+    const dialogRef = this.dialog.open(CommonDialogComponent, {
+      width: '614px',
+      panelClass: 'app-common-dialog--mobile',
+      data: this.dialogConfig,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        // todo: 送出刪除職缺請求
+        this.selection.selected.forEach(({ id }) => this.resumeInvitationService.deleteResume(id))
+        this.selection.clear();
+      }
+    });
   }
 
   editItem(item: ResumeData) {
@@ -238,14 +259,11 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       data: this.dialogConfig,
     });
     dialogRef.afterClosed().subscribe(result => {
-      // todo: 送出編輯職缺請求
+      console.log(result);
       if (result) {
-        console.log(result);
-        const editIndex = this.originalData.findIndex(d => d.id === result.id);
-        if (editIndex > -1) {
-          this.originalData.splice(editIndex, 1, result);
-        }
-        this.dataSource.data = [...this.originalData];
+        // todo: 送出編輯職缺請求
+        const { id, ...data } = result;
+        this.resumeInvitationService.updateResume(id, data);
       }
     });
   }
