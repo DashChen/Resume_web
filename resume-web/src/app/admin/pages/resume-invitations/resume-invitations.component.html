@@ -1,4 +1,4 @@
-<ng-container *ngTemplateOutlet="showSend ? send : table"></ng-container>
+<ng-container *ngTemplateOutlet="!showSend ? send : table"></ng-container>
 <ng-template #table>
   <admin-resume-invitation-list></admin-resume-invitation-list>  
 </ng-template>

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
 import { ResumeInvitationService } from '../';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'admin-resume-invitation-send-form',
@@ -16,6 +17,9 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   showSend$!: Subscription;
 
   levelOptions: ISelectOption[] = [];
+
+  date = new FormControl(new Date());
+  serializedDate = new FormControl(new Date().toISOString());
 
   constructor(
     private resumeInvitationService: ResumeInvitationService,
@@ -36,14 +40,13 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   }
 
   showSendMsg(show: boolean) {
-    console.log('showSendMsg', show);
     this.resumeInvitationService.updateShowSend(show);
   }
 
   addReceiver() {
     //
   }
-  
+
   cancelSend() {
     //
   }

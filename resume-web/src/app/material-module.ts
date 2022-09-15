@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatLuxonDateModule } from '@angular/material-luxon-adapter';
 
 @NgModule({
   exports: [
@@ -40,6 +41,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSnackBarModule,
     MatDatepickerModule,
     MatRadioModule,
+    MatLuxonDateModule,
   ],
 })
 export class MaterialModule {}
