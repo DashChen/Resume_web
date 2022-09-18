@@ -16,24 +16,8 @@ $this: '.admin-resume-invitation-send-form';
       padding: 40px 24px 40px;
       background-color: #FFF;
 
-      &__body {
-        &__title {
-          margin-bottom: 35px;
-        }
-
-        &__column--one {
-          mat-form-field {
-            max-width: calc(50% - 19px);
-          }
-
-          [mat-raised-button] {
-            margin-top: 20px;
-          }
-        }
-
-        mat-form-field:disabled {
-          background: $colorBg;
-        }
+      &__tab-body-content {
+        padding-top: 36px;
       }
     }
   }

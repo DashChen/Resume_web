@@ -108,7 +108,7 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
         return DEFAULT_BREAKPOINTS.map(updateBreakpoints);
       }
     },
-    { provide: RouterStateSerializer, useClass: CustomRouterReducer.CustomeSerializer }
+    { provide: RouterStateSerializer, useClass: CustomRouterReducer.CustomeSerializer },
   ],
   bootstrap: [AppComponent]
 })
