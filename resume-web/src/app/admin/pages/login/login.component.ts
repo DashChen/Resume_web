@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
-import { CookieService } from '@app/core/services/cookie.service';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { catchError, from, of, tap, throwError } from 'rxjs';
@@ -45,7 +44,6 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
-    public cookie: CookieService,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
@@ -85,7 +83,7 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.getToken(this.accountFormCtl.value, this.passwordFormCtl.value))
+    const observable$ = from(this.dataService.getToken({ username: this.accountFormCtl.value, password: this.passwordFormCtl.value }))
     .pipe(
       catchError((err: HttpErrorResponse) => {
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error_description}`));
@@ -94,11 +92,6 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
     .subscribe((next) => {
       if (next.ok && next.data.access_token) {
         if (this.rememberMeFormCtl.value) {
-          this.cookie.setCookie({
-            name: 'JbToken',
-            value: next.data.access_token,
-            expireDays: (next.data.expires_in / 60 / 60 / 24) || 1
-          })
         }
         this.router.navigate(['/admin/company-job']);
       }

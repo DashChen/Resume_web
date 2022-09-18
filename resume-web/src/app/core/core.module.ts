@@ -1,8 +1,10 @@
-import { APP_INITIALIZER, NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_INITIALIZER, Injector, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AppService, DataService, ResizeService  } from './services';
-import { CookieService } from './services/cookie.service';
+import { CookieService } from 'ngx-cookie-service';
+import { StartupService } from './services/startup.service';
+import { AuthGuard } from './guards/auth.guard';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class FormErrorStateMatcher implements ErrorStateMatcher {
@@ -12,10 +14,16 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+export function startupServiceFactory(startupService: StartupService): Function {
+  return () => startupService.load();
+}
+
 @NgModule({
   imports: [
   ],
   providers: [
+    CookieService,
+    AuthGuard,
     {
       multi: true,
       provide: APP_INITIALIZER,
@@ -24,7 +32,13 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
       },
       deps: [AppService]
     },
-    CookieService,
+    StartupService,
+    {
+      multi: true,
+      provide: APP_INITIALIZER,
+      useFactory: startupServiceFactory,
+      deps: [StartupService, Injector]
+    },
     DataService,
     ResizeService,
   ],

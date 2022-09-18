@@ -12,7 +12,6 @@ import { createPasswordStrengthValidator, MatchValidator } from '@app/core/valid
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { TermDialogComponent } from '@app/shared/dialog/term-dialog/term-dialog.component';
-import { setUser } from '@app/shared/store/user/user.actions';
 
 @Component({
   selector: 'app-register-info',
@@ -138,7 +137,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
             // user data to store
-            this.store.dispatch(setUser(next.data));
+            // this.store.dispatch(setUser(next.data));
             this.router.navigate(['/login']);
           }
         });

@@ -9,3 +9,8 @@ export const setLoggedIn = createAction(
     '[Admin Login Page] Set Admin Logged In',
     props<{ logged: boolean}>()
 );
+
+export const setToken = createAction(
+    '[Admin Login Page] Set Admin Token',
+    props<{ token: string }>()
+);

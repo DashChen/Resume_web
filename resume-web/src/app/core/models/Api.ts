@@ -9,13 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export interface ResumeAppendicesAppendixCreateDto {
-  resumeCode?: string | null;
-  appendixName?: string | null;
-  appendixType?: string | null;
-  appendixContent?: string | null;
-}
-
 export interface ResumeAppendicesAppendixDto {
   /** @format uuid */
   id?: string;
@@ -1229,6 +1222,12 @@ export interface ResumeMailQuenesMailQueneCreateDto {
   resumeCode?: string | null;
   stage?: string | null;
   jobName?: string | null;
+
+  /** @format date-time */
+  dateA?: string;
+
+  /** @format date-time */
+  dateD?: string;
 }
 
 export interface ResumeMailQuenesMailQueneDto {
@@ -1270,6 +1269,12 @@ export interface ResumeMailQuenesMailQueneDto {
   resumeCode?: string | null;
   stage?: string | null;
   jobName?: string | null;
+
+  /** @format date-time */
+  dateA?: string;
+
+  /** @format date-time */
+  dateD?: string;
 }
 
 export interface ResumeMailQuenesMailQueneUpdateDto {
@@ -1294,6 +1299,12 @@ export interface ResumeMailQuenesMailQueneUpdateDto {
   resumeCode?: string | null;
   stage?: string | null;
   jobName?: string | null;
+
+  /** @format date-time */
+  dateA?: string;
+
+  /** @format date-time */
+  dateD?: string;
 }
 
 export interface ResumeMailTplsMailTplCreateDto {
@@ -1435,18 +1446,9 @@ export interface ResumeRegisterRegisterInputDto {
 
 export interface ResumeResumeInvitationsResumeInvitationCreateDto {
   code?: string | null;
-  companyName?: string | null;
   jobName?: string | null;
   sendType?: string | null;
-  sendStatus?: string | null;
   isOpening?: boolean;
-
-  /** @format date-time */
-  dateA?: string;
-
-  /** @format date-time */
-  dateD?: string;
-  validCode?: string | null;
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
@@ -1454,7 +1456,7 @@ export interface ResumeResumeInvitationsResumeInvitationCreateDto {
 
   /** @format email */
   email: string;
-  companyId?: string | null;
+  name?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationDto {
@@ -1483,22 +1485,15 @@ export interface ResumeResumeInvitationsResumeInvitationDto {
   companyName?: string | null;
   jobName?: string | null;
   sendType?: string | null;
-  sendStatus?: string | null;
   isOpening?: boolean;
-
-  /** @format date-time */
-  dateA?: string;
-
-  /** @format date-time */
-  dateD?: string;
-  validCode?: string | null;
+  writeStatus?: string | null;
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
   phone?: string | null;
   email?: string | null;
   companyId?: string | null;
-  url?: string | null;
+  name?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
@@ -1510,11 +1505,11 @@ export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
   isOpening?: boolean;
 
   /** @format date-time */
-  dateA?: string;
+  dateA?: string | null;
 
   /** @format date-time */
-  dateD?: string;
-  validCode?: string | null;
+  dateD?: string | null;
+  writeStatus?: string | null;
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
@@ -1523,6 +1518,7 @@ export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
   /** @format email */
   email: string;
   companyId?: string | null;
+  name?: string | null;
 }
 
 export interface ResumeResumeMainsResumeMainCreateDto {
@@ -1720,6 +1716,10 @@ export interface ResumeSMSQuenesSMSQueneCreateDto {
   send_Date?: string;
   isOpened?: boolean;
   companyId: string;
+
+  /** @format date-time */
+  dateB?: string;
+  dateD?: string | null;
 }
 
 export interface ResumeSMSQuenesSMSQueneDto {
@@ -1758,6 +1758,10 @@ export interface ResumeSMSQuenesSMSQueneDto {
   send_Date?: string;
   isOpened?: boolean;
   companyId?: string | null;
+
+  /** @format date-time */
+  dateB?: string;
+  dateD?: string | null;
 }
 
 export interface ResumeSMSQuenesSMSQueneUpdateDto {
@@ -1775,6 +1779,10 @@ export interface ResumeSMSQuenesSMSQueneUpdateDto {
   send_Date?: string;
   isOpened?: boolean;
   companyId: string;
+
+  /** @format date-time */
+  dateB?: string;
+  dateD?: string | null;
 }
 
 export interface ResumeSMSTplsSMSTplCreateDto {
@@ -1960,7 +1968,7 @@ export interface ResumeUserDatasUserDataCreateDto {
   accountId: string;
 
   /** @format date-time */
-  birthDay?: string;
+  birthDay?: string | null;
 }
 
 export interface ResumeUserDatasUserDataDto {
@@ -1998,7 +2006,19 @@ export interface ResumeUserDatasUserDataUpdateDto {
   accountId: string;
 
   /** @format date-time */
-  birthDay?: string;
+  birthDay?: string | null;
+}
+
+export interface ResumeUserDatasUserDto {
+  /** @format uuid */
+  accountId?: string;
+
+  /** @format date-time */
+  birthDay?: string | null;
+  name?: string | null;
+  idNo?: string | null;
+  phone?: string | null;
+  email?: string | null;
 }
 
 export interface ResumeVerifyCodesVerifyCodeCreateDto {
@@ -5709,8 +5729,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appAppendicesCreate: (
-      query: { Name: string },
-      data: ResumeAppendicesAppendixCreateDto,
+      data: { createFileInputWithStream?: File },
+      query?: { ResumeCode?: string; AppendixName?: string; AppendixType?: string; AppendixContent?: string },
       params: RequestParams = {},
     ) =>
       this.request<ResumeAppendicesAppendixDto, VoloAbpHttpRemoteServiceErrorResponse>({
@@ -5719,7 +5739,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         body: data,
         secure: true,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         format: "json",
         ...params,
       }),
@@ -6845,6 +6865,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CompanyJob
+     * @name AppCompanyJobsDeleteListDelete
+     * @request DELETE:/api/app/company-jobs/DeleteList
+     * @secure
+     */
+    appCompanyJobsDeleteListDelete: (query?: { idList?: string[] }, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/company-jobs/DeleteList`,
+        method: "DELETE",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -9912,6 +9949,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ResumeCode?: string;
         Stage?: string;
         JobName?: string;
+        DateAMin?: string;
+        DateAMax?: string;
+        DateDMin?: string;
+        DateDMax?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -9998,60 +10039,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/mail-quenes/${id}`,
         method: "DELETE",
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags MailQuene
-     * @name AppMailQuenesReSendCreate
-     * @request POST:/api/app/mail-quenes/ReSend
-     * @secure
-     */
-    appMailQuenesReSendCreate: (data: string[], params: RequestParams = {}) =>
-      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/mail-quenes/ReSend`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags MailQuene
-     * @name AppMailQuenesGetListByCompanyIdList
-     * @request GET:/api/app/mail-quenes/GetListByCompanyId
-     * @secure
-     */
-    appMailQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
-      this.request<ResumeMailQuenesMailQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/mail-quenes/GetListByCompanyId`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags MailQuene
-     * @name AppMailQuenesUpdateOpenedStatusUpdate
-     * @request PUT:/api/app/mail-quenes/UpdateOpenedStatus
-     * @secure
-     */
-    appMailQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
-      this.request<ResumeMailQuenesMailQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/mail-quenes/UpdateOpenedStatus`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -11181,13 +11168,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         DateAMax?: string;
         DateDMin?: string;
         DateDMax?: string;
-        ValidCode?: string;
+        WriteStatus?: string;
         AccountCode?: string;
         Stage?: string;
         ResumeCode?: string;
         Phone?: string;
         Email?: string;
         CompanyId?: string;
+        Name?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -11285,16 +11273,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags ResumeInvitation
-     * @name AppResumeInvitationsGetListByCompanyIdList
-     * @request GET:/api/app/resume-invitations/GetListByCompanyId
+     * @name AppResumeInvitationsDeleteListDelete
+     * @request DELETE:/api/app/resume-invitations/DeleteList
      * @secure
      */
-    appResumeInvitationsGetListByCompanyIdList: (params: RequestParams = {}) =>
-      this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/resume-invitations/GetListByCompanyId`,
-        method: "GET",
+    appResumeInvitationsDeleteListDelete: (query?: { idList?: string[] }, params: RequestParams = {}) =>
+      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/DeleteList`,
+        method: "DELETE",
+        query: query,
         secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -11302,16 +11290,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags ResumeInvitation
-     * @name AppResumeInvitationsDeleteListDelete
-     * @request DELETE:/api/app/resume-invitations/DeleteList
+     * @name AppResumeInvitationsUpdateStageListCreate
+     * @request POST:/api/app/resume-invitations/UpdateStageList
      * @secure
      */
-    appResumeInvitationsDeleteListDelete: (query?: { id?: string[] }, params: RequestParams = {}) =>
-      this.request<void, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/resume-invitations/DeleteList`,
-        method: "DELETE",
+    appResumeInvitationsUpdateStageListCreate: (
+      data: string[],
+      query?: { StageCode?: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/UpdateStageList`,
+        method: "POST",
         query: query,
+        body: data,
         secure: true,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -11993,6 +11988,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags ShareCode
+     * @name AppShareCodesGetWriteStatusListList
+     * @request GET:/api/app/share-codes/GetWriteStatusList
+     * @secure
+     */
+    appShareCodesGetWriteStatusListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetWriteStatusList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags SMSQuene
      * @name AppSmsQuenesList
      * @request GET:/api/app/s-mSQuenes
@@ -12014,6 +12029,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         Send_DateMax?: string;
         IsOpened?: boolean;
         CompanyId?: string;
+        DateBMin?: string;
+        DateBMax?: string;
+        DateD?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -12100,60 +12118,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/s-mSQuenes/${id}`,
         method: "DELETE",
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags SMSQuene
-     * @name AppSmsQuenesGetListByCompanyIdList
-     * @request GET:/api/app/s-mSQuenes/GetListByCompanyId
-     * @secure
-     */
-    appSMSQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
-      this.request<ResumeSMSQuenesSMSQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/s-mSQuenes/GetListByCompanyId`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags SMSQuene
-     * @name AppSmsQuenesReSendCreate
-     * @request POST:/api/app/s-mSQuenes/ReSend
-     * @secure
-     */
-    appSMSQuenesReSendCreate: (data: string[], params: RequestParams = {}) =>
-      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/s-mSQuenes/ReSend`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags SMSQuene
-     * @name AppSmsQuenesUpdateOpenedStatusUpdate
-     * @request PUT:/api/app/s-mSQuenes/UpdateOpenedStatus
-     * @secure
-     */
-    appSMSQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
-      this.request<ResumeSMSQuenesSMSQueneDto, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/s-mSQuenes/UpdateOpenedStatus`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -13548,6 +13512,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags UserData
+     * @name AppUserDatasGetDataByAccountIdList
+     * @request GET:/api/app/user-datas/GetDataByAccountId
+     * @secure
+     */
+    appUserDatasGetDataByAccountIdList: (params: RequestParams = {}) =>
+      this.request<ResumeUserDatasUserDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/GetDataByAccountId`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),

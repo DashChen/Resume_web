@@ -4,6 +4,8 @@ import { BREAKPOINTS, DEFAULT_BREAKPOINTS, BreakPoint, FlexLayoutModule } from '
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, routerReducer, RouterStateSerializer } from '@ngrx/router-store';
 
 import * as Stores from './shared/store';
 
@@ -21,6 +23,8 @@ import * as country from '@assets/country.json';
 import { ICountry } from './core/interfaces/country';
 import { BreakPointType } from './core/interfaces/breakpoints';
 import { CoreModule } from './core';
+import { EffectsModule } from '@ngrx/effects';
+import { Reducer as CustomRouterReducer } from '@app/shared/store/router';
 
 const iconObj: IconProps = JSON.parse(JSON.stringify(icons));
 const countryObj: ICountry = JSON.parse(JSON.stringify(country));
@@ -74,7 +78,14 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
   imports: [
     BrowserModule,
     CoreModule,
-    StoreModule.forRoot(Stores.default),
+    StoreModule.forRoot({
+      ...Stores.default
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
+    EffectsModule.forRoot(Stores.Effects),
     LayoutModule,
     ComponentModule,
     DialogModule,
@@ -83,6 +94,7 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
     AdminModule,
     UserModule,
     AppRoutingModule,
+    StoreRouterConnectingModule.forRoot(),
     FlexLayoutModule,
   ],
   providers: [
@@ -95,7 +107,8 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
       useFactory: function customizeBreakPoints() {
         return DEFAULT_BREAKPOINTS.map(updateBreakpoints);
       }
-    }
+    },
+    { provide: RouterStateSerializer, useClass: CustomRouterReducer.CustomeSerializer }
   ],
   bootstrap: [AppComponent]
 })

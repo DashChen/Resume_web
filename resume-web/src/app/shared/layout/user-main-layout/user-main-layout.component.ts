@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '@app/core';
 import { link } from '@app/core/interfaces/menu.model';
+import { loginResponseDto } from '@app/core/models/login.model';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Store } from '@ngrx/store';
@@ -55,13 +56,13 @@ export class UserMainLayoutComponent implements OnInit {
       })
     });
     this.currentUser$.subscribe(user => {
-      this.username = user.userName || '王大明';
-      this.email = user.email || 'WuDaMing@gmail.com';
+      this.username = user?.name || '王大明';
+      this.email = user?.email || 'WuDaMing@gmail.com';
     })
   }
 
   logout() {
-    this.store.dispatch(UserActions.setLoggedIn({ logged: false }));
+    this.store.dispatch(UserActions.logout());
     this.router.navigate(['/login']);
   }
 }

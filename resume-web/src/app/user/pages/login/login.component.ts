@@ -4,13 +4,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataService } from '@app/core';
-import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 import { ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
-import { loginRequestDto, loginResponseDto } from '@app/core/models/login.model';
-import { CookieService } from '@app/core/services/cookie.service';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, from, of, tap, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { catchError, from, of, skip, startWith, take, takeUntil, tap, throwError, filter } from 'rxjs';
+import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
+import { Actions as RouterActions } from '@app/shared/store/router';
+
 
 @Component({
   selector: 'app-login',
@@ -46,7 +47,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
-    public cookie: CookieService,
+    public store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
@@ -86,45 +87,44 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.getToken(this.accountFormCtl.value, this.passwordFormCtl.value))
-    .pipe(
-      catchError((err: HttpErrorResponse) => {
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error_description}`));
-      }),
-    )
-    .subscribe((next) => {
-      if (next.ok && next.data.access_token) {
-        if (this.rememberMeFormCtl.value) {
-          this.cookie.setCookie({
-            name: 'JbToken',
-            value: next.data.access_token,
-            expireDays: (next.data.expires_in / 60 / 60 / 24) || 1
-          })
+    this.store.dispatch(UserActions.loginAction({
+      payload: {
+        username: this.accountFormCtl.value,
+        password: this.passwordFormCtl.value,
+        rememberMe: this.rememberMeFormCtl.value,
+      }
+    }));
+    this.store.select(UserSelectors.selectIsLoggedIn)
+      .subscribe(res => {
+        if (res) {
+          this.store.dispatch(UserActions.getUserAction());
         }
-        this.router.navigate(['/member-management']);
-      }
-    },
-    (err: Error) => {
-      if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
-        return this.router.navigate(['/member-management']);
-      }
-      this.dialogConfig.icon = 'unsuccessful';
-      this.dialogConfig.title = '登入失敗';
-      this.dialogConfig.subTitle = err.message;
-      this.dialogConfig.showSuccessBtn = true;
-      this.dialogConfig.successBtnText = '再試一次';
-      this.dialog.open(CommonDialogComponent, {
-        height: '311px',
-        width: '614px',
-        data: this.dialogConfig
       });
-      return null;
-    },
-    () => {
-      this.disableLoginBtn = false;
-      this.showLoginError = true;
-      return null;
-    });
+    this.store.select(UserSelectors.selectErr)
+      .pipe(
+        filter(res => !!res),
+        take(1),
+      )
+      .subscribe(err => {
+        console.log(err);
+        if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
+          return this.store.dispatch(RouterActions.Go({ path: ['/user/member-management']}));
+        }
+        this.dialogConfig.icon = 'unsuccessful';
+        this.dialogConfig.title = '登入失敗';
+        this.dialogConfig.subTitle = err.error.error_description;
+        this.dialogConfig.showSuccessBtn = true;
+        this.dialogConfig.successBtnText = '再試一次';
+        this.dialog.open(CommonDialogComponent, {
+          height: '311px',
+          width: '614px',
+          data: this.dialogConfig
+        });
+        this.disableLoginBtn = false;
+        this.showLoginError = true;
+        this.store.dispatch(UserActions.resetErr());
+        return;
+      });
   }
 
   loginBySocial(target: string) {

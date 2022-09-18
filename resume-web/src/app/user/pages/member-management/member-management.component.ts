@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { BaseComponent } from '@app/shared';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
-import { VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
+import { ResumeUserDatasUserDto, VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
 
 @Component({
   selector: 'app-member-management',
@@ -12,7 +12,7 @@ import { VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
 })
 export class MemberManagementComponent extends BaseComponent implements OnInit {
   currentUser$ = this.store.select(selectCurrentUser);
-  user?: VoloAbpIdentityIdentityUserDto;
+  user: ResumeUserDatasUserDto | null | undefined;
   isEdit: boolean = false;
 
   username: string = '';

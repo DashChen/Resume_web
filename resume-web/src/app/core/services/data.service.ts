@@ -1,26 +1,40 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams  } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { retry, catchError, tap } from 'rxjs/operators';
-import { Api, ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '../models/Api';
+import { Api, ApiConfig, ContentType, RequestParams, VoloAbpHttpRemoteServiceErrorResponse } from '../models/Api';
 import { loginRequestDto, loginResponseDto } from '../models/login.model';
+import { Store } from '@ngrx/store';
+import { Selectors as UserSelectors } from '@app/shared/store/user';
+import { Selectors as AdminSelectors } from '@app/shared/store/admin';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService<SecurityDataType extends unknown> extends Api<SecurityDataType> {
-  authenticationType: string = 'Bearer ';
-  token: string = '';
+  userToken$ = this.store.select(UserSelectors.selectToken);
+  _userToken: string = '';
+
+  adminToken$ = this.store.select(AdminSelectors.selectToken);
+  _adminToken: string = '';
 
   constructor(
+    public store: Store,
     @Inject('API_BASE_URL') apiBaseUrl: string
     ) {
       super({
         baseUrl: apiBaseUrl
       } as ApiConfig)
+    this.userToken$.subscribe(token => {
+      if (token) {
+        this._userToken = `${token.token_type} ${token.access_token}`;
+        this.setAuthorizationToken('user');
+      }
+    });
+    this.adminToken$.subscribe(token => this._adminToken = token);
   }
 
-  getToken(username: string, password: string) {
+  getToken(params: { username: string; password: string }) {
     return this.request<loginResponseDto, VoloAbpHttpRemoteServiceErrorResponse>({
       path: '/connect/token',
       method: "POST",
@@ -30,8 +44,8 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
       body: {
         Client_id: 'Resume_App',
         Client_secret: '1q2w3e*',
-        username: username,
-        password: password,
+        username: params.username,
+        password: params.password,
         scope: 'Resume',
         grant_type: 'password',
       } as loginRequestDto,
@@ -41,16 +55,26 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
     });
   }
 
+  setAuthorizationToken(type: 'user' | 'admin') {
+    const data = {
+      headers: {
+        'Authorization': type === 'user' ? this._userToken : this._adminToken,
+      }
+    } as SecurityDataType;
+    this.setSecurityData(data);
+  }
+
   handleError(error: HttpErrorResponse) {
     let errorMessage = 'Unknown error!';
     if (error.error instanceof ErrorEvent) {
       // Client-side errors
       errorMessage = `Error: ${error.error.message}`;
     } else {
+      // 有多種錯誤格式 XD
+      const message = error.error.error_description;
       // Server-side errors
-      errorMessage = `Error Code: ${error.status}\\nMessage: ${error.message}`;
+      errorMessage = `Error Code: ${error.status}\\nMessage: ${message}`;
     }
-    // TODO: show Error Toast
-    return throwError(() => new Error('errorMessage'));
+    return throwError(() => new Error(errorMessage));
   }
 }

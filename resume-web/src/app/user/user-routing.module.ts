@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from '@app/core/guards/auth.guard';
 import { Layouts } from '../app.component';
 import { ForgetComponent } from './pages/forget/forget.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -7,6 +8,7 @@ import { MemberManagementComponent } from './pages/member-management/member-mana
 import { RegisterInfoComponent } from './pages/register-info/register-info.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { UserComponent } from './pages/user/user.component';
 
 
 const routes: Routes = [
@@ -46,11 +48,19 @@ const routes: Routes = [
       }
     },
     {
-      path: 'member-management',
-      component: MemberManagementComponent,
-      data: {
-        layout: Layouts.userMain
-      }
+      path: 'user',
+      component: UserComponent,
+      children: [
+        { path: '', redirectTo: 'member-management', pathMatch: 'full' },
+        {
+          path: 'member-management',
+          component: MemberManagementComponent,
+          data: {
+            layout: Layouts.userMain
+          }
+        }
+      ],
+      canLoad: [AuthGuard]
     }
 ];
 

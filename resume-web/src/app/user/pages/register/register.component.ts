@@ -139,7 +139,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
         ).subscribe((next) => {
           console.log(next);
           if (next.data) {
-            this.store.dispatch(UserActions.setRegisterPhone({ phone: this.tempPhone }));
+            this.store.dispatch(UserActions.setRegisterPhone({ payload: this.tempPhone }));
             this.router.navigate(['/register-info']);
           } else {
             this.validateError = true;

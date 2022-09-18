@@ -4,4 +4,6 @@ export interface AdminState {
     tempAccount: string;
     // 是否已登入
     isLoggedIn: boolean;
+    // 身分驗證用 token
+    token: string;
 }

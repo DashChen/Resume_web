@@ -9,7 +9,7 @@ export interface loginRequestDto {
 
 export interface loginResponseDto {
     access_token: string;
-    expires_in: number;
-    scope: string;
+    expires_in?: number;
+    scope?: string;
     token_type: string;
 }
