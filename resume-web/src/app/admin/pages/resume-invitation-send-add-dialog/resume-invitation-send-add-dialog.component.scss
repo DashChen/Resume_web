@@ -1,0 +1,44 @@
+@import 'public-mixin';
+
+:host {
+  $this: '.resume-invitation-send-add-dialog';
+
+  #{$this} {
+    &__head {
+      border-bottom: 1px solid #C5D0DF;
+      margin-bottom: 0;
+      padding: 8.5px 24px;
+
+      mat-icon {
+        color: $colorSecond;
+        cursor: pointer;
+        width: 17px;
+      }
+    }
+
+    &__content {
+      max-height: calc(100% - 51px - 130px);
+      overflow: hidden;
+      overflow-y: auto;
+      margin: 0;
+
+      &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 19px;
+        padding: 40px 0 0;
+
+        .default-option {
+          color: $colorLight;
+        }
+      }
+    }
+
+    &__action {
+      gap: 20px;
+      padding: 10px 0 40px;
+      min-height: unset;
+      margin-bottom: unset;
+    }
+  }
+}

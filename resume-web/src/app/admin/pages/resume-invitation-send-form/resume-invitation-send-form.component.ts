@@ -1,11 +1,18 @@
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
+import { ResumeData } from '@app/core/datas';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
+import { ResumeInvitationSendAddDialogComponent } from '@app/admin/pages/resume-invitation-send-add-dialog/resume-invitation-send-add-dialog.component';
 import { ResumeInvitationService } from '../';
+
+export interface ReceiverDialogData extends basicDialog {
+  item: ResumeData | null;
+}
 
 @Component({
   selector: 'admin-resume-invitation-send-form',
@@ -14,23 +21,25 @@ import { ResumeInvitationService } from '../';
 })
 export class ResumeInvitationSendFormComponent extends BaseComponent implements OnInit, OnDestroy {
 
+  override dialogConfig: ReceiverDialogData = {} as ReceiverDialogData;
+
   showSend!: boolean;
   showSend$!: Subscription;
 
   levelOptions: ISelectOption[] = [];
 
-  date1 = new FormControl('');
-  date2 = new FormControl('');
-  date3 = new FormControl('');
-  serializedDate = new FormControl(new Date().toISOString());
+  editForm = new FormGroup({
+    date1: new FormControl(''),
+    date2: new FormControl(''),
+    date3: new FormControl(''),
+  });
 
   constructor(
-    private resumeInvitationService: ResumeInvitationService
+    public dialog: MatDialog,
+    private resumeInvitationService: ResumeInvitationService,
   ) {
     super();
   }
-
-  // @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
   ngOnInit(): void {
     this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
@@ -49,7 +58,23 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   }
 
   addReceiver() {
-    //
+    this.dialogConfig.title = '新增人員';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    this.dialogConfig.item = null;
+    const dialogRef = this.dialog.open(ResumeInvitationSendAddDialogComponent, {
+      height: '783px',
+      width: '614px',
+      maxWidth: '100%',
+      maxHeight: '85vh',
+      data: this.dialogConfig
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        // todo: 新增人員
+      }
+    });
   }
 
   cancelSend() {

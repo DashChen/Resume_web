@@ -1,1 +1,18 @@
-<p>resume-invitation-send-add-dialog works!</p>
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="resume-invitation-send-add-dialog__head">
+  <div class="resume-invitation-send-add-dialog__title h1-title">{{ data.title }}</div>
+  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon">
+  </mat-icon>
+</div>
+<div mat-dialog-content class="resume-invitation-send-add-dialog__content">
+  <form class="resume-invitation-send-add-dialog__content__form" [formGroup]="editForm">
+
+  </form>
+</div>
+<div mat-dialog-actions align="center" class="resume-invitation-send-add-dialog__action">
+  <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+    <span>{{ data.cancelBtnText }}</span>
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+    <span>{{ data.successBtnText }}</span>
+  </button>
+</div>
