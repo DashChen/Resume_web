@@ -1,4 +1,10 @@
 <div class="app-user-login-layout" style="height: 100vh;">
+    <div class="overlay" *ngIf="isLoading">
+        <div class="overlay__scrim"></div>
+        <div class="overlay__content">
+            <div class="overlay__lds__ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
     <div class="app-user-login-layout__left">
         <div class="app-user-login-layout__left__logo__block">
             <div class="app-user-login-layout__left__logo"></div>

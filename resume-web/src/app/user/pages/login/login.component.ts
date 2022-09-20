@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { catchError, from, of, skip, startWith, take, takeUntil, tap, throwError, filter } from 'rxjs';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as RouterActions } from '@app/shared/store/router';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 
 @Component({
@@ -87,6 +88,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
+    this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
     this.store.dispatch(UserActions.loginAction({
       payload: {
         username: this.accountFormCtl.value,
@@ -107,6 +109,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       )
       .subscribe(err => {
         console.log(err);
+        this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
         if (this.accountFormCtl.value === 'test' && this.passwordFormCtl.value === 'test1234') {
           return this.store.dispatch(RouterActions.Go({ path: ['/user/member-management']}));
         }

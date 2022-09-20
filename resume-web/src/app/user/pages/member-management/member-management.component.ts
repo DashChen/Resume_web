@@ -4,6 +4,7 @@ import { BaseComponent } from '@app/shared';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { ResumeUserDatasUserDto, VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Component({
   selector: 'app-member-management',
@@ -35,6 +36,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser$.subscribe(user => {
       this.user = user;
+      this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
     })
   }
 

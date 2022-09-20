@@ -27,6 +27,8 @@ export class UserEffects {
                             sameSite: 'Strict',
                           });
                     }
+                    // session storage
+                    sessionStorage.setItem('JbToken', res.data.access_token);
                     return UserActions.setToken({ payload: res.data });
                 }),
                 catchError(error => {
@@ -41,6 +43,7 @@ export class UserEffects {
         ofType(UserActions.logout),
         map(() => {
             this.cookie.delete('JbToken');
+            sessionStorage.clear();
             this.store.dispatch(RouterActions.Go({ path: ['/login']}));
             return UserActions.logoutSuccess();
         })
@@ -49,7 +52,11 @@ export class UserEffects {
     getUserEffect$ = createEffect(() => this.action$.pipe(
         ofType(UserActions.getUserAction),
         exhaustMap(() => {
-            return from(this.dataService.api.appUserDatasGetDataByAccountIdList()).pipe(
+            return from(this.dataService.api.appUserDatasGetDataByAccountIdList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
                 map(res => {
                     console.log('getUserEffect', res);
                     this.store.dispatch(RouterActions.Go({ path: ['/user/member-management']}));
