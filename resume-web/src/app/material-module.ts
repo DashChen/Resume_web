@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,5 +44,8 @@ import { MatLuxonDateModule } from '@angular/material-luxon-adapter';
     MatRadioModule,
     MatLuxonDateModule,
   ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'zh-TW' },
+  ]
 })
 export class MaterialModule {}

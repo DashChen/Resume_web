@@ -15,51 +15,123 @@
   </div>
 
   <div class="admin-resume-invitation-send-form__card">
-    <div fxLayout="column">
-      <div class="h2-text--medium">收件者</div>
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div fxLayout="row" fxLayoutGap="18px">
-          <ng-container></ng-container>
-        </div>
-        <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
-          <span>新增人員</span>
-        </button>
-      </div>
-    </div>
-    <div fxLayout="row" fxLayoutGap="38px">
-      <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
-        <label class="mat-form-field__lable--top">信件樣板</label>
-        <mat-select formControlName="level" [errorStateMatcher]="matcher">
-          <ng-container *ngFor="let option of levelOptions">
-            <mat-option [value]="option.key">{{option.text}}</mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
-        <label class="mat-form-field__lable--top">簡訊樣板</label>
-        <mat-select formControlName="level" [errorStateMatcher]="matcher">
-          <ng-container *ngFor="let option of levelOptions">
-            <mat-option [value]="option.key">{{option.text}}</mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <div class="h2-text--medium">信件簡訊發送日期</div>
+    <div fxLayout="column" fxLayoutGap="38px">
       <div>
-        <mat-radio-group aria-label="Select an option">
-          <mat-radio-button value="1">信件簡訊立即發送</mat-radio-button>
-          <mat-radio-button value="2">選擇日期</mat-radio-button>
-        </mat-radio-group>
-
-        <mat-form-field appearance="fill">
-          <mat-label>Angular forms</mat-label>
-          <input matInput [matDatepicker]="picker1" [formControl]="date">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-          <mat-datepicker #picker1></mat-datepicker>
+        <div class="h2-text--medium">收件者</div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxLayoutGap="18px">
+            <ng-container></ng-container>
+          </div>
+          <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
+            <span>新增人員</span>
+          </button>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="38px">
+        <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+          <label class="mat-form-field__lable--top">信件樣板</label>
+          <mat-select formControlName="level" [errorStateMatcher]="matcher">
+            <mat-option>請選擇</mat-option>
+            <ng-container *ngFor="let option of levelOptions">
+              <mat-option [value]="option.key">{{option.text}}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+          <label class="mat-form-field__lable--top">簡訊樣板</label>
+          <mat-select formControlName="level" [errorStateMatcher]="matcher">
+            <mat-option>請選擇</mat-option>
+            <ng-container *ngFor="let option of levelOptions">
+              <mat-option [value]="option.key">{{option.text}}</mat-option>
+            </ng-container>
+          </mat-select>
         </mat-form-field>
       </div>
+      <div>
+        <div class="h2-text--medium">信件簡訊發送日期</div>
+        <div>
+          <mat-radio-group aria-label="Select an option">
+            <mat-radio-button value="1">信件簡訊立即發送</mat-radio-button>
+            <mat-radio-button value="2">選擇日期</mat-radio-button>
+          </mat-radio-group>
+  
+          <mat-form-field class="mat-form-field--hide-error" floatLabel="never" appearance="fill">
+            <input matInput [matDatepicker]="picker1" [formControl]="date1" placeholder="請選擇日期">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="h2-text--medium">信件簡訊發送日期</div>
+        <div fxLayout="row" fxLayoutGap="38px">
+          <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
+            <input matInput [matDatepicker]="picker2" [formControl]="date2" placeholder="請選擇日期">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          到
+          <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
+            <input matInput [matDatepicker]="picker3" [formControl]="date3" placeholder="請選擇日期">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="h2-text--medium">檢視信件/簡訊內容</div>
+        <mat-tab-group>
+          <mat-tab label="信件內容">
+            <div fxLayout="column" fxLayoutGap="38px" class="admin-resume-invitation-send-form__card__tab-body-content">
+              <div>
+                <div class="h2-text--medium">主旨</div>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
+                  <input matInput placeholder="請完成入職前填寫資料">
+                </mat-form-field>
+              </div>
+              <div>
+                <div class="h2-text--medium">信件內容</div>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                  <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">
+您好，麻煩在2021/3/15前完成相關填寫事項，謝謝！如有任何疑問請洽人資
+
+
+hyyps://jbjob-my.sharepoint.com/:x:/rpen
+
+
+人事單位
+姓名:王大明
+電話:03-3554436#111
+                  </textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="簡訊內容">
+            <div fxLayout="column" fxLayoutGap="38px" class="admin-resume-invitation-send-form__card__tab-body-content">
+              <div>
+                <div class="h2-text--medium">簡訊內容</div>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
+                  <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">
+您好，麻煩在2021/3/15前完成相關填寫事項，謝謝！如有任何疑問請洽人資
+
+
+hyyps://jbjob-my.sharepoint.com/:x:/rpen
+
+
+人事單位
+姓名:王大明
+電話:03-3554436#111
+                  </textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
     </div>
   </div>
 
