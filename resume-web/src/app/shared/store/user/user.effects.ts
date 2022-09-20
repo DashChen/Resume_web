@@ -12,6 +12,12 @@ import { Actions as RouterActions } from '@app/shared/store/router';
 
 @Injectable()
 export class UserEffects {
+    constructor(
+        private action$: Actions,
+        private store: Store,
+        private dataService: DataService<ApiConfig>,
+        private cookie: CookieService,
+    ) { }
 
     loginEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.loginAction),
@@ -66,11 +72,4 @@ export class UserEffects {
             )
         })
     ));
-
-    constructor(
-        private action$: Actions,
-        private store: Store,
-        private dataService: DataService<ApiConfig>,
-        private cookie: CookieService,
-    ) { }
 }

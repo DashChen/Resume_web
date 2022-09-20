@@ -56,13 +56,12 @@ export class UserMainLayoutComponent implements OnInit {
       })
     });
     this.currentUser$.subscribe(user => {
-      this.username = user?.name || '王大明';
-      this.email = user?.email || 'WuDaMing@gmail.com';
+      this.username = user?.name || '';
+      this.email = user?.email || '';
     })
   }
 
   logout() {
     this.store.dispatch(UserActions.logout());
-    this.router.navigate(['/login']);
   }
 }

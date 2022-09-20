@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { AppService } from '@app/core';
 import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
-import { Actions as AdminActions } from '@app/shared/store/admin';
+import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
 import { link } from '@app/core/interfaces/menu.model';
-
 
 @Component({
   selector: 'app-admin-main-layout',
@@ -13,10 +12,11 @@ import { link } from '@app/core/interfaces/menu.model';
   styleUrls: ['./admin-main-layout.component.scss']
 })
 export class AdminMainLayoutComponent implements OnInit {
+  currentUser$ = this.store.select(AdminSelectors.selectCurrentUser);
   startYear: string = '2022/3';
   currentYear: string = '';
-  username: string = '王大明';
-  email: string = 'WuDaMing@gmail.com';
+  username: string = '';
+  email: string = '';
 
   links: link[] = [
     {
@@ -79,11 +79,13 @@ export class AdminMainLayoutComponent implements OnInit {
         l.active = l.link.includes(path);
       })
     });
-    // TODO Update username from store
+    this.currentUser$.subscribe(user => {
+      this.username = user?.name || '';
+      this.email = user?.email || '';
+    })
   }
 
   logout() {
-    this.store.dispatch(AdminActions.setLoggedIn({ logged: false }));
-    this.router.navigate(['/admin/login']);
+    this.store.dispatch(AdminActions.logout());
   }
 }

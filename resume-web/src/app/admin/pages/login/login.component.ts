@@ -7,7 +7,11 @@ import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, from, of, tap, throwError } from 'rxjs';
+import { catchError, filter, from, of, take, tap, throwError } from 'rxjs';
+import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
+import { Actions as RouterActions } from '@app/shared/store/router';
+import { Actions as CommonActions } from '@app/shared/store/common';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'admin-login',
@@ -44,6 +48,7 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
+    public store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
     super();
@@ -83,40 +88,46 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
       return;
     }
     this.disableLoginBtn = true;
-    const observable$ = from(this.dataService.getToken({ username: this.accountFormCtl.value, password: this.passwordFormCtl.value }))
-    .pipe(
-      catchError((err: HttpErrorResponse) => {
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error_description}`));
-      }),
-    )
-    .subscribe((next) => {
-      if (next.ok && next.data.access_token) {
-        if (this.rememberMeFormCtl.value) {
+    this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
+    this.store.dispatch(AdminActions.loginAction({
+      payload: {
+        username: this.accountFormCtl.value,
+        password: this.passwordFormCtl.value,
+        rememberMe: this.rememberMeFormCtl.value,
+      }
+    }));
+    this.store.select(AdminSelectors.selectIsLoggedIn)
+      .subscribe(res => {
+        if (res) {
+          this.store.dispatch(AdminActions.getUserAction());
         }
-        this.router.navigate(['/admin/company-job']);
-      }
-    },
-    (err) => {
-      if (this.accountFormCtl.value === 'admin' && this.passwordFormCtl.value === 'admin1234') {
-        console.log('login');
-        return this.router.navigate(['/admin/company-job']);
-      }
-      this.dialogConfig.icon = 'unsuccessful';
-      this.dialogConfig.title = '登入失敗';
-      this.dialogConfig.subTitle = err.message;
-      this.dialogConfig.showSuccessBtn = true;
-      this.dialogConfig.successBtnText = '再試一次';
-      this.dialog.open(CommonDialogComponent, {
-        height: '311px',
-        width: '614px',
-        data: this.dialogConfig
       });
-      return null;
-    },
-    () => {
-      this.disableLoginBtn = false;
-      this.showLoginError = true;
-      return null;
-    });
+      this.store.select(AdminSelectors.selectErr)
+      .pipe(
+        filter(res => !!res),
+        take(1),
+      )
+      .subscribe(err => {
+        console.log(err);
+        this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
+        if (this.accountFormCtl.value === 'admin' && this.passwordFormCtl.value === 'admin1234') {
+          console.log('login');
+          return this.router.navigate(['/admin/company-job']);
+        }
+        this.dialogConfig.icon = 'unsuccessful';
+        this.dialogConfig.title = '登入失敗';
+        this.dialogConfig.subTitle = err.error.error_description;
+        this.dialogConfig.showSuccessBtn = true;
+        this.dialogConfig.successBtnText = '再試一次';
+        this.dialog.open(CommonDialogComponent, {
+          height: '311px',
+          width: '614px',
+          data: this.dialogConfig
+        });
+        this.disableLoginBtn = false;
+        this.showLoginError = true;
+        this.store.dispatch(AdminActions.resetErr());
+        return;
+      });
   }
 }
