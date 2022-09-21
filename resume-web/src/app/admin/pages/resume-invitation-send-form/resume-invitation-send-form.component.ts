@@ -63,10 +63,8 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
     this.dialogConfig.cancelBtnText = '取消';
     this.dialogConfig.item = null;
     const dialogRef = this.dialog.open(ResumeInvitationSendAddDialogComponent, {
-      height: '783px',
       width: '614px',
       maxWidth: '100%',
-      maxHeight: '85vh',
       data: this.dialogConfig
     });
     dialogRef.afterClosed().subscribe(result => {

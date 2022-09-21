@@ -16,8 +16,39 @@ $this: '.admin-resume-invitation-send-form';
       padding: 40px 24px 40px;
       background-color: #FFF;
 
+      &__form {
+        &__radio {
+          padding-right: 20px;
+        }
+        &__datepicker {
+          padding-left: 8px;
+        }
+        &__to {
+          padding-right: 14px;
+          padding-left: 14px;
+        }
+      }
+
       &__tab-body-content {
         padding-top: 36px;
+      }
+    }
+
+    ::ng-deep {
+      .mat-tab-label {
+        min-width: 50%;
+        font-size: 14px;
+        line-height: 25px;
+      }
+
+      .mat-tab-label.mat-tab-label-active {
+        background-color: transparent;
+        color: #02B2E1;
+        font-weight: 600;
+      }
+
+      .mat-ink-bar {
+        background-color: #02B2E1;
       }
     }
   }
