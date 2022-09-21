@@ -9,6 +9,7 @@ import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, catchError, tap, switchMap, exhaustMap } from 'rxjs/operators';
 import { Actions as AdminActions } from '.';
 import { Actions as RouterActions } from '@app/shared/store/router';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Injectable()
 export class AdminEffects {
@@ -65,6 +66,7 @@ export class AdminEffects {
             })).pipe(
                 map(res => {
                     console.log('getUserEffect', res);
+                    this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
                     this.store.dispatch(RouterActions.Go({ path: ['/admin/company-job']}));
                     return AdminActions.getUserSuccess({ payload: res.data });
                 }),

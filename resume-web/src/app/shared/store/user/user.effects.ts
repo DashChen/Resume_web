@@ -9,6 +9,7 @@ import { map, mergeMap, catchError, tap, switchMap, finalize, exhaustMap } from 
 import { Actions as UserActions, Selectors as UserSelectors } from '.';
 import { LoginProps } from '@app/core/interfaces/login';
 import { Actions as RouterActions } from '@app/shared/store/router';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Injectable()
 export class UserEffects {
@@ -65,6 +66,7 @@ export class UserEffects {
             })).pipe(
                 map(res => {
                     console.log('getUserEffect', res);
+                    this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
                     this.store.dispatch(RouterActions.Go({ path: ['/user/member-management']}));
                     return UserActions.getUserSuccess({ payload: res.data });
                 }),

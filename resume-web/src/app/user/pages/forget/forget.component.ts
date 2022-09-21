@@ -12,7 +12,8 @@ import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap, throwError } from 'rxjs';
-
+import { Actions as UserActions } from '@app/shared/store/user';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-forget',
@@ -87,6 +88,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private store: Store,
     public dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
     @Inject(COUNTRY_TOKEN) public countryObj: ICountry) {
@@ -169,6 +171,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
           dialogRef.afterClosed().subscribe(result => {
             if (result && next.ok) {
+              this.store.dispatch(UserActions.setTempAccount({payload: this.emailAddressFormCtl.value }));
               this.router.navigate(['/login']);
             }
           });
@@ -213,6 +216,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
     ).subscribe((next) => {
       console.log(next);
       if (next.ok && next.data) {
+        this.store.dispatch(UserActions.setTempAccount({payload: this.tempPhone }));
         this.router.navigate(['/reset-password']);
       } else {
         this.validateErrorTimes++;

@@ -30,7 +30,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
   registerForm = new FormGroup({
     userName: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
     emailAddress: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, createPasswordStrengthValidator()]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), createPasswordStrengthValidator()]),
     confirmPwd: new FormControl('', [Validators.required, MatchValidator('password', 'confirmPwd')]),
     readOver: new FormControl(false)
   });
@@ -136,8 +136,6 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
-            // user data to store
-            // this.store.dispatch(setUser(next.data));
             this.router.navigate(['/login']);
           }
         });

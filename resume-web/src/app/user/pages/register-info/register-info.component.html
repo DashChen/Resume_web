@@ -34,15 +34,16 @@
 
         <div class="app-register-info__form__other">
             <div fxFlex="0 1 0" fxFlexLayout="column">
-                <mat-checkbox class="h2-text--regular" formControlName="readOver"> 我已同意並閱讀</mat-checkbox>
+                <mat-checkbox class="h2-text--regular" formControlName="readOver">
+                    我已同意並閱讀
+                    <a href="#" class="h2-text--regular" (click)="showTerms($event)">
+                        服務條款及隱私權保護政策
+                     </a>
+                </mat-checkbox>
                 <mat-error class="h3-text--medium" *ngIf="readOverFormCtl.invalid">
                     {{ getReadOverErrorMessage() }}
                 </mat-error>
             </div>
-
-            <a href="#" class="h2-text--regular" (click)="showTerms($event)">
-               服務條款及隱私權保護政策
-            </a>
         </div>
 
         <button mat-raised-button (click)="submitForm()" [disabled]="disabledBtn"

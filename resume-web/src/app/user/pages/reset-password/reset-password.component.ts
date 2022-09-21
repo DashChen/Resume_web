@@ -83,7 +83,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         console.log(next);
         this.dialogConfig.icon = next.data ? 'success' : 'unsuccessful';
         this.dialogConfig.title = next.data ? '密碼設定成功' : '密碼設定失敗';
-        this.dialogConfig.subTitle = next.data ? '您的密碼設定成功' : next.error.error.message;
+        this.dialogConfig.subTitle = '您的密碼' + (next.data ? '設定成功' : (next.error?.error.message || '設定失敗'));
         this.dialogConfig.showSuccessBtn = true;
         this.dialogConfig.successBtnText = next.data ? '返回登入畫面' : '再試一次';
         const dialogRef = this.dialog.open(CommonDialogComponent, {
@@ -92,7 +92,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
           data: this.dialogConfig
         });
         dialogRef.afterClosed().subscribe((result) => {
-          if (result && next.ok) {
+          if (result && next.ok && next.data) {
             this.router.navigate(['/login']);
           }
         });
