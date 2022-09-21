@@ -5,6 +5,7 @@ import { filter, interval, of, pipe } from 'rxjs';
 import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as CommonActions } from '@app/shared/store/common';
+import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,26 @@ export class StartupService {
       this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
       if (isAdmin) {
         // TODO 取管理者 data
+        this.store.dispatch(AdminActions.setToken({
+          payload: {
+            token_type: 'bearer',
+            access_token: token,
+            scope: 'Resume',
+            expires_in: 1 * 60 * 60
+          }
+        }));
+        this.store.select(AdminSelectors.selectIsLoggedIn).pipe(
+          filter(status => status)
+        ).subscribe(res => {
+          if (res) {
+            interval(1000 * 60 * 5).subscribe(() => {
+              this.checkStatus(isAdmin);
+            });
+          }
+          // 取回使用者資料
+          this.store.dispatch(AdminActions.getUserAction());
+          resolve(res);
+        });
       } else {
         this.store.dispatch(UserActions.setToken({
           payload: {
