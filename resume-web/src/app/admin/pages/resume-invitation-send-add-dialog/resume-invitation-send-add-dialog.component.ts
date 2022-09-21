@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ResumeData } from '@app/core/datas';
+import { ISelectOption } from '@app/core/interfaces/select-option';
+import { BaseComponent } from '@app/shared/components/base.component';
 import { ReceiverDialogData } from '../resume-invitation-send-form/resume-invitation-send-form.component';
 
 @Component({
@@ -10,27 +12,34 @@ import { ReceiverDialogData } from '../resume-invitation-send-form/resume-invita
   templateUrl: './resume-invitation-send-add-dialog.component.html',
   styleUrls: ['./resume-invitation-send-add-dialog.component.scss']
 })
-export class ResumeInvitationSendAddDialogComponent implements OnInit {
+export class ResumeInvitationSendAddDialogComponent extends BaseComponent implements OnInit {
 
   isSuccess: boolean = false;
 
-  editForm = new FormGroup({
-    jobName: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
-    mailTplCode: new FormControl('', [Validators.required]),
-    smsTplCode: new FormControl('', [Validators.required]),
+  searchForm = new FormGroup({
+    name: new FormControl(''),
+    level: new FormControl(null),
   });
+
+  levelOptions: ISelectOption[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<ResumeInvitationSendAddDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ReceiverDialogData,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
   }
 
+  search(event: MouseEvent) {
+    //
+  }
+
   confirm() {
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
+    if (this.searchForm.invalid) {
+      this.searchForm.markAllAsTouched();
       return;
     }
     this.isSuccess = true;

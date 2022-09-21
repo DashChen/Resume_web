@@ -52,27 +52,28 @@
           <div class="h2-text--medium">信件簡訊發送日期</div>
           <div>
             <mat-radio-group aria-label="Select an option">
-              <mat-radio-button value="1">信件簡訊立即發送</mat-radio-button>
-              <mat-radio-button value="2">選擇日期</mat-radio-button>
+              <mat-radio-button class="admin-resume-invitation-send-form__card__form__radio" value="1">立即發送</mat-radio-button>
+              <mat-radio-button value="2">
+                <span>選擇日期</span>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker" floatLabel="never" appearance="fill">
+                  <input matInput [matDatepicker]="picker1" formControlName="date1" placeholder="請選擇日期">
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </mat-radio-button>
             </mat-radio-group>
-    
-            <mat-form-field class="mat-form-field--hide-error" floatLabel="never" appearance="fill">
-              <input matInput [matDatepicker]="picker1" formControlName="date1" placeholder="請選擇日期">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
           </div>
         </div>
 
         <div>
-          <div class="h2-text--medium">信件簡訊發送日期</div>
-          <div fxLayout="row" fxLayoutGap="38px">
+          <div class="h2-text--medium">網址填寫期限</div>
+          <div fxLayout="row" fxLayoutAlign="center center">
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
               <input matInput [matDatepicker]="picker2" formControlName="date2" placeholder="請選擇日期">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-            到
+            <div class="admin-resume-invitation-send-form__card__form__to">到</div>
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
               <input matInput [matDatepicker]="picker3" formControlName="date3" placeholder="請選擇日期">
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
