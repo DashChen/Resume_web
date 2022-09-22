@@ -15,15 +15,9 @@ export class CompanyJobAddDialogComponent implements OnInit {
 
   isSuccess: boolean = false;
 
-  mailTplCodeOptions: ISelectOption[] = [
-    { text: '第一階段', key: '第一階段' },
-    { text: '第二階端', key: '第二階端' },
-  ];
+  mailTplCodeOptions: ISelectOption[] = [];
 
-  smsTplCodeOptions: ISelectOption[] = [
-    { text: '第一階段', key: '第一階段' },
-    { text: '第二階端', key: '第二階端' },
-  ];
+  smsTplCodeOptions: ISelectOption[] = [];
 
   matcher = new FormErrorStateMatcher();
 
@@ -63,7 +57,20 @@ export class CompanyJobAddDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<CompanyJobAddDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CompanyJobDialogData,
-  ) { }
+  ) {
+    this.mailTplCodeOptions = data.mailList.map(d => {
+      return {
+        text: d.name,
+        key: d.code
+      } as ISelectOption;
+    });
+    this.smsTplCodeOptions = data.smsList.map(d => {
+      return {
+        text: d.name,
+        key: d.code
+      } as ISelectOption;
+    });
+  }
 
   ngOnInit(): void {
   }
@@ -71,12 +78,6 @@ export class CompanyJobAddDialogComponent implements OnInit {
   confirm() {
     if (this.addForm.invalid) {
       this.addForm.markAllAsTouched();
-      this.jobNameFormCtl.setValidators([Validators.required]);
-      this.jobNameFormCtl.updateValueAndValidity({ onlySelf: true });
-      this.mailTplCodeFormCtl.setValidators([Validators.required]);
-      this.mailTplCodeFormCtl.updateValueAndValidity({ onlySelf: true });
-      this.smsTplCodeFormCtl.setValidators([Validators.required]);
-      this.smsTplCodeFormCtl.updateValueAndValidity({ onlySelf: true });
       return;
     }
     this.isSuccess = true;

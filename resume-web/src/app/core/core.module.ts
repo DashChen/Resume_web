@@ -42,7 +42,8 @@ export function startupServiceFactory(startupService: StartupService): Function 
     DataService,
     ResizeService,
   ],
-  declarations: [],
+  declarations: [
+  ],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() core:CoreModule ){

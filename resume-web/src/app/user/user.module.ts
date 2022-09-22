@@ -11,6 +11,7 @@ import { RegisterInfoComponent } from './pages/register-info/register-info.compo
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { MemberManagementComponent } from './pages/member-management/member-management.component';
 import { UserComponent } from './pages/user/user.component';
+import { SharedModule } from '@app/shared/shared.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { UserComponent } from './pages/user/user.component';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    SharedModule,
     ComponentModule
   ],
   providers: [],

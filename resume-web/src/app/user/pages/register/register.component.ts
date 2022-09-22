@@ -70,11 +70,11 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
-    public store: Store,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
     @Inject(COUNTRY_TOKEN) public countryObj: ICountry) {
-      super();
+      super(store, dialog);
       Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
         this.countryCodeOptions.push({
           text: countryObj.userinfo_country_code[value].toString(),

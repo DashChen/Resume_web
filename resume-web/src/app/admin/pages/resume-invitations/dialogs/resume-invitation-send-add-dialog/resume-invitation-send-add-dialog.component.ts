@@ -4,15 +4,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ResumeData } from '@app/core/datas';
 import { ISelectOption } from '@app/core/interfaces/select-option';
+import { BaseFormComponent } from '@app/shared/components/base-form.component';
 import { BaseComponent } from '@app/shared/components/base.component';
-import { ReceiverDialogData } from '../resume-invitation-send-form/resume-invitation-send-form.component';
+import { ReceiverDialogData } from '../../components/resume-invitation-send-form/resume-invitation-send-form.component';
 
 @Component({
   selector: 'admin-resume-invitation-send-add-dialog',
   templateUrl: './resume-invitation-send-add-dialog.component.html',
   styleUrls: ['./resume-invitation-send-add-dialog.component.scss']
 })
-export class ResumeInvitationSendAddDialogComponent extends BaseComponent implements OnInit {
+export class ResumeInvitationSendAddDialogComponent extends BaseFormComponent implements OnInit {
 
   isSuccess: boolean = false;
 

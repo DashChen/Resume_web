@@ -7,7 +7,9 @@ import { ApiConfig } from '@app/core/models/Api';
 import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { Store } from '@ngrx/store';
 import { from, catchError, of, tap } from 'rxjs';
+import { Actions as RouterActions } from '@app/shared/store/router';
 
 @Component({
   selector: 'admin-reset-password',
@@ -51,11 +53,11 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
   }
 
   constructor(
-    private router: Router,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
   ) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {
@@ -93,7 +95,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
-            this.router.navigate(['/login']);
+            this.store.dispatch(RouterActions.Go({path: ['/login']}));
           }
         });
       });

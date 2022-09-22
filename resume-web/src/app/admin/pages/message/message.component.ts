@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'admin-message',
@@ -32,10 +32,10 @@ export class MessageComponent extends BaseComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   constructor(
-    private router: Router,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
-      super();
+      super(store, dialog);
     }
 
   ngOnInit(): void {

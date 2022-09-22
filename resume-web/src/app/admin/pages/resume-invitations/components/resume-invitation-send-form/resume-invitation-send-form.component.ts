@@ -7,8 +7,9 @@ import { ResumeData } from '@app/core/datas';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
-import { ResumeInvitationSendAddDialogComponent } from '@app/admin/pages/resume-invitation-send-add-dialog/resume-invitation-send-add-dialog.component';
-import { ResumeInvitationService } from '../';
+import { ResumeInvitationSendAddDialogComponent } from '@app/admin/pages/resume-invitations/dialogs/resume-invitation-send-add-dialog/resume-invitation-send-add-dialog.component';
+import { ResumeInvitationService } from '../../..';
+import { Store } from '@ngrx/store';
 
 export interface ReceiverDialogData extends basicDialog {
   item: ResumeData | null;
@@ -35,10 +36,11 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   });
 
   constructor(
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     private resumeInvitationService: ResumeInvitationService,
   ) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {

@@ -18,7 +18,11 @@ export class CommonEffects {
     stageEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(CommonActions.getStageList),
         exhaustMap(() => {
-            return from(this.dataService.api.appShareCodesGetStageListList()).pipe(
+            return from(this.dataService.api.appShareCodesGetStageListList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('admin')
+                }
+            })).pipe(
                 map(res => {
                     return CommonActions.getStageListSuccess({ payload: res.data?.items || [] });
                 }),
@@ -33,7 +37,11 @@ export class CommonEffects {
     writeStateEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(CommonActions.getWriteStatus),
         exhaustMap(() => {
-            return from(this.dataService.api.appShareCodesGetWriteStatusListList()).pipe(
+            return from(this.dataService.api.appShareCodesGetWriteStatusListList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('admin')
+                }
+            })).pipe(
                 map(res => {
                     return CommonActions.getWriteStatusSuccess({ payload: res.data?.items || [] });
                 }),
@@ -48,7 +56,11 @@ export class CommonEffects {
     smsTplsEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(CommonActions.getSmsTpl),
         exhaustMap(() => {
-            return from(this.dataService.api.appSMSTplsList()).pipe(
+            return from(this.dataService.api.appSMSTplsList({}, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('admin')
+                }
+            })).pipe(
                 map(res => {
                     return CommonActions.getSmsTplSuccess({ payload: res.data?.items || [] });
                 }),
@@ -63,7 +75,11 @@ export class CommonEffects {
     mailTplsEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(CommonActions.getMailTpl),
         exhaustMap(() => {
-            return from(this.dataService.api.appMailTplsList()).pipe(
+            return from(this.dataService.api.appMailTplsList({}, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('admin')
+                }
+            })).pipe(
                 map(res => {
                     return CommonActions.getMailTplSuccess({ payload: res.data?.items || [] });
                 }),

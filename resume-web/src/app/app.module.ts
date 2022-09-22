@@ -25,6 +25,7 @@ import { BreakPointType } from './core/interfaces/breakpoints';
 import { CoreModule } from './core';
 import { EffectsModule } from '@ngrx/effects';
 import { Reducer as CustomRouterReducer } from '@app/shared/store/router';
+import { SharedModule } from './shared/shared.module';
 
 const iconObj: IconProps = JSON.parse(JSON.stringify(icons));
 const countryObj: ICountry = JSON.parse(JSON.stringify(country));

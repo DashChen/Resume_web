@@ -16,15 +16,9 @@ export class CompanyJobEditDialogComponent implements OnInit {
 
   isSuccess: boolean = false;
 
-  mailTplCodeOptions: ISelectOption[] = [
-    { text: '第一階段', key: '第一階段' },
-    { text: '第二階端', key: '第二階端' },
-  ];
+  mailTplCodeOptions: ISelectOption[] = [];
 
-  smsTplCodeOptions: ISelectOption[] = [
-    { text: '第一階段', key: '第一階段' },
-    { text: '第二階端', key: '第二階端' },
-  ];
+  smsTplCodeOptions: ISelectOption[] = [];
 
   matcher = new FormErrorStateMatcher();
 
@@ -64,20 +58,28 @@ export class CompanyJobEditDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<CompanyJobEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CompanyJobDialogData,
-  ) { }
+  ) {
+    this.mailTplCodeOptions = data.mailList.map(d => {
+      return {
+        text: d.name,
+        key: d.code
+      } as ISelectOption;
+    });
+    this.smsTplCodeOptions = data.smsList.map(d => {
+      return {
+        text: d.name,
+        key: d.code
+      } as ISelectOption;
+    });
+  }
 
   ngOnInit(): void {
   }
 
   confirm() {
     if (this.editForm.invalid) {
+      console.log('CompanyJobEditDialogComponent confirm', this.editForm)
       this.editForm.markAllAsTouched();
-      this.jobNameFormCtl.setValidators([Validators.required]);
-      this.jobNameFormCtl.updateValueAndValidity({ onlySelf: true });
-      this.mailTplCodeFormCtl.setValidators([Validators.required]);
-      this.mailTplCodeFormCtl.updateValueAndValidity({ onlySelf: true });
-      this.smsTplCodeFormCtl.setValidators([Validators.required]);
-      this.smsTplCodeFormCtl.updateValueAndValidity({ onlySelf: true });
       return;
     }
     this.isSuccess = true;
@@ -85,10 +87,7 @@ export class CompanyJobEditDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    const passData = Object.assign({}, this.data.item) as CompanyJobData;
-    passData.jobName = this.jobNameFormCtl.value;
-    passData.mailTplCode = this.mailTplCodeFormCtl.value;
-    passData.smsTplCode = this.smsTplCodeFormCtl.value;
+    const passData = Object.assign({}, this.editForm.value) as CompanyJobData;
     this.dialogRef.close(this.isSuccess ? passData : false);
   }
 

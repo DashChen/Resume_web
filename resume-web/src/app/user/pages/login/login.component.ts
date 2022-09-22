@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
@@ -47,11 +46,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
   disableLoginBtn: boolean = false;
 
   constructor(
-    public router: Router,
-    public store: Store,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {

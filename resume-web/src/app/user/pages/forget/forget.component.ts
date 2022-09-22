@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { DataService, FormErrorStateMatcher } from '@app/core';
 import { basicDialog, IBasicDialog } from '@app/core/interfaces/basic-dialog';
@@ -13,7 +13,7 @@ import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap, throwError } from 'rxjs';
 import { Actions as UserActions } from '@app/shared/store/user';
-import { Store } from '@ngrx/store';
+import { Actions as RouterActions } from '@app/shared/store/router';
 
 @Component({
   selector: 'app-forget',
@@ -87,12 +87,11 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   disabledSendAgain: boolean = true;
 
   constructor(
-    private router: Router,
-    private store: Store,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
     @Inject(COUNTRY_TOKEN) public countryObj: ICountry) {
-      super();
+      super(store, dialog);
       Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
         this.countryCodeOptions.push({
           text: countryObj.userinfo_country_code[value].toString(),
@@ -172,7 +171,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
           dialogRef.afterClosed().subscribe(result => {
             if (result && next.ok) {
               this.store.dispatch(UserActions.setTempAccount({payload: this.emailAddressFormCtl.value }));
-              this.router.navigate(['/login']);
+              this.store.dispatch(RouterActions.Go({path: ['/login']}));
             }
           });
         }
@@ -217,7 +216,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       console.log(next);
       if (next.ok && next.data) {
         this.store.dispatch(UserActions.setTempAccount({payload: this.tempPhone }));
-        this.router.navigate(['/reset-password']);
+        this.store.dispatch(RouterActions.Go({path: ['/reset-password']}));
       } else {
         this.validateErrorTimes++;
         this.showCountdown = false;
@@ -293,7 +292,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/login']);
+          this.store.dispatch(RouterActions.Go({path: ['/login']}));
         }
       })
     }
@@ -309,7 +308,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
     if (this.showCountdown) {
       this.sendVerificationCode();
     } else {
-      this.router.navigate(['/login']);
+      this.store.dispatch(RouterActions.Go({path: ['/login']}));
     }
   }
 }

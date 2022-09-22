@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { FormErrorStateMatcher } from '@app/core';
 import { ISelectOption } from '@app/core/interfaces/select-option';
-import { ResumeDialogData } from '@app/admin/pages/resume-invitation-list/resume-invitation-list.component';
+import { ResumeDialogData } from '@app/admin/pages/resume-invitations/components/resume-invitation-list/resume-invitation-list.component';
 import { ResumeData } from '@app/core/datas';
 
 @Component({

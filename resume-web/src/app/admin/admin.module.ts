@@ -8,7 +8,6 @@ import { MaterialModule } from '@app/material-module';
 import { AdminRoutingModule } from './admin-routing.module';
 import {
   AdminLoginComponent,
-  AboutComponent,
   AdminComponent,
   CompanyJobListComponent,
   CompanyJobAddDialogComponent,
@@ -26,11 +25,11 @@ import {
   ResumeInvitationImportDialogComponent,
   ResumeInvitationsComponent,
 } from './pages';
+import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
   declarations: [
     AdminLoginComponent,
-    AboutComponent,
     AdminComponent,
     HomeComponent,
     ForgetComponent,
@@ -55,6 +54,7 @@ import {
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    SharedModule,
     ComponentModule,
   ],
   providers: [],

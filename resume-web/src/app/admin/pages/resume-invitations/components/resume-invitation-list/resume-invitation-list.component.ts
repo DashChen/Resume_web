@@ -14,8 +14,9 @@ import { BaseComponent } from '@app/shared';
 import { AddPersonDialogComponent } from '@app/shared/dialog/add-person-dialog/add-person-dialog.component';
 import { BatchLevelEditDialogComponent } from '@app/shared/dialog/batch-level-edit-dialog/batch-level-edit-dialog.component';
 import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/message-snackbar.component';
-import { ResumeInvitationService } from '../';
+import { ResumeInvitationService } from '../../..';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { Store } from '@ngrx/store';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeData | null;
@@ -83,11 +84,12 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   pageEvent: PageEvent | null = null;
 
   constructor(
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public snackBar: MatSnackBar,
     private resumeInvitationService: ResumeInvitationService,
   ) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {

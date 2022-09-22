@@ -5,6 +5,7 @@ import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { ResumeUserDatasUserDto, VoloAbpIdentityIdentityUserDto } from '@app/core/models/Api';
 import { Actions as CommonActions } from '@app/shared/store/common';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-member-management',
@@ -28,9 +29,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   mfaFacebook: string = '';
 
   constructor(
-    public store: Store,
+    public override store: Store,
+    public override dialog: MatDialog
   ) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {

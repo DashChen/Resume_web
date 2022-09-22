@@ -48,10 +48,10 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
 
   constructor(
     public router: Router,
-    public store: Store,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {

@@ -2,12 +2,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { DataService } from '@app/core';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { Store } from '@ngrx/store';
 import { from, catchError, of, throwError } from 'rxjs';
+import { Actions as RouterActions } from '@app/shared/store/router';
 
 @Component({
   selector: 'admin-forget',
@@ -36,11 +37,11 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   }
 
   constructor(
-    private router: Router,
-    public dialog: MatDialog,
+    public override store: Store,
+    public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
   ) {
-    super();
+    super(store, dialog);
   }
 
   ngOnInit(): void {
@@ -78,7 +79,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            this.router.navigate(['/admin/login']);
+            this.store.dispatch(RouterActions.Go({path: ['/admin/login']}));
           }
         });
       }

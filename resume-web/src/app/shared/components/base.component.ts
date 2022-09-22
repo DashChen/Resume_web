@@ -1,23 +1,35 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { FormErrorStateMatcher } from "@app/core";
 import { IBasicDialog } from "@app/core/interfaces/basic-dialog";
-import { BaseDestoryComponent } from "./base-destory.component";
+import { Store } from "@ngrx/store";
+import { CommonDialogComponent } from "../dialog/common-dialog/common-dialog.component";
+import { Actions as AdminActions } from '@app/shared/store/admin';
+import { BaseFormComponent } from "./base-form.component";
 
 @Component({template: ''})
-export class BaseComponent extends BaseDestoryComponent {
-    matcher = new FormErrorStateMatcher();
-
+export class BaseComponent extends BaseFormComponent {
     dialogConfig: IBasicDialog = {} as IBasicDialog;
 
-    validateAllFormFields(formGroup: FormGroup) {
-        Object.keys(formGroup.controls).forEach(field => {
-            const control = formGroup.get(field);
-            if (control instanceof FormControl) {
-                control.markAsTouched({ onlySelf: true });
-            } else if (control instanceof FormGroup) {
-                this.validateAllFormFields(control);
-            }
-        })
+    constructor(
+        public readonly store: Store,
+        public readonly dialog: MatDialog,
+        ) {
+        super();
+      }
+
+    failDialog(title: string, subtitle: string, successBtnText: string = '關閉') {
+        this.dialogConfig.icon = 'unsuccessful';
+        this.dialogConfig.title = title;
+        this.dialogConfig.subTitle = subtitle;
+        this.dialogConfig.showSuccessBtn = true;
+        this.dialogConfig.successBtnText = successBtnText;
+        this.dialog.open(CommonDialogComponent, {
+          height: '311px',
+          width: '614px',
+          data: this.dialogConfig
+        });
+        this.store.dispatch(AdminActions.resetErr());
     }
 }
