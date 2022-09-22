@@ -36,7 +36,7 @@
           <label class="mat-form-field__lable--top">階段</label>
           <mat-select formControlName="level" [errorStateMatcher]="matcher">
             <mat-option>請選擇</mat-option>
-            <ng-container *ngFor="let option of levelOptions">
+            <ng-container *ngFor="let option of stageOptions">
               <mat-option [value]="option.key">{{option.text}}</mat-option>
             </ng-container>
           </mat-select>
@@ -54,7 +54,7 @@
           <label class="mat-form-field__lable--top">填寫狀態</label>
           <mat-select formControlName="status" [errorStateMatcher]="matcher">
             <mat-option>請選擇</mat-option>
-            <ng-container *ngFor="let option of statusOptions">
+            <ng-container *ngFor="let option of writeStatusOptions">
               <mat-option [value]="option.key">{{option.text}}</mat-option>
             </ng-container>
           </mat-select>

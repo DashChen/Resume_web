@@ -20,6 +20,7 @@ import { ApiConfig, ResumeCompanyJobsCompanyJobDto, ResumeMailTplsMailTplDto, Re
 import { catchError, from, Observable, throwError } from 'rxjs';
 import { DataService } from '@app/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { validateBasis } from '@angular/flex-layout';
 
 export interface CompanyJobDialogData extends basicDialog {
   item: ResumeCompanyJobsCompanyJobDto | null;
@@ -97,7 +98,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     private dataService: DataService<ApiConfig>,
     private resizeService: ResizeService,
     @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType
-    ) {
+  ) {
     super(store, dialog);
   }
 
@@ -122,43 +123,45 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
   }
 
   ngAfterViewInit(): void {
-    from(this.dataService.api.appCompanyJobsList({}, {
-      headers: {
-        ...this.dataService.getAuthorizationToken('admin')
-      }
-    })).pipe(
+    from(
+      this.dataService.api.appCompanyJobsList({}, {
+        headers: {
+          ...this.dataService.getAuthorizationToken('admin')
+        }
+      })
+    ).pipe(
       catchError((err: HttpErrorResponse) => {
         // console.log(err);
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
-    ).subscribe((next) => {
-      console.log('appCompanyJobsList', next);
-      this.originalData = next.data.items || [] as ResumeCompanyJobsCompanyJobDto[];
-    },
-    (err: Error) => {
-      this.originalData = Array.from(Array(20).keys()).map((val) => {
-        return {
-          id: val.toString(),
-          code: null,
-          companyId: null,
-          jobName: null,
-          jobType: null,
-          mailTplCode: '第一階段',
-          smsTplCode: '第一階段'
-        } as ResumeCompanyJobsCompanyJobDto;
-      })
-      return null;
-    },
-    () => {
-      this.dataSource.data = [...this.originalData];
-      this.updatePageInfo(this.dataSource.data.length);
-      return null;
+    ).subscribe({
+      next: (value) => {
+        console.log('appCompanyJobsList', value);
+        this.originalData = value.data.items || [] as ResumeCompanyJobsCompanyJobDto[];
+      },
+      error: () => {
+        this.originalData = Array.from(Array(20).keys()).map((val) => {
+          return {
+            id: val.toString(),
+            code: null,
+            companyId: null,
+            jobName: null,
+            jobType: null,
+            mailTplCode: '第一階段',
+            smsTplCode: '第一階段'
+          } as ResumeCompanyJobsCompanyJobDto;
+        })
+      },
+      complete: () => {
+        this.dataSource.data = [...this.originalData];
+        this.updatePageInfo(this.dataSource.data.length);
+      }
     });
   }
 
   public updatePageInfo(length: number) {
     this.length = length;
-    this.totalPage = Math.ceil(length/this.pageSize);
+    this.totalPage = Math.ceil(length / this.pageSize);
     this.totalPageList = Array.from(Array(this.totalPage).keys());
     this.dataSource.paginator = this.paginator;
   }
@@ -185,7 +188,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     console.log('getPaginatorData', event);
     this.manualPage = event.pageIndex;
     this.disablePrev = event.pageIndex === 0;
-    this.disableNext = event.pageIndex === (this.totalPage -1);
+    this.disableNext = event.pageIndex === (this.totalPage - 1);
   }
 
   searchKeyword(event: any) {
@@ -214,26 +217,28 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出新增職缺請求
       if (result) {
-        from(this.dataService.api.appCompanyJobsCreate(result, {
-          headers: {
-            ...this.dataService.getAuthorizationToken('admin')
-          }
-        })).pipe(
+        from(
+          this.dataService.api.appCompanyJobsCreate(result, {
+            headers: {
+              ...this.dataService.getAuthorizationToken('admin')
+            }
+          })
+        ).pipe(
           catchError((err: HttpErrorResponse) => {
             console.log(err);
             return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
           }),
-        ).subscribe((next) => {
-          console.log('appCompanyJobsCreate', next);
-          this.dataSource.data = [...this.dataSource.data, next.data];
-        },
-        (err: Error) => {
-          this.failDialog('新增失敗', err.message, '知道了');
-          return null;
-        },
-        () => {
-          this.updatePageInfo(this.dataSource.data.length);
-          return null;
+        ).subscribe({
+          next: (value) => {
+            console.log('appCompanyJobsCreate', value);
+            this.dataSource.data = [...this.dataSource.data, value.data];
+          },
+          error: (err: Error) => {
+            this.failDialog('新增失敗', err.message, '知道了');
+          },
+          complete: () => {
+            this.updatePageInfo(this.dataSource.data.length);
+          }
         });
       }
     });
@@ -256,31 +261,33 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
       // todo: 送出刪除職缺請求
       if (result && idList.length > 0) {
         console.log('delItems', result);
-        from(this.dataService.api.appCompanyJobsDeleteListDelete({
-          idList: idList
-        }, {
-          headers: {
-            ...this.dataService.getAuthorizationToken('admin')
-          }
-        })).pipe(
+        from(
+          this.dataService.api.appCompanyJobsDeleteListDelete({
+            idList: idList
+          }, {
+            headers: {
+              ...this.dataService.getAuthorizationToken('admin')
+            }
+          })
+        ).pipe(
           catchError((err: HttpErrorResponse) => {
             console.log(err);
             return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
           }),
-        ).subscribe((next) => {
-          console.log('appCompanyJobsDeleteListDelete', next);
-          this.originalData = pullAllBy(this.originalData, this.selection.selected, 'jobName');
-          this.dataSource.data = [...this.originalData];
-        },
-        (err: Error) => {
-          this.failDialog('刪除失敗', err.message);
-          return null;
-        },
-        () => {
-          this.disabledDelBtn = true;
-          this.selection.clear();
-          this.updatePageInfo(this.dataSource.data.length);
-          return null;
+        ).subscribe({
+          next: (value) => {
+            console.log('appCompanyJobsDeleteListDelete', value);
+            this.originalData = pullAllBy(this.originalData, this.selection.selected, 'jobName');
+            this.dataSource.data = [...this.originalData];
+          },
+          error: (err: Error) => {
+            this.failDialog('刪除失敗', err.message);
+          },
+          complete: () => {
+            this.disabledDelBtn = true;
+            this.selection.clear();
+            this.updatePageInfo(this.dataSource.data.length);
+          }
         });
       }
     });
@@ -304,29 +311,31 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
       // todo: 送出編輯職缺請求
       if (result && item?.id) {
         console.log('editItem', result);
-        from(this.dataService.api.appCompanyJobsUpdate(item.id, result, {
-          headers: {
-            ...this.dataService.getAuthorizationToken('admin')
-          }
-        })).pipe(
+        from(
+          this.dataService.api.appCompanyJobsUpdate(item.id, result, {
+            headers: {
+              ...this.dataService.getAuthorizationToken('admin')
+            }
+          })
+        ).pipe(
           catchError((err: HttpErrorResponse) => {
             console.log(err);
             return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
           }),
-        ).subscribe((next) => {
-          console.log('appCompanyJobsUpdate', next, item);
-          const editIndex = this.originalData.findIndex(d => d.id === item.id);
-          if (editIndex > -1) {
-            this.originalData.splice(editIndex, 1, next.data);
+        ).subscribe({
+          next: (value) => {
+            console.log('appCompanyJobsUpdate', value, item);
+            const editIndex = this.originalData.findIndex(d => d.id === item.id);
+            if (editIndex > -1) {
+              this.originalData.splice(editIndex, 1, value.data);
+            }
+          },
+          error: (err: Error) => {
+            this.failDialog('變更失敗', err.message);
+          },
+          complete: () => {
+            this.dataSource.data = [...this.originalData];
           }
-        },
-        (err: Error) => {
-          this.failDialog('變更失敗', err.message);
-          return null;
-        },
-        () => {
-          this.dataSource.data = [...this.originalData];
-          return null;
         });
       }
     });

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Subscription } from 'rxjs';
+import { catchError, from, Subscription, throwError } from 'rxjs';
 
 import { ResumeData } from '@app/core/datas';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
@@ -17,6 +17,10 @@ import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/
 import { ResumeInvitationService } from '../../..';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Store } from '@ngrx/store';
+import { DataService } from '@app/core';
+import { ApiConfig, ResumeCompanyJobsCompanyJobDto, ResumeResumeInvitationsResumeInvitationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeData | null;
@@ -46,15 +50,20 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     status: new FormControl(null),
   });
 
-  levelOptions: ISelectOption[] = [];
+  stageOptions: ISelectOption[] = [];
   jobOptions: ISelectOption[] = [];
-  statusOptions: ISelectOption[] = [];
+  writeStatusOptions: ISelectOption[] = [];
+
+  stageTpls$ = this.store.select(CommonSelectors.selectStageList);
+  stageList: ResumeShareCodesShareCodeDto[] = [];
+  writeStatusTpls$ = this.store.select(CommonSelectors.selectWriteStatusList);
+  writeStatusList: ResumeShareCodesShareCodeDto[] = [];
 
   // ---- table ----
   displayedColumns: string[] = ['select', 'name', 'mobile', 'email', 'job', 'level', 'status', 'action'];
-  originalData: ResumeData[] = [];
-  dataSource = new MatTableDataSource<ResumeData>([]);
-  selection = new SelectionModel<ResumeData>(true, []);
+  originalData: ResumeResumeInvitationsResumeInvitationDto[] = [];
+  dataSource = new MatTableDataSource<ResumeResumeInvitationsResumeInvitationDto>([]);
+  selection = new SelectionModel<ResumeResumeInvitationsResumeInvitationDto>(true, []);
 
   disabledDelBtn: boolean = true;
 
@@ -87,28 +96,39 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     public override store: Store,
     public override dialog: MatDialog,
     public snackBar: MatSnackBar,
+    private dataService: DataService<ApiConfig>,
     private resumeInvitationService: ResumeInvitationService,
   ) {
     super(store, dialog);
   }
 
   ngOnInit(): void {
-    this.updatePageInfo(this.dataSource.data.length);
-
     this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
       this.showSend = value;
     });
 
+    this.store.dispatch(CommonActions.getStageList());
+    this.stageTpls$.subscribe(list => {
+      console.log('getStageList', list);
+      this.stageList = list || [];
+    });
+
+    this.store.dispatch(CommonActions.getWriteStatus());
+    this.writeStatusTpls$.subscribe(list => {
+      console.log('getWriteStatus', list);
+      this.writeStatusList = list || [];
+    });
+
     this.resumes$ = this.resumeInvitationService.resumes$.subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        // this.dataSource.data = data;
       },
     });
     this.fetchResumes();
   }
 
   fetchResumes() {
-    this.resumeInvitationService.getResumes();
+    // this.resumeInvitationService.getResumes();
   }
 
   override ngOnDestroy(): void {
@@ -119,12 +139,76 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   ngAfterViewInit(): void {
-    this.updatePageInfo(this.dataSource.data.length);
+    from(
+      this.dataService.api.appResumeInvitationsList({}, {
+        headers: {
+          ...this.dataService.getAuthorizationToken('admin')
+        }
+      })
+    ).pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+    ).subscribe({
+      next: (value) => {
+        console.log('appResumeInvitationsList', value);
+        this.originalData = value.data.items || [] as ResumeResumeInvitationsResumeInvitationDto[];
+      },
+      error: () => {
+        this.originalData = Array.from(Array(20).keys()).map((val) => {
+          return {
+            id: val.toString(),
+            creationTime: '',
+            creatorId: null,
+            lastModificationTime: null,
+            lastModifierId: null,
+            isDeleted: false,
+            deleterId: null,
+            deletionTime: null,
+            code: null,
+            companyName: null,
+            jobName: null,
+            sendType: null,
+            isOpening: false,
+            writeStatus: null,
+            accountCode: null,
+            stage: null,
+            resumeCode: null,
+            phone: null,
+            email: null,
+            companyId: null,
+            name: null,
+          } as ResumeResumeInvitationsResumeInvitationDto;
+        });
+      },
+      complete: () => {
+        this.dataSource.data = [...this.originalData];
+        this.updatePageInfo(this.dataSource.data.length);
+      },
+    });
+
+    from(
+      this.dataService.api.appCompanyJobsGetListByCompanyIdList({
+        headers: {
+          ...this.dataService.getAuthorizationToken('admin')
+        }
+      })
+    ).pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+    ).subscribe({
+      next: (value) => {
+        console.log('appCompanyJobsGetListByCompanyIdList', value.data);
+      },
+    });
   }
 
   public updatePageInfo(length: number) {
     this.length = length;
-    this.totalPage = Math.ceil(length/this.pageSize);
+    this.totalPage = Math.ceil(length / this.pageSize);
     this.totalPageList = Array.from(Array(this.totalPage).keys());
     this.dataSource.paginator = this.paginator;
   }
@@ -146,12 +230,12 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.paginator.pageIndex = 0;
     this.dataSource.paginator = this.paginator;
   }
-  
+
   public getPaginatorData(event: PageEvent) {
     console.log('getPaginatorData', event);
     this.manualPage = event.pageIndex;
     this.disablePrev = event.pageIndex === 0;
-    this.disableNext = event.pageIndex === (this.totalPage -1);
+    this.disableNext = event.pageIndex === (this.totalPage - 1);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -192,7 +276,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 送出新增人員請求
-        this.resumeInvitationService.createResume(result);
+        // this.resumeInvitationService.createResume(result);
       }
     });
   }
@@ -222,7 +306,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 變更被選擇的階段
-        this.selection.selected.forEach(({ id }) => this.resumeInvitationService.updateResume(id, result));
+        // this.selection.selected.forEach(({ id }) => this.resumeInvitationService.updateResume(id, result));
         this.selection.clear();
       }
     });
@@ -244,7 +328,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 送出刪除職缺請求
-        this.selection.selected.forEach(({ id }) => this.resumeInvitationService.deleteResume(id))
+        // this.selection.selected.forEach(({ id }) => this.resumeInvitationService.deleteResume(id))
         this.selection.clear();
       }
     });
@@ -265,7 +349,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       if (result) {
         // todo: 送出編輯職缺請求
         const { id, ...data } = result;
-        this.resumeInvitationService.updateResume(id, data);
+        // this.resumeInvitationService.updateResume(id, data);
       }
     });
   }

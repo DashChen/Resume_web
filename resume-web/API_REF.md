@@ -20,6 +20,7 @@
 修改履歷系統 (*請參考5.2.2-3) {PUT} api/app/resume-invitations/{ID}
 取得職缺管理 (*請參考5.2.2-2) {GET} api/app/company-jobs/GetListByCompanyId
 取得階段 (*請參考5.2.2-2、5.1.6-4) {GET} api/app/share-codes/GetStageList
+取得狀態 (*請參考) {GET} /api/app/share-codes/GetWriteStatusList
 選擇人員 (*請參考5.2.2-5) {GET} api/app/resume-invitations/GetListByCompanyId
 新增信件 (*請參考5.2.2-6) {POST} api/app/mail-quenes
 新增郵件 (*請參考5.2.2-6) {POST} api/app/s-mSquenes
