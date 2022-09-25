@@ -7,3 +7,13 @@ export const selectCurrentUrl = createSelector(
     getRouterState,
     state => state?.state.url,
 );
+
+export const selectCurrentQueryParams = createSelector(
+    getRouterState,
+    state => state?.state.queryParams,
+);
+
+export const selectCurrentParams = createSelector(
+    getRouterState,
+    state => state?.state.params,
+);

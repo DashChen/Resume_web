@@ -39,13 +39,23 @@
 
         <ng-container *ngFor="let item of links">
           <div fxShow="true" fxHide.lt-md="true" class="app-admin-main-layout__link" [ngClass]="{'app-admin-main-layout__link--active': item.active}">
-            <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu">
-              <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
-              <span class="h2-text--bold">{{ item.title }}</span>
-            </a>
-            <app-menu-panel #panel [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
+            <ng-container *ngTemplateOutlet="(item.children !== undefined) ? menuLink : emptyMenu; context: { item: item }"></ng-container>
           </div>
         </ng-container>
+        <ng-template #emptyMenu let-item="item">
+          <a [routerLink]="item.link">
+            <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+            <span class="h2-text--bold">{{ item.title }}</span>
+          </a>
+        </ng-template>
+
+        <ng-template #menuLink let-item="item">
+          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu">
+            <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+            <span class="h2-text--bold">{{ item.title }}</span>
+          </a>
+          <app-menu-panel #panel [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
+        </ng-template>
 
         <div fxShow="true" fxHide.lt-md="true" class="app-admin-main-layout__member">
           <div class="app-admin-main-layout__member__content">

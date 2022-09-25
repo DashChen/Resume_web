@@ -12,112 +12,212 @@
     </div>
 
     <mat-tab-group [selectedIndex]="tabSelected.value" (selectedIndexChange)="changeTab($event)">
-        <mat-tab [label]="tabText1" class="admin-message__form__tab">
-            <ng-container *ngTemplateOutlet="isSms ? sms : email"></ng-container>
-        </mat-tab>
-        <mat-tab [label]="tabText2" class="admin-message__form__tab">
-            <ng-container *ngTemplateOutlet="isSms ? sms : email"></ng-container>
-        </mat-tab>
+        <mat-tab [label]="tabText1" class="admin-message__form__tab"></mat-tab>
+        <mat-tab [label]="tabText2" class="admin-message__form__tab"></mat-tab>
     </mat-tab-group>
 
+    <div fxLayout="column" fxLayoutGap="12px" class="admin-message__search__block">
+        <div class="admin-message__search__title h1-small-title">
+            {{ searchTitle }}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="admin-message__search__conditions__block">
+            <form fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
+                class="admin-message__search__conditions"
+                [ngClass]="'admin-message__search__conditions--' + currentType"
+                [formGroup]="searchForm">
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">發送日期</label>
+                    <input matInput [matDatepicker]="picker1" formControlName="sendDate" placeholder="請選擇日期" readonly (click)="picker1.open()">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" v-if="tabSelected.value === 0">
+                    <label class="mat-form-field__lable--top">發送狀態</label>
+                    <select matNativeControl formControlName="sendStatus" [errorStateMatcher]="matcher">
+                        <option class="default-option" label="請選擇" value="null"></option>
+                        <ng-container *ngFor="let option of sendStatusOptions">
+                            <option [ngValue]="option.key">{{option.text}}</option>
+                        </ng-container>
+                    </select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" v-if="tabSelected.value === 0 && currentType === 'email'">
+                    <label class="mat-form-field__lable--top">開啟狀態</label>
+                    <select matNativeControl formControlName="openStatus" [errorStateMatcher]="matcher">
+                        <option class="default-option" label="請選擇" value="null"></option>
+                        <ng-container *ngFor="let option of openStatusOptions">
+                            <option [ngValue]="option.key">{{option.text}}</option>
+                        </ng-container>
+                    </select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">人員階段</label>
+                    <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
+                        <option class="default-option" label="請選擇" value="null"></option>
+                        <ng-container *ngFor="let option of stageOptions">
+                            <option [value]="option.key">{{option.text}}</option>
+                        </ng-container>
+                    </select>
+                </mat-form-field>
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+                    <label class="mat-form-field__lable--top">姓名</label>
+                    <input matInput placeholder="例:王大大明" formControlName="name" [errorStateMatcher]="matcher">
+                    <mat-error class="h3-text--medium" *ngIf="nameFormCtl.invalid">
+                        {{ getNameErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+            <button mat-raised-button class="admin-message__head__btn mat-button--orange h2-text--regular" (click)="search()">
+                <span>查詢</span>
+            </button>
+        </div>
+    </div>
 
-    <ng-template #email>
-        <div fxLayout="column" fxLayoutGap="12px" class="admin-message__search__block">
-            <div class="admin-message__search__title h1-small-title">
-                人員搜尋
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-between center" class="admin-message__search__conditions__block">
-                <form fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" class="admin-message__search__conditions" [formGroup]="searchForm">
+    <div class="admin-message__table__block">
+        <div fxLayout="row" fxLayoutGap="20px" class="admin-message__table__head">
+            <button mat-raised-button class="admin-message__table__head__btn mat-button--blue h2-text--regular" (click)="sendMsg()">
+                <span>{{ sendBtnText }}</span>
+            </button>
+        </div>
+        <div class="admin-message__table__body">
+            <table mat-table [dataSource]="dataSource">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                    </td>
+                </ng-container>
 
-                </form>
-                <button mat-raised-button class="admin-message__head__btn mat-button--orange h2-text--regular" (click)="search($event)">
-                    <span>查詢</span>
-                </button>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>收件者</th>
+                  <td mat-cell *matCellDef="let element">{{element.to_Name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="stage">
+                  <th mat-header-cell *matHeaderCellDef>人員階段</th>
+                  <td mat-cell *matCellDef="let element">
+                      {{element.stage | getValueByKeyFromList: [stageList, 'code', 'name']}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="sendDate" *ngIf="displayedColumns.includes('sendDate')">
+                  <th mat-header-cell *matHeaderCellDef>寄件日期</th>
+                  <td mat-cell *matCellDef="let element">
+                      {{ element.send_Date | date: 'yyyy/M/dd' }}
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="job" *ngIf="displayedColumns.includes('job')">
+                  <th mat-header-cell *matHeaderCellDef>職務</th>
+                  <td mat-cell *matCellDef="let element">{{element.jobName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="sendSuccess" *ngIf="displayedColumns.includes('sendSuccess')">
+                    <th mat-header-cell *matHeaderCellDef>發送成功</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [ngClass]="element.success ? 'text-main' : 'text-error-1'">
+                            {{element.success ? '是' : '否'}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="open" *ngIf="displayedColumns.includes('open')">
+                    <th mat-header-cell *matHeaderCellDef>開啟狀態</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [ngClass]="element.isOpened ? 'text-main' : 'text-error-1'">
+                            {{element.isOpened ? '是' : '否'}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="resume" *ngIf="displayedColumns.includes('resume')">
+                    <th mat-header-cell *matHeaderCellDef>履歷表</th>
+                    <td mat-cell *matCellDef="let element">{{element.status}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="modifyDate" *ngIf="displayedColumns.includes('modifyDate')">
+                    <th mat-header-cell *matHeaderCellDef>儲存日期</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.lastModificationTime | date: 'yyyy/M/dd' }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="subject" *ngIf="displayedColumns.includes('subject')">
+                    <th mat-header-cell *matHeaderCellDef>信件主旨</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.isOpened ? '是' : '否'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>預覽</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon svgIcon="search-icon" aria-hidden="false" attr.aria-label="search"></mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row data-empty" *matNoDataRow>
+                    <td class="mat-cell"></td>
+                    <td class="mat-cell h2-text--regular" [attr.colspan]="displayedColumns.length">
+                        {{tableEmptyText}}
+                    </td>
+                </tr>
+              </table>
+
+              <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
+                <div class="paginator__item">
+                    <div class="paginator__item__text h2-text--regular">顯示資料</div>
+                    <mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
+                        <ng-container *ngFor="let num of pageSizeOptions">
+                            <mat-option [value]="num">{{num}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </div>
+                <div class="paginator__item">
+                    <div class="paginator__item__text h2-text--regular">當前頁數</div>
+                    <mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)" class="paginator__item__select">
+                        <ng-container *ngFor="let num of totalPageList">
+                            <mat-option [value]="num">{{num + 1}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center flex-start" fxLayoutGap="40px" class="paginator__page-info">
+                    <div fxLayout="row" fxLayoutGap="2px">
+                        <div class="paginator__item__text h2-text--regular">共{{totalPage}}頁</div>
+                        <div>-</div>
+                        <div class="paginator__item__text h2-text--regular">第{{manualPage + 1 }}頁</div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutGap="16px" class="paginator__btns">
+                        <button mat-icon-button class="paginator__btn paginator__btn--prev" (click)="page.previousPage()" [disabled]="disablePrev">
+                            <mat-icon [svgIcon]="'arrow-left'" aria-hidden="false" aria-label="prev icon"></mat-icon>
+                        </button>
+                        <button mat-icon-button class="paginator__btn paginator__btn--next" (click)="page.nextPage()" [disabled]="disableNext">
+                            <mat-icon [svgIcon]="'arrow-right'" aria-hidden="false" aria-label="next icon"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <mat-paginator #page class="paginator__component"
+                    [length]="length"
+                    [pageIndex]="manualPage"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="getPaginatorData($event)"></mat-paginator>
             </div>
         </div>
-        <div class="admin-message__table__block">
-            <div fxLayout="row" fxLayoutGap="20px" class="admin-message__table__head">
-                <button mat-raised-button class="admin-message__table__head__btn mat-button--blue h2-text--regular" (click)="sendMsg($event)">
-                    <span>再次發送信件</span>
-                </button>
-            </div>
-            <div class="admin-message__table__body">
-                <table mat-table [dataSource]="dataSource">
-                    <!-- Checkbox Column -->
-                    <ng-container matColumnDef="select">
-                        <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null"
-                                        [checked]="selection.hasValue() && isAllSelected()"
-                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
-                        </th>
-                        <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()"
-                                        (change)="$event ? selection.toggle(row) : null"
-                                        [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
-                        </td>
-                    </ng-container>
-
-                    <!-- Position Column -->
-                    <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef>姓名</th>
-                      <td mat-cell *matCellDef="let element">{{element.name}}</td>
-                    </ng-container>
-
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="mobile">
-                      <th mat-header-cell *matHeaderCellDef>電話</th>
-                      <td mat-cell *matCellDef="let element">{{element.mobile}}</td>
-                    </ng-container>
-
-                    <!-- Weight Column -->
-                    <ng-container matColumnDef="email">
-                      <th mat-header-cell *matHeaderCellDef>E-mail</th>
-                      <td mat-cell *matCellDef="let element">{{element.email}}</td>
-                    </ng-container>
-
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="job">
-                      <th mat-header-cell *matHeaderCellDef>職缺</th>
-                      <td mat-cell *matCellDef="let element">{{element.job}}</td>
-                    </ng-container>
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="level">
-                        <th mat-header-cell *matHeaderCellDef>階段</th>
-                        <td mat-cell *matCellDef="let element">{{element.level}}</td>
-                      </ng-container>
-                      <!-- Symbol Column -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef>填寫狀態</th>
-                        <td mat-cell *matCellDef="let element">{{element.status}}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                    <!-- Row shown when there is no matching data. -->
-                    <tr class="mat-row data-empty" *matNoDataRow>
-                        <td class="mat-cell"></td>
-                        <td class="mat-cell h2-text--regular" [attr.colspan]="displayedColumns.length">
-                            您還沒有發送任何信件
-                        </td>
-                    </tr>
-                  </table>
-
-                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-            </div>
-
-        </div>
-    </ng-template>
-
-    <ng-template #sms>
-
-    </ng-template>
+    </div>
 </div>

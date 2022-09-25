@@ -17,7 +17,7 @@ import { Store } from '@ngrx/store';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
 import { ApiConfig, ResumeCompanyJobsCompanyJobDto, ResumeMailTplsMailTplDto, ResumeSMSTplsSMSTplDto } from '@app/core/models/Api';
-import { catchError, from, Observable, throwError } from 'rxjs';
+import { catchError, from, Observable, takeUntil, throwError } from 'rxjs';
 import { DataService } from '@app/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { validateBasis } from '@angular/flex-layout';
@@ -134,6 +134,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         // console.log(err);
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
+      takeUntil(this.destroy$)
     ).subscribe({
       next: (value) => {
         console.log('appCompanyJobsList', value);

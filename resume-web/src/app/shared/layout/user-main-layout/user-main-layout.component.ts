@@ -6,6 +6,7 @@ import { loginResponseDto } from '@app/core/models/login.model';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Store } from '@ngrx/store';
+import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { DateTime } from 'luxon';
 
 @Component({
@@ -47,14 +48,17 @@ export class UserMainLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = DateTime.now().toFormat('yyyy/M');
-    this.appService.route$.subscribe((route) => {
+    this.store.select(RouterSelectors.selectCurrentUrl).subscribe(url => {
+      console.log('selectCurrentUrl', url);
       this.links.forEach((l: link) => {
-        const path = route?.routeConfig?.path || '';
-        if (l.link.includes(path)) {
-          l.active = true;
+        l.active = !!(l.link && l.link.includes(url));
+        if (l.children) {
+          l.children.forEach((cl: link) => {
+            cl.active = !!(cl.link && cl.link.includes(url));
+          });
         }
       })
-    });
+    })
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';
       this.email = user?.email || '';

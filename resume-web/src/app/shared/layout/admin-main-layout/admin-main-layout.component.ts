@@ -4,6 +4,7 @@ import { AppService } from '@app/core';
 import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
 import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
+import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { link } from '@app/core/interfaces/menu.model';
 
 @Component({
@@ -27,21 +28,21 @@ export class AdminMainLayoutComponent implements OnInit {
       active: false,
     },
     {
-      link: '/admin/message',
+      link: null,
       key: 'message',
       title: '信件/簡訊管理',
       icon: 'menu-icon02',
       active: false,
       children: [
         {
-          link: '/admin/message?type=email',
+          link: '/admin/message/email',
           key: 'message-email',
           title: '信件管理',
           icon: '',
           active: false,
         },
         {
-          link: '/admin/message?type=sms',
+          link: '/admin/message/sms',
           key: 'message-sms',
           title: '簡訊管理',
           icon: '',
@@ -73,12 +74,17 @@ export class AdminMainLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = DateTime.now().toFormat('yyyy/M');
-    this.appService.route$.subscribe((route) => {
+    this.store.select(RouterSelectors.selectCurrentUrl).subscribe(url => {
+      console.log('selectCurrentUrl', url);
       this.links.forEach((l: link) => {
-        const path = route?.routeConfig?.path || '';
-        l.active = l.link.includes(path);
+        l.active = !!(l.link && l.link.includes(url));
+        if (l.children) {
+          l.children.forEach((cl: link) => {
+            cl.active = !!(cl.link && cl.link.includes(url));
+          });
+        }
       })
-    });
+    })
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';
       this.email = user?.email || '';

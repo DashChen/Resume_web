@@ -1,5 +1,5 @@
 export interface link {
-    link: string;
+    link: string | null;
     key: string;
     title: string;
     icon: string;
