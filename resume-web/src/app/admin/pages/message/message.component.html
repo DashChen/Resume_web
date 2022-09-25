@@ -74,7 +74,7 @@
 
     <div class="admin-message__table__block">
         <div fxLayout="row" fxLayoutGap="20px" class="admin-message__table__head">
-            <button mat-raised-button class="admin-message__table__head__btn mat-button--blue h2-text--regular" (click)="sendMsg()">
+            <button mat-raised-button class="admin-message__table__head__btn mat-button--blue h2-text--regular" [disabled]="selection.selected.length === 0" (click)="sendMsg()">
                 <span>{{ sendBtnText }}</span>
             </button>
         </div>

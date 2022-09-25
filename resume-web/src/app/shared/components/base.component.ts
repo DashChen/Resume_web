@@ -32,4 +32,18 @@ export class BaseComponent extends BaseFormComponent {
         });
         this.store.dispatch(AdminActions.resetErr());
     }
+
+    successDialog(title: string, subtitle: string, successBtnText: string = '關閉') {
+      this.dialogConfig.icon = 'success';
+      this.dialogConfig.title = title;
+      this.dialogConfig.subTitle = subtitle;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = successBtnText;
+      this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
+      this.store.dispatch(AdminActions.resetErr());
+  }
 }

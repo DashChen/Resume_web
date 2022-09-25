@@ -14,6 +14,7 @@ import { catchError, from, take, takeUntil, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DateTime } from 'luxon';
+import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 
 @Component({
   selector: 'admin-message',
@@ -280,6 +281,15 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   }
 
   sendMsg() {
-
+    if (this.selection.selected.length === 0) {
+      return false;
+    }
+    if (this.currentType === 'email') {
+      this.successDialog('發送信件', '您的信件已發送！', '確定');
+    } else {
+      this.successDialog('發送簡訊', '您的簡訊已發送！', '確定');
+    }
+    this.selection.clear();
+    return true;
   }
 }
