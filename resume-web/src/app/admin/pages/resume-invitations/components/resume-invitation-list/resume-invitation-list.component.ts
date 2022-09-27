@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
@@ -17,10 +17,12 @@ import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/
 import { ResumeInvitationService } from '../../..';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Store } from '@ngrx/store';
-import { DataService } from '@app/core';
+import { DataService, ResizeService } from '@app/core';
 import { ApiConfig, ResumeCompanyJobsCompanyJobDto, ResumeResumeInvitationsResumeInvitationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
+import { BreakPointType, DeviceType, ViewportSize } from '@app/core/interfaces/breakpoints';
+import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeData | null;
@@ -98,8 +100,19 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     public snackBar: MatSnackBar,
     private dataService: DataService<ApiConfig>,
     private resumeInvitationService: ResumeInvitationService,
+    private resizeService: ResizeService,
+    @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType,
   ) {
     super(store, dialog);
+
+    this.resizeService.onResize$.subscribe((size: ViewportSize) => {
+      console.log('ViewportSize', size);
+      if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
+        this.headerColspan = this.displayedColumns.length;
+      } else {
+        this.headerColspan = 0;
+      }
+    });
   }
 
   ngOnInit(): void {

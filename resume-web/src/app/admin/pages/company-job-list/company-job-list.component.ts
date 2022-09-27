@@ -99,7 +99,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     public override dialog: MatDialog,
     private dataService: DataService<ApiConfig>,
     private resizeService: ResizeService,
-    @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType
+    @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType,
   ) {
     super(store, dialog);
     this.requestData$ = from(

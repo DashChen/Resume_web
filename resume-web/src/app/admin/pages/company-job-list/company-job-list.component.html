@@ -8,8 +8,7 @@
 				職缺管理 / 所有職缺
 			</div>
 		</div>
-		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center"
-			fxLayoutAlign.lt-md="start center">
+		<div class="admin-company-job-list__head__keyword" fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
 			<mat-form-field appearance="fill">
 				<input matInput type="type" placeholder="請輸入關鍵字" [(ngModel)]="keyword" (ngModelChange)="searchKeyword($event)">
 				<mat-icon matSuffix>search</mat-icon>
@@ -18,12 +17,10 @@
 	</div>
 	<div class="admin-company-job-list__table__block">
 		<div class="admin-company-job-list__table__head" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="15px" fxHide.lt-md="true">
-			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
-				(click)="openAddDialog($event)">
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular" (click)="openAddDialog($event)">
 				<span>新增職缺</span>
 			</button>
-			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular"
-				[disabled]="disabledDelBtn" (click)="delItems($event)">
+			<button mat-raised-button class="admin-company-job-list__table__head__btn mat-button--blue h2-text--regular" [disabled]="disabledDelBtn" (click)="delItems($event)">
 				<span>刪除</span>
 			</button>
 		</div>
