@@ -13,7 +13,15 @@
         </div>
 
         <ng-container *ngFor="let item of links">
-          <div class="app-admin-main-layout__link" [ngClass]="{'app-admin-main-layout__link--active': item.active}">
+          <ng-container *ngTemplateOutlet="drawNav; context: { item: item, child: false }"></ng-container>
+          <ng-container *ngFor="let _item of item.children">
+            <ng-container *ngTemplateOutlet="drawNav; context: { item: _item, child: true }"></ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #drawNav let-item="item" let-child="child">
+          <div class="app-admin-main-layout__link"
+            [ngClass]="{'app-admin-main-layout__link--active': item.active, 'app-admin-main-layout__link--child': child }">
             <a [routerLink]="item.link">
               <div fxLayout="row" fxLayoutAlign="center center" class="app-admin-main-layout__link__icon">
                 <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
@@ -21,7 +29,7 @@
               <span class="h2-text--bold">{{ item.title }}</span>
             </a>
           </div>
-        </ng-container>
+        </ng-template>
 
         <div mat-menu-item class="app-admin-main-layout__member__content__menu__logout" (click)="logout()">
           <div class="h2-text--regular">

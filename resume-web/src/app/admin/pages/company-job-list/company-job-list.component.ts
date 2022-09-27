@@ -92,6 +92,8 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     this.disabledDelBtn = this.selection.selected.length === 0;
   }
 
+  requestData$;
+
   constructor(
     public override store: Store,
     public override dialog: MatDialog,
@@ -100,6 +102,19 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
     @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType
   ) {
     super(store, dialog);
+    this.requestData$ = from(
+      this.dataService.api.appCompanyJobsList({}, {
+        headers: {
+          ...this.dataService.getAuthorizationToken('admin')
+        }
+      })
+    ).pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+      takeUntil(this.destroy$)
+    );
   }
 
   ngOnInit(): void {
@@ -123,35 +138,13 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
   }
 
   ngAfterViewInit(): void {
-    from(
-      this.dataService.api.appCompanyJobsList({}, {
-        headers: {
-          ...this.dataService.getAuthorizationToken('admin')
-        }
-      })
-    ).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe({
+    this.requestData$.subscribe({
       next: (value) => {
         console.log('appCompanyJobsList', value);
         this.originalData = value.data.items || [] as ResumeCompanyJobsCompanyJobDto[];
       },
       error: () => {
-        this.originalData = Array.from(Array(20).keys()).map((val) => {
-          return {
-            id: val.toString(),
-            code: null,
-            companyId: null,
-            jobName: null,
-            jobType: null,
-            mailTplCode: '第一階段',
-            smsTplCode: '第一階段'
-          } as ResumeCompanyJobsCompanyJobDto;
-        })
+        console.log('');
       },
       complete: () => {
         this.dataSource.data = [...this.originalData];
@@ -278,7 +271,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         ).subscribe({
           next: (value) => {
             console.log('appCompanyJobsDeleteListDelete', value);
-            this.originalData = pullAllBy(this.originalData, this.selection.selected, 'jobName');
+            this.originalData = pullAllBy(this.originalData, this.selection.selected, 'id');
             this.dataSource.data = [...this.originalData];
           },
           error: (err: Error) => {

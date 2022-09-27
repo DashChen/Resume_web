@@ -75,11 +75,10 @@ export class StartupService {
   }
 
   checkStatus(isAdmin: boolean) {
-    if (!this.cookie.check('JbToken')) {
+    if (!sessionStorage.getItem('JbToken') && !this.cookie.check('JbToken')) {
       if (isAdmin) {
-        // TODO Admin logout
+        this.store.dispatch(AdminActions.logout());
       } else {
-        console.log('checkStatus user logout');
         this.store.dispatch(UserActions.logout());
       }
     }

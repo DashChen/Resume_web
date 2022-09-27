@@ -86,6 +86,10 @@ $this: '.app-admin-main-layout';
           width: 0;
           right: 0;
           height: 4px;
+
+          @include lt-md {
+            content: none;
+          }
         }
 
         &::before {

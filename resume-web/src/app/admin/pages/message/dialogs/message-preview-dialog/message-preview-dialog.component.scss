@@ -1,0 +1,58 @@
+@import 'public-mixin';
+
+:host {
+  $this: '.admin-message-preview-dialog';
+
+  #{$this} {
+    &__head {
+      border-bottom: 1px solid #C5D0DF;
+      color: #6C7A8E;
+      margin-bottom: 0;
+      padding: 8.5px 24px;
+
+      mat-icon {
+        color: $colorSecond;
+        cursor: pointer;
+        width: 17px;
+      }
+    }
+
+    &__content {
+      max-height: 100%;
+      overflow: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding: 40px 24px 0;
+
+      &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 19px 0 0;
+
+        mat-form-field {
+          &.mat-form-field__block--textarea {
+            margin-top: 20.7px;
+            ::ng-deep .mat-form-field-flex {
+              height: 300px;
+              .mat-form-field-infix {
+                height: 100%;
+              }
+            }
+            textarea {
+              height: 100%;
+              resize: none;
+            }
+          }
+        }
+      }
+    }
+
+    &__action {
+      gap: 20px;
+      padding: 6.7px 0 40px;
+      min-height: unset;
+      margin-bottom: unset;
+    }
+  }
+}

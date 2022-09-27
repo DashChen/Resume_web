@@ -1,0 +1,72 @@
+.paginator {
+    &__block {
+      padding: 24px 50px;
+      position: relative;
+
+      @include lt-md {
+        padding: 13px 17px;
+      }
+    }
+    &__item {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+
+      &--current-page {
+        @include lt-md {
+          display: none;
+        }
+      }
+
+      &__text {
+        white-space: nowrap;
+      }
+      &__select {
+        ::ng-deep .mat-select-trigger {
+          .mat-select-value {
+            padding-right: 20px;
+          }
+          .mat-select-arrow-wrapper {
+            top: 0;
+          }
+        }
+      }
+    }
+    &__page-info {
+      margin: 0 !important;
+      .paginator__item__text {
+        line-height: 20px;
+      }
+    }
+    &__btns {}
+
+    &__btn {
+      height: 14px;
+      margin: 0;
+      width: 14px;
+      line-height: 14px;
+
+      @include lt-md {
+        height: 12px;
+        width: 12px;
+        line-height: 12px;
+      }
+
+      mat-icon {
+        height: 100%;
+        width: 100%;
+        line-height: inherit;
+      }
+      &--prev {}
+      &--next {}
+    }
+
+
+    &__component {
+      visibility: hidden;
+      position: absolute;
+      bottom: 0;
+      margin: 0;
+      pointer-events: none;
+    }
+  }

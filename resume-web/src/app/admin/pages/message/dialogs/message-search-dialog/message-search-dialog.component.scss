@@ -1,0 +1,49 @@
+@import 'public-mixin';
+
+:host {
+  $this: '.admin-message-search-dialog';
+
+  #{$this} {
+    &__head {
+      border-bottom: 1px solid #C5D0DF;
+      color: #6C7A8E;
+      margin-bottom: 0;
+      padding: 11.5px 24px;
+
+      mat-icon {
+        color: $colorSecond;
+        cursor: pointer;
+        width: 17px;
+      }
+    }
+
+    &__content {
+      max-height: 100%;
+      overflow: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding: 40px 24px 0;
+
+      &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+
+        mat-form-field {
+            margin-top: 23px;
+        }
+      }
+    }
+
+    &__action {
+      gap: 20px;
+      padding: 40px 0;
+      min-height: unset;
+      margin-bottom: unset;
+
+      .mat-button-base+.mat-button-base {
+          margin-left: 0;
+      }
+    }
+  }
+}

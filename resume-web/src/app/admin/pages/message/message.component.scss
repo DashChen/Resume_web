@@ -11,6 +11,10 @@ $this: '.admin-message';
       min-height: calc(100vh - 64px - 40px);
       padding: 24px 40px;
 
+      @include lt-md {
+        padding: 16px 24px;
+      }
+
       &__head {
         &__block {}
   
@@ -34,9 +38,35 @@ $this: '.admin-message';
             }
           }
         }
+
+        &__search {
+          &__btn {
+            &__icon {
+              height: 50px;
+              width: 50px;
+              padding: 10px;
+              border: none;
+              background: #F4781E;
+              border-radius: 4px;
+
+              mat-icon {
+                height: 100%;
+                width: 100%;
+                ::ng-deep svg {
+                  path {
+                    fill: #FFFFFF;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
 
       mat-tab-group {
+        @include lt-md {
+          max-width: calc(100vw - 48px);
+        }
           ::ng-deep .mat-tab-labels {
               .mat-tab-label {
                   width: 50%;
@@ -49,6 +79,10 @@ $this: '.admin-message';
           background: #FFFFFF;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
           padding: 24px 20px;
+
+          @include lt-md {
+            display: none;
+          }
         }
         &__title {
           color: $colorSecond;
@@ -107,147 +141,12 @@ $this: '.admin-message';
             }
           }
         }
-  
+
         &__body {
-          .mat-table {
-            min-width: 100%;
-          }
-  
-          .mat-table .mat-cell:not(:first-of-type):not(:last-of-type):before {
-            display: none;
-          }
-  
-          .mat-table .mat-header-cell {
-            display: table-cell;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 25px;
-          }
-  
-          .mat-table .mat-cell:not(:first-of-type):not(:last-of-type) {
-            display: table-cell;
-          }
-  
-          .mat-table .mat-cell:first-child {
-            width: 45px;
-          }
-  
-          .mat-table .mat-cell:last-child {
-            width: 45px;
-            color: #C5D0DF;
-            text-align-last: start;
-          }
-  
-          @include lt-md {
-            .mat-table .mat-header-cell:first-of-type {
-              background: transparent;
-              padding: 23px 24px 22px;
-            }
-  
-            .mat-table .mat-header-cell:not(:first-of-type) {
-              display: none;
-            }
-  
-            .mat-table .mat-cell:not(:first-of-type):not(:last-of-type) {
-              display: block;
-            }
-  
-            .mat-table .mat-cell:not(:first-of-type):not(:last-of-type):before {
-              display: inline-block;
-              content: attr(data-th) "";
-              width: 6.5em;
-              padding: 20px 0 20px 12px;
-              margin-right: 12px;
-            }
-    
-            .mat-table .mat-header-cell,
-            .mat-table .mat-cell:before {
-              font-weight: 600;
-              font-size: 12px;
-              line-height: 20px;
-              background: #F4F9FD;
-            }
-    
-            .mat-table .mat-cell:first-child {
-              vertical-align: text-top;
-            }
-    
-            .mat-table .mat-cell:last-child {
-              vertical-align: text-top;
-              padding-right: 0;
-            }
+          a {
+            color: #006CD0;
           }
         }
       }
-    }
-
-    .paginator {
-        &__block {
-          padding: 24px 50px;
-          position: relative;
-    
-          @include lt-md {
-            padding: 13px 17px;
-          }
-        }
-        &__item {
-          align-items: center;
-          display: flex;
-          gap: 12px;
-    
-          @include lt-md {
-            display: none;
-          }
-    
-          &__text {
-            white-space: nowrap;
-          }
-          &__select {
-            ::ng-deep .mat-select-trigger {
-              .mat-select-value {
-                padding-right: 20px;
-              }
-              .mat-select-arrow-wrapper {
-                top: 0;
-              }
-            }
-          }
-        }
-        &__page-info {
-          margin: 0 !important;
-          .paginator__item__text {
-            line-height: 20px;
-          }
-        }
-        &__btns {}
-    
-        &__btn {
-          height: 14px;
-          margin: 0;
-          width: 14px;
-          line-height: 14px;
-    
-          @include lt-md {
-            height: 12px;
-            width: 12px;
-            line-height: 12px;
-          }
-    
-          mat-icon {
-            height: 100%;
-            width: 100%;
-            line-height: inherit;
-          }
-          &--prev {}
-          &--next {}
-        }
-
-        &__component {
-          visibility: hidden;
-          position: absolute;
-          bottom: 0;
-          margin: 0;
-          pointer-events: none;
-        }
     }
 }

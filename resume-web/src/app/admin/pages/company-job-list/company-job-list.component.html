@@ -61,17 +61,13 @@
 				<!-- MailTplCode Column -->
 				<ng-container matColumnDef="mailTplCode">
 					<th mat-header-cell *matHeaderCellDef>信件樣板</th>
-					<td mat-cell *matCellDef="let element" [attr.data-th]="'信件樣板'">
-						{{ element.mailTplCode | getValueByKeyFromList: [mailList, 'code', 'name'] }}
-					</td>
+					<td mat-cell *matCellDef="let element" [attr.data-th]="'信件樣板'">{{element.mailTplCode | getValueByKeyFromList: [mailList, 'code', 'name']}}</td>
 				</ng-container>
 
 				<!-- SmsTplCode Column -->
 				<ng-container matColumnDef="smsTplCode">
 					<th mat-header-cell *matHeaderCellDef>訊息樣板</th>
-					<td mat-cell *matCellDef="let element" [attr.data-th]="'訊息樣板'">
-						{{ element.smsTplCode | getValueByKeyFromList: [smsList, 'code', 'name'] }}
-					</td>
+					<td mat-cell *matCellDef="let element" [attr.data-th]="'訊息樣板'">{{element.smsTplCode | getValueByKeyFromList: [smsList, 'code', 'name']}}</td>
 				</ng-container>
 
 				<!-- Action Column -->
@@ -97,7 +93,7 @@
 			</table>
 
 			<div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
-				<div class="paginator__item">
+				<div class="paginator__item paginator__item--show-len">
 					<div class="paginator__item__text h2-text--regular">顯示資料</div>
 					<mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
 						<ng-container *ngFor="let num of pageSizeOptions">
@@ -105,7 +101,7 @@
 						</ng-container>
 					</mat-select>
 				</div>
-				<div class="paginator__item">
+				<div class="paginator__item paginator__item--current-page">
 					<div class="paginator__item__text h2-text--regular">當前頁數</div>
 					<mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)" class="paginator__item__select">
 						<ng-container *ngFor="let num of totalPageList">
@@ -113,6 +109,7 @@
 						</ng-container>
 					</mat-select>
 				</div>
+
 				<div fxLayout="row" fxLayoutAlign="center flex-start" fxLayoutGap="40px" class="paginator__page-info">
 					<div fxLayout="row" fxLayoutGap="2px">
 						<div class="paginator__item__text h2-text--regular">共{{totalPage}}頁</div>

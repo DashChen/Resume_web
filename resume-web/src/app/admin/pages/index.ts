@@ -7,6 +7,8 @@ export * from './forget/forget.component';
 export * from './home/home.component';
 export * from './login/login.component';
 export * from './message/message.component';
+export * from './message/dialogs/message-preview-dialog/message-preview-dialog.component';
+export * from './message/dialogs/message-search-dialog/message-search-dialog.component';
 export * from './reset-password/reset-password.component';
 export * from './resume-invitations/dialogs/resume-invitation-delete-dialog/resume-invitation-delete-dialog.component';
 export * from './resume-invitations/dialogs/resume-invitation-import-dialog/resume-invitation-import-dialog.component';

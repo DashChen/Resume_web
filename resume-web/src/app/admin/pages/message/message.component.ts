@@ -1,9 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { DataService } from '@app/core';
+import { DataService, ResizeService } from '@app/core';
 import { ApiConfig, ResumeMailQuenesMailQueneDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSMSTplDto } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { Store } from '@ngrx/store';
@@ -15,6 +15,21 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DateTime } from 'luxon';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
+import { MessagePreviewDialogComponent } from '@app/admin/pages';
+import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
+import { BreakPointType, ViewportSize, DeviceType } from '@app/core/interfaces/breakpoints';
+import { MessageSearchDialogComponent } from './dialogs/message-search-dialog/message-search-dialog.component';
+
+export interface MessageSearchDialogData extends basicDialog {
+  type: string;
+}
+
+export interface MessagePreviewDialogData extends basicDialog {
+  type: string;
+  subject: string;
+  body: string;
+}
 
 @Component({
   selector: 'admin-message',
@@ -76,6 +91,9 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   dataSource = new MatTableDataSource<ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto>([]);
   selection = new SelectionModel<ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto>(true, []);
 
+  //
+  headerColspan: number = 1;
+
   // ---- paginator ----.
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   totalPage: number = 0;
@@ -117,7 +135,10 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   constructor(
     public override store: Store,
     public override dialog: MatDialog,
-    public dataService: DataService<ApiConfig>) {
+    public dataService: DataService<ApiConfig>,
+    private resizeService: ResizeService,
+    @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType
+  ) {
       super(store, dialog);
       this.requestEmailData$ = (query: any = {}) => {
         return from(this.dataService.api.appMailQuenesList(query, {
@@ -142,9 +163,6 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.stageList = res;
       this.stageOptions = res.map(item => ({text: item.name, key: item.code} as ISelectOption));
     });
-  }
-
-  ngAfterViewInit(): void {
     this.store.select(RouterSelectors.selectCurrentParams).subscribe(res => {
       console.log('selectCurrentParams', res);
       this.currentType = res['type'];
@@ -155,7 +173,17 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
         this.getSmsData();
       }
     });
+    this.resizeService.onResize$.subscribe((size: ViewportSize) => {
+      console.log('ViewportSize', size);
+      if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
+        this.headerColspan = this.displayedColumns.length;
+      } else {
+        this.headerColspan = 0;
+      }
+    });
   }
+
+  ngAfterViewInit(): void {}
 
   getEmailData(query: any = {}) {
     this.requestEmailData$(query).pipe(
@@ -255,6 +283,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.subtitle = index === 0 ? '已發送的簡訊' : '儲存簡訊';
     }
     this.searchForm.reset({...this.initialValue});
+    this.headerColspan = this.displayedColumns.length;
   }
 
   search() {
@@ -284,12 +313,68 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     if (this.selection.selected.length === 0) {
       return false;
     }
+    this.showSuccessDialog();
+    this.selection.clear();
+    return true;
+  }
+
+  showSuccessDialog() {
     if (this.currentType === 'email') {
       this.successDialog('發送信件', '您的信件已發送！', '確定');
     } else {
       this.successDialog('發送簡訊', '您的簡訊已發送！', '確定');
     }
-    this.selection.clear();
-    return true;
+  }
+
+  showResume(event: MouseEvent, item: ResumeMailQuenesMailQueneDto) {
+    event.stopPropagation();
+    event.preventDefault();
+
+  }
+
+  previewMessage(item: ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto) {
+    this.dialogConfig.title = (this.currentType === 'email' ? '信件': '簡訊' ) + '預覽';
+    this.dialogConfig.successBtnText = '再次發送' + (this.currentType === 'email' ? '信件': '簡訊' );
+    this.dialogConfig.cancelBtnText = '取消';
+    const dialogRef = this.dialog.open(MessagePreviewDialogComponent, {
+      width: '614px',
+      height: '651px',
+      panelClass: 'admin-message__dialog--preview',
+      data: {
+        ...this.dialogConfig,
+        type: this.currentType,
+        subject: item.subject,
+        body: item.body,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        this.showSuccessDialog();
+      }
+    });
+  }
+
+  searchMessage() {
+    this.dialogConfig.title = (this.currentType === 'email' ? '信件': '簡訊' ) + '搜尋';
+    this.dialogConfig.successBtnText = '確認';
+    this.dialogConfig.cancelBtnText = '取消';
+    const dialogRef = this.dialog.open(MessageSearchDialogComponent, {
+      width: 'calc(100vw - 48px)',
+      maxWidth: '100%',
+      height: '401px',
+      panelClass: 'admin-message__dialog--search',
+      data: {
+        ...this.dialogConfig,
+        type: this.currentType,
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        // TODO 搜尋
+      }
+    });
   }
 }
