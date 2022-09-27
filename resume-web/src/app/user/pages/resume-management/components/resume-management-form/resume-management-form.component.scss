@@ -1,0 +1,86 @@
+@import 'public-mixin';
+
+$this: '.app-resume-management-form';
+
+:host {
+  #{$this} {
+    background-color: #F4F9FD;
+    min-height: calc(100vh - 64px - 40px);
+    padding: 24px 40px;
+
+    &__head {
+      &__block {}
+
+      &__title {
+        &__main {}
+
+        &__sub {}
+      }
+
+      &__action {}
+    }
+
+    &__title {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        padding: 40px 24px 40px;
+        background-color: #FFF;
+      }
+    }
+
+    &__sidebar {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        padding: 40px 24px 40px;
+        background-color: #FFF;
+      }
+    }
+
+    &__body {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        padding: 40px 24px 40px;
+        background-color: #FFF;
+      }
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this} {
+    &__dialog {
+
+      &--add,
+      &--edit {
+        max-width: calc(100vw - 48px) !important;
+      }
+    }
+  }
+}
+
+[mat-stroked-button] {
+  border-radius: 8px;
+  height: 50px;
+  width: 150px;
+
+  ::ng-deep .mat-button-wrapper {
+    line-height: unset;
+    color: #006CD0;
+  }
+
+  &.mat-stroked-button:not(.mat-button-disabled) {
+    border-color: #006CD0;
+  }
+}
+
+mat-form-field {
+  margin-bottom: 0;
+
+  ::ng-deep .mat-form-field-flex {
+    background: #FFF;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}

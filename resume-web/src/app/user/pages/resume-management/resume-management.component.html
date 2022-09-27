@@ -1,0 +1,7 @@
+<ng-container *ngTemplateOutlet="showPreview ? preview : form"></ng-container>
+<ng-template #form>
+  <app-resume-management-form></app-resume-management-form>  
+</ng-template>
+<ng-template #preview>
+  <app-resume-management-preview></app-resume-management-preview>
+</ng-template>

@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentModule } from '@app/shared';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '@app/material-module';
 
+import { ComponentModule } from '@app/shared';
+import { SharedModule } from '@app/shared/shared.module';
+import { MaterialModule } from '@app/material-module';
 import { AdminRoutingModule } from './admin-routing.module';
 import {
   AdminLoginComponent,
@@ -27,7 +28,6 @@ import {
   ResumeInvitationImportDialogComponent,
   ResumeInvitationsComponent,
 } from './pages';
-import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
   declarations: [
