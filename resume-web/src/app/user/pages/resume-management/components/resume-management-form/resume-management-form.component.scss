@@ -23,16 +23,50 @@ $this: '.app-resume-management-form';
     &__title {
       &__card {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        padding: 40px 24px 40px;
+        padding: 26.5px 30px;
         background-color: #FFF;
+      }
+
+      &__resume {
+        position: relative;
+        top: -5px;
+        margin-right: 24px;
+      }
+
+      &__icon {
+        width: 30px;
+        height: 30px;
       }
     }
 
     &__sidebar {
       &__card {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        padding: 40px 24px 40px;
         background-color: #FFF;
+
+        ::ng-deep .mat-subheader {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 25px;
+          color: #C5D0DF;
+          padding: 17px 16px 17px 12px;
+        }
+
+        ::ng-deep .mat-list-item-content {
+          padding: 0 0 0 24px !important;
+        }
+
+        ::ng-deep .mat-list-text>*,
+        ::ng-deep .mat-list-text>* {
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 25px;
+          color: #6C7A8E;
+        }
+
+        ::ng-deep .mat-list-single-selected-option {
+          background-color: #E0EFFD;
+        }
       }
     }
 
