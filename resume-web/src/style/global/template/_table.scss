@@ -1,10 +1,6 @@
 [mat-table] {
     min-width: 100%;
 
-    .mat-cell:not(:first-of-type):not(:last-of-type):before {
-        display: none;
-    }
-
     .mat-header-cell {
         display: table-cell;
         font-weight: 600;
@@ -12,18 +8,43 @@
         line-height: 25px;
     }
 
-    .mat-cell:not(:first-of-type):not(:last-of-type) {
-        display: table-cell;
-    }
+    .mat-cell {
+        &:first-child {
+            width: 45px;
+            @include lt-md {
+                width: 39px;
+                vertical-align: text-top;
+            }
+        }
 
-    .mat-cell:first-child {
-        width: 45px;
-    }
+        &:not(:first-of-type):not(:last-of-type) {
+            display: table-cell;
+            &::before {
+                display: none;
+            }
+            .mat-cell-content {
+                word-break: break-all;
+            }
+        }
 
-    .mat-cell:last-child {
-        width: 45px;
-        color: #C5D0DF;
-        text-align-last: start;
+        &:last-child {
+            width: 45px;
+            color: #C5D0DF;
+            text-align-last: start;
+            @include lt-md {
+                vertical-align: text-top;
+                padding-left: 24px;
+                padding-right: 0;
+                width: 39px;
+
+                .mat-focus-indicator {
+                    line-height: 0;
+                    height: 25px;
+                    padding: 0;
+                    width: 25px;
+                }
+            }
+        }
     }
 
     @include lt-md {
@@ -31,7 +52,7 @@
             background: transparent;
             padding: 22px 24px;
             mat-checkbox {
-            margin-top: 8px;
+                margin-top: 8px;
             }
         }
 
@@ -61,25 +82,6 @@
             font-size: 12px;
             line-height: 20px;
             background: #F4F9FD;
-        }
-
-        .mat-cell:first-child {
-            width: 39px;
-            vertical-align: text-top;
-        }
-
-        .mat-cell:last-child {
-            vertical-align: text-top;
-            padding-left: 24px;
-            padding-right: 0;
-            width: 39px;
-
-            .mat-focus-indicator {
-            line-height: 0;
-            height: 25px;
-            padding: 0;
-            width: 25px;
-            }
         }
     }
 }

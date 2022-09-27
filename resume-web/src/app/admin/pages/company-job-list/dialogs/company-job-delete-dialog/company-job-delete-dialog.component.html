@@ -7,10 +7,10 @@
   <div class="admin-company-job-delete-dialog__content__text">確定要刪除所選擇的項目嗎？</div>
 </div>
 <div mat-dialog-actions align="center" class="admin-company-job-delete-dialog__action">
-  <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

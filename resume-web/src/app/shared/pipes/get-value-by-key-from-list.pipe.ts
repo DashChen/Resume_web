@@ -11,7 +11,7 @@ export class GetValueByKeyFromListPipe implements PipeTransform {
     const returnKey = args[2];
     const item = items.find((v: { [x: string]: any; }) => v[compareKey] === value);
     if (!item || !item[returnKey]) {
-      console.warn('no map item or key');
+      // console.warn('no map item or key');
       return value;
     }
     return item[returnKey];

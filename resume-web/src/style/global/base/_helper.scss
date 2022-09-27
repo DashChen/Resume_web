@@ -1,7 +1,17 @@
 .text-main {
     color: $colorMain;
 }
+.text-second {
+    color: $colorSecond;
+}
 
 .text-error-1 {
     color: $colorError;
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+.ml-auto {
+    margin-left: auto;
 }

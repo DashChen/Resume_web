@@ -6,17 +6,17 @@
     <div class="app-batch-level-edit-dialog__content__description h2-text--regular">
         將對所選取人員進行批次人員階段編輯
     </div>
-    <form class="app-batch-level-edit-dialog__content__form" [formGroup]="levelForm">
+    <form class="app-batch-level-edit-dialog__content__form" [formGroup]="stageForm">
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <label class="mat-form-field__lable--top">階段*</label>
-            <select matNativeControl required formControlName="level" [errorStateMatcher]="matcher">
+            <select matNativeControl required formControlName="stage" [errorStateMatcher]="matcher">
                 <option class="default-option" label="請選擇"></option>
-                <ng-container *ngFor="let option of levelOptions">
+                <ng-container *ngFor="let option of stageOptions">
                     <option [value]="option.key">{{option.text}}</option>
                 </ng-container>
             </select>
-            <mat-error class="h3-text--medium" *ngIf="levelFormCtl.invalid">
-                {{ getLevelErrorMessage() }}
+            <mat-error class="h3-text--medium" *ngIf="stageFormCtl.invalid">
+                {{ getStageErrorMessage() }}
             </mat-error>
         </mat-form-field>
     </form>

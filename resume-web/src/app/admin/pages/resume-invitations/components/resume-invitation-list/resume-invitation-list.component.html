@@ -39,32 +39,32 @@
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">階段</label>
-          <mat-select formControlName="level" [errorStateMatcher]="matcher">
-            <mat-option>請選擇</mat-option>
+          <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
+            <option class="default-option" label="請選擇" [ngValue]="null" >請選擇</option>
             <ng-container *ngFor="let option of stageOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
+              <option [value]="option.key">{{option.text}}</option>
             </ng-container>
-          </mat-select>
+          </select>
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">職缺</label>
-          <mat-select formControlName="job" [errorStateMatcher]="matcher">
-            <mat-option>請選擇</mat-option>
+          <select matNativeControl formControlName="jobName" [errorStateMatcher]="matcher">
+            <option class="default-option" label="請選擇" [value]="null">請選擇</option>
             <ng-container *ngFor="let option of jobOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
+              <option [value]="option.key">{{option.text}}</option>
             </ng-container>
-          </mat-select>
+          </select>
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">填寫狀態</label>
-          <mat-select formControlName="status" [errorStateMatcher]="matcher">
-            <mat-option>請選擇</mat-option>
+          <select matNativeControl formControlName="status" [errorStateMatcher]="matcher">
+            <option class="default-option" label="請選擇" [value]="null">請選擇</option>
             <ng-container *ngFor="let option of writeStatusOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
+              <option [value]="option.key">{{option.text}}</option>
             </ng-container>
-          </mat-select>
+          </select>
         </mat-form-field>
-        <div fxFlex fxLayoutAlign="end">
+        <div fxFlex fxLayoutAlign="end" class="mt-auto">
           <button mat-raised-button class="admin-resume-invitation-list__search__btn mat-button--orange h2-text--regular" (click)="search($event)">
             <span>查詢</span>
           </button>
@@ -115,38 +115,62 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>姓名</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'姓名'">{{element.name}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">姓名</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'姓名'">
+            <div class="mat-cell-content">{{element.name}}</div>
+          </td>
         </ng-container>
 
         <!-- Mobile Column -->
         <ng-container matColumnDef="mobile">
-          <th mat-header-cell *matHeaderCellDef>電話</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'電話'">{{element.mobile}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">電話</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'電話'">
+            <div class="mat-cell-content">{{element.mobile}}</div>
+          </td>
         </ng-container>
 
         <!-- E-mail Column -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>E-mail</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'E-mail'">{{element.email}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">E-mail</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'E-mail'">
+            <div class="mat-cell-content">{{element.email}}</div>
+          </td>
         </ng-container>
 
         <!-- Job Column -->
         <ng-container matColumnDef="job">
-          <th mat-header-cell *matHeaderCellDef>職缺</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺'">{{element.job}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">職缺</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺'">
+            <div class="mat-cell-content">{{element.job}}</div>
+          </td>
         </ng-container>
 
         <!-- Level Column -->
         <ng-container matColumnDef="level">
-          <th mat-header-cell *matHeaderCellDef>階段</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'階段'">{{element.level}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">階段</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'階段'">
+            <div class="mat-cell-content">{{element.level}}</div>
+          </td>
         </ng-container>
 
         <!-- Level Column -->
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>填寫狀態</th>
-          <td mat-cell *matCellDef="let element" [attr.data-th]="'填寫狀態'">{{element.status}}</td>
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h2-text--bold text-main">填寫狀態</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [attr.data-th]="'填寫狀態'">
+            <div class="mat-cell-content">{{element.status}}</div>
+          </td>
         </ng-container>
 
         <!-- Action Column -->
@@ -186,7 +210,7 @@
           <div class="paginator__item__text h2-text--regular">顯示資料</div>
           <mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
             <ng-container *ngFor="let num of pageSizeOptions">
-              <mat-option [value]="num">{{num}}</mat-option>
+              <option [value]="num">{{num}}</option>
             </ng-container>
           </mat-select>
         </div>
@@ -195,7 +219,7 @@
           <mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)"
             class="paginator__item__select">
             <ng-container *ngFor="let num of totalPageList">
-              <mat-option [value]="num">{{num + 1}}</mat-option>
+              <option [value]="num">{{num + 1}}</option>
             </ng-container>
           </mat-select>
         </div>

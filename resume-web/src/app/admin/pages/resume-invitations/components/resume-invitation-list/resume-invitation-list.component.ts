@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { catchError, from, Subscription, throwError } from 'rxjs';
+import { catchError, filter, finalize, from, Subscription, take, takeUntil, throwError } from 'rxjs';
 
 import { ResumeData } from '@app/core/datas';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
@@ -25,7 +25,7 @@ import { BreakPointType, DeviceType, ViewportSize } from '@app/core/interfaces/b
 import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 
 export interface ResumeDialogData extends basicDialog {
-  item: ResumeData | null;
+  item: ResumeResumeInvitationsResumeInvitationDto;
 }
 
 @Component({
@@ -42,13 +42,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   showSend!: boolean;
   showSend$!: Subscription;
 
-  resumes: ResumeData[] = [];
-  resumes$!: Subscription;
-
   searchForm = new FormGroup({
     name: new FormControl(''),
-    level: new FormControl(null),
-    job: new FormControl(null),
+    stage: new FormControl(null),
+    jobName: new FormControl(null),
     status: new FormControl(null),
   });
 
@@ -94,6 +91,9 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   // MatPaginator Output
   pageEvent: PageEvent | null = null;
 
+  requestData$;
+  requestJobData$;
+
   constructor(
     public override store: Store,
     public override dialog: MatDialog,
@@ -104,55 +104,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType,
   ) {
     super(store, dialog);
-
-    this.resizeService.onResize$.subscribe((size: ViewportSize) => {
-      console.log('ViewportSize', size);
-      if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
-        this.headerColspan = this.displayedColumns.length;
-      } else {
-        this.headerColspan = 0;
-      }
-    });
-  }
-
-  ngOnInit(): void {
-    this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
-      this.showSend = value;
-    });
-
-    this.store.dispatch(CommonActions.getStageList());
-    this.stageTpls$.subscribe(list => {
-      console.log('getStageList', list);
-      this.stageList = list || [];
-    });
-
-    this.store.dispatch(CommonActions.getWriteStatus());
-    this.writeStatusTpls$.subscribe(list => {
-      console.log('getWriteStatus', list);
-      this.writeStatusList = list || [];
-    });
-
-    this.resumes$ = this.resumeInvitationService.resumes$.subscribe({
-      next: (data) => {
-        // this.dataSource.data = data;
-      },
-    });
-    this.fetchResumes();
-  }
-
-  fetchResumes() {
-    // this.resumeInvitationService.getResumes();
-  }
-
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-
-    this.showSend$.unsubscribe();
-    this.resumes$.unsubscribe();
-  }
-
-  ngAfterViewInit(): void {
-    from(
+    this.requestData$ = from(
       this.dataService.api.appResumeInvitationsList({}, {
         headers: {
           ...this.dataService.getAuthorizationToken('admin')
@@ -163,45 +115,9 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         // console.log(err);
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
-    ).subscribe({
-      next: (value) => {
-        console.log('appResumeInvitationsList', value);
-        this.originalData = value.data.items || [] as ResumeResumeInvitationsResumeInvitationDto[];
-      },
-      error: () => {
-        this.originalData = Array.from(Array(20).keys()).map((val) => {
-          return {
-            id: val.toString(),
-            creationTime: '',
-            creatorId: null,
-            lastModificationTime: null,
-            lastModifierId: null,
-            isDeleted: false,
-            deleterId: null,
-            deletionTime: null,
-            code: null,
-            companyName: null,
-            jobName: null,
-            sendType: null,
-            isOpening: false,
-            writeStatus: null,
-            accountCode: null,
-            stage: null,
-            resumeCode: null,
-            phone: null,
-            email: null,
-            companyId: null,
-            name: null,
-          } as ResumeResumeInvitationsResumeInvitationDto;
-        });
-      },
-      complete: () => {
-        this.dataSource.data = [...this.originalData];
-        this.updatePageInfo(this.dataSource.data.length);
-      },
-    });
-
-    from(
+      takeUntil(this.destroy$)
+    );
+    this.requestJobData$ = from(
       this.dataService.api.appCompanyJobsGetListByCompanyIdList({
         headers: {
           ...this.dataService.getAuthorizationToken('admin')
@@ -211,6 +127,71 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       catchError((err: HttpErrorResponse) => {
         // console.log(err);
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+      takeUntil(this.destroy$)
+    );
+    this.resizeService.onResize$.subscribe((size: ViewportSize) => {
+      console.log('ViewportSize', size);
+      if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
+        this.headerColspan = this.displayedColumns.length;
+      } else {
+        this.headerColspan = 1;
+      }
+    });
+    this.store.dispatch(CommonActions.getStageList());
+    this.stageTpls$.pipe(
+      filter(res => !!res),
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(list => {
+      console.log('getStageList', list);
+      this.stageList = list || [];
+      this.stageOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
+    });
+
+    this.store.dispatch(CommonActions.getWriteStatus());
+    this.writeStatusTpls$.pipe(
+      filter(res => !!res),
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(list => {
+      console.log('getWriteStatus', list);
+      this.writeStatusList = list || [];
+      this.writeStatusOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
+    });
+  }
+
+  ngOnInit(): void {
+    this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
+      this.showSend = value;
+    });
+  }
+
+  fetchResumes() {
+    const httpRequest = this.requestData$.pipe(
+      finalize(() => {
+        httpRequest.unsubscribe();
+      }),
+    ).subscribe({
+      next: (value) => {
+        console.log('appResumeInvitationsList', value);
+        this.originalData = value.data.items || [] as ResumeResumeInvitationsResumeInvitationDto[];
+      },
+      error: () => {},
+      complete: () => {
+        this.dataSource.data = [...this.originalData];
+        this.updatePageInfo(this.dataSource.data.length);
+      },
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.fetchResumes();
+
+    const httpRequest = this.requestJobData$.pipe(
+      finalize(() => {
+        console.log('finalize httpRequest unsubscribe');
+        httpRequest.unsubscribe();
       }),
     ).subscribe({
       next: (value) => {
@@ -277,13 +258,22 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.title = '新增人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
-    this.dialogConfig.item = null;
     const dialogRef = this.dialog.open(AddPersonDialogComponent, {
-      height: '783px',
+      height: '833px',
       width: '614px',
       maxWidth: '100%',
       maxHeight: '85vh',
-      data: this.dialogConfig
+      data: {
+        ...this.dialogConfig,
+        item: {
+          name: '',
+          phone: '',
+          accountCode: '',
+          email: '',
+          jobName: null,
+          stage: null,
+        } as ResumeResumeInvitationsResumeInvitationDto
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
@@ -313,7 +303,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       height: '353px',
       width: '614px',
       maxWidth: '100%',
-      data: this.dialogConfig
+      data: {
+        ...this.dialogConfig,
+        options: this.stageOptions
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
@@ -348,14 +341,19 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   editItem(item: ResumeData) {
-    this.dialogConfig.title = '職缺修改';
+    this.dialogConfig.title = '編輯人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
-    this.dialogConfig.item = item;
     const dialogRef = this.dialog.open(AddPersonDialogComponent, {
+      height: '833px',
       width: '614px',
+      maxWidth: '100%',
+      maxHeight: '85vh',
       panelClass: 'admin-resume-invitation-list__dialog--edit',
-      data: this.dialogConfig,
+      data: {
+        ...this.dialogConfig,
+        item: item
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);

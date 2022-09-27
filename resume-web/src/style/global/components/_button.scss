@@ -10,6 +10,9 @@
         color: #FFFFFF;
     }
     &.mat-button {
+        &--medium {
+            width: 120px;
+        }
         &--small {
             width: 100px;
         }

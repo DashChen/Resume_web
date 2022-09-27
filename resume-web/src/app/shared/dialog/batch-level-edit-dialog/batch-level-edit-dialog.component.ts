@@ -5,6 +5,10 @@ import { FormErrorStateMatcher } from '@app/core';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 
+export interface batchStageDialogData extends basicDialog {
+  options: ISelectOption[];
+}
+
 @Component({
   selector: 'app-batch-level-edit-dialog',
   templateUrl: './batch-level-edit-dialog.component.html',
@@ -14,33 +18,32 @@ export class BatchLevelEditDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
   isSuccess: boolean = false;
 
-  levelOptions: ISelectOption[] = [
-    { text: '第一階段', key: '1' },
-    { text: '第二階端', key: '2' }
-  ];
+  stageOptions: ISelectOption[] = [];
 
-  levelForm = new FormGroup({
-    level: new FormControl('', [Validators.required])
+  stageForm = new FormGroup({
+    stage: new FormControl('', [Validators.required])
   })
 
-  get levelFormCtl() {
-    return this.levelForm.get('level') as FormControl;
+  get stageFormCtl() {
+    return this.stageForm.get('stage') as FormControl;
   }
 
-  getLevelErrorMessage() {
-    return this.levelFormCtl.getError('required') ? '請選擇項目' : '';
+  getStageErrorMessage() {
+    return this.stageFormCtl.getError('required') ? '請選擇項目' : '';
   }
 
   constructor(
     public dialogRef: MatDialogRef<BatchLevelEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: basicDialog
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: batchStageDialogData
+  ) {
+    this.stageOptions = data.options;
+  }
 
   ngOnInit(): void {}
 
   confirm() {
-    if (this.levelForm.invalid) {
-      this.levelForm.markAllAsTouched();
+    if (this.stageForm.invalid) {
+      this.stageForm.markAllAsTouched();
       return;
     }
     this.isSuccess = true;
@@ -48,6 +51,6 @@ export class BatchLevelEditDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close(this.isSuccess ? this.levelForm.value : false);
+    this.dialogRef.close(this.isSuccess ? this.stageForm.value : false);
   }
 }
