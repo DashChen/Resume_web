@@ -20,7 +20,7 @@
             </mat-select>
           </mat-form-field>
 
-          <button mat-stroked-button [ngStyle.lt-md]="{'width.px': 105}" class="h2-text--regular">
+          <button mat-stroked-button [ngStyle.lt-md]="{'width.px': 105}" class="h2-text--regular" (click)="onShowPreview(true)">
             <span>預覽履歷</span>
           </button>
           <button mat-raised-button [ngStyle.lt-md]="{'width.px': 105}" class="mat-button--blue h2-text--regular">
@@ -33,7 +33,9 @@
 
   <div class="app-resume-management-form__title__card">
     <span class="app-resume-management-form__title__resume h1-title">我的第一份履歷表</span>
-    <mat-icon [svgIcon]="'edit-b-icon'" class="app-resume-management-form__title__icon" aria-hidden="false" aria-label="edit b icon"></mat-icon>
+    <button mat-icon-button aria-label="edit b icon" (click)="openTitleDialog($event)">
+      <mat-icon class="app-resume-management-form__title__icon" [svgIcon]="'edit-b-icon'"></mat-icon>
+    </button>
   </div>
 
   <div fxLayout="column" fxFill>
@@ -62,14 +64,96 @@
         </mat-selection-list>
       </div>
       <div fxLayout="column" fxFlex fxLayoutGap="24px" fxLayoutAlign="none stretch">
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
-        <div class="app-resume-management-form__body__card" fxFlex></div>
+        <div class="app-resume-management-form__content__card" fxLayout="column" fxFlex>
+          <div class="app-resume-management-form__content__card__header">
+            <span class="app-resume-management-form__content__card__header__title">基本資料</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openBasicDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body" fxLayout="row">
+            <div fxLayout="column">
+              <img class="app-resume-management-form__content__image__avatar" [src]="'/assets/icons/user-pic-icon1.svg'" (error)="onImgError($event)" alt="">
+              <button mat-stroked-button class="app-resume-management-form__content__button__upload" (click)="openProfileDialog($event)">
+                <span>上傳照片</span>
+                <div fxFlex fxLayoutAlign="end center">
+                  <mat-icon [svgIcon]="'camera-icon'" aria-hidden="false" aria-label="camera icon"></mat-icon>
+                </div>
+              </button>
+            </div>
+            <div fxLayout="column" fxLayoutGap="24px" [ngStyle]="{'padding-left.px': 48, 'padding-right.px': 48}">
+              <div fxLayout="row">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">中文姓名</label>
+                <div class="app-resume-management-form__content__plaintext">王大明</div>
+              </div>
+              <div fxLayout="row">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">通訊電話</label>
+                <div class="app-resume-management-form__content__plaintext">0900-000-000</div>
+              </div>
+              <div fxLayout="row">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">電子郵件</label>
+                <div class="app-resume-management-form__content__plaintext">WanDaiMing@gamil.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+          <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+            <span class="app-resume-management-form__content__card__header__title">學歷</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openEducationDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+          <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+            <span class="app-resume-management-form__content__card__header__title">工作經歷</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openWorkDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+          <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+            <span class="app-resume-management-form__content__card__header__title">專業證照</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openLicenseDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+          <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+            <span class="app-resume-management-form__content__card__header__title">自傳</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openAutobiographyDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+          <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+            <span class="app-resume-management-form__content__card__header__title">附件</span>
+            <div fxFlex fxLayoutAlign="end">
+              <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openAppendixDialog($event)">
+                <span>編輯</span>
+              </button>
+            </div>
+          </div>
+          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+        </div>
       </div>
     </div>
   </div>
