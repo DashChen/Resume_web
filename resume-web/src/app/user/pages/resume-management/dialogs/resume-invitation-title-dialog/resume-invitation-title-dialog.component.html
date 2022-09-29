@@ -1,1 +1,23 @@
-<p>resume-invitation-title-dialog works!</p>
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="resume-invitation-title-dialog__head">
+  <div class="resume-invitation-title-dialog__title h1-title">{{ data.title }}</div>
+  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+</div>
+<div mat-dialog-content class="resume-invitation-title-dialog__content">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-title-dialog__content__form">
+    <mat-form-field class="mat-form-field__block" appearance="fill">
+      <label class="mat-form-field__lable--top">名稱</label>
+      <input matInput placeholder="" required value="我的第一份履歷表">
+      <mat-error *ngIf="true" class="h3-text--medium">
+        名稱
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-title-dialog__action">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+    <span>{{ data.cancelBtnText }}</span>
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+    <span>{{ data.successBtnText }}</span>
+  </button>
+</div>

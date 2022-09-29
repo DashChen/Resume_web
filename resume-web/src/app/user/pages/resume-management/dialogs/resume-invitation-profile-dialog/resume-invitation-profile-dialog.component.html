@@ -1,1 +1,19 @@
-<p>resume-invitation-profile-dialog works!</p>
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="resume-invitation-profile-dialog__head">
+  <div class="resume-invitation-profile-dialog__title h1-title">{{ data.title }}</div>
+  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+</div>
+<div mat-dialog-content class="resume-invitation-profile-dialog__content">
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="resume-invitation-profile-dialog__content__loader">
+    <mat-icon class="resume-invitation-profile-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
+    <label class="resume-invitation-profile-dialog__content__input">按此上傳圖片<input type="file" hidden accept="image/*"></label>
+    <div class="resume-invitation-profile-dialog__content__text">檔案格式為jpg/png,最佳尺寸360x360</div>
+  </div>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-profile-dialog__action">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+    <span>{{ data.cancelBtnText }}</span>
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+    <span>{{ data.successBtnText }}</span>
+  </button>
+</div>
