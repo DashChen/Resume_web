@@ -1,0 +1,10 @@
+@import 'public-mixin';
+
+$this: '.app-resume-management';
+
+:host {
+  height: 100%;
+  width: 100%;
+
+  #{$this} {}
+}

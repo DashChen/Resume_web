@@ -26,5 +26,9 @@
   "menu-icon04": "menu-icon04.svg",
   "member-icon": "member-icon.svg",
   "mail": "mail.svg",
+  "edit-b-icon": "edit-b-icon.svg",
+  "user-pic-icon": "user-pic-icon.svg",
+  "camera-icon": "camera-icon.svg",
+  "notice": "notice.svg",
   "upload-icon": "upload-icon.svg"
 }

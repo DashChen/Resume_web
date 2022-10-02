@@ -25,14 +25,14 @@ export class UserMainLayoutComponent implements OnInit {
 
   links: link[] = [
     {
-      link: '/resume-management',
+      link: '/user/resume-management',
       key: 'resume-management',
       title: '履歷管理',
       icon: 'menu-icon01',
       active: false,
     },
     {
-      link: '/member-management',
+      link: '/user/member-management',
       key: 'member-management',
       title: '會員管理',
       icon: 'menu-icon04',

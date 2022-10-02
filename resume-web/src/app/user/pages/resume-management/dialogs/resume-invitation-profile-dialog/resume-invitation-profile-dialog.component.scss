@@ -1,0 +1,62 @@
+@import 'public-mixin';
+
+:host {
+  $this: '.resume-invitation-profile-dialog';
+
+  #{$this} {
+    &__head {
+      border-bottom: 1px solid #C5D0DF;
+      margin-bottom: 0;
+      padding: 8.5px 24px;
+
+      mat-icon {
+        color: $colorSecond;
+        cursor: pointer;
+        width: 17px;
+      }
+    }
+
+    &__content {
+      max-height: calc(100% - 51px - 130px);
+      overflow: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding-top: 40px;
+      padding-bottom: 40px;
+      padding-right: 24px;
+      padding-left: 24px;
+
+      &__loader {
+        width: 566px;
+        height: 172px;
+        border: 1px dashed #C5D0DF;
+      }
+
+      &__icon {
+        width: 70px;
+        height: 70px;
+      }
+
+      &__input {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 33px;
+        color: #6C7A8E;
+        cursor: pointer;
+      }
+
+      &__text {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        color: #6C7A8E;
+      }
+    }
+
+    &__action {
+      padding: 0 0 40px;
+      min-height: unset;
+      margin-bottom: unset;
+    }
+  }
+}

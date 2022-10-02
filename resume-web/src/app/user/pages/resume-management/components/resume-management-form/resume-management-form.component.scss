@@ -1,0 +1,176 @@
+@import 'public-mixin';
+
+$this: '.app-resume-management-form';
+
+:host {
+  #{$this} {
+    background-color: #F4F9FD;
+    min-height: calc(100vh - 64px - 40px);
+    padding: 24px 40px;
+
+    &__head {
+      &__block {}
+
+      &__title {
+        &__main {}
+
+        &__sub {}
+      }
+
+      &__action {}
+    }
+
+    &__title {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        padding: 26px 30px;
+        background-color: #FFF;
+      }
+
+      &__resume {
+        position: relative;
+        top: 5px;
+        margin-right: 24px;
+      }
+
+      &__icon {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &__sidebar {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        background-color: #FFF;
+
+        ::ng-deep .mat-subheader {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 25px;
+          color: #C5D0DF;
+          padding: 17px 16px 17px 12px;
+        }
+
+        ::ng-deep .mat-list-item-content {
+          padding: 0 0 0 24px !important;
+        }
+
+        ::ng-deep .mat-list-text>*,
+        ::ng-deep .mat-list-text>* {
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 25px;
+          color: #6C7A8E;
+        }
+
+        ::ng-deep .mat-list-single-selected-option {
+          background-color: #E0EFFD;
+        }
+      }
+    }
+
+    &__content {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        background-color: #FFF;
+
+        &__header {
+          padding-top: 15px;
+          padding-bottom: 15px;
+          padding-left: 24px;
+          padding-right: 24px;
+          border-bottom: 1px solid #C5D0DF;
+
+          &__title {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 27px;
+          }
+        }
+        &__body {
+          padding-top: 24px;
+          padding-bottom: 24px;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+      }
+      &__image {
+        &__avatar {
+          width: 100px;
+          height: 100px;
+          margin-bottom: 12px;
+        }
+      }
+      &__button {
+        &__upload {
+          width: 100px;
+          height: 36px;
+          border: 1px solid #006CD0;
+          border-radius: 8px;
+          ::ng-deep span {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 20px;
+          }
+          ::ng-deep mat-icon {
+            margin-right: 0;
+            width: 15.03px;
+            height: 15px;
+          }
+        }
+      }
+      &__label {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 25px;
+        color: #27303D;
+      }
+      &__plaintext {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        color: #6C7A8E;
+      }
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this} {
+    &__dialog {
+
+      &--add,
+      &--edit {
+        max-width: calc(100vw - 48px) !important;
+      }
+    }
+  }
+}
+
+[mat-stroked-button] {
+  border-radius: 8px;
+  height: 50px;
+  width: 150px;
+
+  ::ng-deep .mat-button-wrapper {
+    line-height: unset;
+    color: #006CD0;
+  }
+
+  &.mat-stroked-button:not(.mat-button-disabled) {
+    border-color: #006CD0;
+  }
+}
+
+mat-form-field {
+  margin-bottom: 0;
+
+  ::ng-deep .mat-form-field-flex {
+    background: #FFF;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}

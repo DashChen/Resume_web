@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CompanyJobDialogData } from '@app/admin/pages/company-job-list/company-job-list.component';
 
 @Component({
-  selector: 'app-company-job-delete-dialog',
+  selector: 'admin-company-job-delete-dialog',
   templateUrl: './company-job-delete-dialog.component.html',
   styleUrls: ['./company-job-delete-dialog.component.scss']
 })
