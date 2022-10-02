@@ -112,7 +112,8 @@
 				</div>
 				<div class="paginator__item paginator__item--current-page">
 					<div class="paginator__item__text h2-text--regular">當前頁數</div>
-					<mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)" class="paginator__item__select">
+					<mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)"
+						class="paginator__item__select">
 						<ng-container *ngFor="let num of totalPageList">
 							<mat-option [value]="num">{{num + 1}}</mat-option>
 						</ng-container>

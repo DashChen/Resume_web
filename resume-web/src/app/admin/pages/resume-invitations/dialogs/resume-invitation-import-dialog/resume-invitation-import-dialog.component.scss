@@ -1,0 +1,32 @@
+@import 'public-mixin';
+
+$this: '.admin-resume-invitation-import-dialog';
+
+:host {
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    gap: 35px;
+    justify-content: center;
+    padding: 40px 24px;
+    #{$this} {
+        &__upload-icon {
+            text-align: center;
+            mat-icon {
+                height: 70px;
+                width: 70px;
+            }
+        }
+        &__title {
+            color: #6C7A8E;
+            text-align: center;
+        }
+        &__subtitle {
+            color: #6C7A8E;
+            text-align: center;
+        }
+        &__action {
+            padding: 0;
+        }
+    }
+}

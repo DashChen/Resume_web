@@ -13,6 +13,9 @@
         &--medium {
             width: 120px;
         }
+        &--medium-1 {
+            width: 110px;
+        }
         &--small {
             width: 100px;
         }
@@ -91,6 +94,34 @@
         color: #6C7A8E;
         mat-icon {
             margin-right: 16px;
+        }
+    }
+}
+
+[mat-icon-button] {
+    &.mat-button {
+        &--icon {
+            background-color: $colorLight;
+            border-radius: 4px;
+            height: 50px;
+            min-width: 50px;
+            width: 50px;
+            mat-icon {
+                ::ng-deep svg {
+                    color: #FFFFFF;
+                    path {
+                        fill: #FFFFFF;
+                    }
+                }
+            }
+        }
+        &--blue {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: button;
+            background-color: $colorCis;
+            background-image: none;
+            overflow: hidden;
+            position: relative;
         }
     }
 }

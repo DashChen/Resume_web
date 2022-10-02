@@ -4,6 +4,7 @@
   "arrow-right": "arrow-right.svg",
   "calendar": "calendar.svg",
   "check-circle": "check-circle.svg",
+  "check-square": "check-square.svg",
   "close-icon": "close-02.svg",
   "connected": "connected-icon.svg",
   "down": "down.svg",
@@ -24,5 +25,6 @@
   "menu-icon03": "menu-icon03.svg",
   "menu-icon04": "menu-icon04.svg",
   "member-icon": "member-icon.svg",
-  "mail": "mail.svg"
+  "mail": "mail.svg",
+  "upload-icon": "upload-icon.svg"
 }

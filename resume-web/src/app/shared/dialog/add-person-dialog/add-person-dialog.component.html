@@ -20,9 +20,9 @@
         </mat-form-field>
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <label class="mat-form-field__lable--top">身分證號碼</label>
-            <input matInput placeholder="請輸入身分證號碼" formControlName="accountCode" [errorStateMatcher]="matcher">
-            <mat-error *ngIf="accountCodeFormCtl.invalid">
-                {{ getAccountCodeErrorMessage() }}
+            <input matInput placeholder="請輸入身分證號碼" formControlName="idno" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="idnoFormCtl.invalid">
+                {{ getIdnoErrorMessage() }}
             </mat-error>
         </mat-form-field>
         <mat-form-field class="mat-form-field__block" appearance="fill">

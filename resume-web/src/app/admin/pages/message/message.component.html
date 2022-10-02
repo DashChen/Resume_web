@@ -84,7 +84,7 @@
             </button>
         </div>
         <div class="admin-message__table__body">
-            <table mat-table [dataSource]="dataSource">
+            <table mat-table [dataSource]="dataSource" [ngClass]="('tab-' + tabSelected.value)">
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="headerColspan">
@@ -173,10 +173,10 @@
                     <td mat-cell *matCellDef="let element" [attr.data-th]="'履歷表'">
                         <ng-container *ngTemplateOutlet="element.refuse ? refuseResume : viewResume"></ng-container>
                         <ng-template #refuseResume>
-                            <span>已婉拒</span>
+                            <span class="mat-cell-content">已婉拒</span>
                         </ng-template>
                         <ng-template #viewResume>
-                            <a href="#" (click)="showResume($event, element)">檢視</a>
+                            <a class="mat-cell-content" href="#" (click)="showResume($event, element)">檢視</a>
                         </ng-template>
                     </td>
                 </ng-container>
@@ -218,9 +218,9 @@
                         {{tableEmptyText}}
                     </td>
                 </tr>
-              </table>
+            </table>
 
-              <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
+            <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
                 <div class="paginator__item paginator__item--show-len">
                     <div class="paginator__item__text h2-text--regular">顯示資料</div>
                     <mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">

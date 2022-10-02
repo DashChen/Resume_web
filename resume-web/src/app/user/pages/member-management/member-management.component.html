@@ -1,13 +1,6 @@
 <div class="app-member-management" fxLayout="column" fxLayoutGap="24px">
 	<div class="app-member-management__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
 		<div fxFlex fxLayout="column" fxLayoutGap="12px" class="app-member-management____head__title__block">
-            <ng-template *ngIf="isEdit">
-                <div class="app-member-management__head__title__back" (click)="isEdit = false">
-                    <mat-icon svgIcon="edit"></mat-icon>
-                    <span class="h2-text--bold">返回</span>
-                </div>
-            </ng-template>
-
 			<div class="app-member-management__head__title__main h1-large-title">
 				會員管理
 			</div>
@@ -15,138 +8,10 @@
 				會員管理 / 會員資料
 			</div>
 		</div>
-		<!-- <div class="app-member-management__edit" fxFlex fxLayout="row" fxLayoutAlign="end center"
-			fxLayoutAlign.lt-md="start center">
-            <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event)">
-                <span>編輯會員資料</span>
-            </button>
-		</div> -->
 	</div>
     <div class="app-member-management__card">
         <div class="app-member-management__card__body">
-            <div class="">
-                <div class="app-member-management__card__body__title">
-                    <span class="h1-small-title">會員管理</span>
-                </div>
-                <div fxLayout="row" fxLayoutGap="40px">
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">姓名*</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event)">
-                            <span>編輯</span>
-                        </button>
-                    </div>
-
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">身分證字號</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event)">
-                            <span>編輯</span>
-                        </button>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutGap="40px">
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">電子郵件</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundEmail()">
-                            <span>綁定</span>
-                        </button>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundEmail()">
-                            <span>編輯</span>
-                        </button>
-                    </div>
-
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">手機</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-    
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundMobile()">
-                            <span>{{ false ? '解除綁定' : '綁定' }}</span>
-                        </button>
-                    </div>
-                </div>
-
-
-                <div fxLayout="row" fxLayoutGap="40px">
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">生日</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundEmail()">
-                            <span>編輯</span>
-                        </button>
-                    </div>
-
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">密碼</label>
-                            <input matInput placeholder="未填寫" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="changePwd()">
-                            <span>編輯</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div>
-                <div class="app-member-management__card__body__title">
-                    <span class="h1-small-title">第三方帳號管理</span>
-                    <span class="h2-text--bold">(綁定後可以使用第三方帳號登入)</span>
-                </div>
-                <div fxLayout="row" fxLayoutGap="40px" class="app-member-management__card__body__column--one">
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">google</label>
-                            <input matInput placeholder="未綁定" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-    
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundMFA('google')">
-                            <span>{{ false ? '重新綁定' : '綁定' }}</span>
-                        </button>
-                    </div>
-
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-member-management__card__body__field">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">LINE</label>
-                            <input matInput placeholder="未綁定" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-    
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundMFA('line')">
-                            <span>{{ false ? '重新綁定' : '綁定' }}</span>
-                        </button>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutGap="40px">
-                    <div fxLayout="row" fxLayoutGap="20px" class="app-member-management__card__body__field--one">
-                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                            <label class="mat-form-field__lable--top">FACEBOOK</label>
-                            <input matInput placeholder="未綁定" required [errorStateMatcher]="matcher" [disabled]="!isEdit">
-                        </mat-form-field>
-
-                        <button mat-raised-button class="app-member-management__edit__btn mat-button--blue h2-text--regular" (click)="boundMFA('facebook')">
-                            <span>{{ false ? '重新綁定' : '綁定' }}</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <app-shared-member-management [showCommunity]="true"></app-shared-member-management>
         </div>
     </div>
 </div>

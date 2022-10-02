@@ -25,12 +25,13 @@ export class BaseComponent extends BaseFormComponent {
         this.dialogConfig.subTitle = subtitle;
         this.dialogConfig.showSuccessBtn = true;
         this.dialogConfig.successBtnText = successBtnText;
-        this.dialog.open(CommonDialogComponent, {
+        const dialogRef = this.dialog.open(CommonDialogComponent, {
           height: '311px',
           width: '614px',
           data: this.dialogConfig
         });
         this.store.dispatch(AdminActions.resetErr());
+        return dialogRef;
     }
 
     successDialog(title: string, subtitle: string, successBtnText: string = '關閉') {
@@ -39,11 +40,29 @@ export class BaseComponent extends BaseFormComponent {
       this.dialogConfig.subTitle = subtitle;
       this.dialogConfig.showSuccessBtn = true;
       this.dialogConfig.successBtnText = successBtnText;
-      this.dialog.open(CommonDialogComponent, {
+      const dialogRef = this.dialog.open(CommonDialogComponent, {
         height: '311px',
         width: '614px',
         data: this.dialogConfig
       });
       this.store.dispatch(AdminActions.resetErr());
-  }
+      return dialogRef;
+    }
+
+    errDialog(title: string, subtitle: string, successBtnText: string = '關閉', cancelBtnText: string = '') {
+      this.dialogConfig.icon = 'error';
+      this.dialogConfig.title = title;
+      this.dialogConfig.subTitle = subtitle;
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = successBtnText;
+      this.dialogConfig.showCancelBtn = cancelBtnText.length > 0;
+      this.dialogConfig.cancelBtnText = cancelBtnText;
+      const dialogRef = this.dialog.open(CommonDialogComponent, {
+        height: '311px',
+        width: '614px',
+        data: this.dialogConfig
+      });
+      this.store.dispatch(AdminActions.resetErr());
+      return dialogRef;
+    }
 }

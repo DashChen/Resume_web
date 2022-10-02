@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div fxFlex fxLayout="column" fxLayoutGap="12px" fxHide.lt-md="true" class="admin-resume-invitation-list__search">
+  <div fxFlex="0 0 auto" fxLayout="column" fxLayoutGap="12px" [fxHide.lt-md]="true" class="admin-resume-invitation-list__search">
     <div class="admin-resume-invitation-list__search__title h1-small-title">
       人員搜尋
     </div>
@@ -35,11 +35,11 @@
       <form fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="admin-resume-invitation-list__search__conditions" [formGroup]="searchForm">
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">姓名</label>
-          <input matInput placeholder="例:王大明" formControlName="name" required [errorStateMatcher]="matcher">
+          <input matInput placeholder="例:王大明" formControlName="Name" required [errorStateMatcher]="matcher">
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">階段</label>
-          <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
+          <select matNativeControl formControlName="Stage" [errorStateMatcher]="matcher">
             <option class="default-option" label="請選擇" [ngValue]="null" >請選擇</option>
             <ng-container *ngFor="let option of stageOptions">
               <option [value]="option.key">{{option.text}}</option>
@@ -48,7 +48,7 @@
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">職缺</label>
-          <select matNativeControl formControlName="jobName" [errorStateMatcher]="matcher">
+          <select matNativeControl formControlName="JobName" [errorStateMatcher]="matcher">
             <option class="default-option" label="請選擇" [value]="null">請選擇</option>
             <ng-container *ngFor="let option of jobOptions">
               <option [value]="option.key">{{option.text}}</option>
@@ -57,7 +57,7 @@
         </mat-form-field>
         <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
           <label class="mat-form-field__lable--top">填寫狀態</label>
-          <select matNativeControl formControlName="status" [errorStateMatcher]="matcher">
+          <select matNativeControl formControlName="WriteStatus" [errorStateMatcher]="matcher">
             <option class="default-option" label="請選擇" [value]="null">請選擇</option>
             <ng-container *ngFor="let option of writeStatusOptions">
               <option [value]="option.key">{{option.text}}</option>
@@ -65,7 +65,8 @@
           </select>
         </mat-form-field>
         <div fxFlex fxLayoutAlign="end" class="mt-auto">
-          <button mat-raised-button class="admin-resume-invitation-list__search__btn mat-button--orange h2-text--regular" (click)="search($event)">
+          <button mat-raised-button class="admin-resume-invitation-list__search__btn mat-button--orange h2-text--regular"
+            (click)="search($event)">
             <span>查詢</span>
           </button>
         </div>
@@ -75,13 +76,16 @@
 
   <div class="admin-resume-invitation-list__table__block">
     <div class="admin-resume-invitation-list__table__head" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="15px" fxHide.lt-md="true">
-      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular" (click)="showSendMsg(true)">
+      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular"
+        (click)="showSendMsg(true)">
         <span>發送信件&訊息</span>
       </button>
-      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular" (click)="batchEdit($event)">
+      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular"
+        (click)="batchEdit($event)">
         <span>批次編輯</span>
       </button>
-      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular" [disabled]="disabledDelBtn" (click)="delItems($event)">
+      <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular"
+        [disabled]="disabledDelBtn" (click)="delItems($event)">
         <span>刪除</span>
       </button>
     </div>
@@ -97,12 +101,16 @@
             <div fxHide="true" fxShow.lt-md="true" fxLayout="row" fxLayoutGap.lt-md="15px"
               class="admin-resume-invitation-list__table__head__btn__icons">
               <button class="admin-resume-invitation-list__table__head__btn__icon mat-button--blue"
-                (click)="openAddDialog($event)">
-                <mat-icon [svgIcon]="'plus'" aria-hidden="false" aria-label="next icon"></mat-icon>
+                (click)="showSendMsg(true)">
+                <mat-icon [svgIcon]="'mail'" aria-hidden="false" aria-label="mail icon"></mat-icon>
+              </button>
+              <button class="admin-resume-invitation-list__table__head__btn__icon mat-button--blue"
+                (click)="batchEdit($event)">
+                <mat-icon [svgIcon]="'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
               </button>
               <button class="admin-resume-invitation-list__table__head__btn__icon mat-button--blue"
                 [disabled]="disabledDelBtn" (click)="delItems($event)">
-                <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="next icon"></mat-icon>
+                <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="trash icon"></mat-icon>
               </button>
             </div>
           </th>
@@ -124,12 +132,12 @@
         </ng-container>
 
         <!-- Mobile Column -->
-        <ng-container matColumnDef="mobile">
+        <ng-container matColumnDef="phone">
           <th mat-header-cell *matHeaderCellDef>
             <span class="h2-text--bold text-main">電話</span>
           </th>
           <td mat-cell *matCellDef="let element" [attr.data-th]="'電話'">
-            <div class="mat-cell-content">{{element.mobile}}</div>
+            <div class="mat-cell-content">{{element.phone}}</div>
           </td>
         </ng-container>
 
@@ -144,32 +152,34 @@
         </ng-container>
 
         <!-- Job Column -->
-        <ng-container matColumnDef="job">
+        <ng-container matColumnDef="jobName">
           <th mat-header-cell *matHeaderCellDef>
             <span class="h2-text--bold text-main">職缺</span>
           </th>
           <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺'">
-            <div class="mat-cell-content">{{element.job}}</div>
+            <div class="mat-cell-content">{{element.jobName}}</div>
           </td>
         </ng-container>
 
         <!-- Level Column -->
-        <ng-container matColumnDef="level">
+        <ng-container matColumnDef="stage">
           <th mat-header-cell *matHeaderCellDef>
             <span class="h2-text--bold text-main">階段</span>
           </th>
           <td mat-cell *matCellDef="let element" [attr.data-th]="'階段'">
-            <div class="mat-cell-content">{{element.level}}</div>
+            <div class="mat-cell-content">{{element.stage | getValueByKeyFromList: [stageList, 'code', 'name']}}</div>
           </td>
         </ng-container>
 
         <!-- Level Column -->
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="writeStatus">
           <th mat-header-cell *matHeaderCellDef>
             <span class="h2-text--bold text-main">填寫狀態</span>
           </th>
           <td mat-cell *matCellDef="let element" [attr.data-th]="'填寫狀態'">
-            <div class="mat-cell-content">{{element.status}}</div>
+            <div class="mat-cell-content">
+              {{(element.writeStatus | getValueByKeyFromList: [writeStatusList, 'code', 'name', '1'])  }}
+            </div>
           </td>
         </ng-container>
 
@@ -206,44 +216,45 @@
       </table>
 
       <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="24px" class="paginator__block">
-        <div class="paginator__item">
-          <div class="paginator__item__text h2-text--regular">顯示資料</div>
-          <mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
-            <ng-container *ngFor="let num of pageSizeOptions">
-              <option [value]="num">{{num}}</option>
-            </ng-container>
-          </mat-select>
+        <div class="paginator__item paginator__item--show-len">
+            <div class="paginator__item__text h2-text--regular">顯示資料</div>
+            <mat-select [(ngModel)]="pageSize" (ngModelChange)="updatePageSize($event)" class="paginator__item__select">
+                <ng-container *ngFor="let num of pageSizeOptions">
+                    <mat-option [value]="num">{{num}}</mat-option>
+                </ng-container>
+            </mat-select>
         </div>
-        <div class="paginator__item">
-          <div class="paginator__item__text h2-text--regular">當前頁數</div>
-          <mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)"
-            class="paginator__item__select">
-            <ng-container *ngFor="let num of totalPageList">
-              <option [value]="num">{{num + 1}}</option>
-            </ng-container>
-          </mat-select>
+        <div class="paginator__item paginator__item--current-page">
+            <div class="paginator__item__text h2-text--regular">當前頁數</div>
+            <mat-select [(ngModel)]="manualPage" (ngModelChange)="updateManualPage($event)" class="paginator__item__select">
+                <ng-container *ngFor="let num of totalPageList">
+                    <mat-option [value]="num">{{num + 1}}</mat-option>
+                </ng-container>
+            </mat-select>
         </div>
         <div fxLayout="row" fxLayoutAlign="center flex-start" fxLayoutGap="40px" class="paginator__page-info">
-          <div fxLayout="row" fxLayoutGap="2px">
-            <div class="paginator__item__text h2-text--regular">共{{totalPage}}頁</div>
-            <div>-</div>
-            <div class="paginator__item__text h2-text--regular">第{{manualPage + 1 }}頁</div>
-          </div>
+            <div fxLayout="row" fxLayoutGap="2px">
+                <div class="paginator__item__text h2-text--regular">共{{totalPage}}頁</div>
+                <div>-</div>
+                <div class="paginator__item__text h2-text--regular">第{{manualPage + 1 }}頁</div>
+            </div>
 
-          <div fxLayout="row" fxLayoutGap="16px" class="paginator__btns">
-            <button mat-icon-button class="paginator__btn paginator__btn--prev" (click)="page.previousPage()"
-              [disabled]="disablePrev">
-              <mat-icon [svgIcon]="'arrow-left'" aria-hidden="false" aria-label="prev icon"></mat-icon>
-            </button>
-            <button mat-icon-button class="paginator__btn paginator__btn--next" (click)="page.nextPage()"
-              [disabled]="disableNext">
-              <mat-icon [svgIcon]="'arrow-right'" aria-hidden="false" aria-label="next icon"></mat-icon>
-            </button>
-          </div>
+            <div fxLayout="row" fxLayoutGap="16px" class="paginator__btns">
+                <button mat-icon-button class="paginator__btn paginator__btn--prev" (click)="page.previousPage()" [disabled]="disablePrev">
+                    <mat-icon [svgIcon]="'arrow-left'" aria-hidden="false" aria-label="prev icon"></mat-icon>
+                </button>
+                <button mat-icon-button class="paginator__btn paginator__btn--next" (click)="page.nextPage()" [disabled]="disableNext">
+                    <mat-icon [svgIcon]="'arrow-right'" aria-hidden="false" aria-label="next icon"></mat-icon>
+                </button>
+            </div>
         </div>
 
-        <mat-paginator #page class="paginator__component" [length]="length" [pageIndex]="manualPage"
-          [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="getPaginatorData($event)"></mat-paginator>
+        <mat-paginator #page class="paginator__component"
+            [length]="length"
+            [pageIndex]="manualPage"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="getPaginatorData($event)"></mat-paginator>
       </div>
     </div>
   </div>

@@ -24,6 +24,9 @@ export class CustomeSerializer implements RouterStateSerializer<RouterStateUrl>{
 
         }
         const { params } = state;
+        if (window.sessionStorage) {
+            sessionStorage.setItem('currentUrl', url);
+        }
         return { url, queryParams, params };
     }
 }

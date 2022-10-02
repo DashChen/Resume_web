@@ -6,6 +6,7 @@ export * from './company-job-list/company-job-list.component';
 export * from './forget/forget.component';
 export * from './home/home.component';
 export * from './login/login.component';
+export * from './member-management/member-management.component';
 export * from './message/message.component';
 export * from './message/dialogs/message-preview-dialog/message-preview-dialog.component';
 export * from './message/dialogs/message-search-dialog/message-search-dialog.component';

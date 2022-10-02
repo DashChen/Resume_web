@@ -1,0 +1,17 @@
+<div class="admin-member-management" fxLayout="column" fxLayoutGap="24px">
+	<div class="admin-member-management__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
+		<div fxFlex fxLayout="column" fxLayoutGap="12px" class="admin-member-management____head__title__block">
+			<div class="admin-member-management__head__title__main h1-large-title">
+				會員管理
+			</div>
+			<div class="admin-member-management__head__title__sub h2-text--regular">
+				會員管理 / 會員資料
+			</div>
+		</div>
+	</div>
+    <div class="admin-member-management__card">
+        <div class="admin-member-management__card__body">
+            <app-shared-member-management [authorizeType]="'admin'"></app-shared-member-management>
+        </div>
+    </div>
+</div>

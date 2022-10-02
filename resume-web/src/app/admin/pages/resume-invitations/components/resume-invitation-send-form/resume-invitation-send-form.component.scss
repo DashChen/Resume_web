@@ -11,6 +11,20 @@ $this: '.admin-resume-invitation-send-form';
     min-height: calc(100vh - 64px - 40px);
     padding: 24px 40px;
 
+    &__head {
+      &__title {
+        &__back {
+          cursor: pointer;
+          display: flex;
+          gap: 8px;
+          mat-icon {
+            height: 20px;
+            width: 20px;
+          }
+        }
+      }
+    }
+
     &__card {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
       padding: 40px 24px 40px;
@@ -34,6 +48,23 @@ $this: '.admin-resume-invitation-send-form';
       }
     }
 
+    &__person {
+      &-tag {
+        background: #6C7A8E;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px rgba(24, 135, 114, 0.2);
+        color: #FFFFFF;
+        padding: 12.5px 20px;
+        height: 50px;
+        width: 150px;
+        mat-icon {
+          cursor: pointer;
+          height: 14px;
+          width: 14px;
+        }
+      }
+    }
+
     ::ng-deep {
       .mat-tab-label {
         min-width: 50%;
@@ -49,6 +80,24 @@ $this: '.admin-resume-invitation-send-form';
 
       .mat-ink-bar {
         background-color: #02B2E1;
+      }
+    }
+
+    mat-tab-group {
+      mat-form-field {
+        &.mat-form-field__block--textarea {
+          margin-top: 20.7px;
+          ::ng-deep .mat-form-field-flex {
+            height: 300px;
+            .mat-form-field-infix {
+              height: 100%;
+            }
+          }
+          textarea {
+            height: 100%;
+            resize: none;
+          }
+        }
       }
     }
   }

@@ -32,7 +32,7 @@ export class AddPersonDialogComponent implements OnInit {
       Validators.minLength(9),
       Validators.maxLength(13)
     ]),
-    accountCode: new FormControl(this.data.item.accountCode, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
+    idno: new FormControl(this.data.item?.accountCode, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
     email: new FormControl(this.data.item.email, [Validators.required, Validators.email]),
     jobName: new FormControl(this.data.item.jobName, [Validators.required]),
     stage: new FormControl(this.data.item.stage, [Validators.required])
@@ -46,8 +46,8 @@ export class AddPersonDialogComponent implements OnInit {
     return this.addForm.get('phone') as FormControl;
   }
 
-  get accountCodeFormCtl() {
-    return this.addForm.get('accountCode') as FormControl;
+  get idnoFormCtl() {
+    return this.addForm.get('idno') as FormControl;
   }
 
   get emailFormCtl() {
@@ -76,8 +76,8 @@ export class AddPersonDialogComponent implements OnInit {
     return '手機號碼格式錯誤';
   }
 
-  getAccountCodeErrorMessage() {
-    return this.accountCodeFormCtl.getError('pattern') ? '身分證格式錯誤' : '';
+  getIdnoErrorMessage() {
+    return this.idnoFormCtl.getError('pattern') ? '身分證格式錯誤' : '';
   }
 
   getEmailErrorMessage() {
@@ -99,7 +99,9 @@ export class AddPersonDialogComponent implements OnInit {
     public store: Store,
     public dialogRef: MatDialogRef<AddPersonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ResumeDialogData,
-  ) { }
+  ) {
+    this.jobOptions = data.jobOptions;
+  }
 
   ngOnInit(): void {
     // 取回人員階段
@@ -119,8 +121,7 @@ export class AddPersonDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    const passData = Object.assign({...this.addForm.value}, this.data.item) as ResumeData;
-    this.dialogRef.close(this.isSuccess ? passData : false);
+    this.dialogRef.close(this.isSuccess ? {...this.addForm.value} : false);
   }
 }
 

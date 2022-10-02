@@ -7,16 +7,16 @@
   <form class="resume-invitation-send-add-dialog__content__form" [formGroup]="searchForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">階段</label>
-      <mat-select formControlName="level" [errorStateMatcher]="matcher">
-        <mat-option>請選擇</mat-option>
-        <ng-container *ngFor="let option of levelOptions">
-          <mat-option [value]="option.key">{{option.text}}</mat-option>
+      <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
+        <option class="default-option" label="請選擇" [value]="null">請選擇</option>
+        <ng-container *ngFor="let option of stageOptions">
+          <option [value]="option.key">{{option.text}}</option>
         </ng-container>
-      </mat-select>
+      </select>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">姓名</label>
-      <input matInput placeholder="例:王大明" formControlName="name" required [errorStateMatcher]="matcher">
+      <input matInput placeholder="例:王大明" formControlName="name" [errorStateMatcher]="matcher">
     </mat-form-field>
   </form>
   <div class="resume-invitation-send-add-dialog__content__action" align="center">
@@ -26,11 +26,12 @@
   </div>
 </div>
 <div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-around stretch" class="resume-invitation-send-add-dialog__action">
-  <div fxLayout="column" fxLayoutAlign="center start" class="resume-invitation-send-add-dialog__action__result">
+  <div fxLayout="column" fxLayoutAlign="center start" class="resume-invitation-send-add-dialog__action__result" *ngIf="personList.length > 0">
     <div class="resume-invitation-send-add-dialog__action__result__label">查詢結果</div>
-    <div class="resume-invitation-send-add-dialog__action__result__section">
-      <mat-checkbox class="resume-invitation-send-add-dialog__action__result__checkbox">黃小明</mat-checkbox>
-      <mat-checkbox class="resume-invitation-send-add-dialog__action__result__checkbox">黃小花</mat-checkbox>
+    <div class="resume-invitation-send-add-dialog__action__result__section" fxLayout="row" fxLayoutGap="24px">
+      <ng-container *ngFor="let person of personList">
+        <mat-checkbox class="resume-invitation-send-add-dialog__action__result__checkbox" [(ngModel)]="person.checked">{{person.name}}</mat-checkbox>
+      </ng-container>
     </div>
   </div>
   <div fxLayout="row" fxLayoutAlign="center center" class="resume-invitation-send-add-dialog__action__action">

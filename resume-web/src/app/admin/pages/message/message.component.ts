@@ -131,6 +131,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
 
   requestEmailData$;
   requestSmsData$;
+  isSP: boolean = false;
 
   constructor(
     public override store: Store,
@@ -174,11 +175,13 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       }
     });
     this.resizeService.onResize$.subscribe((size: ViewportSize) => {
-      console.log('ViewportSize', size);
+      console.log('ViewportSize', size, this.breakpointOption[DeviceType.Mobile]);
       if (size.width <= this.breakpointOption[DeviceType.Mobile]) {
         this.headerColspan = this.displayedColumns.length;
+        this.isSP = true;
       } else {
-        this.headerColspan = 0;
+        this.headerColspan = 1;
+        this.isSP = false;
       }
     });
   }
@@ -283,7 +286,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.subtitle = index === 0 ? '已發送的簡訊' : '儲存簡訊';
     }
     this.searchForm.reset({...this.initialValue});
-    this.headerColspan = this.displayedColumns.length;
+    this.headerColspan = this.isSP ? this.displayedColumns.length : 1;
   }
 
   search() {

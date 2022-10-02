@@ -8,10 +8,11 @@ import {
     AdminComponent,
     CompanyJobListComponent,
     ForgetComponent,
-    HomeComponent,
     ResetPasswordComponent,
     ResumeInvitationsComponent,
+    MemberManagementComponent,
     MessageComponent,
+    ResumeInvitationSendFormComponent,
 } from './pages';
 
 const routes: Routes = [
@@ -24,10 +25,11 @@ const routes: Routes = [
             { path: 'reset-password', component: ResetPasswordComponent, data: { layout: Layouts.adminLogin }, },
 
             { path: 'resume-invitation', component: ResumeInvitationsComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'resume-invitation/send-message', component: ResumeInvitationSendFormComponent, data: { layout: Layouts.adminMain }, },
             { path: 'message', redirectTo: 'message/email', pathMatch: 'full' },
             { path: 'message/:type', component: MessageComponent, data: { layout: Layouts.adminMain }, },
             { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
-            { path: 'member', component: HomeComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'member', component: MemberManagementComponent, data: { layout: Layouts.adminMain }, },
         ],
         canLoad: [AdminAuthGuard]
     },

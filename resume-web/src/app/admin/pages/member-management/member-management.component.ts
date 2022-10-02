@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-member-management',
+  selector: 'admin-member-management',
   templateUrl: './member-management.component.html',
   styleUrls: ['./member-management.component.scss']
 })

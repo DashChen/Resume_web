@@ -34,7 +34,7 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
     this.adminToken$.subscribe(token => {
       if (token) {
         this._adminToken = `${token.token_type} ${token.access_token}`;
-        this.setAuthorizationToken('user');
+        this.setAuthorizationToken('admin');
       }
     });
   }

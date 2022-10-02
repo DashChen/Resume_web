@@ -1,0 +1,61 @@
+
+
+履歷表 (query會帶入invitationCode，每個檔案資料名IsFinish為已完成和未完成的判斷)
+取得ResumeCode (*請參考5.1.6-5) {GET} api/app/resume-mains/GetListByAccountId
+	取第一筆的ID當作ResumeCode下方用到ResumeCode用此值帶入
+	
+簡訊是否開啟 (*請參考5.1.6-5) {PUT} api/app/s-mSquenes/UpdateOpenedStatus
+	id 帶入 invitationCode
+信件是否開啟 (*請參考5.1.6-5) {PUT} api/app/mail-quenes/UpdateOpenedStatus
+	id 帶入 invitationCode
+	
+取得基本資料 (*請參考5.1.6-1) {GET} api/app/base-basics/GetListByResumeCode
+更新基本資料 (*請參考5.1.6-1) {PUT} api/app/base-basics/{id}
+取得性別代碼 (*請參考5.1.6-1) {GET} api/app/share-codes/GetSexCodeList
+	NameC   中文名
+	NameE   英文名
+	IdNo    身分證號
+	SexCode 性別 M=男 F=女 
+	BirthDate 生日
+	CurrentTel 通訊電話
+	CurrentAdd 地址
+	
+取得附件 (*請參考5.1.6-1) {GET} api/app/appendices/GetListByResumeCode
+新增附件 (*請參考5.1.6-1) {POST} api/app/appendices
+	appendixName 物件或連結名稱
+	appendixType 傳入型別(1為檔案，0為連結)
+	appeenixContent 根據傳入型別，會顯示檔案ID或連結網址
+附件下載 (*請參考5.1.6-1) {GET} api/file-management/file-descriptor/download/{id}/token
+附件下載 (*請參考5.1.6-1) {GET} api/file-management/file-descriptor/download/{id}
+	先使用appeenixContent的ID呼叫
+	api/file-management/file-descriptor/download/{id}/token
+	取得Token後傳入ID和TOKEN呼叫
+	api/file-management/file-descriptor/download/{id}
+取得自傳 (*請參考5.1.6-1) {GET} api/app/autobiographies/GetListByResumeCode
+新增自傳 (*請參考5.1.6-1) {POST} api/app/autobiographies
+
+取得證照 (*請參考5.1.6-1) {GET} api/app/licenses/GetListByResumeCode
+新增證照 (*請參考5.1.6-1) {POST} api/app/licenses
+	目前證照都用字串傳入Name就好
+	
+上傳大頭貼 (*請參考5.1.6-1) {POST} api/app/register/set-profile-picture
+取得大頭貼 (*請參考5.1.6-1) {GET} api/app/register/profile-picture
+
+新增學歷 (*請參考5.1.6-1){POST} api/app/educations
+取得學歷 (*請參考5.1.6-1){Get} api/app/educations/GetListByResumeCode
+取得學歷代碼 (*請參考5.1.6-1){Get} api/app/share-codes/GetEducationCodeList
+取得畢業代碼 (*請參考5.1.6-1){Get} api/app/share-codes/GetGraduateCodeList
+	School         學校
+	EducationCode  學歷代碼
+	Major          科系名稱
+	DateA~DateD    就學期間
+	SchoolLocation 學校地區(用字串帶入就行)
+	
+新增經歷 (*請參考5.1.6-1){POST} api/app/experiences
+取得經歷 (*請參考5.1.6-1){Get} api/app/experiences/GetListByResumeCode
+	Name           公司名稱
+	JobTitle       職稱
+	DateA~DateD    在職期間
+	JobDescription 工作內容
+送出     (*請參考5.1.6-1){PUT} api/app/resume-invitations/SendResume
+	ID帶入query的invitationCode

@@ -1,0 +1,259 @@
+<div class="app-shared-member-management">
+    <div class="app-shared-member-management__basic" fxLayout="column">
+        <div class="app-shared-member-management__card__body__title">
+            <span class="h1-small-title">會員資料</span>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">姓名*</label>
+                    <input matInput placeholder="未填寫" [(ngModel)]="Name" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'Name'">
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Name'" [fxHide.lt-md]="true">
+                    <span>取消</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Name'" [fxHide.gt-sm]="true">
+                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event, 'Name')" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'Name' ? '編輯' : '儲存' }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular" (click)="editMember($event, 'Name')" [fxHide.gt-sm]="true">
+                    <mat-icon [svgIcon]="focusBtnKey === 'Name' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">身分證字號</label>
+                    <input matInput [placeholder]="focusBtnKey !== 'IdNo' ? '未填寫':'例:A123456789'" [(ngModel)]="IdNo" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'IdNo'">
+                </mat-form-field>
+
+                <!-- <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'IdNo'">
+                    <span>取消</span>
+                </button>
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event, 'IdNo')">
+                    <span>{{ focusBtnKey !== 'IdNo' ? '編輯' : '儲存' }}</span>
+                </button> -->
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">電子郵件</label>
+                    <input matInput placeholder="未填寫" [(ngModel)]="Email" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'Email'">
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
+                    [ngClass]="{'mat-button--blue': focusBtnKey !== 'Email'}" (click)="boundEmail()" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'Email' ? (bounded.email ? '解除綁定' : '綁定') : '取消' }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"
+                    (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Email'" [fxHide.gt-sm]="true">
+                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Email')" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'Email' ? '編輯' : '儲存' }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Email')" [fxHide.gt-sm]="true">
+                    <mat-icon [svgIcon]="focusBtnKey === 'Email' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
+            </div>
+
+            <div fxLayout="row" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.gt-sm]="true">
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--block mat-button--blue h2-text--regular" style="margin-top: 0;margin-bottom: 35px;" (click)="boundEmail()">
+                    <span>{{ bounded.email ? '解除綁定' : '綁定' }}電子郵件</span>
+                </button>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">手機</label>
+                    <input matInput [placeholder]="focusBtnKey === 'Phone' ? '例:0912-3456-789' : '未填寫'" [(ngModel)]="Phone" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'Phone'">
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
+                    (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Phone'" [fxHide.lt-md]="true">
+                    <span>取消</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"
+                    (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Phone'" [fxHide.gt-sm]="true">
+                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'Phone' ? '編輯' : (bounded.phone ? '解除綁定' : '儲存') }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Phone')" [fxHide.gt-sm]="true" *ngIf="!bounded.phone || focusBtnKey === ''">
+                    <mat-icon [svgIcon]="focusBtnKey === 'Phone' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.gt-sm]="true" *ngIf="focusBtnKey === 'Phone'">
+            <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--block mat-button--blue h2-text--regular" style="margin-top: 0;margin-bottom: 35px;"
+                (click)="editMember($event, 'Phone')">
+                <span>{{ bounded.phone ? '解除綁定' : '綁定' }}手機</span>
+            </button>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'Phone' && !bounded.phone">
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.lt-md]="true"></div>
+
+            <div fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxFlex="1 1 100%"
+                class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">輸入驗證碼</label>
+                    <input matInput placeholder="請輸入驗證碼" [(ngModel)]="smsCode" required [errorStateMatcher]="matcher" [disabled]="waitVerifiedSms">
+                </mat-form-field>
+
+                <div fxLayout="row" fxLayoutGap="20px" class="app-shared-member-management__card__body__field--send-sms">
+                    <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="sendSMS()" [disabled]="showCountdown || Phone.length === 0">
+                        <span>{{ showCountdown ? ('00:' + countdown) : '傳送驗證碼'  }}</span>
+                    </button>
+                    <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="verifidPhone()">
+                        <span>確定</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" floatLabel="never" appearance="fill" >
+                    <label class="mat-form-field__lable--top">生日</label>
+                    <input matInput [matDatepicker]="picker1" [(ngModel)]="Birthday" [placeholder]="focusBtnKey !== 'Birthday' ? '未填寫': '請選擇日期'" [disabled]="focusBtnKey !== 'Birthday'">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Birthday'" [fxHide.lt-md]="true">
+                    <span>取消</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'Birthday'" [fxHide.gt-sm]="true">
+                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event, 'Birthday')" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'Birthday' ? '編輯' : '儲存' }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Birthday')" [fxHide.gt-sm]="true">
+                    <mat-icon [svgIcon]="focusBtnKey === 'Birthday' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">{{focusBtnKey !== 'newPassword' ? '密碼' : '舊密碼*' }}</label>
+                    <input matInput [placeholder]="focusBtnKey !== 'newPassword' ? '未填寫' : '請輸入舊密碼'"
+                        autocomplete="nope" [(ngModel)]="password" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'newPassword'">
+                    <mat-icon [svgIcon]="showNewPassword ? 'eye-open' : 'eye-close'"
+                        aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword" *ngIf="focusBtnKey === 'newPassword'"></mat-icon>
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
+                    (click)="focusBtnKey = ''" [fxHide.lt-md]="true"  *ngIf="focusBtnKey === 'newPassword'">
+                    <span>取消</span>
+                </button>
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    (click)="changePwd()" [fxHide.lt-md]="true">
+                    <span>{{ focusBtnKey !== 'newPassword' ? '編輯' : '儲存' }}</span>
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="changePwd()" [fxHide.gt-sm]="true" *ngIf="focusBtnKey !== 'newPassword'">
+                    <mat-icon svgIcon="edit" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'newPassword'">
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.lt-md]="true"></div>
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">新密碼*</label>
+                    <input [type]="showNewPassword ? 'text' : 'password'" matInput placeholder="請輸入新密碼"
+                        autocomplete="new-password" [(ngModel)]="newPassword" required [errorStateMatcher]="matcher">
+                    <mat-icon [svgIcon]="showNewPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showNewPassword = !showNewPassword"></mat-icon>
+                </mat-form-field>
+
+                <div class="app-shared-member-management__card__body__field--empty" [fxHide.lt-md]="true"></div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'newPassword'">
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.lt-md]="true"></div>
+            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">再次輸入新密碼*</label>
+                    <input [type]="showNewConfirmPassword ? 'text' : 'password'" matInput placeholder="請再次輸入新密碼"
+                        autocomplete="new-password" [(ngModel)]="newConfirmPassword" required [errorStateMatcher]="matcher">
+                    <mat-icon [svgIcon]="showNewConfirmPassword ? 'eye-open' : 'eye-close'" aria-hidden="false" aria-label="google icon" (click)="showNewConfirmPassword = !showNewConfirmPassword"></mat-icon>
+                </mat-form-field>
+
+                <div class="app-shared-member-management__card__body__field--empty" [fxHide.lt-md]="true"></div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center" [fxHide.gt-md]="true" [fxHide.lt-md]="focusBtnKey !== 'newPassword'">
+            <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular" (click)="focusBtnKey = ''">
+                <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+            </button>
+            <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--blue mat-button--icon h2-text--regular" (click)="changePwd()">
+                <mat-icon svgIcon="check-square" aria-hidden="false" aria-label="close icon"></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="app-shared-member-management__community" *ngIf="showCommunity">
+        <div class="app-shared-member-management__card__body__title">
+            <span class="h1-small-title">第三方帳號管理</span>
+            <span class="h2-text--bold">(綁定後可以使用第三方帳號登入)</span>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" class="app-shared-member-management__card__body__column--one">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">google</label>
+                    <input matInput placeholder="未綁定" [value]="accountId" required [errorStateMatcher]="matcher" disabled>
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    ngClass.lt-md="mat-button--medium-1" (click)="boundMFA('google')">
+                    <span>{{ bounded.google ? '解除綁定' : '綁定' }}</span>
+                </button>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">LINE</label>
+                    <input matInput placeholder="未綁定" [value]="accountId" required [errorStateMatcher]="matcher" disabled>
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    ngClass.lt-md="mat-button--medium-1" (click)="boundMFA('line')">
+                    <span>{{ bounded.line ? '解除綁定' : '綁定' }}</span>
+                </button>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" class="app-shared-member-management__card__body__field--one">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                    <label class="mat-form-field__lable--top">FACEBOOK</label>
+                    <input matInput placeholder="未綁定" [value]="accountId" required [errorStateMatcher]="matcher" disabled>
+                </mat-form-field>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    ngClass.lt-md="mat-button--medium-1" (click)="boundMFA('facebook')">
+                    <span>{{ bounded.facebook ? '解除綁定' : '綁定' }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

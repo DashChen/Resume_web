@@ -28,6 +28,7 @@ import {
   ResumeInvitationsComponent,
 } from './pages';
 import { SharedModule } from '@app/shared/shared.module';
+import { MemberManagementComponent } from './pages/member-management/member-management.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { SharedModule } from '@app/shared/shared.module';
     ResumeInvitationSendAddDialogComponent,
     ResumeInvitationImportDialogComponent,
     ResumeInvitationsComponent,
+    MemberManagementComponent,
   ],
   imports: [
     BrowserAnimationsModule,

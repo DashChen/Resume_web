@@ -67,7 +67,11 @@ export class AdminEffects {
                 map(res => {
                     console.log('getUserEffect', res);
                     this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
-                    this.store.dispatch(RouterActions.Go({ path: ['/admin/company-job']}));
+                    let url = sessionStorage.getItem('currentUrl');
+                    if (!url || url === '/admin/login') {
+                        url = '/admin/company-job';
+                    }
+                    this.store.dispatch(RouterActions.Go({ path: [url]}));
                     return AdminActions.getUserSuccess({ payload: res.data });
                 }),
                 catchError(error => of(AdminActions.getUserFail({ payload: error }))),

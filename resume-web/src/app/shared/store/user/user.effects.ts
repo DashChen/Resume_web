@@ -67,7 +67,11 @@ export class UserEffects {
                 map(res => {
                     console.log('getUserEffect', res);
                     this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
-                    this.store.dispatch(RouterActions.Go({ path: ['/user/member-management']}));
+                    let url = sessionStorage.getItem('currentUrl');
+                    if (!url || url === '/login') {
+                        url = '/user/member-management';
+                    }
+                    this.store.dispatch(RouterActions.Go({ path: [url]}));
                     return UserActions.getUserSuccess({ payload: res.data });
                 }),
                 catchError(error => of(UserActions.getUserFail({ payload: error }))),

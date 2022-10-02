@@ -2,7 +2,7 @@
   <div class="admin-resume-invitation-send-form__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
     <div fxFlex fxLayout="column" fxLayoutGap="12px">
       <div class="admin-resume-invitation-send-form__head__title__back" (click)="showSendMsg(false)">
-        <mat-icon svgIcon="edit"></mat-icon>
+        <mat-icon svgIcon="arrow-left"></mat-icon>
         <span class="h2-text--bold">返回</span>
       </div>
       <div class="admin-resume-invitation-send-form__head__title__main h1-large-title">
@@ -21,46 +21,54 @@
           <div class="h2-text--medium">收件者</div>
           <div fxLayout="row" fxLayoutAlign="space-between center">
             <div fxLayout="row" fxLayoutGap="18px">
-              <ng-container></ng-container>
+              <ng-container *ngFor="let person of selectedPerson; let index = index">
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center" class="admin-resume-invitation-send-form__person-tag">
+                  <span class="h2-text--medium">{{person.name}}</span>
+                  <mat-icon svgIcon="close-icon" (click)="removeSelectedPerson(index, person)"></mat-icon>
+                </div>
+              </ng-container>
             </div>
             <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
-              <span>新增人員</span>
+              <span>選擇人員</span>
             </button>
           </div>
         </div>
         <div fxLayout="row" fxLayoutGap="38px">
           <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
             <label class="mat-form-field__lable--top">信件樣板</label>
-            <mat-select formControlName="level" [errorStateMatcher]="matcher">
-              <mat-option>請選擇</mat-option>
-              <ng-container *ngFor="let option of levelOptions">
-                <mat-option [value]="option.key">{{option.text}}</mat-option>
+            <select matNativeControl formControlName="mailTpl" [errorStateMatcher]="matcher">
+              <option class="default-option" label="請選擇" [ngValue]="null"></option>
+              <ng-container *ngFor="let option of mailOptions">
+                <option [value]="option.key">{{option.text}}</option>
               </ng-container>
-            </mat-select>
+            </select>
           </mat-form-field>
           <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
             <label class="mat-form-field__lable--top">簡訊樣板</label>
-            <mat-select formControlName="level" [errorStateMatcher]="matcher">
-              <mat-option>請選擇</mat-option>
-              <ng-container *ngFor="let option of levelOptions">
-                <mat-option [value]="option.key">{{option.text}}</mat-option>
+            <select matNativeControl formControlName="smsTpl" [errorStateMatcher]="matcher">
+              <option class="default-option" label="請選擇" [ngValue]="null"></option>
+              <ng-container *ngFor="let option of smsOptions">
+                <option [value]="option.key">{{option.text}}</option>
               </ng-container>
-            </mat-select>
+            </select>
           </mat-form-field>
         </div>
         <div>
           <div class="h2-text--medium">信件簡訊發送日期</div>
           <div>
-            <mat-radio-group aria-label="Select an option">
-              <mat-radio-button class="admin-resume-invitation-send-form__card__form__radio" value="1">立即發送</mat-radio-button>
-              <mat-radio-button value="2">
-                <span>選擇日期</span>
-                <mat-form-field class="mat-form-field__block mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker" floatLabel="never" appearance="fill">
-                  <input matInput [matDatepicker]="picker1" formControlName="date1" placeholder="請選擇日期">
-                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
+            <mat-radio-group aria-label="Select an option" formControlName="sendDateType">
+              <mat-radio-button class="admin-resume-invitation-send-form__card__form__radio" [value]="'none'">
+                <span>立即發送</span>
               </mat-radio-button>
+              <mat-radio-button [value]="'design'">
+                <span>選擇日期</span>
+              </mat-radio-button>
+              <mat-form-field class="mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker"
+                floatLabel="never" appearance="fill" >
+                <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
             </mat-radio-group>
           </div>
         </div>
@@ -95,18 +103,8 @@
                 </div>
                 <div>
                   <div class="h2-text--medium">信件內容</div>
-                  <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
-                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">
-  您好，麻煩在2021/3/15前完成相關填寫事項，謝謝！如有任何疑問請洽人資
-
-
-  hyyps://jbjob-my.sharepoint.com/:x:/rpen
-
-
-  人事單位
-  姓名:王大明
-  電話:03-3554436#111
-                    </textarea>
+                  <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" appearance="fill">
+                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -115,18 +113,8 @@
               <div fxLayout="column" fxLayoutGap="38px" class="admin-resume-invitation-send-form__card__tab-body-content">
                 <div>
                   <div class="h2-text--medium">簡訊內容</div>
-                  <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
-                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">
-  您好，麻煩在2021/3/15前完成相關填寫事項，謝謝！如有任何疑問請洽人資
-
-
-  hyyps://jbjob-my.sharepoint.com/:x:/rpen
-
-
-  人事單位
-  姓名:王大明
-  電話:03-3554436#111
-                    </textarea>
+                  <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" floatLabel="never" appearance="fill">
+                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
                   </mat-form-field>
                 </div>
               </div>

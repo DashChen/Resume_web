@@ -6,6 +6,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { InputCountryMobileComponent } from './input-country-mobile/input-country-mobile.component';
 import { MenuPanelComponent } from './menu-panel/menu-panel.component';
+import { MemberManagementComponent } from './member-management/member-management.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,15 +15,19 @@ import { MenuPanelComponent } from './menu-panel/menu-panel.component';
         PageTitleComponent,
         InputCountryMobileComponent,
         MenuPanelComponent,
+        MemberManagementComponent,
     ],
     exports: [
         PageTitleComponent,
         InputCountryMobileComponent,
         MenuPanelComponent,
+        MemberManagementComponent,
     ],
     imports: [
         CommonModule,
         RouterModule.forChild([]),
+        FormsModule,
+        ReactiveFormsModule,
         MaterialModule,
         FlexLayoutModule,
     ],

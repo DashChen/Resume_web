@@ -1,12 +1,8 @@
 mat-checkbox {
-    height: 15px;
-    width: 15px;
     position: relative;
 
     ::ng-deep .mat-checkbox-layout {
-        inset: 0;
         height: 100%;
-        position: absolute;
         width: 100%;
         .mat-checkbox-inner-container {
             height: 15px;
