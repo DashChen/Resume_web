@@ -130,7 +130,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         this.headerColspan = 1;
       }
     });
-    this.store.dispatch(CommonActions.getStageList());
+    // 階段
     this.stageTpls$.pipe(
       filter(res => !!res),
       take(1),
@@ -140,8 +140,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       this.stageList = list || [];
       this.stageOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
     });
-
-    this.store.dispatch(CommonActions.getWriteStatus());
+    // 寫入狀態
     this.writeStatusTpls$.pipe(
       filter(res => !!res),
       take(1),

@@ -70,21 +70,9 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
     private resumeInvitationService: ResumeInvitationService,
   ) {
     super(store, dialog);
-    this.stageTpls$.pipe(
-      filter(res => !!res),
-      take(1),
-      takeUntil(this.destroy$)
-    ).subscribe(list => {
-      console.log('getStageList', list);
-      this.stageList = list || [];
-      this.stageOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
-    });
   }
 
   ngOnInit(): void {
-    // 取回信件樣板、簡訊樣板
-    this.store.dispatch(CommonActions.getSmsTpl());
-    this.store.dispatch(CommonActions.getMailTpl());
     this.mailTpls$.subscribe(list => {
       this.mailList = list || [];
       this.mailOptions = this.mailList.map(item => {
@@ -102,6 +90,15 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
           key: item.code,
         } as ISelectOption;
       });
+    });
+    this.stageTpls$.pipe(
+      filter(res => Array.isArray(res) && res.length > 0),
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(list => {
+      console.log('getStageList', list);
+      this.stageList = list || [];
+      this.stageOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
     });
   }
 

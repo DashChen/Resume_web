@@ -6,8 +6,15 @@ $this: '.app-member-management';
     height: 100%;
     width: 100%;
     #{$this} {
-        margin-bottom: 24px;
+        background-color: #F4F9FD;
+        min-height: calc(100vh - 64px - 40px);
         padding: 24px 40px 0;
+
+        @include lt-md {
+            margin-bottom: 16px;
+            padding: 16px 24px 0;
+        }
+
         &__head {
             &__block {
 

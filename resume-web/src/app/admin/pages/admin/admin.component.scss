@@ -1,18 +1,7 @@
 @import 'public-mixin';
 
+$this: '.admin-admin';
 :host {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
+  height: auto;
   width: 100%;
-  @include lt-md {
-    align-items: flex-start;
-    height: auto;
-  }
-
-  $this: '.admin-admin';
-  #{$this} {
-    //
-  }
 }

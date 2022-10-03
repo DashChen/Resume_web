@@ -67,6 +67,11 @@ export class AdminEffects {
                 map(res => {
                     console.log('getUserEffect', res);
                     this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
+                    // 取回信件樣板、簡訊樣板、階段、寫入狀態
+                    this.store.dispatch(CommonActions.getSmsTpl());
+                    this.store.dispatch(CommonActions.getMailTpl());
+                    this.store.dispatch(CommonActions.getStageList());
+                    this.store.dispatch(CommonActions.getWriteStatus());
                     let url = sessionStorage.getItem('currentUrl');
                     if (!url || url === '/admin/login') {
                         url = '/admin/company-job';

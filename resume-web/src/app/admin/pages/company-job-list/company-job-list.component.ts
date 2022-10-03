@@ -118,9 +118,6 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
   }
 
   ngOnInit(): void {
-    // 取回信件樣板、簡訊樣板
-    this.store.dispatch(CommonActions.getSmsTpl());
-    this.store.dispatch(CommonActions.getMailTpl());
     this.mailTpls$.subscribe(list => {
       this.mailList = list || [];
     });

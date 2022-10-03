@@ -17,23 +17,22 @@
   <div class="admin-resume-invitation-send-form__card">
     <form class="admin-resume-invitation-send-form__card__form" [formGroup]="editForm">
       <div fxLayout="column" fxLayoutGap="38px">
-        <div>
+        <div fxLayout="column" fxLayoutGap="4px">
           <div class="h2-text--medium">收件者</div>
-          <div fxLayout="row" fxLayoutAlign="space-between center">
-            <div fxLayout="row" fxLayoutGap="18px">
-              <ng-container *ngFor="let person of selectedPerson; let index = index">
-                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center" class="admin-resume-invitation-send-form__person-tag">
-                  <span class="h2-text--medium">{{person.name}}</span>
-                  <mat-icon svgIcon="close-icon" (click)="removeSelectedPerson(index, person)"></mat-icon>
-                </div>
-              </ng-container>
-            </div>
-            <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="addReceiver()">
+          <div fxLayout="row wrap" fxLayoutGap="18px" fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="flex-start center" fxLayoutGap.lt-md="0px"
+            class="admin-resume-invitation-send-form__tags">
+            <ng-container *ngFor="let person of selectedPerson; let index = index">
+              <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between center" class="admin-resume-invitation-send-form__person-tag">
+                <span class="h2-text--medium">{{person.name}}</span>
+                <mat-icon svgIcon="close-icon" (click)="removeSelectedPerson(index, person)"></mat-icon>
+              </div>
+            </ng-container>
+            <button mat-raised-button class="mat-button--blue h2-text--regular" [ngClass.lt-md]="['mat-button--medium']" (click)="addReceiver()">
               <span>選擇人員</span>
             </button>
           </div>
         </div>
-        <div fxLayout="row" fxLayoutGap="38px">
+        <div fxLayout="row" fxLayoutGap="38px" fxLayout.lt-md="column" fxLayoutGap.lt-md="35px">
           <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
             <label class="mat-form-field__lable--top">信件樣板</label>
             <select matNativeControl formControlName="mailTpl" [errorStateMatcher]="matcher">
@@ -53,29 +52,31 @@
             </select>
           </mat-form-field>
         </div>
-        <div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px" fxLayoutAlign.lt-md="center flex-start">
           <div class="h2-text--medium">信件簡訊發送日期</div>
-          <div>
-            <mat-radio-group aria-label="Select an option" formControlName="sendDateType">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px">
+            <mat-radio-group aria-label="Select an option" formControlName="sendDateType" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px">
               <mat-radio-button class="admin-resume-invitation-send-form__card__form__radio" [value]="'none'">
                 <span>立即發送</span>
               </mat-radio-button>
-              <mat-radio-button [value]="'design'">
-                <span>選擇日期</span>
-              </mat-radio-button>
-              <mat-form-field class="mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker"
-                floatLabel="never" appearance="fill" >
-                <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
+              <div fxLayout.lt-md="row" fxLayoutGap.lt-md="15px" fxLayoutAlign.lt-md="flex-start center">
+                <mat-radio-button [value]="'design'">
+                  <span>選擇日期</span>
+                </mat-radio-button>
+                <mat-form-field class="mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker"
+                  floatLabel="never" appearance="fill" >
+                  <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'">
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
             </mat-radio-group>
           </div>
         </div>
 
-        <div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="4px">
           <div class="h2-text--medium">網址填寫期限</div>
-          <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px" fxLayoutAlign.lt-md="center flex-start">
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
               <input matInput [matDatepicker]="picker2" formControlName="date2" placeholder="請選擇日期">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -127,10 +128,12 @@
   </div>
 
   <div fxLayout="row" fxLayoutAlign="flex-end center" fxLayoutGap="18px" class="admin-resume-invitation-send-form__action">
-    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn h2-text--regular" (click)="cancelSend()">
+    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn h2-text--regular"
+      [ngClass.lt-md]="['mat-button--medium']" (click)="cancelSend()">
       <span>取消</span>
     </button>
-    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn mat-button--blue h2-text--regular" (click)="sendMessage()">
+    <button mat-raised-button class="admin-resume-invitation-send-form__head__btn mat-button--blue h2-text--regular"
+      [ngClass.lt-md]="['mat-button--medium']" (click)="sendMessage()">
       <span>確定</span>
     </button>
   </div>

@@ -11,6 +11,10 @@ $this: '.admin-resume-invitation-send-form';
     min-height: calc(100vh - 64px - 40px);
     padding: 24px 40px;
 
+    @include lt-md {
+      padding: 16px 24px;
+    }
+
     &__head {
       &__title {
         &__back {
@@ -36,15 +40,30 @@ $this: '.admin-resume-invitation-send-form';
         }
         &__datepicker {
           padding-left: 8px;
+          @include lt-md {
+            padding-left: 0;
+            ::ng-deep .mat-form-field-infix {
+              width: auto;
+            }
+          }
         }
         &__to {
           padding-right: 14px;
           padding-left: 14px;
+          @include lt-md {
+            padding-left: 0;
+          }
         }
       }
 
       &__tab-body-content {
         padding-top: 36px;
+      }
+    }
+
+    &__tags {
+      @include lt-md {
+        gap: 12px 18px;
       }
     }
 
@@ -54,6 +73,7 @@ $this: '.admin-resume-invitation-send-form';
         border-radius: 5px;
         box-shadow: 0px 4px 10px rgba(24, 135, 114, 0.2);
         color: #FFFFFF;
+        flex-shrink: 0;
         padding: 12.5px 20px;
         height: 50px;
         width: 150px;
@@ -61,6 +81,10 @@ $this: '.admin-resume-invitation-send-form';
           cursor: pointer;
           height: 14px;
           width: 14px;
+        }
+
+        @include lt-md {
+          width: 120px;
         }
       }
     }
