@@ -1,0 +1,45 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="admin-resume-invitation-search-dialog__head" mat-dialog-title>
+    <div class="admin-resume-invitation-search-dialog__head__title h1-title text-second">{{data.title}}</div>
+    <mat-icon mat-dialog-close svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+</div>
+<mat-dialog-content class="admin-resume-invitation-search-dialog__content">
+    <form fxFlex fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="35px"
+        class="admin-resume-invitation-search-dialog__search__conditions" [formGroup]="searchForm">
+        <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
+            <label class="mat-form-field__lable--top">填寫狀態</label>
+            <select matNativeControl formControlName="WriteStatus" [errorStateMatcher]="matcher">
+              <option class="default-option" label="請選擇" [value]="null">請選擇</option>
+              <ng-container *ngFor="let option of writeStatusOptions">
+                <option [value]="option.key">{{option.text}}</option>
+              </ng-container>
+            </select>
+        </mat-form-field>
+        <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
+            <label class="mat-form-field__lable--top">階段</label>
+            <select matNativeControl formControlName="Stage" [errorStateMatcher]="matcher">
+              <option class="default-option" label="請選擇" [ngValue]="null" >請選擇</option>
+              <ng-container *ngFor="let option of stageOptions">
+                <option [value]="option.key">{{option.text}}</option>
+              </ng-container>
+            </select>
+        </mat-form-field>
+        <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
+          <label class="mat-form-field__lable--top">姓名</label>
+          <input matInput placeholder="例:王大明" formControlName="Name" required [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field fxFlex class="mat-form-field--hide-error" appearance="fill">
+          <label class="mat-form-field__lable--top">職缺</label>
+          <select matNativeControl formControlName="JobName" [errorStateMatcher]="matcher">
+            <option class="default-option" label="請選擇" [value]="null">請選擇</option>
+            <ng-container *ngFor="let option of jobOptions">
+              <option [value]="option.key">{{option.text}}</option>
+            </ng-container>
+          </select>
+        </mat-form-field>
+      </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="admin-resume-invitation-search-dialog__action">
+    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+        <span>{{data.successBtnText}}</span>
+    </button>
+</mat-dialog-actions>

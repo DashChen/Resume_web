@@ -14,6 +14,7 @@ export * from './reset-password/reset-password.component';
 export * from './resume-invitations/dialogs/resume-invitation-delete-dialog/resume-invitation-delete-dialog.component';
 export * from './resume-invitations/dialogs/resume-invitation-import-dialog/resume-invitation-import-dialog.component';
 export * from './resume-invitations/components/resume-invitation-list/resume-invitation-list.component';
+export * from './resume-invitations/dialogs/resume-invitation-search-dialog/resume-invitation-search-dialog.component';
 export * from './resume-invitations/dialogs/resume-invitation-send-add-dialog/resume-invitation-send-add-dialog.component';
 export * from './resume-invitations/components/resume-invitation-send-form/resume-invitation-send-form.component';
 export * from './resume-invitations/dialogs/resume-invitation-stage-dialog/resume-invitation-stage-dialog.component';

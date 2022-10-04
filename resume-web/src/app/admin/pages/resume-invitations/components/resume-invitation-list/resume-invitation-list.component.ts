@@ -24,10 +24,18 @@ import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 import { identity, pickBy } from 'lodash';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { ResumeInvitationImportDialogComponent } from '@app/admin';
+import { MediaObserver } from '@angular/flex-layout';
+import { ResumeInvitationSearchDialogComponent } from '../../dialogs/resume-invitation-search-dialog/resume-invitation-search-dialog.component';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeResumeInvitationsResumeInvitationDto;
   jobOptions: ISelectOption[];
+}
+
+export interface ResumeSearchDialogData extends basicDialog {
+  stageOptions: ISelectOption[];
+  jobOptions: ISelectOption[];
+  writeStatusOptions: ISelectOption[];
 }
 
 @Component({
@@ -70,6 +78,9 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   disabledDelBtn: boolean = true;
 
+  // 使否響應小版(Figma 上的SP)
+  isSP: boolean = false;
+
   // ---- SnackBar ----
   configSuccess: MatSnackBarConfig = {
     panelClass: 'success-snackbar',
@@ -103,9 +114,18 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     public snackBar: MatSnackBar,
     private dataService: DataService<ApiConfig>,
     private resizeService: ResizeService,
+    public mediaObserver: MediaObserver,
     @Inject(BREAK_POINT_OPTION_TOKEN) public breakpointOption: BreakPointType,
   ) {
     super(store, dialog);
+    mediaObserver.asObservable().subscribe(res => {
+      console.log('mediaObserver', res);
+      res.forEach(mediaChange => {
+        if (mediaChange.mqAlias === 'lt-md' && mediaChange.matches) {
+          this.isSP = true;
+        }
+      })
+    });
     // 取得履歷列表
     this.fetchResumes();
     // 取得職缺管理
@@ -132,8 +152,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     });
     // 階段
     this.stageTpls$.pipe(
-      filter(res => !!res),
-      take(1),
+      filter(res => Array.isArray(res) && res.length > 0),
       takeUntil(this.destroy$)
     ).subscribe(list => {
       console.log('getStageList', list);
@@ -142,8 +161,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     });
     // 寫入狀態
     this.writeStatusTpls$.pipe(
-      filter(res => !!res),
-      take(1),
+      filter(res => Array.isArray(res) && res.length > 0),
       takeUntil(this.destroy$)
     ).subscribe(list => {
       console.log('getWriteStatus', list);
@@ -336,8 +354,33 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   search(event: MouseEvent) {
     event.preventDefault();
-    const query = pickBy(this.searchForm.value, identity);
-    this.fetchResumes(query);
+    if (this.isSP) {
+      this.dialogConfig.title = '人員搜尋';
+      this.dialogConfig.showSuccessBtn = true;
+      this.dialogConfig.successBtnText = '查詢';
+      const dialogRef = this.dialog.open(ResumeInvitationSearchDialogComponent, {
+        height: '617px',
+        width: '567px',
+        maxWidth: 'calc(100vw - 48px)',
+        maxHeight: '85vh',
+        data: {
+          ...this.dialogConfig,
+          stageOptions: this.stageOptions,
+          jobOptions: this.jobOptions,
+          writeStatusOptions: this.writeStatusOptions,
+        }
+      });
+      dialogRef.afterClosed().subscribe(
+        res => {
+          console.log(res);
+          const query = pickBy(res, identity);
+          this.fetchResumes(query);
+        }
+      );
+    } else {
+      const query = pickBy(this.searchForm.value, identity);
+      this.fetchResumes(query);
+    }
   }
 
   showSendMsg(show: boolean) {

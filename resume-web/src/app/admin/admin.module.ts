@@ -24,6 +24,7 @@ import {
   ResumeInvitationListComponent,
   ResumeInvitationStageDialogComponent,
   ResumeInvitationDeleteDialogComponent,
+  ResumeInvitationSearchDialogComponent,
   ResumeInvitationSendFormComponent,
   ResumeInvitationSendAddDialogComponent,
   ResumeInvitationImportDialogComponent,
@@ -52,6 +53,7 @@ import {
     ResumeInvitationImportDialogComponent,
     ResumeInvitationsComponent,
     MemberManagementComponent,
+    ResumeInvitationSearchDialogComponent,
   ],
   imports: [
     BrowserAnimationsModule,
