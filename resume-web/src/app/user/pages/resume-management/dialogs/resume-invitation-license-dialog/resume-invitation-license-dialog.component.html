@@ -1,1 +1,36 @@
-<p>resume-invitation-license-dialog works!</p>
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="resume-invitation-license-dialog__head">
+  <div class="resume-invitation-license-dialog__title h1-title">{{ data.title }}</div>
+  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+</div>
+<div mat-dialog-content class="resume-invitation-license-dialog__content">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-license-dialog__content__form">
+    <mat-form-field>
+      <label class="mat-form-field__lable--top">證照名稱</label>
+      <mat-select [formControl]="licensesControl" multiple>
+        <mat-select-trigger>
+          <mat-chip-list>
+            <mat-chip *ngFor="let license of licensesControl.value" [removable]="true" (removed)="onLicenseRemoved(license)">
+              {{ license }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+        </mat-select-trigger>
+        <mat-option *ngFor="let license of licenseList" [value]="license">{{ license }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="mat-form-field__block mat-form-field__block--textarea" appearance="fill">
+      <label class="mat-form-field__lable--top">其他證照</label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-license-dialog__action">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+    <span>{{ data.cancelBtnText }}</span>
+  </button>
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+    <span>{{ data.successBtnText }}</span>
+  </button>
+</div>

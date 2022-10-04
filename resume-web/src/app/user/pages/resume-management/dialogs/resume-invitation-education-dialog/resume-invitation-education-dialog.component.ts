@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-resume-invitation-education-dialog',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResumeInvitationEducationDialogComponent implements OnInit {
 
-  constructor() { }
+  isSuccess: boolean = false;
+
+  constructor(
+    public dialogRef: MatDialogRef<ResumeInvitationEducationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  confirm() {
+    this.isSuccess = true;
+    this.closeDialog();
+  }
+
+  closeDialog() {
+    this.dialogRef.close(this.isSuccess ? true : false);
   }
 
 }

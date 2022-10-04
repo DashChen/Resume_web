@@ -122,7 +122,10 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationBasicDialogComponent, {
+      height: '833px',
       width: '614px',
+      maxWidth: '100%',
+      maxHeight: '85vh',
       // panelClass: '',
       data: dialogConfig,
     });
@@ -166,7 +169,10 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationEducationDialogComponent, {
+      height: '833px',
       width: '614px',
+      maxWidth: '100%',
+      maxHeight: '85vh',
       // panelClass: '',
       data: dialogConfig,
     });
@@ -211,6 +217,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     };
     const dialogRef = this.dialog.open(ResumeInvitationLicenseDialogComponent, {
       width: '614px',
+      maxWidth: '100%',
       // panelClass: '',
       data: dialogConfig,
     });
