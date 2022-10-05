@@ -42,6 +42,12 @@
         .mat-radio-button ~ .mat-radio-button {
           margin-left: 16px;
         }
+
+        ::ng-deep .mat-form-field-flex {
+          .mat-form-field-infix:has(mat-select) {
+            width: unset;
+          }
+        }
       }
     }
 
