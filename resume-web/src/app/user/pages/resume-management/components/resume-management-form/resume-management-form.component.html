@@ -11,9 +11,8 @@
     <div class="app-resume-management-form__head__action__block" fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
       <div fxLayout="row" fxFlex fxLayoutAlign="space-between center">
         <div fxLayoutGap="20px">
-          <mat-form-field fxFlex appearance="fill">
-            <mat-select>
-              <mat-option>請選擇職缺</mat-option>
+          <mat-form-field fxFlex appearance="fill" floatLabel="never">
+            <mat-select placeholder="請選擇職缺">
               <ng-container *ngFor="let option of jobOptions">
                 <mat-option [value]="option.key">{{option.text}}</mat-option>
               </ng-container>

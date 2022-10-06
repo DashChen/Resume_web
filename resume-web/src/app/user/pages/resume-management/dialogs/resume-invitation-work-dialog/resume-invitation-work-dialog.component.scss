@@ -1,0 +1,54 @@
+@import 'public-mixin';
+
+:host {
+  $this: '.resume-invitation-work-dialog';
+
+  #{$this} {
+    &__head {
+      border-bottom: 1px solid #C5D0DF;
+      margin-bottom: 0;
+      padding: 8.5px 24px;
+
+      mat-icon {
+        color: $colorSecond;
+        cursor: pointer;
+        width: 17px;
+      }
+    }
+
+    &__content {
+      max-height: calc(100% - 51px - 130px);
+      overflow: hidden;
+      overflow-y: auto;
+      margin: 0;
+      padding-top: 40px;
+      padding-bottom: calc(40px - 1.34375em);
+      padding-right: 24px;
+      padding-left: 24px;
+
+      &__form {
+        mat-form-field:first-child {
+          padding-top: 23px;
+        }
+
+        mat-form-field:last-child {
+          margin-bottom: 0;
+        }
+
+        .default-option {
+          color: $colorLight;
+        }
+
+        ::ng-deep .mat-form-field-flex:has(textarea) {
+          height: unset;
+        }
+      }
+    }
+
+    &__action {
+      padding: 0 0 40px;
+      min-height: unset;
+      margin-bottom: unset;
+    }
+  }
+}
