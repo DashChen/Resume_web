@@ -140,4 +140,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
       data: this.dialogConfig
     });
   }
+
+  goTo(event: MouseEvent, path: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('goTo', path);
+    this.store.dispatch(RouterActions.Go({ path: [path]}));
+  }
 }

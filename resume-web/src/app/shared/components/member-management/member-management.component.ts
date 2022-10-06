@@ -9,6 +9,9 @@ import { BaseComponent } from '../base.component';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Actions as CommonActions } from '@app/shared/store/common';
 import { MediaObserver } from '@angular/flex-layout';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-shared-member-management',
@@ -22,14 +25,102 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   currentUser$ = this.store.select(selectCurrentUser);
   user: ResumeUserDatasUserDto | null | undefined;
 
-  Name: string = '';
-  IdNo: string = '';
-  Birthday: string = '';
-  Phone: string = '';
-  Email: string = '';
-  password: string = '';
-  newPassword: string = '';
-  newConfirmPassword: string = '';
+  nameForm: FormGroup = new FormGroup({
+    Name: new FormControl('', [Validators.pattern('[\\W]+')]),
+  });
+
+  get nameFormCtl() {
+    return this.nameForm.get('Name') as FormControl;
+  }
+
+  getNameErrorMessage() {
+    return this.nameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+  }
+
+
+  idNoForm: FormGroup = new FormGroup({
+    IdNo: new FormControl('', [Validators.pattern('[A-Z][0-9]{9}')]),
+  });
+
+  get idNoFormCtl() {
+    return this.idNoForm.get('IdNo') as FormControl;
+  }
+
+  getIdNoErrorMessage() {
+    return this.idNoFormCtl.hasError('pattern') ? '格式不正確，例:A123456789' : '';
+  }
+
+  birthdayForm: FormGroup = new FormGroup({
+    Birthday: new FormControl(''),
+  });
+
+  get birthdayFormCtl() {
+    return this.birthdayForm.get('Birthday') as FormControl;
+  }
+
+  minDate = DateTime.now().plus({year: -80}).toLocal();
+  maxDate = DateTime.now().toLocal();
+
+  phoneForm: FormGroup = new FormGroup({
+    Phone: new FormControl('', [
+      Validators.pattern('^[0-9]*$'),
+      Validators.minLength(9),
+      Validators.maxLength(13)
+    ]),
+  });
+
+  get phoneFormCtl() {
+    return this.phoneForm.get('Phone') as FormControl;
+  }
+
+  getMobileErrorMessage() {
+    return '手機號碼格式錯誤';
+  }
+
+  emailForm: FormGroup = new FormGroup({
+    Email: new FormControl('', [Validators.email]),
+  });
+
+  get emailFormCtl() {
+    return this.emailForm.get('Email') as FormControl;
+  }
+
+  getEmailErrorMessage() {
+    return this.emailFormCtl.hasError('email') ? '格式不正確，例:WaDaMing@gmail.com' : '';
+  }
+
+  passwordForm: FormGroup = new FormGroup({
+    password: new FormControl('********'),
+  });
+
+  get passwordFormCtl() {
+    return this.passwordForm.get('password') as FormControl;
+  }
+
+  newPasswordForm: FormGroup = new FormGroup({
+    newPassword: new FormControl('', [Validators.minLength(8), createPasswordStrengthValidator()]),
+    newConfirmPassword: new FormControl('', [Validators.required, MatchValidator('newPassword', 'newConfirmPassword')]),
+  });
+
+  get newPasswordFormCtl() {
+    return this.newPasswordForm.get('newPassword') as FormControl;
+  }
+
+  getNewPasswordErrorMessage() {
+    return this.newPasswordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
+  }
+
+  get newConfirmPasswordFormCtl() {
+    return this.newPasswordForm.get('newConfirmPassword') as FormControl;
+  }
+
+  getConfirmPwdErrorMessage() {
+    return this.newConfirmPasswordFormCtl.hasError('mismatch') ? '密碼輸入不正確' : '';
+  }
+
+
+
+  defaultPassword: string = '********';;
   hasPwd: boolean = true;
 
   // 三方登入用
@@ -92,25 +183,25 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         // console.log(err);
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
-      finalize(() => { this.requestData$.unsubscribe() }),
+      finalize(() => {
+        this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
+        this.requestData$.unsubscribe()
+      }),
       takeUntil(this.destroy$),
     ).subscribe(
       res => {
         console.log(res);
-        this.Name = res.data.name || '';
-        this.IdNo = res.data.idNo || '';
-        this.Phone = res.data.phone || '';
-        this.Email = res.data.email || '';
-        this.Birthday = res.data.birthDay || '';
+        this.user = res.data;
+        this.nameFormCtl.setValue(res.data.name || '');
+        this.idNoFormCtl.setValue(res.data.idNo || '');
+        this.phoneFormCtl.setValue(res.data.phone || '');
+        this.emailFormCtl.setValue(res.data.email || '');
+        this.birthdayFormCtl.setValue(res.data.birthDay || '');
       },
       err => {
         console.log(err);
       }
     );
-    this.currentUser$.subscribe(user => {
-      this.user = user;
-      this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
-    });
   }
 
   editMember(event: MouseEvent, type: string) {
@@ -122,27 +213,21 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       let requestApi ;
       switch (type) {
         case 'Name':
-          requestApi = this.dataService.api.appUserDatasUpdateNameUpdate({
-            Name: this.Name
-          },{
+          requestApi = this.dataService.api.appUserDatasUpdateNameUpdate(this.nameForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
             }
           });
           break;
         case 'Birthday':
-          requestApi = this.dataService.api.appUserDatasUpdateBirthdayUpdate({
-            Birthday: this.Birthday
-          },{
+          requestApi = this.dataService.api.appUserDatasUpdateBirthdayUpdate(this.birthdayForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
             }
           });
           break;
         case 'Email':
-          requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate({
-            Email: this.Email
-          },{
+          requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
             }
@@ -152,9 +237,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           if (this.bounded.phone) {
             this.cancelboundMobile();
           } else {
-            requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate({
-              Phone: this.Phone
-            },{
+            requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate(this.phoneForm.value,{
               headers: {
                 ...this.dataService.getAuthorizationToken(this.authorizeType)
               }
@@ -185,9 +268,27 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     }
   }
 
+  cancelEdit(event: MouseEvent, type: string) {
+    this.focusBtnKey = '';
+    switch (type) {
+      case 'Name':
+        this.nameFormCtl.setValue(this.user?.name || '');
+        break;
+      case 'Birthday':
+        this.birthdayFormCtl.setValue(this.user?.birthDay || '');
+        break;
+      case 'Email':
+        this.emailFormCtl.setValue(this.user?.email || '');
+        break;
+      case 'Phone':
+        this.phoneFormCtl.setValue(this.user?.phone || '');
+        break;
+    }
+  }
+
   cancelboundMobile() {
     console.log('cancelboundMobile');
-    const subtitle = `按下確認後即解除${this.Phone}此手機號碼，請問是否解除?`;
+    const subtitle = `按下確認後即解除${this.phoneFormCtl.value}此手機號碼，請問是否解除?`;
     const dialogRef = this.errDialog('解除綁定', subtitle, '確認', '取消');
     dialogRef.afterClosed().subscribe(
       (res) => {
@@ -206,9 +307,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       this.focusBtnKey = '';
     } else if (this.focusBtnKey === '' && !this.isSP && !this.bounded.email) {
       // TODO 綁定信箱
-      const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate({
-        Email: this.Email
-      },{
+      const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailFormCtl.value,{
         headers: {
           ...this.dataService.getAuthorizationToken(this.authorizeType)
         }
@@ -230,7 +329,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         }
       )
     } else if (this.focusBtnKey === '' && !this.isSP && this.bounded.email) {
-      const subtitle = `按下確認後即解除${this.Email}此電子郵件，請問是否解除?`;
+      const subtitle = `按下確認後即解除${this.emailFormCtl.value}此電子郵件，請問是否解除?`;
       const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
       dialogRef.afterClosed().subscribe((res) => {
         console.log(res);
@@ -244,9 +343,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
 
   // 傳送驗證碼
   sendSMS() {
-    const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
-      Phone: this.Phone
-    }))
+    const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate(this.phoneForm.value))
     .pipe(
       catchError((err: HttpErrorResponse) => {
         // console.log(err);
@@ -280,7 +377,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   verifidPhone() {
     this.waitVerifiedSms = true;
     const requestHttp$ = from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
-      Phone: this.Phone,
+      Phone: this.phoneFormCtl.value,
       Code: this.smsCode,
     }))
     .pipe(
@@ -306,11 +403,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     });
   }
 
-  changePwd() {
-    if (this.focusBtnKey === '') {
+  changePwd(isChange: boolean) {
+    if (isChange) {
       this.focusBtnKey = 'newPassword';
+      this.showPassword = false;
     } else {
-
+      this.focusBtnKey = '';
+      this.showPassword = true;
+      this.passwordFormCtl.setValue(this.defaultPassword);
     }
   }
 

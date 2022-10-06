@@ -80,7 +80,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
 
   searchTitle: string = '信件搜尋';
   tabText1: string = '已發送的信件';
-  tabText2: string = '儲存信件';
+  tabText2: string = '儲存的信件';
   sendBtnText: string = '再次發送信件';
 
   tabSelected = new FormControl(0);
@@ -290,6 +290,10 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   }
 
   search() {
+    if (this.searchForm.invalid) {
+      return;
+    }
+
     console.log(this.searchForm.value);
     let query: { [key: string]: any } = {};
     Object.keys(this.initialValue).forEach(key => {

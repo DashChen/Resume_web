@@ -25,7 +25,7 @@
         <div class="app-login__form__remeber__block">
             <mat-checkbox class="h2-text--regular" formControlName="rememberMe">記住我</mat-checkbox>
 
-            <a class="h2-text--regular" routerLink="/forget">
+            <a href="/forget" class="h2-text--regular" (click)="goTo($event, '/forget')">
                 忘記密碼?
             </a>
         </div>
@@ -38,7 +38,7 @@
 
     <div class="app-login__register">
         <span class="h2-text--regular">還沒有註冊?</span>
-        <a class="h2-text--regular" routerLink="/register">註冊</a>
+        <a href="/register" class="h2-text--regular" (click)="goTo($event, '/register')">註冊</a>
     </div>
 
     <div class="app-login__divider">
@@ -66,7 +66,7 @@
         </button>
     </div>
 
-    <a class="app-login__route__admin" routerLink="/admin/login">
+    <a href="/admin/login" class="app-login__route__admin" (click)="goTo($event, '/admin/login')">
         <span class="h2-text--bold">切換管理者登入</span>
         <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
     </a>

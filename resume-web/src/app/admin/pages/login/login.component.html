@@ -36,7 +36,7 @@
 
     </form>
 
-    <a class="admin-login__route__admin" routerLink="/login">
+    <a href="/login" class="admin-login__route__admin" (click)="goTo($event, '/login')">
         <span class="h2-text--bold">切換使用者登入</span>
         <mat-icon svgIcon="arrow" aria-hidden="false" aria-label="arrow right"></mat-icon>
     </a>

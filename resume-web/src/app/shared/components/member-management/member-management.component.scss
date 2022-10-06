@@ -41,9 +41,7 @@ $this: '.app-shared-member-management';
                             .mat-form-field {
                                 ::ng-deep .mat-form-field-flex {
                                     .mat-form-field-infix {
-                                        @include lt-md {
-                                            width: 100%;
-                                        }
+                                        width: 100%;
                                     }
                                 }
                             }
@@ -67,9 +65,7 @@ $this: '.app-shared-member-management';
                     .mat-form-field {
                         ::ng-deep .mat-form-field-flex {
                             .mat-form-field-infix {
-                                @include lt-md {
-                                    width: 100%;
-                                }
+                                width: 100%;
                             }
                         }
                     }
