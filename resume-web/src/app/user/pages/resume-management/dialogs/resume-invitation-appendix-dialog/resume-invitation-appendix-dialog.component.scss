@@ -1,0 +1,70 @@
+@import 'public-mixin';
+
+$this: '.app-resume-invitation-appendix-dialog';
+
+:host {
+
+    #{$this} {
+        &__head {
+            border-bottom: 1px solid #C5D0DF;
+            margin-bottom: 0;
+            padding: 11.5px 24px;
+            mat-icon {
+                color: $colorSecond;
+                cursor: pointer;
+                width: 17px;
+            }
+        }
+
+        &__content {
+            margin: 0;
+            padding: 40px 24px 0;
+
+            &__form {
+                position: relative;
+
+                mat-form-field {
+                    ::ng-deep .mat-form-field-flex {
+                        margin-top: 20px;
+                    }
+                }
+                mat-list-item {
+                    background: #EAEDF1;
+                    border-radius: 5px;
+                    cursor: default;
+                    ::ng-deep .mat-list-item-content {
+                        justify-content: space-between;
+                        padding: 12.5px 20px;
+                    }
+                    a {
+                        color: #006CD0;
+                    }
+                    .mat-focus-indicator {
+                        line-height: 20px;
+                        height: 20px;
+                        width: 20px;
+                        .mat-icon {
+                            color: #27303D;
+                            height: 14px;
+                            width: 14px;
+                        }
+                    }
+                }
+            }
+            &__upload-block {
+                border: 1px dashed #C5D0DF;
+                cursor: pointer;
+                height: 164px;
+            }
+            &__icon {
+                height: 70px;
+                width: 70px;
+            }
+        }
+
+        &__action {
+            margin: 40px 0;
+            padding: 0;
+        }
+    }
+}

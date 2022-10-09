@@ -8,6 +8,7 @@ import { InputCountryMobileComponent } from './input-country-mobile/input-countr
 import { MenuPanelComponent } from './menu-panel/menu-panel.component';
 import { MemberManagementComponent } from './member-management/member-management.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CropperjsComponent } from './cropperjs/cropperjs.component';
 
 
 @NgModule({
@@ -16,12 +17,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         InputCountryMobileComponent,
         MenuPanelComponent,
         MemberManagementComponent,
+        CropperjsComponent,
     ],
     exports: [
         PageTitleComponent,
         InputCountryMobileComponent,
         MenuPanelComponent,
         MemberManagementComponent,
+        CropperjsComponent,
     ],
     imports: [
         CommonModule,

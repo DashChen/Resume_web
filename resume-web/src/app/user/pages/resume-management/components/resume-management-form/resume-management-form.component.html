@@ -5,7 +5,7 @@
         履歷管理
       </div>
       <div class="app-resume-management-form__head__title__sub h2-text--regular">
-        履歷管理 / 我的第一份履歷表
+        履歷管理 / {{title}}
       </div>
     </div>
     <div class="app-resume-management-form__head__action__block" fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
@@ -31,7 +31,7 @@
   </div>
 
   <div class="app-resume-management-form__title__card">
-    <span class="app-resume-management-form__title__resume h1-title">我的第一份履歷表</span>
+    <span class="app-resume-management-form__title__resume h1-title">{{title}}</span>
     <button mat-icon-button aria-label="edit b icon" (click)="openTitleDialog($event)">
       <mat-icon class="app-resume-management-form__title__icon" [svgIcon]="'edit-b-icon'"></mat-icon>
     </button>

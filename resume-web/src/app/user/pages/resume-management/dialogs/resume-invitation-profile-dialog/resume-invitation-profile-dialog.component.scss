@@ -17,14 +17,11 @@
     }
 
     &__content {
-      max-height: calc(100% - 51px - 130px);
+      height: 172px;
+      max-height: 172px;
       overflow: hidden;
-      overflow-y: auto;
       margin: 0;
-      padding-top: 40px;
-      padding-bottom: 40px;
-      padding-right: 24px;
-      padding-left: 24px;
+      padding: 40px 24px 0;
 
       &__loader {
         width: 566px;
@@ -54,9 +51,10 @@
     }
 
     &__action {
-      padding: 0 0 40px;
       min-height: unset;
+      margin-top: 40px;
       margin-bottom: unset;
+      padding: 0 0 40px;
     }
   }
 }

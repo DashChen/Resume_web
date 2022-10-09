@@ -1,1 +1,24 @@
-<p>resume-invitation-autobiography-dialog works!</p>
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-invitation-autobiography-dialog__head">
+    <div class="app-resume-invitation-autobiography-dialog__title h1-title">{{ data.title }}</div>
+    <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+  </div>
+  <div mat-dialog-content class="app-resume-invitation-autobiography-dialog__content">
+    <form fxLayout="column" class="app-resume-invitation-autobiography-dialog__content__form" [formGroup]="autobiographiesForm">
+      <mat-form-field class="mat-form-field__block mat-form-field__block--textarea" appearance="fill">
+        <label class="mat-form-field__lable--top">自傳內容</label>
+        <textarea matInput placeholder="請輸入內容" formControlName="autobiographies" required></textarea>
+        <mat-error class="h3-text--medium" *ngIf="autobiographiesFormCtl.invalid">
+          {{getAutobiographiesErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <span class="conten-len">{{contentLen}}/4000</span>
+    </form>
+  </div>
+  <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="app-resume-invitation-autobiography-dialog__action">
+    <button mat-raised-button class="mat-button--medium" (click)="closeDialog(false)">
+      <span>{{ data.cancelBtnText }}</span>
+    </button>
+    <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
+      <span>{{ data.successBtnText }}</span>
+    </button>
+  </div>

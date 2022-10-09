@@ -3,12 +3,12 @@
   <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-title-dialog__content">
-  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-title-dialog__content__form">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-title-dialog__content__form" [formGroup]="titleForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">名稱</label>
-      <input matInput placeholder="" required value="我的第一份履歷表">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        名稱
+      <input matInput placeholder="" required formControlName="title">
+      <mat-error *ngIf="titleFormCtl.invalid" class="h3-text--medium">
+        {{getTitleErrorMessage()}}
       </mat-error>
     </mat-form-field>
   </form>
@@ -17,7 +17,8 @@
   <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange"
+    (click)="confirm()" [disabled]="titleFormCtl.invalid">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

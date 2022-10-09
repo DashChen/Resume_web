@@ -1,0 +1,23 @@
+mat-radio-group {
+    display: inline-flex;
+    gap: 24px;
+    padding: 8px 0;
+    mat-radio-button {
+        ::ng-deep .mat-radio-label {
+            gap: 16px;
+
+            .mat-radio-container {
+                .mat-radio-outer-circle {
+                    border-color: #02B2E1;
+                }
+                .mat-radio-inner-circle {
+                    background-color: #02B2E1;
+                }
+            }
+
+            .mat-radio-label-content {
+                padding-left: 0;
+            }
+        }
+    }
+}

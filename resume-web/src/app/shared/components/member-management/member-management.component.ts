@@ -26,7 +26,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   user: ResumeUserDatasUserDto | null | undefined;
 
   nameForm: FormGroup = new FormGroup({
-    Name: new FormControl('', [Validators.pattern('[\\W]+')]),
+    Name: new FormControl({
+      value:'',
+      disabled: true
+    }, [Validators.pattern('[\\W]+')]),
   });
 
   get nameFormCtl() {
@@ -39,7 +42,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
 
 
   idNoForm: FormGroup = new FormGroup({
-    IdNo: new FormControl('', [Validators.pattern('[A-Z][0-9]{9}')]),
+    IdNo: new FormControl({
+      value:'',
+      disabled: true
+    }, [Validators.pattern('[A-Z][0-9]{9}')]),
   });
 
   get idNoFormCtl() {
@@ -51,7 +57,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   birthdayForm: FormGroup = new FormGroup({
-    Birthday: new FormControl(''),
+    Birthday: new FormControl({
+      value:'',
+      disabled: true
+    }),
   });
 
   get birthdayFormCtl() {
@@ -62,7 +71,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   maxDate = DateTime.now().toLocal();
 
   phoneForm: FormGroup = new FormGroup({
-    Phone: new FormControl('', [
+    Phone: new FormControl({
+      value:'',
+      disabled: true
+    }, [
       Validators.pattern('^[0-9]*$'),
       Validators.minLength(9),
       Validators.maxLength(13)
@@ -78,7 +90,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   emailForm: FormGroup = new FormGroup({
-    Email: new FormControl('', [Validators.email]),
+    Email: new FormControl({
+      value:'',
+      disabled: true
+    }, [Validators.email]),
   });
 
   get emailFormCtl() {
@@ -90,7 +105,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   passwordForm: FormGroup = new FormGroup({
-    password: new FormControl('********'),
+    password: new FormControl({
+      value:'********',
+      disabled: true
+    }),
   });
 
   get passwordFormCtl() {
@@ -209,6 +227,23 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     event.stopPropagation();
     if (this.focusBtnKey === '') {
       this.focusBtnKey = type;
+      switch (type) {
+        case 'Name':
+          this.nameFormCtl.enable();
+          break;
+        case 'Birthday':
+          this.birthdayFormCtl.enable();
+          break;
+        case 'Email':
+          this.emailFormCtl.enable();
+          break;
+        case 'Phone':
+          this.phoneFormCtl.enable();
+          break;
+        case 'IdNo':
+          this.idNoFormCtl.enable();
+          break;
+      }
     } else {
       let requestApi ;
       switch (type) {
@@ -273,15 +308,23 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     switch (type) {
       case 'Name':
         this.nameFormCtl.setValue(this.user?.name || '');
+        this.nameFormCtl.disable();
         break;
       case 'Birthday':
         this.birthdayFormCtl.setValue(this.user?.birthDay || '');
+        this.birthdayFormCtl.disable();
         break;
       case 'Email':
         this.emailFormCtl.setValue(this.user?.email || '');
+        this.emailFormCtl.disable();
         break;
       case 'Phone':
         this.phoneFormCtl.setValue(this.user?.phone || '');
+        this.phoneFormCtl.disable();
+        break;
+      case 'IdNo':
+        this.idNoFormCtl.setValue(this.user?.idNo || '');
+        this.idNoFormCtl.disable();
         break;
     }
   }
@@ -305,6 +348,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     // 取消按鈕
     if (this.focusBtnKey === 'Email') {
       this.focusBtnKey = '';
+      this.emailFormCtl.disable();
     } else if (this.focusBtnKey === '' && !this.isSP && !this.bounded.email) {
       // TODO 綁定信箱
       const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailFormCtl.value,{

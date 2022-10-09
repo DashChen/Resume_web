@@ -1,1 +1,67 @@
-<p>resume-invitation-appendix-dialog works!</p>
+<div mat-dialog-title class="app-resume-invitation-appendix-dialog__head">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="app-resume-invitation-appendix-dialog_title h1-title">{{ data.title }}</div>
+        <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+    </div>
+</div>
+<div mat-dialog-content class="app-resume-invitation-appendix-dialog__content">
+<form fxLayout="column" class="app-resume-invitation-appendix-dialog__content__form" [formGroup]="appendixForm">
+    <div class="mat-form-field__block" fxLayout="column" [ngStyle]="{'padding-bottom.em': 1.34375}">
+        <label class="mat-form-field__lable--top h2-text--medium">附件類型</label>
+        <mat-radio-group formControlName="AppendixType">
+            <mat-radio-button value="file">附件檔案</mat-radio-button>
+            <mat-radio-button value="link">連結</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div fxLayout="column" fxLayoutGap="12px" *ngIf="appendixTypeFormCtl.value === 'file'">
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <label class="mat-form-field__lable--top h2-text--medium">附件名稱</label>
+            <input matInput placeholder="請輸入附件名稱" required formControlName="AppendixName">
+            <mat-error *ngIf="true" class="h3-text--medium">
+                {{getAppendixNameErrorMessage()}}
+            </mat-error>
+        </mat-form-field>
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="app-resume-invitation-appendix-dialog__content__upload-block"
+            (click)="fileInput.click()">
+            <mat-icon class="app-resume-invitation-appendix-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
+            <label class="app-resume-invitation-appendix-dialog__content__input">
+            <span class="h1-title">按此匯入檔案</span>
+            <input #fileInput type="file" hidden accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" (change)="uploadFile($event)">
+            </label>
+            <div class="app-resume-invitation-appendix-dialog__content__text h2-text--regular">不可上傳exe檔案，最大10MB</div>
+        </div>
+        <mat-nav-list *ngIf="uploadFiles.length > 0">
+            <mat-list-item *ngFor="let file of uploadFiles; let index = index;">
+                <a href="#" (click)="downloadFile($event, file)">{{file.name}}</a>
+                <button mat-icon-button (click)="removeFile(index)">
+                    <mat-icon [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+                </mat-list-item>
+        </mat-nav-list>
+    </div>
+    <div fxLayout="column" fxLayoutGap="12px" *ngIf="appendixTypeFormCtl.value === 'link'">
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <label class="mat-form-field__lable--top h2-text--medium">連結名稱</label>
+            <input matInput placeholder="請輸入連結名稱" required formControlName="AppendixName">
+            <mat-error *ngIf="true" class="h3-text--medium">
+                {{getAppendixNameErrorMessage()}}
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field__block" appearance="fill">
+            <label class="mat-form-field__lable--top h2-text--medium">網址連結</label>
+            <input matInput placeholder="請輸入網址連結" required formControlName="AppendixContent">
+            <mat-error *ngIf="true" class="h3-text--medium">
+                {{getAppendixContentErrorMessage()}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+</form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="app-resume-invitation-appendix-dialog__action">
+<button mat-raised-button class="mat-button--medium" (click)="closeDialog(false)">
+    <span>{{ data.cancelBtnText }}</span>
+</button>
+<button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
+    <span>{{ data.successBtnText }}</span>
+</button>
+</div>

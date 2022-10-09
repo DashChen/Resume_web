@@ -23,10 +23,12 @@
                 </button>
 
 
-                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event, 'Name')" [fxHide.lt-md]="true">
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Name')" [fxHide.lt-md]="true">
                     <span>{{ focusBtnKey !== 'Name' ? '編輯' : '儲存' }}</span>
                 </button>
-                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular" (click)="editMember($event, 'Name')" [fxHide.gt-sm]="true">
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'Name')" [fxHide.gt-sm]="true">
                     <mat-icon [svgIcon]="focusBtnKey === 'Name' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
                 </button>
             </div>
@@ -41,19 +43,30 @@
                     </mat-error>
                 </mat-form-field>
 
-                <!-- <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular" (click)="focusBtnKey = ''" *ngIf="focusBtnKey === 'IdNo'">
+                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular" (click)="cancelEdit($event, 'IdNo')"
+                    *ngIf="focusBtnKey === 'IdNo'" [fxHide.lt-md]="true">
                     <span>取消</span>
                 </button>
-                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="editMember($event, 'IdNo')">
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular" (click)="cancelEdit($event, 'IdNo')"
+                    *ngIf="focusBtnKey === 'IdNo'" [fxHide.gt-sm]="true">
+                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                </button>
+
+                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'IdNo')" [fxHide.lt-md]="true">
                     <span>{{ focusBtnKey !== 'IdNo' ? '編輯' : '儲存' }}</span>
-                </button> -->
+                </button>
+                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                    (click)="editMember($event, 'IdNo')" [fxHide.gt-sm]="true">
+                    <mat-icon [svgIcon]="focusBtnKey === 'IdNo' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                </button>
             </div>
         </div>
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
             <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="emailForm">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
                     <label class="mat-form-field__lable--top">電子郵件</label>
-                    <input type="email" matInput placeholder="未填寫" formControlName="Email" required [errorStateMatcher]="matcher" [disabled]="focusBtnKey !== 'Email'">
+                    <input type="email" matInput placeholder="未填寫" formControlName="Email" required [errorStateMatcher]="matcher">
                     <mat-error class="h3-text--medium" *ngIf="emailFormCtl.invalid">
                         {{ getEmailErrorMessage() }}
                     </mat-error>

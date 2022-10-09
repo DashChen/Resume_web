@@ -17,6 +17,7 @@ import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 })
 export class ResumeManagementFormComponent extends BaseComponent implements OnInit, OnDestroy {
 
+  title: string = '我的第一份履歷表';
   showPreview!: boolean;
   showPreview$!: Subscription;
 
@@ -102,12 +103,16 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationTitleDialogComponent, {
       width: '614px',
       // panelClass: '',
-      data: dialogConfig,
+      data: {
+        ...dialogConfig,
+        resumeTitle: this.title,
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出更改履歷名稱請求
       if (result) {
         console.log('openTitleDialog', result);
+        this.title = result.title;
       }
     });
   }
@@ -239,9 +244,16 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
-      width: '614px',
+      width: '100%',
+      maxWidth: '614px',
+      height: '100%',
+      maxHeight: '417px',
       // panelClass: '',
-      data: dialogConfig,
+      data: {
+        ...dialogConfig,
+        // TODO
+        autobiographies: '',
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出編輯自傳請求
@@ -261,9 +273,14 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationAppendixDialogComponent, {
-      width: '614px',
+      width: '100%',
+      maxWidth: '614px',
+      height: 'auto',
+      maxHeight: '80vh',
       // panelClass: '',
-      data: dialogConfig,
+      data: {
+        ...dialogConfig
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出編輯附件請求

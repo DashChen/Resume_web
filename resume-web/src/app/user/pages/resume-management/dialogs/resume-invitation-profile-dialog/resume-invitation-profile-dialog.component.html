@@ -3,17 +3,23 @@
   <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-profile-dialog__content">
-  <div fxLayout="column" fxLayoutAlign="space-around center" class="resume-invitation-profile-dialog__content__loader">
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="resume-invitation-profile-dialog__content__loader"
+    *ngIf="!cropperImageUrl" (click)="imageInput.click()">
     <mat-icon class="resume-invitation-profile-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
-    <label class="resume-invitation-profile-dialog__content__input">按此上傳圖片<input type="file" hidden accept="image/*"></label>
+    <label class="resume-invitation-profile-dialog__content__input">
+      <span>按此上傳圖片</span>
+      <input #imageInput type="file" hidden accept="image/*" (change)="uploadImageFile($event)">
+    </label>
     <div class="resume-invitation-profile-dialog__content__text">檔案格式為jpg/png,最佳尺寸360x360</div>
   </div>
+  <app-shared-cropperjs #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="cropperImageUrl"
+    (export)="cropperResult($event)" *ngIf="cropperImageUrl"></app-shared-cropperjs>
 </div>
 <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-profile-dialog__action">
-  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+  <button mat-raised-button class="mat-button--medium" (click)="closeDialog(false)">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

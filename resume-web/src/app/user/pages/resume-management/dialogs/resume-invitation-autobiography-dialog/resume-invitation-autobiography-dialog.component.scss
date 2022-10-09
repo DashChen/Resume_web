@@ -1,0 +1,56 @@
+@import 'public-mixin';
+
+$this: '.app-resume-invitation-autobiography-dialog';
+
+:host {
+
+    #{$this} {
+        &__head {
+            border-bottom: 1px solid #C5D0DF;
+            margin-bottom: 0;
+            padding: 11.5px 24px;
+            mat-icon {
+                color: $colorSecond;
+                cursor: pointer;
+                width: 17px;
+            }
+        }
+
+        &__content {
+            margin: 0;
+            padding: 40px 24px 0;
+
+            &__form {
+                position: relative;
+
+                mat-form-field {
+                    &.mat-form-field__block--textarea {
+                      margin-top: 20px;
+                      margin-bottom: 4px;
+                      ::ng-deep .mat-form-field-flex {
+                        height: 150px;
+                        .mat-form-field-infix {
+                          height: 100%;
+                        }
+                      }
+                      textarea {
+                        height: 100%;
+                        resize: none;
+                      }
+                    }
+                }
+
+                .conten-len {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                }
+            }
+        }
+
+        &__action {
+            margin-top: 40px;
+            padding: 0;
+        }
+    }
+}
