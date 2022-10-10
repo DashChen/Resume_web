@@ -3,6 +3,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
@@ -27,6 +28,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
+    MatExpansionModule,
     MatIconModule,
     MatListModule,
     MatInputModule,

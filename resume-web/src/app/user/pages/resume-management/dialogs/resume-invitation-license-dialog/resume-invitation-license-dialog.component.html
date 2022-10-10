@@ -3,27 +3,67 @@
   <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-license-dialog__content">
-  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-license-dialog__content__form">
+  <div fxLayout="column" fxLayoutGap="35px" class="resume-invitation-license-dialog__content__form">
     <mat-form-field>
       <label class="mat-form-field__lable--top">證照名稱</label>
-      <mat-select [formControl]="licensesControl" multiple>
-        <mat-select-trigger>
-          <mat-chip-list>
-            <mat-chip *ngFor="let license of licensesControl.value" [removable]="true" (removed)="onLicenseRemoved(license)">
-              {{ license }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-          </mat-chip-list>
-        </mat-select-trigger>
-        <mat-option *ngFor="let license of licenseList" [value]="license">{{ license }}</mat-option>
-      </mat-select>
+      <mat-chip-list #chipList aria-label="Video keywords" multiple>
+        <mat-chip-list>
+          <mat-chip *ngFor="let license of licensesControl.value" [removable]="true" (removed)="onLicenseRemoved(license)">
+            {{ license }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        <input
+          placeholder="請輸入關鍵字"
+          [matChipInputFor]="chipList"
+          (matChipInputTokenEnd)="showSelectLicense($event)">
+      </mat-chip-list>
     </mat-form-field>
+
+    <div fxLayout="column" fxLayoutGap="8px" class="resume-invitation-license-dialog__select__block" *ngIf="showSelectLicenseBlock">
+      <div fxLayout="row" fxLayoutAlign="flex-end center" class="resume-invitation-license-dialog__select__head">
+        <mat-icon [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon" (click)="closeShowLicense()"></mat-icon>
+      </div>
+      <div fxLayout="row" class="resume-invitation-license-dialog__select__content">
+        <div fxFlex class="resume-invitation-license-dialog__select__content__item-list">
+          <mat-nav-list>
+            <mat-list-item *ngFor="let link of licenseList">
+               <span [ngClass]="link.id === choiceLicenseTypeId ? 'h2-text--bold': 'h2-text--regular'">{{link.name}}</span>
+               <button mat-icon-button (click)="showLicenseGroup(link)">
+                  <mat-icon svgIcon="arrow-right"></mat-icon>
+               </button>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+        <div fxFlex class="resume-invitation-license-dialog__select__content__item-list">
+          <div fxLayout="row" fxLayoutAlign="center center" class="resume-invitation-license-dialog__select__content__item-type-name h2-text--bold">{{choiceLicenseTypeName}}</div>
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel *ngFor="let group of choiceLicenseGroup" (opened)="updateChoiceGroupId(group)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span [ngClass]="group.id === choiceGroupId ? 'h2-text--bold': 'h2-text--regular'">{{group.name}}</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <mat-list-item *ngFor="let item of group.items" fxLayout="rwo" fxLayoutAlign="space-between center">
+                <mat-checkbox class="h2-text--regular" [(ngModel)]="item.checked">{{item.name}}</mat-checkbox>
+             </mat-list-item>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <button mat-raised-button (click)="confirmAddLicenses()">
+          <span>確認</span>
+        </button>
+      </div>
+    </div>
 
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">其他證照</label>
       <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="10"></textarea>
     </mat-form-field>
-  </form>
+  </div>
 </div>
 <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-license-dialog__action">
   <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">

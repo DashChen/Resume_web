@@ -49,6 +49,64 @@
       }
     }
 
+    &__select {
+      &__block {
+        background: #F4F9FD;
+        height: 534px;
+        padding: 8px;
+      }
+      &__head {
+        height: 32px;
+      }
+      &__content {
+        border: 1px solid #C5D0DF;
+        height: 100%;
+        &__item {
+          &-type-name {
+            height: 49px;
+            text-align: center;
+          }
+
+          &-list {
+            background: #FFFFFF;
+            height: 100%;
+            max-height: 420px;
+            overflow: hidden;
+            overflow-y: auto;
+
+            mat-nav-list {
+              mat-list-item {
+                border-bottom: 1px solid #C5D0DF;
+                height: 49px;
+                padding: 12px 24px;
+                ::ng-deep .mat-list-item-content {
+                  justify-content: space-between;
+                }
+              }
+            }
+            mat-expansion-panel {
+              border: none;
+              border-radius: 0;
+              box-shadow: none;
+              border-bottom: 1px dashed #C5D0DF;
+              mat-expansion-panel-header {
+                height: 49px;
+              }
+              ::ng-deep .mat-expansion-panel-content {
+                .mat-expansion-panel-body {
+                  padding: 0;
+                }
+              }
+              mat-list-item {
+                height: 49px;
+                padding: 12px 24px;
+              }
+            }
+          }
+        }
+      }
+    }
+
     &__action {
       padding: 0 0 40px;
       min-height: unset;
