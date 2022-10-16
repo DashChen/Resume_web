@@ -7,6 +7,9 @@ export class GetValueByKeyFromListPipe implements PipeTransform {
 
   transform(value: any, args: any[]): any {
     const items = args[0];
+    if (!items) {
+      return value;
+    }
     const compareKey = args[1];
     const returnKey = args[2];
     const defaultValue = args[3];

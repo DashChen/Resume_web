@@ -76,11 +76,12 @@ $this: '.app-resume-management-form';
         background-color: #FFF;
 
         &__header {
+          border-bottom: 1px solid #C5D0DF;
+          height: 80px;
           padding-top: 15px;
           padding-bottom: 15px;
           padding-left: 24px;
           padding-right: 24px;
-          border-bottom: 1px solid #C5D0DF;
 
           &__title {
             font-weight: 600;
@@ -100,78 +101,12 @@ $this: '.app-resume-management-form';
           min-height: 56px;
           padding: 40px 24px;
           position: relative;
-          &-btns {
-            display: none;
-            padding: 6px 24px 0 0;
-            position: absolute;
-            inset: 0;
-            [mat-icon-button] {
-              align-items: center;
-              display: flex;
-              justify-content: center;
-              height: 30px;
-              width: 30px;
-              min-width: 30px;
-              mat-icon {
-                &[data-mat-icon-name="trash"] {
-                  height: 18px;
-                  width: 16px;
-                }
-                &[data-mat-icon-name="edit"] {
-                  height: 16px;
-                  width: 16px;
-                }
-              }
-            }
-          }
-          &:hover {
-            background-color: #E0EFFD;
-            #{$this}__content__card--eduction-btns {
-              display: flex;
-              align-items: flex-start;
-              justify-content: flex-end;
-              gap: 12px;
-            }
-          }
         }
 
         &--experiences {
           min-height: 162px;
           padding: 40px 24px;
           position: relative;
-          &-btns {
-            display: none;
-            padding: 6px 24px 0 0;
-            position: absolute;
-            inset: 0;
-            [mat-icon-button] {
-              align-items: center;
-              display: flex;
-              justify-content: center;
-              height: 30px;
-              width: 30px;
-              min-width: 30px;
-              mat-icon {
-                &[data-mat-icon-name="trash"] {
-                  height: 18px;
-                  width: 16px;
-                }
-                &[data-mat-icon-name="edit"] {
-                  height: 16px;
-                  width: 16px;
-                }
-              }
-            }
-          }
-          &:hover {
-            background-color: #E0EFFD;
-            #{$this}__content__card--experiences-btns {
-              display: flex;
-              align-items: flex-start;
-              justify-content: flex-end;
-              gap: 12px;
-            }
-          }
 
           &-content {
             max-width: 529px;

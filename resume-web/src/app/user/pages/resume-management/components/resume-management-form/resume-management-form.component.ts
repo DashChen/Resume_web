@@ -244,7 +244,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   onShowPreview(show: boolean) {
     this.store.dispatch(UserActions.setReusmeTitle({ payload: this.title}));
-    this.store.dispatch(RouterActions.Go({ path: ['resume-management'] }));
+    this.store.dispatch(RouterActions.Go({ path: ['/user/resume-management-preview'] }));
   }
 
   onImgError(event: Event): void {

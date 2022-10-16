@@ -1,0 +1,276 @@
+@import 'public-mixin';
+
+$this: '.app-resume-management-form';
+
+:host {
+  #{$this} {
+    background-color: #F4F9FD;
+    min-height: calc(100vh - 64px - 40px);
+    padding: 24px 40px;
+
+    &__head {
+      &__block {}
+
+      &__title {
+        &__main {}
+
+        &__sub {}
+      }
+
+      &__action {}
+    }
+
+    &__title {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        padding: 26px 30px;
+        background-color: #FFF;
+      }
+
+      &__resume {
+        position: relative;
+        top: 5px;
+        margin-right: 24px;
+      }
+
+      &__icon {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &__content {
+      &__card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        background-color: #FFF;
+
+        &__header {
+          border-bottom: 1px solid #C5D0DF;
+          height: 80px;
+          padding-top: 15px;
+          padding-bottom: 15px;
+          padding-left: 24px;
+          padding-right: 24px;
+
+          &__title {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 27px;
+          }
+        }
+        &__body {
+          &--empty {
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+        }
+        &--eduction {
+          min-height: 56px;
+          padding: 40px 24px;
+          position: relative;
+          &-btns {
+            display: none;
+            padding: 6px 24px 0 0;
+            position: absolute;
+            inset: 0;
+            [mat-icon-button] {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+              height: 30px;
+              width: 30px;
+              min-width: 30px;
+              mat-icon {
+                &[data-mat-icon-name="trash"] {
+                  height: 18px;
+                  width: 16px;
+                }
+                &[data-mat-icon-name="edit"] {
+                  height: 16px;
+                  width: 16px;
+                }
+              }
+            }
+          }
+          &:hover {
+            background-color: #E0EFFD;
+            #{$this}__content__card--eduction-btns {
+              display: flex;
+              align-items: flex-start;
+              justify-content: flex-end;
+              gap: 12px;
+            }
+          }
+        }
+
+        &--experiences {
+          min-height: 162px;
+          padding: 40px 24px;
+          position: relative;
+          &-btns {
+            display: none;
+            padding: 6px 24px 0 0;
+            position: absolute;
+            inset: 0;
+            [mat-icon-button] {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+              height: 30px;
+              width: 30px;
+              min-width: 30px;
+              mat-icon {
+                &[data-mat-icon-name="trash"] {
+                  height: 18px;
+                  width: 16px;
+                }
+                &[data-mat-icon-name="edit"] {
+                  height: 16px;
+                  width: 16px;
+                }
+              }
+            }
+          }
+          &:hover {
+            background-color: #E0EFFD;
+            #{$this}__content__card--experiences-btns {
+              display: flex;
+              align-items: flex-start;
+              justify-content: flex-end;
+              gap: 12px;
+            }
+          }
+
+          &-content {
+            max-width: 529px;
+            width: 100%;
+            height: auto;
+          }
+        }
+  
+        &--appendix {
+          &-file {
+            background: #EAEDF1;
+            border-radius: 5px;
+            height: 50px;
+            max-width: 566px;
+            width: 100%;
+            a {
+              color: #006CD0;
+            }
+            mat-icon {
+              color: $colorMain;
+            }
+          }
+          &-link {
+            border: 1px solid #C5D0DF;
+            height: 120px;
+            max-width: 566px;
+            padding: 12px;
+            width: 100%;
+            &-left {
+              &-title {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                width: 100%;
+              }
+              &-content {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+              }
+            }
+            &-right {
+              background: #006CD0;
+              border-radius: 4px;
+              height: 96px;
+              width: 96px;
+            }
+          }
+        }
+      }
+      &__image {
+        &__avatar {
+          width: 100px;
+          height: 100px;
+          margin-bottom: 12px;
+        }
+      }
+      &__button {
+        &__upload {
+          width: 100px;
+          height: 36px;
+          border: 1px solid #006CD0;
+          border-radius: 8px;
+          ::ng-deep span {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 20px;
+          }
+          ::ng-deep mat-icon {
+            margin-right: 0;
+            width: 15.03px;
+            height: 15px;
+          }
+        }
+      }
+      &__label {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 25px;
+        color: #27303D;
+      }
+      &__plaintext {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        color: #6C7A8E;
+      }
+    }
+  }
+}
+
+::ng-deep body {
+  #{$this} {
+    &__dialog {
+
+      &--add,
+      &--edit {
+        max-width: calc(100vw - 48px) !important;
+      }
+    }
+  }
+}
+
+[mat-stroked-button] {
+  border-radius: 8px;
+  height: 50px;
+  width: 150px;
+
+  ::ng-deep .mat-button-wrapper {
+    line-height: unset;
+    color: #006CD0;
+  }
+
+  &.mat-stroked-button:not(.mat-button-disabled) {
+    border-color: #006CD0;
+  }
+}
+
+mat-form-field {
+  margin-bottom: 0;
+
+  ::ng-deep .mat-form-field-flex {
+    background: #FFF;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
