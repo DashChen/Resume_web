@@ -1,15 +1,16 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import { DataService } from '@app/core';
-import { ApiConfig } from '@app/core/models/Api';
+import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeExperiencesExperienceCreateDto, ResumeLicensesLicenseCreateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
-import { map, mergeMap, catchError, tap, switchMap, finalize, exhaustMap } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, switchMap, finalize, exhaustMap, withLatestFrom, filter } from 'rxjs/operators';
 import { Actions as UserActions, Selectors as UserSelectors } from '.';
 import { LoginProps } from '@app/core/interfaces/login';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions } from '@app/shared/store/common';
+import { createAppendices } from './user.actions';
 
 @Injectable()
 export class UserEffects {
@@ -75,6 +76,344 @@ export class UserEffects {
                     return UserActions.getUserSuccess({ payload: res.data });
                 }),
                 catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回基本資料
+    getBasicInfo$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getBasicInfo),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getBasicInfo', resumeCode);
+            return from(this.dataService.api.appBaseBasicsGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getBasicInfo', res);
+                    return UserActions.setResumeBasicInfo({ payload: res.data.length > 0 ? res.data[0] : {} });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+
+    // 取回學歷
+    getEducations$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getResumeEductions),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getEducations', resumeCode);
+            return from(this.dataService.api.appEducationsGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getEducations', res);
+                    return UserActions.setResumeEductions({ payload: res.data });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回經歷
+    getExperiences$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getResumeExperiences),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getExperiences', resumeCode);
+            return from(this.dataService.api.appExperiencesGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getExperiences', res);
+                    return UserActions.setResumeExperiences({ payload: res.data });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回專業證照
+    getLicenses$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getResumeLicenses),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getLicenses', resumeCode);
+            return from(this.dataService.api.appLicensesGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getLicenses', res);
+                    return UserActions.setResumeLicenses({ payload: res.data });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回自傳
+    getAutobiographies$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getResumeAutobiographies),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getAutobiographies', resumeCode);
+            return from(this.dataService.api.appAutobiographiesGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getAutobiographies', res);
+                    return UserActions.setResumeAutobiographies({ payload: res.data });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回附件
+    getAppendices$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getResumeAppendices),
+        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
+        filter(([action, resumeCode]) => !!resumeCode),
+        exhaustMap(([action, resumeCode]) => {
+            console.log('getAppendices', resumeCode);
+            return from(this.dataService.api.appAppendicesGetListByResumeCodeList({
+                ResumeCode: resumeCode || undefined,
+            },{
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getAppendices', res);
+                    return UserActions.setResumeAppendices({ payload: res.data });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回學歷代碼
+    getEductionCode$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getEductionCodeList),
+        exhaustMap(() => {
+            return from(this.dataService.api.appShareCodesGetEducationCodeListList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getEductionCode', res);
+                    return UserActions.setEductionCodeList({ payload: res.data.items || [] });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+    // 取回畢業代碼
+    getGraduateCode$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getGraduateCodeList),
+        exhaustMap(() => {
+            return from(this.dataService.api.appShareCodesGetGraduateCodeListList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getGraduateCode', res);
+                    return UserActions.setGraduateCodeList({ payload: res.data.items || [] });
+                }),
+                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+            )
+        })
+    ));
+
+    // 更新基本資料
+    updateBasicInfo$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.updateBasicInfo),
+        map(params => params.payload),
+        exhaustMap((payload: {id: string; data: ResumeBaseBasicsBaseBasicUpdateDto }) => {
+            return from(this.dataService.api.appBaseBasicsUpdate(payload.id, payload.data, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('updateBasicInfo', res);
+                    return UserActions.setResumeBasicInfo({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('updateBasicInfo error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 新增學歷
+    createEduction$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.createEduction),
+        map(params => params.payload),
+        exhaustMap((payload: ResumeEducationsEducationCreateDto) => {
+            return from(this.dataService.api.appEducationsCreate(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createEduction', res);
+                    return UserActions.addEduction({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('createEduction error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 新增經歷
+    createExperience$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.createExperience),
+        map(params => params.payload),
+        exhaustMap((payload: ResumeExperiencesExperienceCreateDto) => {
+            return from(this.dataService.api.appExperiencesCreate(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createExperience', res);
+                    return UserActions.addExperience({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('createExperience error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 新增證照
+    createLicense$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.createLicense),
+        map(params => params.payload),
+        exhaustMap((payload: ResumeLicensesLicenseCreateDto) => {
+            return from(this.dataService.api.appLicensesCreate(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createLicense', res);
+                    return UserActions.setResumeLicenses({ payload: [res.data] });
+                }),
+                catchError(error => {
+                    console.error('createLicense error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 新增自傳
+    createAutobiographies$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.createAutobiographies),
+        map(params => params.payload),
+        exhaustMap((payload: ResumeAutobiographiesAutobiographyCreateDto) => {
+            return from(this.dataService.api.appAutobiographiesCreate(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createAutobiographies', res);
+                    return UserActions.addAutobiographies({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('createAutobiographies error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 新增附件
+    createAppendices$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.createAppendices),
+        map(params => params.payload),
+        exhaustMap((payload: { createFileInputWithStream?: File, query: { ResumeCode: string; AppendixName: string; AppendixContent: string } }) => {
+            return from(this.dataService.api.appAppendicesCreate({
+                createFileInputWithStream: payload.createFileInputWithStream,
+            }, payload.query, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createAppendices', res);
+                    return UserActions.addAppendices({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('createAppendices error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 上傳大頭貼
+    uploadProfilePicture$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.uploadProfilePicture),
+        map(params => params.payload),
+        exhaustMap((payload: { ImageContent: File, Type: VoloAbpAccountProfilePictureType }) => {
+            return from(this.dataService.api.appRegisterSetProfilePictureCreate({
+                ImageContent: payload.ImageContent,
+            }, { Type: payload.Type }, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                tap(res => {
+                    console.log('uploadProfilePicture', res);
+                }),
+                catchError(error => {
+                    console.error('uploadProfilePicture error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 取得大頭貼
+    getProfilePicture$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.getProfilePicture),
+        exhaustMap(() => {
+            return from(this.dataService.api.appRegisterProfilePictureCreate({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('getProfilePicture', res);
+                    return UserActions.setProfilePicture({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('getProfilePicture error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
             )
         })
     ));

@@ -35,3 +35,27 @@ export const selectMailTpls = createSelector(
     state => state.mailTpls,
 );
 
+export const selectSexList = createSelector(
+    selectFeature,
+    state => state.sexList,
+);
+
+export const selectAreaList = createSelector(
+    selectFeature,
+    state => state.areasList,
+);
+
+export const selectMainAreas = createSelector(
+    selectFeature,
+    state => state.mainAreas,
+);
+
+export const selectSkillsList = createSelector(
+    selectFeature,
+    state => state.skillsList,
+);
+
+export const selectMainSkills = createSelector(
+    selectFeature,
+    state => state.mainSkills,
+);

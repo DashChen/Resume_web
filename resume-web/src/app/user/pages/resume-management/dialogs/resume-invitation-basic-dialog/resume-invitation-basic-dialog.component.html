@@ -1,71 +1,71 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="resume-invitation-basic-dialog__head">
   <div class="resume-invitation-basic-dialog__title h1-title">{{ data.title }}</div>
-  <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+  <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-basic-dialog__content">
-  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-basic-dialog__content__form">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-basic-dialog__content__form" [formGroup]="infoForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">中文姓名</label>
-      <input matInput placeholder="請輸入中文姓名" required value="王大明">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        中文姓名
+      <input matInput placeholder="請輸入中文姓名" required formControlName="nameC">
+      <mat-error *ngIf="nameCFormCtl.invalid" class="h3-text--medium">
+        {{getNameCErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">英文姓名</label>
-      <input matInput placeholder="請輸入英文姓名">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        英文姓名
+      <input matInput placeholder="請輸入英文姓名" formControlName="nameE">
+      <mat-error *ngIf="nameEFormCtl.invalid" class="h3-text--medium">
+        {{getNameEErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">身分證號碼</label>
-      <input matInput placeholder="請輸入身分證號碼">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        身分證號碼
+      <input matInput placeholder="請輸入身分證號碼" formControlName="idNo">
+      <mat-error *ngIf="idNoFormCtl.invalid" class="h3-text--medium">
+        {{getIdNoErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <div class="mat-form-field__block" fxLayout="column" [ngStyle]="{'padding-bottom.em': 1.34375}">
       <label class="mat-form-field__lable--top">性別</label>
-      <mat-radio-group [ngStyle]="{'padding-right.px': 13, 'padding-left.px': 13, 'padding-top.px': 8, 'padding-bottom.px': 8}">
-        <mat-radio-button value="male">男</mat-radio-button>
-        <mat-radio-button value="female">女</mat-radio-button>
+      <mat-radio-group formControlName="sexCode">
+        <mat-radio-button value="M">男</mat-radio-button>
+        <mat-radio-button value="F">女</mat-radio-button>
       </mat-radio-group>
+      <mat-error *ngIf="sexCodeFormCtl.invalid" class="h3-text--medium">
+        {{getsexCodeErrorMessage()}}
+      </mat-error>
     </div>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">出生日期</label>
-      <input matInput [matDatepicker]="picker" placeholder="請選擇日期">
+      <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" placeholder="請選擇日期" formControlName="birthDate">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">通訊電話</label>
-      <input matInput placeholder="請輸入通訊電話">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        通訊電話
+      <input matInput placeholder="請輸入通訊電話" formControlName="currentTel">
+      <mat-error *ngIf="currentTelFormCtl.invalid" class="h3-text--medium">
+        {{getCurrentTelErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">地址</label>
-      <input matInput placeholder="請輸入地址">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        地址
-      </mat-error>
+      <input matInput placeholder="請輸入地址" formControlName="currentAdd">
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">電子郵件</label>
-      <input matInput placeholder="請輸入電子郵件">
-      <mat-error *ngIf="true" class="h3-text--medium">
-        電子郵件
+      <input matInput placeholder="請輸入電子郵件" formControlName="email">
+      <mat-error *ngIf="emailFormCtl.invalid" class="h3-text--medium">
+        {{getEmailErrorMessage()}}
       </mat-error>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-basic-dialog__action">
-  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="closeDialog(false)">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

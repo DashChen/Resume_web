@@ -2,76 +2,56 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-interface ILicense {
-  id: string;
-  name: string;
-  checked: boolean;
-}
-
-interface ILicenseGroup {
-  id: string;
-  name: string;
-  items: ILicense[]
-}
-
-interface ILinenseData {
-  id: string;
-  name: string;
-  items: ILicenseGroup[];
-}
+import { Store } from '@ngrx/store';
+import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
+import { BaseDestoryComponent } from '@app/shared/components/base-destory.component';
+import { filter, takeUntil } from 'rxjs';
+import { skill, skills, skillsList } from '@app/core/interfaces/skill.model';
 
 @Component({
   selector: 'app-resume-invitation-license-dialog',
   templateUrl: './resume-invitation-license-dialog.component.html',
   styleUrls: ['./resume-invitation-license-dialog.component.scss']
 })
-export class ResumeInvitationLicenseDialogComponent implements OnInit {
+export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent implements OnInit {
 
   isSuccess: boolean = false;
 
   licensesControl = new FormControl([]);
-  licenseList: ILinenseData[] = [
-    {
-      id: '1',
-      name: '設計/美工類',
-      items: [
-        {
-          id: '11',
-          name: '平面／網頁／多媒體相關證照',
-          items: [
-            {
-              id: '111',
-              name: 'Adobe After Effects',
-              checked: false,
-            },
-            {
-              id: '112',
-              name: 'Adobe Illustrator',
-              checked: false,
-            },
-            {
-              id: '113',
-              name: 'Adobe InDesign',
-              checked: false,
-            }
-          ]
-        }
-      ]
-    }
-  ];
+  licenseList: skillsList[] = [];
+  mainLicenses: skill[] = [];
   showSelectLicenseBlock: boolean = false;
   choiceLicenseTypeId: string = '';
   choiceLicenseTypeName: string = '';
-  choiceLicenseGroup: ILicenseGroup[] = [];
+  choiceLicenseGroup: skills[] = [];
   choiceGroupId: string = '';
+  choicedSkills: skill[] = [];
+
+  otherLicense: FormControl = new FormControl('');
 
   constructor(
+    private store: Store,
     public dialogRef: MatDialogRef<ResumeInvitationLicenseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
+    this.store.select(CommonSelectors.selectSkillsList)
+      .pipe(
+        filter(list => list.length > 0),
+        takeUntil(this.destroy$)
+      ).subscribe( res => {
+        this.licenseList = res;
+      });
+    this.store.select(CommonSelectors.selectMainSkills)
+      .pipe(
+        filter(list => list.length > 0),
+        takeUntil(this.destroy$)
+      ).subscribe( res => {
+        this.mainLicenses = res;
+      });
   }
 
   onLicenseRemoved(license: string) {
@@ -87,13 +67,11 @@ export class ResumeInvitationLicenseDialogComponent implements OnInit {
     }
   }
 
-  confirm() {
-    this.isSuccess = true;
-    this.closeDialog();
-  }
-
-  closeDialog() {
-    this.dialogRef.close(this.isSuccess ? true : false);
+  closeDialog(isSuccess: boolean) {
+    this.dialogRef.close(isSuccess ? {
+      name: '',
+      note: this.otherLicense.value,
+    } : false);
   }
 
   showSelectLicense(event: MatChipInputEvent) {
@@ -112,13 +90,33 @@ export class ResumeInvitationLicenseDialogComponent implements OnInit {
     this.showSelectLicenseBlock = false;
   }
 
-  showLicenseGroup(data: ILinenseData) {
-    this.choiceLicenseTypeId = data.id;
-    this.choiceLicenseTypeName = data.name;
-    this.choiceLicenseGroup = data.items;
+  showLicenseGroup(data: skill) {
+    this.choiceLicenseTypeId = data.no;
+    this.choiceLicenseTypeName = data.des;
+    const index = this.licenseList.findIndex((i: skillsList) => i.no === data.no);
+    if (index > -1) {
+      this.choiceLicenseGroup = this.licenseList[index].n || [];
+    }
   }
 
-  updateChoiceGroupId(group: ILicenseGroup) {
-    this.choiceGroupId = group.id;
+  updateChoiceGroupId(group: skills) {
+    this.choiceGroupId = group.no;
+  }
+
+  checkItme(item: skill) {
+    return this.choicedSkills.find((i: skill) => {
+      return i.no === item.no;
+    }) ? true : false;
+  }
+
+  changeCheck(checked: boolean, item: skill) {
+    if (checked) {
+      this.choicedSkills.push(item);
+    } else {
+      const index = this.choicedSkills.findIndex((i: skill) => i.no === item.no);
+      if (index > -1) {
+        this.choicedSkills.splice(index, 1);
+      }
+    }
   }
 }

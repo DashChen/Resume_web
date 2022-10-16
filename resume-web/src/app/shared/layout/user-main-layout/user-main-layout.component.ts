@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { DateTime } from 'luxon';
 import { AppService } from '@app/core';
 import { link } from '@app/core/interfaces/menu.model';
-import { loginResponseDto } from '@app/core/models/login.model';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
-import { Store } from '@ngrx/store';
 import { Selectors as RouterSelectors } from '@app/shared/store/router';
-import { DateTime } from 'luxon';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Component({
   selector: 'app-user-main-layout',
@@ -62,7 +62,8 @@ export class UserMainLayoutComponent implements OnInit {
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';
       this.email = user?.email || '';
-    })
+    });
+    this.store.dispatch(CommonActions.getSexList());
   }
 
   logout() {

@@ -12,6 +12,7 @@ import {
   ResetPasswordComponent,
   UserComponent,
   ResumeManagementComponent,
+  ResumeManagementPreviewComponent,
 } from './pages';
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
       // { path: '', redirectTo: 'member-management', pathMatch: 'full' },
       { path: 'member-management', component: MemberManagementComponent, data: { layout: Layouts.userMain }, },
       { path: 'resume-management', component: ResumeManagementComponent, data: { layout: Layouts.userMain }, },
+      { path: 'resume-management-preview', component: ResumeManagementPreviewComponent, data: { layout: Layouts.userMain }, },
     ],
     canLoad: [AuthGuard]
   }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '@app/core';
-import { ApiConfig } from '@app/core/models/Api';
+import { area, areasList } from '@app/core/interfaces/ares.model';
+import { skill, skillsList } from '@app/core/interfaces/skill.model';
+import { ApiConfig, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
@@ -86,6 +88,92 @@ export class CommonEffects {
                 catchError(error => {
                     console.error('mailTplsEffect error', error);
                     return of(CommonActions.getMailTplFail({ payload: error }));
+                })
+            )
+        })
+    ));
+
+    sexEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(CommonActions.getSexList),
+        exhaustMap(() => {
+            return from(this.dataService.api.appShareCodesGetSexCodeListList({
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user')
+                }
+            })).pipe(
+                map(res => {
+                    console.log('sexEffect', res);
+                    return CommonActions.getSexListSuccess({ payload: res.data?.items || [] });
+                }),
+                catchError(error => {
+                    console.error('sexEffect error', error);
+                    return of(CommonActions.getSexListFail({ payload: error }));
+                })
+            )
+        })
+    ));
+
+    getAreasEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(CommonActions.getAreas),
+        exhaustMap(() => {
+            return from(this.dataService.request<areasList[], VoloAbpHttpRemoteServiceErrorResponse>({
+                baseUrl: window.location.origin,
+                path: `/assets/Area.json`,
+                method: "GET",
+                secure: true,
+                format: "json",
+              })).pipe(
+                map(res => {
+                    console.log('getAreasEffect', res);
+                    if (res.data.length > 0) {
+                        const mainAreas: area[] = [];
+                        res.data.forEach(i => {
+                            mainAreas.push({
+                                no: i.no,
+                                des: i.des,
+                            });
+                        });
+                        console.log('getAreasEffect', mainAreas);
+                        this.store.dispatch(CommonActions.setMainAreas({ payload: mainAreas }));
+                    }
+                    return CommonActions.setAreas({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('getAreasEffect error', error);
+                    return of(CommonActions.getSexListFail({ payload: error }));
+                })
+            )
+        })
+    ));
+
+    getSkillsEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(CommonActions.getSkills),
+        exhaustMap(() => {
+            return from(this.dataService.request<skillsList[], VoloAbpHttpRemoteServiceErrorResponse>({
+                baseUrl: window.location.origin,
+                path: `/assets/Skill.json`,
+                method: "GET",
+                secure: true,
+                format: "json",
+              })).pipe(
+                map(res => {
+                    console.log('getSkillsEffect', res);
+                    if (res.data.length > 0) {
+                        const mainSkills: skill[] = [];
+                        res.data.forEach(i => {
+                            mainSkills.push({
+                                no: i.no,
+                                des: i.des,
+                            });
+                        });
+                        console.log('getAreasEffect', mainSkills);
+                        this.store.dispatch(CommonActions.setMainSkills({ payload: mainSkills }));
+                    }
+                    return CommonActions.setSkills({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('getSkillsEffect error', error);
+                    return of(CommonActions.getSexListFail({ payload: error }));
                 })
             )
         })

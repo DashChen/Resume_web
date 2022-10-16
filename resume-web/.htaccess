@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+
+	RewriteCond %{REQUEST_FILENAME} -s [OR]
+	RewriteCond %{REQUEST_FILENAME} -l [OR]
+	RewriteCond %{REQUEST_FILENAME} -d
+
+	RewriteRule ^.*$ - [NC,L]
+	RewriteRule ^(.*) /index.html [NC]
+</IfModule>
+
+# Keyword
+# DOCUMENT_ROOT
+# REQUEST_URI
+# -s : Is regular file, with size. Treats the TestString as a pathname and tests whether or not it exists, and is a regular file with size greater than zero.
+# -f : Is regular file. Treats the TestString as a pathname and tests whether or not it exists, and is a regular file.
+# -l : Is symbolic link. Treats the TestString as a pathname and tests whether or not it exists, and is a symbolic link.
+# 		May also use the bash convention of -L or -h if there's a possibility of confusion such as when using the -lt or -le tests.
+# -d : Is directory. Treats the TestString as a pathname and tests whether or not it exists, and is a directory.

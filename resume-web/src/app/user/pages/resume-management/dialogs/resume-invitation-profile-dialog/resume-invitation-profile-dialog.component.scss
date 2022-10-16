@@ -17,11 +17,13 @@
     }
 
     &__content {
-      height: 172px;
-      max-height: 172px;
-      overflow: hidden;
       margin: 0;
-      padding: 40px 24px 0;
+      padding: 40px 24px;
+      position: relative;
+
+      app-shared-cropperjs {
+        display: block;
+      }
 
       &__loader {
         width: 566px;
@@ -52,7 +54,7 @@
 
     &__action {
       min-height: unset;
-      margin-top: 40px;
+      margin-top: 0;
       margin-bottom: unset;
       padding: 0 0 40px;
     }

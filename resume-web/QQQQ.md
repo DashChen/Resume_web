@@ -65,3 +65,19 @@ HR履歷管理
 1. 新增人員的身分證對應的 key 是 idno? API 中沒有
 2. 單筆紀錄的複製連結，要取怎樣的key 或怎樣組成?
 3. 履歷管理紀錄應該要額外提供 jobName 對應的ID，否則創建職缺目前可以重名，編輯上沒法對應到正確的 jobName
+
+USER 履歷管理
+1. 缺少編輯專業證照API
+2. 編輯附件的連結分享 LINK PREVIEW 需要後端抓取目標網址的 meta property: og:title、og:image、og:description 等三項提供給前端，因為前端瀏覽器有 CORS 阻擋
+3. 學歷中的學校該如何取得?
+
+USER 履歷管理
+1. 履歷表 (query會帶入invitationCode，每個檔案資料名IsFinish為已完成和未完成的判斷)
+   Q: 新建的時候 invitationCode 從哪來?
+2. 取得ResumeCode (*請參考5.1.6-5) {GET} api/app/resume-mains/GetListByAccountId
+	取第一筆的ID當作ResumeCode下方用到ResumeCode用此值帶入
+   Q: 第一筆會是未被使用的?
+3. Q: 基本資料等各區塊更新，要在何時更新? 送出履歷表? 還是編輯完關閉popup後?
+4. Q: 工作經歷可以多筆? 可以刪除?
+5. Q: 取得專業證照分類列表的API?
+6. Q: 學歷中的學校(海內外)該如何取得?

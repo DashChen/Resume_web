@@ -22,7 +22,8 @@
           <button mat-stroked-button [ngStyle.lt-md]="{'width.px': 105}" class="h2-text--regular" (click)="onShowPreview(true)">
             <span>預覽履歷</span>
           </button>
-          <button mat-raised-button [ngStyle.lt-md]="{'width.px': 105}" class="mat-button--blue h2-text--regular" (click)="onSaveResume($event)">
+          <button mat-raised-button [ngStyle.lt-md]="{'width.px': 105}" class="mat-button--blue h2-text--regular"
+            [disabled]="invitationCode.length === 0"  (click)="onSaveResume()">
             <span>送出</span>
           </button>
         </div>
@@ -72,9 +73,9 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body" fxLayout="row">
+          <div class="app-resume-management-form__content__card__body app-resume-management-form__content__card__body--empty" fxLayout="row">
             <div fxLayout="column">
-              <img class="app-resume-management-form__content__image__avatar" [src]="'/assets/icons/user-pic-icon1.svg'" (error)="onImgError($event)" alt="">
+              <img class="app-resume-management-form__content__image__avatar" [src]="userPic" (error)="onImgError($event)" alt="">
               <button mat-stroked-button class="app-resume-management-form__content__button__upload" (click)="openProfileDialog($event)">
                 <span>上傳照片</span>
                 <div fxFlex fxLayoutAlign="end center">
@@ -85,15 +86,35 @@
             <div fxLayout="column" fxLayoutGap="24px" [ngStyle]="{'padding-left.px': 48, 'padding-right.px': 48}">
               <div fxLayout="row">
                 <label class="app-resume-management-form__content__label" fxFlex="80px">中文姓名</label>
-                <div class="app-resume-management-form__content__plaintext">王大明</div>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.nameC}}</div>
+              </div>
+              <div fxLayout="row" *ngIf="basicInfo.nameE">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">英文姓名</label>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.nameE}}</div>
+              </div>
+              <div fxLayout="row" *ngIf="basicInfo.idNo">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">身分證字號</label>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.idNo}}</div>
+              </div>
+              <div fxLayout="row" *ngIf="basicInfo.sexCode">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">性別</label>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.sexCode | getValueByKeyFromList: [sexList, 'code', 'name']}}</div>
+              </div>
+              <div fxLayout="row" *ngIf="basicInfo.birthDate">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">出生日期</label>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.birthDate}}</div>
               </div>
               <div fxLayout="row">
                 <label class="app-resume-management-form__content__label" fxFlex="80px">通訊電話</label>
-                <div class="app-resume-management-form__content__plaintext">0900-000-000</div>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.currentTel}}</div>
+              </div>
+              <div fxLayout="row" *ngIf="basicInfo.currentAdd">
+                <label class="app-resume-management-form__content__label" fxFlex="80px">通訊地址</label>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.currentAdd}}</div>
               </div>
               <div fxLayout="row">
                 <label class="app-resume-management-form__content__label" fxFlex="80px">電子郵件</label>
-                <div class="app-resume-management-form__content__plaintext">WanDaiMing@gamil.com</div>
+                <div class="app-resume-management-form__content__plaintext">{{basicInfo.email}}</div>
               </div>
             </div>
           </div>
@@ -107,7 +128,35 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+          <div class="app-resume-management-form__content__card__body">
+            <div class="app-resume-management-form__content__card__body--empty" *ngIf="eductions.length === 0">
+              您還沒有填寫學歷
+            </div>
+            <ng-container *ngIf="eductions.length > 0">
+              <ng-container *ngFor="let item of eductions">
+                <div  class="app-resume-management-form__content__card--eduction">
+                  <div class="app-resume-management-form__content__card--eduction-btns">
+                    <button mat-icon-button class="mat-button--icon" (click)="delEduction(item)">
+                      <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
+                    <button mat-icon-button class="mat-button--icon mat-button--blue" (click)="editEduction(item)">
+                      <mat-icon [svgIcon]="'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
+                  </div>
+                  <div class="h2-text--bold">{{item.school}}</div>
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div>
+                      <span>{{item.major}}</span>
+                      <span style="margin: 0 8px;">|</span>
+                      <span>{{item.educationCode | getValueByKeyFromList: [eductionCodeList, 'code', 'name']}}</span>
+                      <span>{{item.graduationCode | getValueByKeyFromList: [graduateCodeList, 'code', 'name']}}</span>
+                    </div>
+                    <div>{{item.dateA | date: 'yyyy/MM'}}-{{item.dateD | date: 'yyyy/MM'}}</div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
         </div>
         <div class="app-resume-management-form__content__card" fxFlex>
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
@@ -118,7 +167,34 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+          <div class="app-resume-management-form__content__card__body">
+            <div class="app-resume-management-form__content__card__body--empty" *ngIf="experiences.length === 0">
+              您還沒有填寫工作經歷
+            </div>
+            <ng-container *ngIf="experiences.length > 0">
+              <ng-container *ngFor="let item of experiences">
+                <div class="app-resume-management-form__content__card--experiences">
+                  <div class="app-resume-management-form__content__card--experiences-btns">
+                    <button mat-icon-button class="mat-button--icon" (click)="delExperience(item)">
+                      <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
+                    <button mat-icon-button class="mat-button--icon mat-button--blue" (click)="editExperience(item)">
+                      <mat-icon [svgIcon]="'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h2-text--bold">{{item.jobTitle}}</div>
+                    <div class="h2-text--regular">{{item.dateA | date: 'yyyy/MM/dd'}}-{{item.dateD | date: 'yyyy/MM/dd'}}</div>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h2-text--regular">{{item.name}}</div>
+                    <div class="h2-text--regular">{{getStayMonth(item)}}</div>
+                  </div>
+                  <div class="h2-text--regular app-resume-management-form__content__card__content--experiences-content">{{item.jobDescription}}</div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
         </div>
         <div class="app-resume-management-form__content__card" fxFlex>
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
@@ -129,7 +205,25 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+          <div class="app-resume-management-form__content__card__body">
+            <div class="app-resume-management-form__content__card__body--empty" *ngIf="licenses.length === 0">
+              您還沒有填寫專業證照
+            </div>
+            <ng-container *ngIf="licenses.length > 0">
+              <ng-container *ngFor="let item of licenses">
+                <div fxLayout="column" fxLayoutGap="24px" class="app-resume-management-form__content__card--licenses">
+                  <div fxLayout="row" fxLayoutGap="24px">
+                    <div class="h2-text--bold">證照名稱</div>
+                    <div class="h2-text--regular">{{item.name}}</div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="24px">
+                    <div class="h2-text--bold">其他證照</div>
+                    <div class="h2-text--regular">{{item.note}}</div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
         </div>
         <div class="app-resume-management-form__content__card" fxFlex>
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
@@ -140,7 +234,16 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+          <div class="app-resume-management-form__content__card__body">
+            <div class="app-resume-management-form__content__card__body--empty" *ngIf="autobiographies.length === 0">
+              您還沒有填寫自傳
+            </div>
+            <ng-container *ngIf="autobiographies.length > 0">
+              <ng-container *ngFor="let item of autobiographies">
+                <div class="h2-text--regular">{{item.content}}</div>
+              </ng-container>
+            </ng-container>
+          </div>
         </div>
         <div class="app-resume-management-form__content__card" fxFlex>
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
@@ -151,7 +254,37 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body">您還沒有填寫學歷</div>
+          <div class="app-resume-management-form__content__card__body">
+            <div class="app-resume-management-form__content__card__body--empty" *ngIf="appendices.length === 0">
+              您還沒有上傳附件
+            </div>
+            <ng-container *ngIf="appendices.length > 0">
+              <ng-container *ngFor="let item of appendices">
+                <div fxLayout="column" fxLayoutGap="6px">
+                  <div class="h2-text--bold">{{item.appendixName}}</div>
+                  <div *ngIf="item.appendixType == '1'">
+                    <div fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-management-form__content__card--appendix-file">
+                      <a href="#" (click)="downloadAppendixFile($event, item)">{{item.appendixContent}}</a>
+                      <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
+                    </div>
+                  </div>
+                  <div *ngIf="item.appendixType != '1'">
+                    <div fxLayout="row" fxLayoutGap="56px" class="app-resume-management-form__content__card--appendix-link">
+                      <div fxLayout="column" fxLayoutGap="12px" class="app-resume-management-form__content__card--appendix-link-left">
+                        <div class="h1-small-title app-resume-management-form__content__card--appendix-link-left-title">傑報人歷資源服務集團 | 傑報人歷資源服務集團</div>
+                        <div class="h2-text--regular app-resume-management-form__content__card--appendix-link-left-content">
+                          傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人傑報人歷資源服務集團
+                        </div>
+                      </div>
+                      <div class="app-resume-management-form__content__card__body--appendix-link-right">
+                        <i [ngStyle]="{'background-image': 'url(' + logoUrl +')'}"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>

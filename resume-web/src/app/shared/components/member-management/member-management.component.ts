@@ -67,9 +67,6 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     return this.birthdayForm.get('Birthday') as FormControl;
   }
 
-  minDate = DateTime.now().plus({year: -80}).toLocal();
-  maxDate = DateTime.now().toLocal();
-
   phoneForm: FormGroup = new FormGroup({
     Phone: new FormControl({
       value:'',

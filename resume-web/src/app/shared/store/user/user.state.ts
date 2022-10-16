@@ -1,4 +1,4 @@
-import { ResumeUserDatasUserDto } from "@app/core/models/Api";
+import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeEducationsEducationDto, ResumeExperiencesExperienceDto, ResumeLicensesLicenseDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto } from "@app/core/models/Api";
 import { loginResponseDto } from "@app/core/models/login.model";
 
 export interface UserState {
@@ -14,4 +14,26 @@ export interface UserState {
     currentUser: ResumeUserDatasUserDto | null;
     // 錯誤訊息
     errorMessage: any;
+    // preview resume title
+    resumeTitle: string;
+    // 履歷基本資料，取得 resume code 會暫存至這
+    resumeBasicInfo: ResumeBaseBasicsBaseBasicDto;
+    // 學歷
+    resumeEductions: ResumeEducationsEducationDto[];
+    // 經歷
+    resumeExperiences: ResumeExperiencesExperienceDto[];
+    // 專業證照
+    resumeLicenses: ResumeLicensesLicenseDto[];
+    // 自傳
+    resumeAutobiographies: ResumeAutobiographiesAutobiographyDto[];
+    // 附件
+    resumeAppendices: ResumeAppendicesAppendixDto[];
+    // 學歷代碼
+    eductionCodeList: ResumeShareCodesShareCodeDto[];
+    // 畢業代碼
+    graduateCodeList: ResumeShareCodesShareCodeDto[];
+    // 大頭貼
+    profilePicture: VoloAbpAccountProfilePictureSourceDto;
+    // 邀請碼
+    invitationCode: string;
 }

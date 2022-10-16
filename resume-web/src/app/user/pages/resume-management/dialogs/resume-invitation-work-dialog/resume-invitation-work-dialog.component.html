@@ -3,52 +3,51 @@
   <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-work-dialog__content">
-  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-work-dialog__content__form">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-work-dialog__content__form" [formGroup]="workForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">公司名稱*</label>
-      <input matInput placeholder="請輸入公司名稱" required>
-      <mat-error *ngIf="true" class="h3-text--medium">
-        公司名稱
+      <input matInput placeholder="請輸入公司名稱" required formControlName="name">
+      <mat-error *ngIf="nameFormCtl.invalid" class="h3-text--medium">
+        {{getNameErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">職稱*</label>
-      <input matInput placeholder="請輸入職稱" required>
-      <mat-error *ngIf="true" class="h3-text--medium">
-        職稱
+      <input matInput placeholder="請輸入職稱" required formControlName="jobTitle">
+      <mat-error *ngIf="jobTitleFormCtl.invalid" class="h3-text--medium">
+        {{getJobTitleNameErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <div class="mat-form-field__block" fxLayout="column">
       <label class="mat-form-field__lable--top">起訖日期</label>
       <div fxLayout="row" fxLayoutGap="12px">
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never" [ngStyle]="{'padding-top.px': 0}">
-          <mat-select placeholder="開始日期">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
+          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="開始日期" formControlName="dateA">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <div [ngStyle]="{'position': 'relative', 'top.px': 12}">-</div>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="結束日期">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
+          <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="dateFilterE" placeholder="結束日期" formControlName="dateD">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
         </mat-form-field>
       </div>
     </div>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">工作內容*</label>
-      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="10" placeholder="請輸入內容"></textarea>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="10" placeholder="請輸入內容" formControlName="jobDescription"></textarea>
+      <mat-error *ngIf="jobDescriptionFormCtl.invalid" class="h3-text--medium">
+        {{getJobDescriptionErrorMessage()}}
+      </mat-error>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-work-dialog__action">
-  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="closeDialog(false)">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

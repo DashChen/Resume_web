@@ -1,5 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { ResumeMailTplsMailTplDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSMSTplDto } from "@app/core/models/Api";
+import { areas, areasList } from '@app/core/interfaces/ares.model';
+import { skill, skillsList } from '@app/core/interfaces/skill.model';
 
 export const actionType = {
     LOADING: '[Common] API Loging',
@@ -20,7 +22,19 @@ export const actionType = {
     MAIL_TPL_SUCCESS: '[Common] MAIL TPL get success',
     MAIL_TPL_FAIL: '[Common] MAIL TPL get fail',
 
+    SEX: '[Common] Sex list',
+    SEX_SUCCESS: '[Common] Sex list get success',
+    SEX_FAIL: '[Common] Sex list get fail',
+
     RESET_ERR: '[Common] Reset error',
+
+    GET_AREAS: '[Common] Get Area json',
+    SET_AREAS: '[Common] Set Areas',
+    SET_MAIN_AREAS: '[Common] Set main Areas',
+
+    GET_SKILLS: '[Common] Get Skills json',
+    SET_SKILLS: '[Common] Set Skills',
+    SET_MAIN_SKILLS: '[Common] Set main Skills',
 }
 
 export const setApiLoading = createAction(
@@ -84,6 +98,48 @@ export const getMailTplFail = createAction(
     props<{ payload: any }>(),
 );
 
+export const getSexList = createAction(
+    actionType.SEX,
+);
+
+export const getSexListSuccess = createAction(
+    actionType.SEX_SUCCESS,
+    props<{ payload: ResumeShareCodesShareCodeDto[] | null }>(),
+);
+
+export const getSexListFail = createAction(
+    actionType.SEX_FAIL,
+    props<{ payload: any }>(),
+);
+
 export const resetErr = createAction(
     actionType.RESET_ERR
+);
+
+export const getAreas = createAction(
+    actionType.GET_AREAS,
+);
+
+export const setAreas = createAction(
+    actionType.SET_AREAS,
+    props<{ payload: areasList[] }>(),
+);
+
+export const setMainAreas = createAction(
+    actionType.SET_MAIN_AREAS,
+    props<{ payload: areas[] }>(),
+);
+
+export const getSkills = createAction(
+    actionType.GET_SKILLS,
+);
+
+export const setSkills = createAction(
+    actionType.SET_SKILLS,
+    props<{ payload: skillsList[] }>(),
+);
+
+export const setMainSkills = createAction(
+    actionType.SET_MAIN_SKILLS,
+    props<{ payload: skill[] }>(),
 );

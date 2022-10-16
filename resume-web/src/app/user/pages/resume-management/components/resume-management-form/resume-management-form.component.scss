@@ -89,10 +89,140 @@ $this: '.app-resume-management-form';
           }
         }
         &__body {
-          padding-top: 24px;
-          padding-bottom: 24px;
-          padding-left: 24px;
-          padding-right: 24px;
+          &--empty {
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+        }
+        &--eduction {
+          min-height: 56px;
+          padding: 40px 24px;
+          position: relative;
+          &-btns {
+            display: none;
+            padding: 6px 24px 0 0;
+            position: absolute;
+            inset: 0;
+            [mat-icon-button] {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+              height: 30px;
+              width: 30px;
+              min-width: 30px;
+              mat-icon {
+                &[data-mat-icon-name="trash"] {
+                  height: 18px;
+                  width: 16px;
+                }
+                &[data-mat-icon-name="edit"] {
+                  height: 16px;
+                  width: 16px;
+                }
+              }
+            }
+          }
+          &:hover {
+            background-color: #E0EFFD;
+            #{$this}__content__card--eduction-btns {
+              display: flex;
+              align-items: flex-start;
+              justify-content: flex-end;
+              gap: 12px;
+            }
+          }
+        }
+
+        &--experiences {
+          min-height: 162px;
+          padding: 40px 24px;
+          position: relative;
+          &-btns {
+            display: none;
+            padding: 6px 24px 0 0;
+            position: absolute;
+            inset: 0;
+            [mat-icon-button] {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+              height: 30px;
+              width: 30px;
+              min-width: 30px;
+              mat-icon {
+                &[data-mat-icon-name="trash"] {
+                  height: 18px;
+                  width: 16px;
+                }
+                &[data-mat-icon-name="edit"] {
+                  height: 16px;
+                  width: 16px;
+                }
+              }
+            }
+          }
+          &:hover {
+            background-color: #E0EFFD;
+            #{$this}__content__card--experiences-btns {
+              display: flex;
+              align-items: flex-start;
+              justify-content: flex-end;
+              gap: 12px;
+            }
+          }
+
+          &-content {
+            max-width: 529px;
+            width: 100%;
+            height: auto;
+          }
+        }
+  
+        &--appendix {
+          &-file {
+            background: #EAEDF1;
+            border-radius: 5px;
+            height: 50px;
+            max-width: 566px;
+            width: 100%;
+            a {
+              color: #006CD0;
+            }
+            mat-icon {
+              color: $colorMain;
+            }
+          }
+          &-link {
+            border: 1px solid #C5D0DF;
+            height: 120px;
+            max-width: 566px;
+            padding: 12px;
+            width: 100%;
+            &-left {
+              &-title {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                width: 100%;
+              }
+              &-content {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+              }
+            }
+            &-right {
+              background: #006CD0;
+              border-radius: 4px;
+              height: 96px;
+              width: 96px;
+            }
+          }
         }
       }
       &__image {

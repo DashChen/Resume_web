@@ -3,89 +3,81 @@
   <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
 <div mat-dialog-content class="resume-invitation-education-dialog__content">
-  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-education-dialog__content__form">
+  <form fxLayout="column" fxLayoutGap="35px" class="resume-invitation-education-dialog__content__form" [formGroup]="eductionForm">
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">學校*</label>
-      <input matInput placeholder="請輸入學校名字" required>
-      <mat-error *ngIf="true" class="h3-text--medium">
-        學校
+      <input matInput placeholder="請輸入學校名字" required formControlName="school">
+      <mat-error *ngIf="schoolFormCtl.invalid" class="h3-text--medium">
+        {{getSchoolErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
       <label class="mat-form-field__lable--top">學歷*</label>
-      <mat-select placeholder="請選擇學歷">
-        <ng-container *ngFor="let option of educationOptions">
-          <mat-option [value]="option.key">{{option.text}}</mat-option>
+      <mat-select placeholder="請選擇學歷" formControlName="educationCode">
+        <ng-container *ngFor="let option of eductionCodeList">
+          <mat-option [value]="option.code">{{option.name}}</mat-option>
         </ng-container>
       </mat-select>
+      <mat-error *ngIf="educationCodeFormCtl.invalid" class="h3-text--medium">
+        {{getEductionCodeErrorMessage()}}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">科系名稱*</label>
-      <input matInput placeholder="請輸入科系名稱" required>
-      <mat-error *ngIf="true" class="h3-text--medium">
-        科系名稱
+      <input matInput placeholder="請輸入科系名稱" required formControlName="major">
+      <mat-error *ngIf="majorFormCtl.invalid" class="h3-text--medium">
+        {{getMajorErrorMessage()}}
       </mat-error>
     </mat-form-field>
     <div class="mat-form-field__block" fxLayout="column">
       <label class="mat-form-field__lable--top">就學期間*</label>
       <div fxLayout="row" fxLayoutGap="12px">
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never" [ngStyle]="{'padding-top.px': 0}">
-          <mat-select placeholder="開始年份">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="開始月份">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
+          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="開始月份" formControlName="dateA">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="multi-year" (monthSelected)="setStartMonthAndYear($event, picker)"></mat-datepicker>
+          <mat-error *ngIf="dateAFormCtl.invalid" class="h3-text--medium">
+            {{getDateAErrorMessage()}}
+          </mat-error>
         </mat-form-field>
         <div [ngStyle]="{'position': 'relative', 'top.px': 12}">-</div>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="結束年份">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="結束月份">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
-            </ng-container>
-          </mat-select>
+          <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="dateFilterE" placeholder="結束月份" formControlName="dateD">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1 startView="multi-year" (monthSelected)="setEndMonthAndYear($event, picker1)"></mat-datepicker>
+          <mat-error *ngIf="dateDFormCtl.invalid" class="h3-text--medium">
+            {{getDateDErrorMessage()}}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="mat-form-field__block" fxLayout="column" [ngStyle]="{'padding-bottom.em': 1.34375}">
       <label class="mat-form-field__lable--top">狀態*</label>
-      <mat-radio-group [ngStyle]="{'padding-right.px': 13, 'padding-left.px': 13, 'padding-top.px': 8, 'padding-bottom.px': 8}">
-        <mat-radio-button value="graduate">畢業</mat-radio-button>
-        <mat-radio-button value="ungraduate">肄業</mat-radio-button>
-        <mat-radio-button value="school">就學中</mat-radio-button>
+      <mat-radio-group formControlName="graduationCode">
+        <mat-radio-button [value]="item.code" *ngFor="let item of graduateCodeList">{{item.name}}</mat-radio-button>
       </mat-radio-group>
+      <mat-error *ngIf="graduationCodeFormCtl.invalid" class="h3-text--medium">
+        {{getGraduationCodeErrorMessage()}}
+      </mat-error>
     </div>
     <div class="mat-form-field__block" fxLayout="column" [ngStyle]="{'padding-bottom.em': 1.34375}">
-      <label class="mat-form-field__lable--top">請輸入關鍵字</label>
-      <mat-radio-group [ngStyle]="{'padding-right.px': 13, 'padding-left.px': 13, 'padding-top.px': 8, 'padding-bottom.px': 8}">
-        <mat-radio-button value="taiwan">台灣</mat-radio-button>
-        <mat-radio-button value="foreign">國外</mat-radio-button>
-      </mat-radio-group>
+      <label class="mat-form-field__lable--top">請選擇地區</label>
+      <!-- <mat-radio-group formControlName="area">
+        <mat-radio-button [value]="'taiwan'">台灣</mat-radio-button>
+        <mat-radio-button [value]="'foreign'">國外</mat-radio-button>
+      </mat-radio-group> -->
       <div fxLayout="row" fxLayoutGap="24px">
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never" [ngStyle]="{'padding-top.px': 0}">
-          <mat-select placeholder="請選擇區域">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
+          <mat-select placeholder="請選擇區域" (valueChange)="changeArea($event)">
+            <ng-container *ngFor="let option of mainAreas">
+              <mat-option [value]="option.no">{{option.des}}</mat-option>
             </ng-container>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="請選擇國家">
-            <ng-container *ngFor="let option of educationOptions">
-              <mat-option [value]="option.key">{{option.text}}</mat-option>
+          <mat-select placeholder="請選擇國家" (valueChange)="changeCountry($event)">
+            <ng-container *ngFor="let option of choicedAreas">
+              <mat-option [value]="option.no">{{option.des}}</mat-option>
             </ng-container>
           </mat-select>
         </mat-form-field>
@@ -94,10 +86,10 @@
   </form>
 </div>
 <div mat-dialog-actions fxLayoutAlign="center center" fxLayoutGap="12px" class="resume-invitation-education-dialog__action">
-  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+  <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="closeDialog(false)">
     <span>{{ data.cancelBtnText }}</span>
   </button>
-  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+  <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
     <span>{{ data.successBtnText }}</span>
   </button>
 </div>

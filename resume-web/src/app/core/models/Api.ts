@@ -574,6 +574,7 @@ export interface ResumeEducationsEducationDto {
   graduationCode?: string | null;
   note?: string | null;
   schoolLocation?: string | null;
+  isFinish?: boolean;
 }
 
 export interface ResumeEducationsEducationUpdateDto {
@@ -1275,6 +1276,7 @@ export interface ResumeMailQuenesMailQueneDto {
 
   /** @format date-time */
   dateD?: string;
+  refuse?: boolean;
 }
 
 export interface ResumeMailQuenesMailQueneUpdateDto {
@@ -1457,6 +1459,7 @@ export interface ResumeResumeInvitationsResumeInvitationCreateDto {
   /** @format email */
   email: string;
   name?: string | null;
+  idno?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationDto {
@@ -1494,22 +1497,14 @@ export interface ResumeResumeInvitationsResumeInvitationDto {
   email?: string | null;
   companyId?: string | null;
   name?: string | null;
+  url?: string | null;
 }
 
 export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
   code?: string | null;
-  companyName?: string | null;
   jobName?: string | null;
   sendType?: string | null;
-  sendStatus?: string | null;
   isOpening?: boolean;
-
-  /** @format date-time */
-  dateA?: string | null;
-
-  /** @format date-time */
-  dateD?: string | null;
-  writeStatus?: string | null;
   accountCode?: string | null;
   stage?: string | null;
   resumeCode?: string | null;
@@ -1517,7 +1512,6 @@ export interface ResumeResumeInvitationsResumeInvitationUpdateDto {
 
   /** @format email */
   email: string;
-  companyId?: string | null;
   name?: string | null;
 }
 
@@ -1720,6 +1714,8 @@ export interface ResumeSMSQuenesSMSQueneCreateDto {
   /** @format date-time */
   dateB?: string;
   dateD?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
 }
 
 export interface ResumeSMSQuenesSMSQueneDto {
@@ -1762,6 +1758,9 @@ export interface ResumeSMSQuenesSMSQueneDto {
   /** @format date-time */
   dateB?: string;
   dateD?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
+  refuse?: boolean;
 }
 
 export interface ResumeSMSQuenesSMSQueneUpdateDto {
@@ -1783,6 +1782,8 @@ export interface ResumeSMSQuenesSMSQueneUpdateDto {
   /** @format date-time */
   dateB?: string;
   dateD?: string | null;
+  stage?: string | null;
+  jobName?: string | null;
 }
 
 export interface ResumeSMSTplsSMSTplCreateDto {
@@ -2019,6 +2020,11 @@ export interface ResumeUserDatasUserDto {
   idNo?: string | null;
   phone?: string | null;
   email?: string | null;
+  mailVerify?: boolean;
+  phoneVerify?: boolean;
+  fbVerify?: boolean;
+  lineVerify?: boolean;
+  googleVerify?: boolean;
 }
 
 export interface ResumeVerifyCodesVerifyCodeCreateDto {
@@ -2410,26 +2416,6 @@ export interface VoloAbpAccountVerifyLinkTokenInput {
   /** @format uuid */
   tenantId?: string | null;
   token: string;
-}
-
-export interface VoloAbpApplicationDtosListResultDto1ResumeAppendicesAppendixDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
-  items?: ResumeAppendicesAppendixDto[] | null;
-}
-
-export interface VoloAbpApplicationDtosListResultDto1ResumeAutobiographiesAutobiographyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
-  items?: ResumeAutobiographiesAutobiographyDto[] | null;
-}
-
-export interface VoloAbpApplicationDtosListResultDto1ResumeBaseBasicsBaseBasicDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
-  items?: ResumeBaseBasicsBaseBasicDto[] | null;
-}
-
-export interface VoloAbpApplicationDtosListResultDto1ResumeExperiencesExperienceDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
-  items?: ResumeExperiencesExperienceDto[] | null;
-}
-
-export interface VoloAbpApplicationDtosListResultDto1ResumeLicensesLicenseDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull {
-  items?: ResumeLicensesLicenseDto[] | null;
 }
 
 export interface VoloAbpApplicationDtosListResultDto1VoloAbpAccountLinkUserDtoVoloAbpAccountProPublicApplicationContractsVersion5200CultureNeutralPublicKeyTokenNull {
@@ -5730,7 +5716,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     appAppendicesCreate: (
       data: { createFileInputWithStream?: File },
-      query?: { ResumeCode?: string; AppendixName?: string; AppendixType?: string; AppendixContent?: string },
+      query?: { ResumeCode?: string; AppendixName?: string; AppendixContent?: string },
       params: RequestParams = {},
     ) =>
       this.request<ResumeAppendicesAppendixDto, VoloAbpHttpRemoteServiceErrorResponse>({
@@ -5805,10 +5791,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appAppendicesGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
-      this.request<
-        VoloAbpApplicationDtosListResultDto1ResumeAppendicesAppendixDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
-        VoloAbpHttpRemoteServiceErrorResponse
-      >({
+      this.request<ResumeAppendicesAppendixDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/appendices/GetListByResumeCode`,
         method: "GET",
         query: query,
@@ -6142,10 +6125,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appAutobiographiesGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
-      this.request<
-        VoloAbpApplicationDtosListResultDto1ResumeAutobiographiesAutobiographyDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
-        VoloAbpHttpRemoteServiceErrorResponse
-      >({
+      this.request<ResumeAutobiographiesAutobiographyDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/autobiographies/GetListByResumeCode`,
         method: "GET",
         query: query,
@@ -6295,10 +6275,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appBaseBasicsGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
-      this.request<
-        VoloAbpApplicationDtosListResultDto1ResumeBaseBasicsBaseBasicDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
-        VoloAbpHttpRemoteServiceErrorResponse
-      >({
+      this.request<ResumeBaseBasicsBaseBasicDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/base-basics/GetListByResumeCode`,
         method: "GET",
         query: query,
@@ -7889,6 +7866,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Education
+     * @name AppEducationsGetListByResumeCodeList
+     * @request GET:/api/app/educations/GetListByResumeCode
+     * @secure
+     */
+    appEducationsGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
+      this.request<ResumeEducationsEducationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/educations/GetListByResumeCode`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Education
      * @name AppEducationsDetail
      * @request GET:/api/app/educations/{id}
      * @secure
@@ -8215,10 +8210,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appExperiencesGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
-      this.request<
-        VoloAbpApplicationDtosListResultDto1ResumeExperiencesExperienceDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
-        VoloAbpHttpRemoteServiceErrorResponse
-      >({
+      this.request<ResumeExperiencesExperienceDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/experiences/GetListByResumeCode`,
         method: "GET",
         query: query,
@@ -9819,10 +9811,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appLicensesGetListByResumeCodeList: (query?: { ResumeCode?: string }, params: RequestParams = {}) =>
-      this.request<
-        VoloAbpApplicationDtosListResultDto1ResumeLicensesLicenseDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
-        VoloAbpHttpRemoteServiceErrorResponse
-      >({
+      this.request<ResumeLicensesLicenseDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/licenses/GetListByResumeCode`,
         method: "GET",
         query: query,
@@ -10039,6 +10028,60 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/mail-quenes/${id}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesResendCreate
+     * @request POST:/api/app/mail-quenes/Resend
+     * @secure
+     */
+    appMailQuenesResendCreate: (data: string[], params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/Resend`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesGetListByCompanyIdList
+     * @request GET:/api/app/mail-quenes/GetListByCompanyId
+     * @secure
+     */
+    appMailQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeMailQuenesMailQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags MailQuene
+     * @name AppMailQuenesUpdateOpenedStatusUpdate
+     * @request PUT:/api/app/mail-quenes/UpdateOpenedStatus
+     * @secure
+     */
+    appMailQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/mail-quenes/UpdateOpenedStatus`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -10795,12 +10838,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Register
+     * @name AppRegisterResumeMailCheckCreate
+     * @request POST:/api/app/register/resume-mail-check
+     * @secure
+     */
+    appRegisterResumeMailCheckCreate: (query?: { Email?: string }, params: RequestParams = {}) =>
+      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/resume-mail-check`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
      * @name AppRegisterResumeMailVerifyCodeCreate
      * @request POST:/api/app/register/resume-mail-verify-code
      * @secure
      */
     appRegisterResumeMailVerifyCodeCreate: (query?: { Email?: string }, params: RequestParams = {}) =>
-      this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
+      this.request<string, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/register/resume-mail-verify-code`,
         method: "POST",
         query: query,
@@ -10820,6 +10881,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     appRegisterConfirmVerifyCodeCreate: (query?: { Phone?: string; Code?: string }, params: RequestParams = {}) =>
       this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/register/confirm-verify-code`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterCheckPhoneExsistCreate
+     * @request POST:/api/app/register/check-phone-exsist
+     * @secure
+     */
+    appRegisterCheckPhoneExsistCreate: (query?: { Phone?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/check-phone-exsist`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterCheckEmailExsistCreate
+     * @request POST:/api/app/register/check-email-exsist
+     * @secure
+     */
+    appRegisterCheckEmailExsistCreate: (query?: { Email?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/check-email-exsist`,
         method: "POST",
         query: query,
         secure: true,
@@ -11273,6 +11370,49 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags ResumeInvitation
+     * @name AppResumeInvitationsCreateListAsyncCreate
+     * @request POST:/api/app/resume-invitations/CreateListAsync
+     * @secure
+     */
+    appResumeInvitationsCreateListAsyncCreate: (
+      data: ResumeResumeInvitationsResumeInvitationCreateDto[],
+      params: RequestParams = {},
+    ) =>
+      this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/CreateListAsync`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
+     * @name AppResumeInvitationsSendResumeUpdate
+     * @request PUT:/api/app/resume-invitations/SendResume
+     * @secure
+     */
+    appResumeInvitationsSendResumeUpdate: (
+      query?: { invitationCode?: string; ResumeCode?: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/SendResume`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
      * @name AppResumeInvitationsDeleteListDelete
      * @request DELETE:/api/app/resume-invitations/DeleteList
      * @secure
@@ -11306,6 +11446,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
+     * @name AppResumeInvitationsGetListByCompanyIdList
+     * @request GET:/api/app/resume-invitations/GetListByCompanyId
+     * @secure
+     */
+    appResumeInvitationsGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -11430,7 +11587,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     appResumeMainsGetListByAccountIdList: (params: RequestParams = {}) =>
-      this.request<ResumeResumeMainsResumeMainDto, VoloAbpHttpRemoteServiceErrorResponse>({
+      this.request<ResumeResumeMainsResumeMainDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/resume-mains/GetListByAccountId`,
         method: "GET",
         secure: true,
@@ -12008,6 +12165,146 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags ShareCode
+     * @name AppShareCodesGetIsSendListList
+     * @request GET:/api/app/share-codes/GetIsSendList
+     * @secure
+     */
+    appShareCodesGetIsSendListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetIsSendList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetOpenStatusListList
+     * @request GET:/api/app/share-codes/GetOpenStatusList
+     * @secure
+     */
+    appShareCodesGetOpenStatusListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetOpenStatusList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetThirdPartyCodeListList
+     * @request GET:/api/app/share-codes/GetThirdPartyCodeList
+     * @secure
+     */
+    appShareCodesGetThirdPartyCodeListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetThirdPartyCodeList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetResumeInvitationCodeListList
+     * @request GET:/api/app/share-codes/GetResumeInvitationCodeList
+     * @secure
+     */
+    appShareCodesGetResumeInvitationCodeListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetResumeInvitationCodeList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetSexCodeListList
+     * @request GET:/api/app/share-codes/GetSexCodeList
+     * @secure
+     */
+    appShareCodesGetSexCodeListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetSexCodeList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetEducationCodeListList
+     * @request GET:/api/app/share-codes/GetEducationCodeList
+     * @secure
+     */
+    appShareCodesGetEducationCodeListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetEducationCodeList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ShareCode
+     * @name AppShareCodesGetGraduateCodeListList
+     * @request GET:/api/app/share-codes/GetGraduateCodeList
+     * @secure
+     */
+    appShareCodesGetGraduateCodeListList: (params: RequestParams = {}) =>
+      this.request<
+        VoloAbpApplicationDtosPagedResultDto1ResumeShareCodesShareCodeDtoResumeApplicationContractsVersion1000CultureNeutralPublicKeyTokenNull,
+        VoloAbpHttpRemoteServiceErrorResponse
+      >({
+        path: `/api/app/share-codes/GetGraduateCodeList`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags SMSQuene
      * @name AppSmsQuenesList
      * @request GET:/api/app/s-mSQuenes
@@ -12032,6 +12329,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         DateBMin?: string;
         DateBMax?: string;
         DateD?: string;
+        Stage?: string;
+        JobName?: string;
         Sorting?: string;
         SkipCount?: number;
         MaxResultCount?: number;
@@ -12118,6 +12417,60 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/app/s-mSQuenes/${id}`,
         method: "DELETE",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesResendCreate
+     * @request POST:/api/app/s-mSQuenes/Resend
+     * @secure
+     */
+    appSMSQuenesResendCreate: (data: string[], params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/Resend`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesGetListByCompanyIdList
+     * @request GET:/api/app/s-mSQuenes/GetListByCompanyId
+     * @secure
+     */
+    appSMSQuenesGetListByCompanyIdList: (params: RequestParams = {}) =>
+      this.request<ResumeSMSQuenesSMSQueneDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SMSQuene
+     * @name AppSmsQuenesUpdateOpenedStatusUpdate
+     * @request PUT:/api/app/s-mSQuenes/UpdateOpenedStatus
+     * @secure
+     */
+    appSMSQuenesUpdateOpenedStatusUpdate: (query?: { id?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/s-mSQuenes/UpdateOpenedStatus`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
 

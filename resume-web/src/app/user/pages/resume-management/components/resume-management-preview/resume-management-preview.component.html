@@ -1,1 +1,87 @@
-<p>resume-management-preview works!</p>
+<div class="app-resume-management-form" fxLayout="column" fxLayoutGap="24px">
+    <div class="app-resume-management-form__head__block" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="24px">
+      <div fxLayout="column" fxFlex fxLayoutGap="12px">
+        <div class="app-resume-management-form__head__title__main h1-large-title">
+          履歷管理
+        </div>
+        <div class="app-resume-management-form__head__title__sub h2-text--regular">
+          履歷管理 / {{title}} / 預覽履歷
+        </div>
+      </div>
+      <div class="app-resume-management-form__head__action__block" fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
+        <button mat-raised-button [ngStyle.lt-md]="{'width.px': 105}" class="mat-button--blue h2-text--regular" (click)="goToEdit()">
+            <span>編輯</span>
+        </button>
+      </div>
+    </div>
+
+    <div fxLayout="column" fxFill>
+        <div fxLayout="column" fxFlex fxLayoutGap="24px" fxLayoutAlign="none stretch">
+            <div class="app-resume-management-form__content__card" fxLayout="column" fxFlex>
+                <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                    <span class="app-resume-management-form__content__card__header__title">基本資料</span>
+                </div>
+                <div class="app-resume-management-form__content__card__body" fxLayout="row">
+                <div fxLayout="column">
+                    <img class="app-resume-management-form__content__image__avatar" [src]="'/assets/icons/user-pic-icon1.svg'" (error)="onImgError($event)" alt="">
+                </div>
+                <div fxLayout="column" fxLayoutGap="24px" [ngStyle]="{'padding-left.px': 48, 'padding-right.px': 48}">
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">中文姓名</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.nameC}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">英文姓名</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.nameE}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">性別</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.sexCode | getValueByKeyFromList: [sexList, 'code', 'name']}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">出生日期</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.birthDate | date: 'yyyy-MM-dd'}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">通訊電話</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.currentTel}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">通訊地址</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.currentAdd}}</div>
+                    </div>
+                    <div fxLayout="row">
+                        <label class="app-resume-management-form__content__label" fxFlex="80px">電子郵件</label>
+                        <div class="app-resume-management-form__content__plaintext">{{user?.email}}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+            <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                <span class="app-resume-management-form__content__card__header__title">學歷</span>
+            </div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+            <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                <span class="app-resume-management-form__content__card__header__title">工作經歷</span>
+            </div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+            <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                <span class="app-resume-management-form__content__card__header__title">專業證照</span>
+            </div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+            <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                <span class="app-resume-management-form__content__card__header__title">自傳</span>
+            </div>
+        </div>
+        <div class="app-resume-management-form__content__card" fxFlex>
+            <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
+                <span class="app-resume-management-form__content__card__header__title">附件</span>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>

@@ -21,14 +21,18 @@ export class StartupService {
     return new Promise((resolve, reject) => {
       const isAdmin = window.location.pathname.includes('admin') || false;
       const token = sessionStorage.getItem('JbToken') || this.cookie.get('JbToken');
-
+      const params = new URLSearchParams(window.location.search);
+      const invitationCode = params.get('invitationCode');
+      if (!!invitationCode && !isAdmin) {
+        this.store.dispatch(UserActions.setInvitationCode({ payload: invitationCode }));
+      }
       if (!token) {
         this.checkStatus(isAdmin);
         return resolve('no token or token expired');
       }
       this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
       if (isAdmin) {
-        // TODO 取管理者 data
+        // 取管理者 data
         this.store.dispatch(AdminActions.setToken({
           payload: {
             token_type: 'bearer',
