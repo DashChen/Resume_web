@@ -93,7 +93,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok && next.data) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/user/login']);
           }
         });
       });

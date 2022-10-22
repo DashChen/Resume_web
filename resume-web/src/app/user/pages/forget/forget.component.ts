@@ -171,7 +171,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
           dialogRef.afterClosed().subscribe(result => {
             if (result && next.ok) {
               this.store.dispatch(UserActions.setTempAccount({payload: this.emailAddressFormCtl.value }));
-              this.store.dispatch(RouterActions.Go({path: ['/login']}));
+              this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
             }
           });
         }
@@ -216,7 +216,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       console.log(next);
       if (next.ok && next.data) {
         this.store.dispatch(UserActions.setTempAccount({payload: this.tempPhone }));
-        this.store.dispatch(RouterActions.Go({path: ['/reset-password']}));
+        this.store.dispatch(RouterActions.Go({path: ['/user/reset-password']}));
       } else {
         this.validateErrorTimes++;
         this.showCountdown = false;
@@ -292,7 +292,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.store.dispatch(RouterActions.Go({path: ['/login']}));
+          this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
         }
       })
     }
@@ -308,7 +308,7 @@ export class ForgetComponent extends BaseComponent implements OnInit {
     if (this.showCountdown) {
       this.sendVerificationCode();
     } else {
-      this.store.dispatch(RouterActions.Go({path: ['/login']}));
+      this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
     }
   }
 }

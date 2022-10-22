@@ -45,7 +45,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     IdNo: new FormControl({
       value:'',
       disabled: true
-    }, [Validators.pattern('[A-Z][0-9]{9}')]),
+    }, [Validators.pattern('[A-Z][1-2][0-9]{8}')]),
   });
 
   get idNoFormCtl() {
@@ -222,29 +222,19 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   editMember(event: MouseEvent, type: string) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.focusBtnKey === '') {
+    if (this.focusBtnKey !== type) {
+      this.disOrEnableFormCtl(this.focusBtnKey, true);
       this.focusBtnKey = type;
-      switch (type) {
-        case 'Name':
-          this.nameFormCtl.enable();
-          break;
-        case 'Birthday':
-          this.birthdayFormCtl.enable();
-          break;
-        case 'Email':
-          this.emailFormCtl.enable();
-          break;
-        case 'Phone':
-          this.phoneFormCtl.enable();
-          break;
-        case 'IdNo':
-          this.idNoFormCtl.enable();
-          break;
-      }
+      this.disOrEnableFormCtl(type, false);
     } else {
       let requestApi ;
       switch (type) {
         case 'Name':
+          if (this.nameForm.invalid) {
+            this.nameForm.markAllAsTouched();
+            return;
+          }
+
           requestApi = this.dataService.api.appUserDatasUpdateNameUpdate(this.nameForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
@@ -252,6 +242,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           });
           break;
         case 'Birthday':
+          if (this.birthdayForm.invalid) {
+            this.birthdayForm.markAllAsTouched();
+            return;
+          }
           requestApi = this.dataService.api.appUserDatasUpdateBirthdayUpdate(this.birthdayForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
@@ -259,6 +253,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           });
           break;
         case 'Email':
+          if (this.emailForm.invalid) {
+            this.emailForm.markAllAsTouched();
+            return;
+          }
           requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
@@ -269,12 +267,27 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           if (this.bounded.phone) {
             this.cancelboundMobile();
           } else {
+            if (this.phoneForm.invalid) {
+              this.phoneForm.markAllAsTouched();
+              return;
+            }
             requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate(this.phoneForm.value,{
               headers: {
                 ...this.dataService.getAuthorizationToken(this.authorizeType)
               }
             });
           }
+          break;
+        case 'IdNo':
+          if (this.idNoForm.invalid) {
+            this.idNoForm.markAllAsTouched();
+            return;
+          }
+          requestApi = this.dataService.api.appUserDatasUpdateIdNoUpdate(this.idNoForm.value,{
+            headers: {
+              ...this.dataService.getAuthorizationToken(this.authorizeType)
+            }
+          });
           break;
       }
       if (requestApi) {
@@ -285,6 +298,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           }),
           finalize(() => {
             this.focusBtnKey = '';
+            this.disOrEnableFormCtl(type, true);
             requestHttp$.unsubscribe()
           }),
           takeUntil(this.destroy$),
@@ -300,30 +314,55 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     }
   }
 
+  disOrEnableFormCtl(type: string, disable: boolean) {
+    if (!type) {
+      return;
+    }
+    let formCtl;
+    switch (type) {
+      case 'Name':
+        formCtl = this.nameFormCtl;
+        break;
+      case 'Birthday':
+        formCtl = this.birthdayFormCtl;
+        break;
+      case 'Email':
+        formCtl = this.emailFormCtl;
+        break;
+      case 'Phone':
+        formCtl = this.phoneFormCtl;
+        break;
+      case 'IdNo':
+        formCtl = this.idNoFormCtl;
+        break;
+    }
+    if (disable) {
+      (formCtl as FormControl).disable();
+    } else {
+      (formCtl as FormControl).enable();
+    }
+  }
+
   cancelEdit(event: MouseEvent, type: string) {
     this.focusBtnKey = '';
     switch (type) {
       case 'Name':
         this.nameFormCtl.setValue(this.user?.name || '');
-        this.nameFormCtl.disable();
         break;
       case 'Birthday':
         this.birthdayFormCtl.setValue(this.user?.birthDay || '');
-        this.birthdayFormCtl.disable();
         break;
       case 'Email':
         this.emailFormCtl.setValue(this.user?.email || '');
-        this.emailFormCtl.disable();
         break;
       case 'Phone':
         this.phoneFormCtl.setValue(this.user?.phone || '');
-        this.phoneFormCtl.disable();
         break;
       case 'IdNo':
         this.idNoFormCtl.setValue(this.user?.idNo || '');
-        this.idNoFormCtl.disable();
         break;
     }
+    this.disOrEnableFormCtl(type, true);
   }
 
   cancelboundMobile() {

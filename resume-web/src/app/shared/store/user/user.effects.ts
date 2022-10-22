@@ -52,7 +52,7 @@ export class UserEffects {
         map(() => {
             this.cookie.delete('JbToken');
             sessionStorage.clear();
-            this.store.dispatch(RouterActions.Go({ path: ['/login']}));
+            this.store.dispatch(RouterActions.Go({ path: ['/user/login']}));
             return UserActions.logoutSuccess();
         })
     ))
@@ -69,7 +69,7 @@ export class UserEffects {
                     console.log('getUserEffect', res);
                     this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
                     let url = sessionStorage.getItem('currentUrl');
-                    if (!url || url === '/login') {
+                    if (!url || url === '/user/login') {
                         url = '/user/member-management';
                     }
                     this.store.dispatch(RouterActions.Go({ path: [url]}));

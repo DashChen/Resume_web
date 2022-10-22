@@ -16,11 +16,6 @@ import {
 } from './pages';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, data: { layout: Layouts.userLogin }, },
-  { path: 'register', component: RegisterComponent, data: { layout: Layouts.userLogin }, },
-  { path: 'register-info', component: RegisterInfoComponent, data: { layout: Layouts.userLogin }, },
-  { path: 'forget', component: ForgetComponent, data: { layout: Layouts.userLogin }, },
-  { path: 'reset-password', component: ResetPasswordComponent, data: { layout: Layouts.userLogin }, },
   {
     path: 'user',
     component: UserComponent,

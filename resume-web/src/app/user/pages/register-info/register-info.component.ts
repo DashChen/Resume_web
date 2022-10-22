@@ -59,7 +59,6 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
     if (this.userNameFormCtl.hasError('required')) {
       return '請填寫此欄位'
     }
-    console.log(this.userNameFormCtl.errors)
     return this.userNameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
   }
 
@@ -74,7 +73,10 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
     if (this.passwordFormCtl.hasError('required')) {
       return '請輸入關鍵字'
     }
-    return this.passwordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
+    if (this.passwordFormCtl.hasError('passwordStrength')) {
+      return '密碼須包含大小寫英文、數字等';
+    }
+    return this.passwordFormCtl.hasError('minlength') ? '密碼設定長度至少為8個字元的字串' : '';
   }
 
   getConfirmPwdErrorMessage() {
@@ -85,11 +87,10 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
   }
 
   getReadOverErrorMessage() {
-    console.log(this.readOverFormCtl.errors);
     return this.readOverFormCtl.hasError('required') ? '請勾選' : '';
   }
 
-  disabledBtn: boolean = false;
+  disabledBtn: boolean = true;
 
   constructor(
     public router: Router,
@@ -101,16 +102,19 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerPhone$.subscribe(phone => this.phone = phone);
+    this.registerForm.statusChanges.subscribe(status => {
+      this.disabledBtn = status !== 'VALID';
+    });
   }
 
   submitForm() {
     if (this.registerForm.valid) {
+      this.disabledBtn = true;
       this.readOverFormCtl.addValidators([Validators.requiredTrue]);
       this.readOverFormCtl.updateValueAndValidity();
       if (this.readOverFormCtl.invalid) {
         return;
       }
-      this.disabledBtn = true;
 
       const observable$ = from(this.dataService.api.appRegisterResumeRegisterCreate({
         userName: this.userNameFormCtl.value,
@@ -136,7 +140,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/user/login']);
           }
         });
       },

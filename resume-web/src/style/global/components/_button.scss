@@ -22,13 +22,13 @@
         &--block {
             width: 100%;
         }
-        &--orange {
+        &--orange:not(.mat-button-disabled) {
             background-color: #F4781E;
             &:hover {
                 background-color: #FF984D;
             }
         }
-        &--blue {
+        &--blue:not(.mat-button-disabled) {
             -webkit-tap-highlight-color: transparent;
             -webkit-appearance: button;
             background-color: $colorCis;
@@ -61,7 +61,7 @@
                 mix-blend-mode: lighten;
             }
         }
-        &--blue2 {
+        &--blue2:not(.mat-button-disabled) {
             background: #006CD0;
             &:hover {
                 background: #42A4FF;

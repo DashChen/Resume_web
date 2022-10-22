@@ -25,7 +25,7 @@
         <div class="app-login__form__remeber__block">
             <mat-checkbox class="h2-text--regular" formControlName="rememberMe">記住我</mat-checkbox>
 
-            <a href="/forget" class="h2-text--regular" (click)="goTo($event, '/forget')">
+            <a href="/user/forget" class="h2-text--regular" (click)="goTo($event, '/user/forget')">
                 忘記密碼?
             </a>
         </div>
@@ -38,7 +38,7 @@
 
     <div class="app-login__register">
         <span class="h2-text--regular">還沒有註冊?</span>
-        <a href="/register" class="h2-text--regular" (click)="goTo($event, '/register')">註冊</a>
+        <a href="/user/register" class="h2-text--regular" (click)="goTo($event, '/user/register')">註冊</a>
     </div>
 
     <div class="app-login__divider">

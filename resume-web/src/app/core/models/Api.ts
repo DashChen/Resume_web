@@ -184,35 +184,35 @@ export interface ResumeBaseBasicsBaseBasicDto {
 }
 
 export interface ResumeBaseBasicsBaseBasicUpdateDto {
-  code: string;
-  resumeCode: string;
-  nameC: string;
+  code?: string | null;
+  resumeCode?: string | null;
+  nameC?: string | null;
   nameE?: string | null;
   admitChannelCode?: string | null;
-  idNo: string;
+  idNo?: string | null;
 
   /** @format date-time */
-  birthDate: string;
-  sexCode: string;
+  birthDate?: string;
+  sexCode?: string | null;
   blood?: string | null;
-  mirrageCode: string;
+  mirrageCode?: string | null;
   introducer?: string | null;
   birthPlaceCode?: string | null;
-  armyCode: string;
+  armyCode?: string | null;
   passportName?: string | null;
   passportNo?: string | null;
   disabledType?: string | null;
-  cellPhone: string;
+  cellPhone?: string | null;
 
   /** @format email */
-  email: string;
+  email?: string | null;
   account_AD?: string | null;
-  photo: string;
+  photo?: string | null;
   hobby?: string | null;
-  currentTel: string;
-  currentAdd: string;
-  permanentTel: string;
-  permanentAdd: string;
+  currentTel?: string | null;
+  currentAdd?: string | null;
+  permanentTel?: string | null;
+  permanentAdd?: string | null;
   validCode?: string | null;
   country?: string | null;
   specialStatus?: string | null;
@@ -6884,6 +6884,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserNameUpdate
+     * @request PUT:/api/app/custom-identity-user/name/{UserId}
+     * @secure
+     */
+    appCustomIdentityUserNameUpdate: (userId: string, query?: { Name?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/name/${userId}`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
+     * @name AppCustomIdentityUserIdNoUpdate
+     * @request PUT:/api/app/custom-identity-user/id-no/{UserId}
+     * @secure
+     */
+    appCustomIdentityUserIdNoUpdate: (userId: string, query?: { idNo?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/custom-identity-user/id-no/${userId}`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags CustomIdentityUser
      * @name AppCustomIdentityUserDetail
      * @request GET:/api/app/custom-identity-user/{id}
      * @secure
@@ -10335,7 +10371,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     identityOrganizationUnitsRolesDetail: (
       id: string,
-      query?: { SkipCount?: number; MaxResultCount?: number; Sorting?: string },
+      query?: { Sorting?: string; SkipCount?: number; MaxResultCount?: number },
       params: RequestParams = {},
     ) =>
       this.request<
@@ -10845,6 +10881,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     appRegisterResumeMailCheckCreate: (query?: { Email?: string }, params: RequestParams = {}) =>
       this.request<ResumeVerifyCodesVerifyCodeDto, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/register/resume-mail-check`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
+     * @name AppRegisterDescryptionCreate
+     * @request POST:/api/app/register/descryption
+     * @secure
+     */
+    appRegisterDescryptionCreate: (query?: { param?: string }, params: RequestParams = {}) =>
+      this.request<string, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/descryption`,
         method: "POST",
         query: query,
         secure: true,
@@ -11461,6 +11515,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     appResumeInvitationsGetListByCompanyIdList: (params: RequestParams = {}) =>
       this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/resume-invitations/GetListByCompanyId`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeInvitation
+     * @name AppResumeInvitationsGetListByAccountIdList
+     * @request GET:/api/app/resume-invitations/GetListByAccountId
+     * @secure
+     */
+    appResumeInvitationsGetListByAccountIdList: (params: RequestParams = {}) =>
+      this.request<ResumeResumeInvitationsResumeInvitationDto[], VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-invitations/GetListByAccountId`,
         method: "GET",
         secure: true,
         format: "json",
@@ -14003,6 +14074,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     appUserDatasUpdateBirthdayUpdate: (query?: { Birthday?: string }, params: RequestParams = {}) =>
       this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/user-datas/UpdateBirthday`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags UserData
+     * @name AppUserDatasUpdateIdNoUpdate
+     * @request PUT:/api/app/user-datas/UpdateIdNo
+     * @secure
+     */
+    appUserDatasUpdateIdNoUpdate: (query?: { IdNo?: string }, params: RequestParams = {}) =>
+      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/user-datas/UpdateIdNo`,
         method: "PUT",
         query: query,
         secure: true,

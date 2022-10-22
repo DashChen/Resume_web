@@ -1,6 +1,6 @@
 <div class="app-register__content">
     <app-page-title [title]="title" [subtitle]="subtitle"></app-page-title>
-    <ng-container *ngTemplateOutlet="showCountdown ? validateCode : countryMobile"></ng-container>
+    <ng-container *ngTemplateOutlet="showCountryCode ? countryMobile : validateCode"></ng-container>
         <ng-template #countryMobile>
             <form fxLayout="row" fxLayoutGap="10px" class="app-register__form" [formGroup]="beforeValidationForm">
                 <mat-form-field class="app-register__form__country__code" appearance="fill">
@@ -40,6 +40,8 @@
 
     <div class="app-register__other">
         <span class="h2-text--regular">{{otherTitle}}</span>
-        <a href="#" class="h2-text--regular" (click)="otherAction($event)" [ngClass]="{'not-allowed': showCountdown && disabledSendAgain}">{{otherActionText}}</a>
+        <a href="#" (click)="otherAction($event)" [ngClass]="{'not-allowed': showCountdown && disabledSendAgain, 'h1-small-title': showCountdown && !disabledSendAgain, 'h2-text--regular': !(showCountdown && !disabledSendAgain)}">
+            <span>{{otherActionText}}</span>
+        </a>
     </div>
 </div>

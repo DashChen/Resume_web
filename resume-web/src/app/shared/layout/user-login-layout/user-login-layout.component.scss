@@ -51,10 +51,10 @@
         }
         &__right {
             align-items: center;
-            flex: 1;
             display: flex;
+            flex: 1;
             flex-direction: column;
-            place-content: center;
+            justify-content: space-between;
             max-height: 100vh;
             overflow-y: auto;
             position: relative;

@@ -15,7 +15,7 @@ import { skill, skills, skillsList } from '@app/core/interfaces/skill.model';
 })
 export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent implements OnInit {
 
-  isSuccess: boolean = false;
+  choiceLimit: number = 20;
 
   licensesControl = new FormControl([]);
   licenseList: skillsList[] = [];
@@ -82,6 +82,7 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   confirmAddLicenses() {
     console.log('confirmAddLicenses');
     this.showSelectLicenseBlock = false;
+    this.licensesControl.setValue(this.choicedSkills);
   }
 
   closeShowLicense() {
@@ -110,7 +111,7 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   }
 
   changeCheck(checked: boolean, item: skill) {
-    if (checked) {
+    if (checked && this.choicedSkills.length < this.choiceLimit) {
       this.choicedSkills.push(item);
     } else {
       const index = this.choicedSkills.findIndex((i: skill) => i.no === item.no);

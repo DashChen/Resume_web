@@ -95,7 +95,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result && next.ok) {
-            this.store.dispatch(RouterActions.Go({path: ['/login']}));
+            this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
           }
         });
       });

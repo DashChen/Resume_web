@@ -4,20 +4,19 @@
 </div>
 <div mat-dialog-content class="resume-invitation-license-dialog__content">
   <div fxLayout="column" fxLayoutGap="35px" class="resume-invitation-license-dialog__content__form">
-    <mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="never">
       <label class="mat-form-field__lable--top">證照名稱</label>
-      <mat-chip-list #chipList aria-label="Video keywords" multiple>
-        <mat-chip-list>
-          <mat-chip *ngFor="let license of licensesControl.value" [removable]="true" (removed)="onLicenseRemoved(license)">
-            {{ license }}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-        </mat-chip-list>
+      <mat-chip-list #chipList aria-label="license keywords">
+        <mat-chip *ngFor="let license of licensesControl.value" [removable]="true" (removed)="onLicenseRemoved(license)">
+          <span class="mat-chip-title">{{ license.des }}</span>
+          <mat-icon matChipRemove [svgIcon]="'close-icon'"></mat-icon>
+        </mat-chip>
         <input
           placeholder="請輸入關鍵字"
           [matChipInputFor]="chipList"
           (matChipInputTokenEnd)="showSelectLicense($event)">
       </mat-chip-list>
+      <mat-hint align="end">{{licensesControl.value?.length || 0}}/{{choiceLimit}}</mat-hint>
     </mat-form-field>
 
     <div fxLayout="column" fxLayoutGap="8px" class="resume-invitation-license-dialog__select__block" *ngIf="showSelectLicenseBlock">
@@ -26,17 +25,15 @@
       </div>
       <div fxLayout="row" class="resume-invitation-license-dialog__select__content">
         <div fxFlex class="resume-invitation-license-dialog__select__content__item-list">
-          <mat-nav-list>
-            <mat-list-item *ngFor="let link of mainLicenses">
-               <span [ngClass]="link.no === choiceLicenseTypeId ? 'h2-text--bold': 'h2-text--regular'">{{link.des}}</span>
-               <button mat-icon-button (click)="showLicenseGroup(link)">
-                  <mat-icon svgIcon="arrow-right"></mat-icon>
-               </button>
-            </mat-list-item>
-          </mat-nav-list>
+          <mat-selection-list [multiple]="false">
+            <mat-list-option *ngFor="let link of mainLicenses" [value]="link.no" (click)="showLicenseGroup(link)">
+               <span mat-line>{{link.des}}</span>
+               <mat-icon mat-list-icon svgIcon="arrow-right"></mat-icon>
+            </mat-list-option>
+          </mat-selection-list>
         </div>
         <div fxFlex class="resume-invitation-license-dialog__select__content__item-list">
-          <div fxLayout="row" fxLayoutAlign="center center" class="resume-invitation-license-dialog__select__content__item-type-name h2-text--bold">{{choiceLicenseTypeName}}</div>
+          <div fxLayout="row" fxLayoutAlign="flex-start center" class="resume-invitation-license-dialog__select__content__item-type-name h2-text--bold">{{choiceLicenseTypeName}}</div>
           <mat-accordion class="example-headers-align">
             <mat-expansion-panel *ngFor="let group of choiceLicenseGroup" (opened)="updateChoiceGroupId(group)">
               <mat-expansion-panel-header>
