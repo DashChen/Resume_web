@@ -20,6 +20,7 @@ import { MessagePreviewDialogComponent } from '@app/admin/pages';
 import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 import { BreakPointType, ViewportSize, DeviceType } from '@app/core/interfaces/breakpoints';
 import { MessageSearchDialogComponent } from './dialogs/message-search-dialog/message-search-dialog.component';
+import { omitBy } from 'lodash';
 
 export interface MessageSearchDialogData extends basicDialog {
   type: string;
@@ -90,6 +91,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   originalData: ResumeMailQuenesMailQueneDto[] | ResumeSMSTplsSMSTplDto[] = [];
   dataSource = new MatTableDataSource<ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto>([]);
   selection = new SelectionModel<ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto>(true, []);
+  disabledSend: boolean = true;
 
   //
   headerColspan: number = 1;
@@ -119,7 +121,6 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   masterToggle() {
     if (this.isAllSelected()) {
       this.selection.clear();
-
       return;
     }
     this.selection.select(...this.dataSource.data);
@@ -277,6 +278,8 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.sendBtnText = '再次發送信件';
       this.title = '信件管理';
       this.subtitle = index === 0 ? '已發送的信件' : '儲存信件';
+      this.tabText1 = '已發送的信件';
+      this.tabText2 = '儲存的信件';
     } else {
       this.searchTitle = '簡訊搜尋';
       this.displayedColumns = ['select', 'name', 'stage', 'modifyDate', 'sendSuccess', 'action'];
@@ -284,6 +287,8 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.sendBtnText = '再次發送簡訊';
       this.title = '簡訊管理';
       this.subtitle = index === 0 ? '已發送的簡訊' : '儲存簡訊';
+      this.tabText1 = '已發送的簡訊';
+      this.tabText2 = '儲存的簡訊';
     }
     this.searchForm.reset({...this.initialValue});
     this.headerColspan = this.isSP ? this.displayedColumns.length : 1;
@@ -308,6 +313,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
         }
       }
     })
+    query = omitBy(query, v => v == null || v == '');
     console.log(query);
     if (this.currentType === 'email') {
       this.getEmailData(query);

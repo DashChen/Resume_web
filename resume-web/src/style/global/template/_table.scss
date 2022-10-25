@@ -3,10 +3,12 @@
 
     .mat-header-cell {
         background: #F4F9FD;
+        border-top: 1px solid rgba(0,0,0,.12);
         display: table-cell;
         font-weight: 600;
         font-size: 14px;
         line-height: 25px;
+
         @include lt-md {
             font-weight: 600;
             font-size: 12px;
@@ -105,6 +107,12 @@
                     width: 25px;
                 }
             }
+        }
+    }
+
+    tr {
+        &.mat-header-row, &.mat-row {
+            height: 75px;
         }
     }
 }

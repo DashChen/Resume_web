@@ -14,10 +14,14 @@
                 width: 17px;
             }
         }
+        &__title {
+            color: $colorSecond;
+        }
 
         &__content {
             margin: 0;
             &__description {
+                color: $colorSecond;
                 margin-top: 40px;
                 margin-bottom: 19px;
             }
@@ -26,6 +30,10 @@
                 flex-direction: column;
                 gap: 19px;
                 padding: 40px 0 0;
+
+                select {
+                    color: $colorSecond;
+                }
 
                 .default-option {
                     color: $colorLight;

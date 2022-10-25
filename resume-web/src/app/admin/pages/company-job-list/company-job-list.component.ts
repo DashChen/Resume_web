@@ -222,7 +222,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         ).subscribe({
           next: (value) => {
             console.log('appCompanyJobsCreate', value);
-            this.dataSource.data = [...this.dataSource.data, value.data];
+            this.dataSource.data = [value.data, ...this.dataSource.data];
           },
           error: (err: Error) => {
             this.failDialog('新增失敗', err.message, '知道了');

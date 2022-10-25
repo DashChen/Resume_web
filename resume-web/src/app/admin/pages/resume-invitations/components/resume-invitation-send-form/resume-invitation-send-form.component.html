@@ -16,7 +16,7 @@
 
   <div class="admin-resume-invitation-send-form__card">
     <form class="admin-resume-invitation-send-form__card__form" [formGroup]="editForm">
-      <div fxLayout="column" fxLayoutGap="38px">
+      <div fxLayout="column" fxLayoutGap="35px">
         <div fxLayout="column" fxLayoutGap="4px">
           <div class="h2-text--medium">收件者</div>
           <div fxLayout="row wrap" fxLayoutGap="18px" fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="flex-start center" fxLayoutGap.lt-md="0px"
@@ -32,7 +32,7 @@
             </button>
           </div>
         </div>
-        <div fxLayout="row" fxLayoutGap="38px" fxLayout.lt-md="column" fxLayoutGap.lt-md="35px">
+        <div fxLayout="row" fxLayoutGap="35px" fxLayout.lt-md="column" class="admin-resume-invitation-send-form__card__form__template">
           <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
             <label class="mat-form-field__lable--top">信件樣板</label>
             <select matNativeControl formControlName="mailTpl" [errorStateMatcher]="matcher">
@@ -52,7 +52,7 @@
             </select>
           </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px" fxLayoutAlign.lt-md="center flex-start">
+        <div fxLayout="column" fxLayoutGap="4px">
           <div class="h2-text--medium">信件簡訊發送日期</div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px">
             <mat-radio-group aria-label="Select an option" formControlName="sendDateType" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px">
@@ -74,7 +74,7 @@
           </div>
         </div>
 
-        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="4px">
+        <div fxLayout="column" fxLayoutGap="4px">
           <div class="h2-text--medium">網址填寫期限</div>
           <div fxLayout="row" fxLayoutAlign="center center" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px" fxLayoutAlign.lt-md="center flex-start">
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
@@ -93,7 +93,7 @@
 
         <div>
           <div class="h2-text--medium">檢視信件/簡訊內容</div>
-          <mat-tab-group>
+          <mat-tab-group animationDuration="0ms">
             <mat-tab label="信件內容">
               <div fxLayout="column" fxLayoutGap="38px" class="admin-resume-invitation-send-form__card__tab-body-content">
                 <div>

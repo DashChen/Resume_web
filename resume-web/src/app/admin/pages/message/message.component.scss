@@ -67,11 +67,22 @@ $this: '.admin-message';
         @include lt-md {
           max-width: calc(100vw - 48px);
         }
-          ::ng-deep .mat-tab-labels {
-              .mat-tab-label {
-                  width: 50%;
+        ::ng-deep .mat-tab-labels {
+            .mat-tab-label {
+              color: $colorSecond;
+              width: 50%;
+              &.mat-tab-label-active {
+                color: $colorBlue;
+                border-bottom: 3px solid $colorBlue;
               }
-          }
+            }
+            .mat-tab-label-content {
+              @include Noto-Sans-TCBody14-Bold;
+              @include lt-md {
+                  @include Noto-Sans-TCBody12-Bold;
+              }
+            }
+        }
       }
 
       &__search {

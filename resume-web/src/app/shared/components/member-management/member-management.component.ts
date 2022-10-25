@@ -45,7 +45,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     IdNo: new FormControl({
       value:'',
       disabled: true
-    }, [Validators.pattern('[A-Z][1-2][0-9]{8}')]),
+    }, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
   });
 
   get idNoFormCtl() {
@@ -122,6 +122,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getNewPasswordErrorMessage() {
+    console.log(this.newPasswordFormCtl.errors);
     return this.newPasswordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
   }
 
@@ -130,6 +131,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getConfirmPwdErrorMessage() {
+    console.log(this.newConfirmPasswordFormCtl.errors);
     return this.newConfirmPasswordFormCtl.hasError('mismatch') ? '密碼輸入不正確' : '';
   }
 
@@ -484,13 +486,48 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   changePwd(isChange: boolean) {
+    console.log(isChange);
     if (isChange) {
-      this.focusBtnKey = 'newPassword';
-      this.showPassword = false;
+      if (this.focusBtnKey !== 'newPassword') {
+        this.focusBtnKey = 'newPassword';
+        this.showPassword = false;
+        this.passwordFormCtl.setValue('');
+        this.passwordFormCtl.enable();
+      } else {
+        const requestHttp$ = from(this.dataService.api.accountMyProfileChangePasswordCreate({
+          currentPassword: this.passwordFormCtl.value,
+          newPassword: this.newPasswordFormCtl.value
+        },{
+          headers: {
+            ...this.dataService.getAuthorizationToken(this.authorizeType)
+          }
+        })).pipe(
+          catchError((err: HttpErrorResponse) => {
+            // console.log(err);
+            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          }),
+          finalize(() => {
+            this.focusBtnKey = '';
+            this.showPassword = true;
+            this.passwordFormCtl.setValue(this.defaultPassword);
+            this.passwordFormCtl.disable();
+            requestHttp$.unsubscribe()
+          }),
+          takeUntil(this.destroy$),
+        ).subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        )
+      }
     } else {
       this.focusBtnKey = '';
       this.showPassword = true;
       this.passwordFormCtl.setValue(this.defaultPassword);
+      this.passwordFormCtl.disable();
     }
   }
 

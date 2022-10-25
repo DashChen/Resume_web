@@ -32,23 +32,23 @@
                 [formGroup]="searchForm">
                 <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
                     <label class="mat-form-field__lable--top">發送日期</label>
-                    <input matInput [matDatepicker]="picker1" formControlName="sendDate" placeholder="請選擇日期" readonly (click)="picker1.open()">
+                    <input matInput [matDatepicker]="picker1" formControlName="sendDate" placeholder="請選擇日期" (click)="picker1.open()">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" v-if="tabSelected.value === 0">
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" *ngIf="tabSelected.value === 0 || currentType === 'sms'">
                     <label class="mat-form-field__lable--top">發送狀態</label>
                     <select matNativeControl formControlName="sendStatus" [errorStateMatcher]="matcher">
-                        <option class="default-option" label="請選擇" value="null"></option>
+                        <option class="default-option" label="請選擇" [ngValue]="null"></option>
                         <ng-container *ngFor="let option of sendStatusOptions">
                             <option [ngValue]="option.key">{{option.text}}</option>
                         </ng-container>
                     </select>
                 </mat-form-field>
-                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" v-if="tabSelected.value === 0 && currentType === 'email'">
+                <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" *ngIf="tabSelected.value === 0 && currentType === 'email'">
                     <label class="mat-form-field__lable--top">開啟狀態</label>
                     <select matNativeControl formControlName="openStatus" [errorStateMatcher]="matcher">
-                        <option class="default-option" label="請選擇" value="null"></option>
+                        <option class="default-option" label="請選擇" [ngValue]="null"></option>
                         <ng-container *ngFor="let option of openStatusOptions">
                             <option [ngValue]="option.key">{{option.text}}</option>
                         </ng-container>
@@ -57,7 +57,7 @@
                 <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
                     <label class="mat-form-field__lable--top">人員階段</label>
                     <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
-                        <option class="default-option" label="請選擇" value="null"></option>
+                        <option class="default-option" label="請選擇" [ngValue]="null"></option>
                         <ng-container *ngFor="let option of stageOptions">
                             <option [value]="option.key">{{option.text}}</option>
                         </ng-container>
@@ -94,7 +94,7 @@
                         </mat-checkbox>
 
                         <div fxHide="true" fxShow.lt-md="true" fxLayout="row" class="admin-message__table__head__btn__icons">
-							<button class="admin-message__table__head__btn__icon mat-button--blue" (click)="sendMsg()">
+							<button class="admin-message__table__head__btn__icon mat-button--blue" [disabled]="selection.selected.length === 0" (click)="sendMsg()">
 								<mat-icon [svgIcon]="'mail'" aria-hidden="false" aria-label="mail icon"></mat-icon>
 							</button>
 						</div>

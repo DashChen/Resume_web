@@ -21,7 +21,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { BreakPointType, DeviceType, ViewportSize } from '@app/core/interfaces/breakpoints';
 import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
-import { identity, pickBy } from 'lodash';
+import { identity, omitBy, pickBy } from 'lodash';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { ResumeInvitationImportDialogComponent } from '@app/admin';
 import { MediaObserver } from '@angular/flex-layout';
@@ -373,12 +373,13 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       dialogRef.afterClosed().subscribe(
         res => {
           console.log(res);
-          const query = pickBy(res, identity);
+          const query = omitBy(res, v => v == null || v == '');
           this.fetchResumes(query);
         }
       );
     } else {
-      const query = pickBy(this.searchForm.value, identity);
+      const query = omitBy(this.searchForm.value, v => v == null || v == '');
+      console.log(query);
       this.fetchResumes(query);
     }
   }
@@ -430,7 +431,9 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           finalize(() => {
             this.selection.clear();
             this.originalData = this.originalData.map(item => {
-              item.stage = result.stage;
+              if (selectedIds.includes(item.id || '')) {
+                item.stage = result.stage;
+              }
               return item;
             });
             // console.log('finalize httpRequest unsubscribe', this.originalData);
@@ -440,7 +443,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           takeUntil(this.destroy$),
         ).subscribe((res) => {
           console.log(res);
-        })
+        });
       }
     });
   }
@@ -461,8 +464,38 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       console.log(result);
       if (result) {
         // todo: 送出刪除職缺請求
-        // this.selection.selected.forEach(({ id }) => this.resumeInvitationService.deleteResume(id))
-        this.selection.clear();
+        const selectedIds: string[] = [];
+        const requestList: Observable<any>[] = [];
+        // todo: 變更被選擇的階段
+        this.selection.selected.forEach(({ id }) => {
+          selectedIds.push(id as string);
+          requestList.push(of(this.dataService.api.appResumeInvitationsDelete(id as string, {
+            headers: {
+              ...this.dataService.getAuthorizationToken('admin')
+            }
+          })));
+        });
+        const requestList$ = forkJoin(requestList).pipe(
+          catchError((err: HttpErrorResponse) => {
+            // console.log(err);
+            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          }),
+          finalize(() => {
+            this.selection.clear();
+            selectedIds.forEach(id => {
+              const index = this.originalData.findIndex(_item => _item.id === id);
+              if (index > -1) {
+                this.originalData.splice(index, 1);
+              }
+            });
+            // console.log('finalize httpRequest unsubscribe', this.originalData);
+            this.dataSource.data = [...this.originalData];
+            requestList$.unsubscribe();
+          }),
+          takeUntil(this.destroy$),
+        ).subscribe((res) => {
+          console.log(res);
+        });
       }
     });
   }
@@ -494,9 +527,28 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
-        // todo: 送出編輯職缺請求
-        const { id, ...data } = result;
-        // this.resumeInvitationService.updateResume(id, data);
+        const request$ = from(this.dataService.api.appResumeInvitationsUpdate(item.id as string, result, {
+          headers: {
+            ...this.dataService.getAuthorizationToken('admin')
+          }
+        })).pipe(
+          catchError((err: HttpErrorResponse) => {
+            // console.log(err);
+            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          }),
+          finalize(() => {
+            const index = this.originalData.findIndex(_item => _item.id === item.id);
+            if (index > -1) {
+              this.originalData.splice(index, 1, {...item, ...result});
+            }
+            // console.log('finalize httpRequest unsubscribe', this.originalData);
+            this.dataSource.data = [...this.originalData];
+            request$.unsubscribe();
+          }),
+          takeUntil(this.destroy$),
+        ).subscribe((res) => {
+          console.log(res);
+        });
       }
     });
   }

@@ -245,7 +245,7 @@
                 </div>
             </div>
         </div>
-        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center" [fxHide]="true" [fxShow.lt-md]="focusBtnKey === 'newPassword'">
+        <div [ngStyle.lt-md]="{'margin-bottom': '35px'}" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center" [fxHide]="true" [fxShow.lt-md]="focusBtnKey === 'newPassword'">
             <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular" (click)="changePwd(false)">
                 <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
             </button>
