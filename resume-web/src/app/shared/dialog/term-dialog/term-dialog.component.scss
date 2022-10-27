@@ -18,18 +18,20 @@
             width: 100%;
             &__terms {
                 padding: 40px 24px 0;
-                span {
-                    color: #27303D;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 24px;
-                    line-height: 33px;
-                }
-                mat-icon {
-                    color: #F4781E;
-                    margin-left: 40px;
-                    ::ng-deep {
-                        transform: rotate(-90deg);
+                [mat-stroked-button] {
+                    ::ng-deep .mat-button-wrapper {
+                        display: inline-flex;
+                    }
+                    div {
+                        color: #27303D;
+                        width: 100px;
+                    }
+                    mat-icon {
+                        color: #F4781E;
+                        margin-left: 40px;
+                        ::ng-deep {
+                            transform: rotate(-90deg);
+                        }
                     }
                 }
             }
@@ -46,6 +48,14 @@
                 }
                 &::-webkit-scrollbar-track {
                     background: #F6F6F6;
+                }
+                ::ng-deep .iso {
+                    background-image: url('https://www.jbjob.com.tw/wp-content/uploads/2022/06/iso90001%E5%93%81%E8%B3%AA%E6%94%BF%E7%AD%96-1-600x849.jpg');
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    height: 508px;
+                    width: 100%;
                 }
             }
         }

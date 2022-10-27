@@ -69,7 +69,7 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
 
   closeDialog(isSuccess: boolean) {
     this.dialogRef.close(isSuccess ? {
-      name: '',
+      name: this.choicedSkills.map(v => v.des).join(','),
       note: this.otherLicense.value,
     } : false);
   }

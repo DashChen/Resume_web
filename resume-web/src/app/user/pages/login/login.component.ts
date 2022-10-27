@@ -11,6 +11,7 @@ import { catchError, from, of, skip, startWith, take, takeUntil, tap, throwError
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions } from '@app/shared/store/common';
+import { createPasswordStrengthValidator } from '@app/core/validators';
 
 
 @Component({
@@ -23,10 +24,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   loginForm = new FormGroup({
     account: new FormControl('', [Validators.required]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), createPasswordStrengthValidator()]),
     rememberMe: new FormControl(false),
   })
 
@@ -63,15 +61,17 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return '請填寫這個欄位';
     }
 
-    return this.accountFormCtl.hasError('email') ? 'Not a valid email' : '';
+    return this.accountFormCtl.hasError('email') ? '格式不正確，例:WaDaMing@gmail.com' : '';
   }
 
   getPasswordErrorMessage() {
     if (this.passwordFormCtl.hasError('required')) {
-      return '請填寫這個欄位';
+      return '請輸入關鍵字'
     }
-
-    return this.passwordFormCtl.hasError('minlength') ? 'Not a valid password' : '';
+    if (this.passwordFormCtl.hasError('passwordStrength')) {
+      return '密碼須包含大小寫英文、數字等';
+    }
+    return this.passwordFormCtl.hasError('minlength') ? '密碼設定長度至少為8個字元的字串' : '';
   }
 
   getLoginErrorMessage() {

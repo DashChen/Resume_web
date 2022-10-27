@@ -496,6 +496,20 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       // todo: 送出編輯專業證照請求
       if (result) {
         console.log('openLicenseDialog', result);
+        this.licenses = [
+          ...(Array.isArray(this.licenses) ? this.licenses : []),
+          {
+            name: result.name,
+            note: result.note
+          }
+        ];
+        this.store.dispatch(UserActions.createLicense({
+          payload: {
+            name: result.name,
+            note: result.note,
+            resumeCode: this.resumeCode,
+          },
+        }));
       }
     });
   }
@@ -595,7 +609,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     if (diff.years) {
       return `${Math.abs(diff.years)}年${Math.abs(diff.months)}月`;
     }
-    return `${Math.abs(diff.months)}月`;
+    return `${Math.round(Math.abs(diff.months))}月`;
   }
 
   downloadAppendixFile(event: MouseEvent, item: ResumeAppendicesAppendixDto) {
@@ -631,5 +645,9 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       a.click();
       URL.revokeObjectURL(objUrl);
     });
+  }
+
+  goTitle(id: string) {
+    window.location.hash = '#' + id;
   }
 }

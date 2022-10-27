@@ -75,7 +75,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <mat-select placeholder="請選擇國家" (valueChange)="changeCountry($event)">
+          <mat-select placeholder="請選擇城市/地區" (valueChange)="changeCountry($event)">
             <ng-container *ngFor="let option of choicedAreas">
               <mat-option [value]="option.no">{{option.des}}</mat-option>
             </ng-container>

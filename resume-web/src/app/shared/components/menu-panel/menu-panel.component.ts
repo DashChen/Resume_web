@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatMenu } from '@angular/material/menu';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { link } from '@app/core/interfaces/menu.model';
 
 @Component({
@@ -10,6 +10,8 @@ import { link } from '@app/core/interfaces/menu.model';
 export class MenuPanelComponent implements OnInit {
   @ViewChild("menu", { static: true })
   menu!: MatMenu;
+  @Input('trigger')
+  menuTrigger!: MatMenuTrigger;
   @Input()
   items: link[] = [];
   @Input()
@@ -19,5 +21,4 @@ export class MenuPanelComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

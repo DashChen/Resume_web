@@ -99,6 +99,7 @@ $this: '.admin-message';
           color: $colorSecond;
         }
         &__conditions {
+          margin-right: 20px;
           .mat-form-field__block {
             max-width: 201.6px;
           }

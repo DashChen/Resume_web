@@ -38,7 +38,7 @@ export class StartupService {
             token_type: 'bearer',
             access_token: token,
             scope: 'Resume',
-            expires_in: 1 * 60 * 60
+            expires_in: 24 * 60 * 60
           }
         }));
         this.store.select(AdminSelectors.selectIsLoggedIn).pipe(
@@ -59,7 +59,7 @@ export class StartupService {
             token_type: 'bearer',
             access_token: token,
             scope: 'Resume',
-            expires_in: 1 * 60 * 60
+            expires_in: 24 * 60 * 60
           }
         }));
         this.store.select(UserSelectors.selectIsLoggedIn).pipe(

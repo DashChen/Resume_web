@@ -58,11 +58,11 @@
         </ng-template>
 
         <ng-template #menuLink let-item="item">
-          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu">
+          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu" #locationMenuTrigger="matMenuTrigger" (mouseover)="locationMenuTrigger.openMenu()">
             <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
             <span class="h2-text--bold">{{ item.title }}</span>
           </a>
-          <app-menu-panel #panel [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
+          <app-menu-panel #panel [trigger]="locationMenuTrigger" [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
         </ng-template>
 
         <div fxShow="true" fxHide.lt-md="true" class="app-admin-main-layout__member">

@@ -1,15 +1,17 @@
-<mat-menu #menu [class]="class" class="app-menu-panel">
-    <ng-container *ngFor="let item of items">
-        <div class="app-menu-panel__link" [class]="{'app-menu-panel__link--active': item.active}">
-            <a [routerLink]="item.link" *ngIf="!item.children; else branch" mat-menu-item>
-                <span class="h2-text--bold">{{item.title}}</span>
-            </a>
-            <ng-template #branch>
-                <a [routerLink]="item.link" mat-menu-item [matMenuTriggerFor]="innerPanel.menu">
+<mat-menu #menu="matMenu" [class]="class" class="app-menu-panel" [hasBackdrop]="false">
+    <div (mouseleave)="menuTrigger.closeMenu()">
+        <ng-container *ngFor="let item of items">
+            <div class="app-menu-panel__link" [class]="{'app-menu-panel__link--active': item.active}">
+                <a [routerLink]="item.link" *ngIf="!item.children; else branch" mat-menu-item>
                     <span class="h2-text--bold">{{item.title}}</span>
                 </a>
-                <app-menu-panel #innerPanel [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
-            </ng-template>
-        </div>
-    </ng-container>
+                <ng-template #branch>
+                    <a [routerLink]="item.link" mat-menu-item [matMenuTriggerFor]="innerPanel.menu" #locationMenuTrigger="matMenuTrigger" (mouseover)="locationMenuTrigger.openMenu()">
+                        <span class="h2-text--bold">{{item.title}}</span>
+                    </a>
+                    <app-menu-panel #innerPanel [trigger]="locationMenuTrigger" [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
+                </ng-template>
+            </div>
+        </ng-container>
+    </div>
 </mat-menu>

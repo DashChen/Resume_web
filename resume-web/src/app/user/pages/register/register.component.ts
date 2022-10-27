@@ -14,7 +14,7 @@ import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-d
 import { Actions as UserActions } from '@app/shared/store/user';
 import { Store } from '@ngrx/store';
 import { from, interval, Observable, of } from 'rxjs';
-import { catchError, map, shareReplay, startWith, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { catchError, finalize, map, shareReplay, startWith, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +28,9 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   otherTitle: string = '已經有帳號?';
   otherActionText: string = '登入';
 
-  tempPhone: string = '';
+  get tempPhone(): string {
+    return this.getCountryCode(this.countryCodeFormControl.value) + this.mobileFormControl.value;
+  }
 
   beforeValidationForm = new FormGroup({
     countryCode: new FormControl('TW', [Validators.required]),
@@ -186,13 +188,36 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     }
   }
 
-  sendVerificationCode() {
+  checkPhone() {
+    const request$ = from(this.dataService.api.appRegisterCheckPhoneExsistCreate({
+      Phone: this.tempPhone
+    })).pipe(
+      finalize(() => {
+        request$.unsubscribe();
+      }),
+      catchError(err => of(err)),
+    ).subscribe(res => {
+      console.log(res);
+      if (!res.data) {
+        this.getVerificationCode();
+      } else {
+        // 代表電話號碼已經存在
+        this.title = '註冊失敗';
+        this.subtitle = `手機號${this.maskPhone(this.tempPhone)}已經存在`;
+        this.mobileFormControl.setValue('');
+      }
+    })
+  }
+
+  getVerificationCode() {
     // 代表等待送出驗證碼
-    this.tempPhone = this.getCountryCode(this.countryCodeFormControl.value) + this.mobileFormControl.value;
-    from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+    const request$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
       Phone: this.tempPhone
     }))
     .pipe(
+      finalize(() => {
+        request$.unsubscribe();
+      }),
       catchError(err => of(err)),
     ).subscribe((next) => {
       console.log(next);
@@ -215,6 +240,11 @@ export class RegisterComponent extends BaseComponent implements OnInit {
       ).subscribe();
       this.validationForm.reset();
     });
+  }
+
+  sendVerificationCode() {
+    // 代表等待送出驗證碼
+    this.checkPhone();
   }
 
   otherAction(event: MouseEvent) {
