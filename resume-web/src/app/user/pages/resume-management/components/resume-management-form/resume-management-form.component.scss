@@ -164,16 +164,46 @@ $this: '.app-resume-management-form';
           }
         }
 
-        &--licences {
+        &--licenses {
           padding: 24px 0px 24px 24px;
         }
-  
+
+        &--autobiographies {
+          padding: 24px 0px 24px 24px;
+        }
+
+        &--appendices {
+          min-height: 162px;
+          padding: 40px 24px;
+          position: relative;
+
+          &-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            [mat-icon-button].mat-button--icon {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+              height: 30px;
+              width: 30px;
+              min-width: 30px;
+              [data-mat-icon-name="trash"] {
+                height: 18.3px;
+                width: 16.1px;
+                line-height: 0;
+              }
+            }
+          }
+        }
+
         &--appendix {
           &-file {
             background: #EAEDF1;
             border-radius: 5px;
             height: 50px;
             max-width: 566px;
+            padding: 12.5px 20px;
             width: 100%;
             a {
               color: #006CD0;

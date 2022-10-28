@@ -66,4 +66,18 @@ export class BaseComponent extends BaseFormComponent {
     this.store.dispatch(AdminActions.resetErr());
     return dialogRef;
   }
+
+  infoDialog(title: string, subtitle: string, successBtnText: string = '確認', cancelBtnText: string = '取消') {
+    this.dialogConfig.title = title;
+    this.dialogConfig.subTitle = subtitle;
+    this.dialogConfig.successBtnText = successBtnText;
+    this.dialogConfig.cancelBtnText = cancelBtnText;
+    this.dialogConfig.showSuccessBtn = true;
+    this.dialogConfig.showCancelBtn = true;
+    const dialogRef = this.dialog.open(CommonDialogComponent, {
+      width: '614px',
+      data: this.dialogConfig,
+    });
+    return dialogRef;
+  }
 }

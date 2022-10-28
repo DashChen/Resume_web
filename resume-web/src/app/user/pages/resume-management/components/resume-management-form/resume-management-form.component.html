@@ -240,7 +240,9 @@
             </div>
             <ng-container *ngIf="autobiographies.length > 0">
               <ng-container *ngFor="let item of autobiographies">
-                <div class="h2-text--regular">{{item.content}}</div>
+                <div class="app-resume-management-form__content__card--autobiographies">
+                  <div class="h2-text--regular">{{item.content}}</div>
+                </div>
               </ng-container>
             </ng-container>
           </div>
@@ -260,24 +262,31 @@
             </div>
             <ng-container *ngIf="appendices.length > 0">
               <ng-container *ngFor="let item of appendices">
-                <div fxLayout="column" fxLayoutGap="6px">
-                  <div class="h2-text--bold">{{item.appendixName}}</div>
-                  <div *ngIf="item.appendixType == '1'">
-                    <div fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-management-form__content__card--appendix-file">
-                      <a href="#" (click)="downloadAppendixFile($event, item)">{{item.appendixContent}}</a>
-                      <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
-                    </div>
+                <div class="app-resume-management-form__content__card--appendices">
+                  <div class="app-resume-management-form__content__card--appendices-btns">
+                    <button mat-icon-button class="mat-button--icon" (click)="delAppendix(item)">
+                      <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
                   </div>
-                  <div *ngIf="item.appendixType != '1'">
-                    <div fxLayout="row" fxLayoutGap="56px" class="app-resume-management-form__content__card--appendix-link">
-                      <div fxLayout="column" fxLayoutGap="12px" class="app-resume-management-form__content__card--appendix-link-left">
-                        <div class="h1-small-title app-resume-management-form__content__card--appendix-link-left-title">傑報人歷資源服務集團 | 傑報人歷資源服務集團</div>
-                        <div class="h2-text--regular app-resume-management-form__content__card--appendix-link-left-content">
-                          傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人傑報人歷資源服務集團
-                        </div>
+                  <div fxLayout="column" fxLayoutGap="6px">
+                    <div class="h2-text--bold">{{item.appendixName}}</div>
+                    <div *ngIf="item.appendixType == '1'">
+                      <div fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-management-form__content__card--appendix-file">
+                        <a href="#" (click)="downloadAppendixFile($event, item)">{{item.appendixContent}}</a>
+                        <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon" (click)="delAppendix(item)"></mat-icon>
                       </div>
-                      <div class="app-resume-management-form__content__card__body--appendix-link-right">
-                        <i [ngStyle]="{'background-image': 'url(' + logoUrl +')'}"></i>
+                    </div>
+                    <div *ngIf="item.appendixType != '1'">
+                      <div fxLayout="row" fxLayoutGap="56px" class="app-resume-management-form__content__card--appendix-link">
+                        <div fxLayout="column" fxLayoutGap="12px" class="app-resume-management-form__content__card--appendix-link-left">
+                          <div class="h1-small-title app-resume-management-form__content__card--appendix-link-left-title">傑報人歷資源服務集團 | 傑報人歷資源服務集團</div>
+                          <div class="h2-text--regular app-resume-management-form__content__card--appendix-link-left-content">
+                            傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人歷資源服務集團傑報人傑報人歷資源服務集團
+                          </div>
+                        </div>
+                        <div class="app-resume-management-form__content__card__body--appendix-link-right">
+                          <i [ngStyle]="{'background-image': 'url(' + logoUrl +')'}"></i>
+                        </div>
                       </div>
                     </div>
                   </div>

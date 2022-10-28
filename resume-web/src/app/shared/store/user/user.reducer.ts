@@ -47,6 +47,49 @@ export const userReducer = createReducer(
     on(UserActions.addAppendices, (state, { payload }) => ({ ...state, resumeAppendices: [...state.resumeAppendices, payload] })),
     on(UserActions.setProfilePicture, (state, { payload }) => ({ ...state, profilePicture: payload })),
     on(UserActions.setInvitationCode, (state, { payload }) => ({ ...state, invitationCode: payload })),
+
+    on(UserActions.updateEductionStore, (state, { payload }) => {
+        const index = state.resumeEductions.findIndex(_item => _item.id === payload.id);
+        let items = [...state.resumeEductions];
+        if (index > -1) {
+            items.splice(index, 1, payload);
+        }
+        return {...state, resumeEductions: [...items]};
+    }),
+    on(UserActions.updateExperienceStore, (state, { payload }) => {
+        const index = state.resumeExperiences.findIndex(_item => _item.id === payload.id);
+        let items = [...state.resumeExperiences];
+        if (index > -1) {
+            items.splice(index, 1, payload);
+        }
+        return {...state, resumeExperiences: [...items]};
+    }),
+
+    on(UserActions.delEductionStore, (state, { payload }) => {
+        const index = state.resumeEductions.findIndex(_item => _item.id === payload);
+        let items = [...state.resumeEductions];
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        return {...state, resumeEductions: [...items]};
+    }),
+    on(UserActions.delExperienceStore, (state, { payload }) => {
+        const index = state.resumeExperiences.findIndex(_item => _item.id === payload);
+        let items = [...state.resumeExperiences];
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        return {...state, resumeExperiences: [...items]};
+    }),
+    on(UserActions.delAppendiceStore, (state, { payload }) => {
+        const index = state.resumeAppendices.findIndex(_item => _item.id === payload);
+        let items = [...state.resumeAppendices];
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        return {...state, resumeAppendices: [...items]};
+    }),
+
     // error
     on(UserActions.loginFail, (state, { payload }) => ({ ...state, errorMessage: payload })),
     on(UserActions.getUserFail, (state, { payload }) => ({ ...state, errorMessage: payload })),

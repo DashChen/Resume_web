@@ -5,6 +5,9 @@ import { Store } from '@ngrx/store';
 import { Selectors as UserSelectors } from '@app/shared/store/user';
 import { DateTime } from 'luxon';
 import { BaseFormComponent } from '@app/shared/components/base-form.component';
+import { ICountry } from '@app/core/interfaces/country';
+import { COUNTRY_TOKEN } from '@app/app.module';
+import { ISelectOption } from '@app/core/interfaces/select-option';
 
 @Component({
   selector: 'app-resume-invitation-basic-dialog',
@@ -12,13 +15,14 @@ import { BaseFormComponent } from '@app/shared/components/base-form.component';
   styleUrls: ['./resume-invitation-basic-dialog.component.scss']
 })
 export class ResumeInvitationBasicDialogComponent extends BaseFormComponent implements OnInit {
-
+  countryCodeOptions: ISelectOption[] = [];
   infoForm = new FormGroup({
     nameC: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
     nameE: new FormControl('', [Validators.pattern('^[a-zA-Z ]+$')]),
     idNo: new FormControl('', [Validators.pattern('[A-Z][0-9]{9}')]),
     sexCode: new FormControl(null),
     birthDate: new FormControl(''),
+    countryCode: new FormControl('TW', [Validators.required]),
     currentTel: new FormControl('', [Validators.pattern('[0-9\-]+')]),
     currentAdd: new FormControl(''),
     email: new FormControl(''),
@@ -66,6 +70,17 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
     return this.infoForm.get('birthDate') as FormControl;
   }
 
+  get countryCodeFormCtl() {
+    return this.infoForm.get('countryCode') as FormControl;
+  }
+
+  getCountryCodeErrorMessage() {
+    if (this.countryCodeFormCtl.hasError('required')) {
+      return '請選擇這個欄位';
+    }
+    return '';
+  }
+
   get currentTelFormCtl() {
     return this.infoForm.get('currentTel') as FormControl;
   }
@@ -93,8 +108,15 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
     private store: Store,
     public dialogRef: MatDialogRef<ResumeInvitationBasicDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(COUNTRY_TOKEN) public countryObj: ICountry
   ) {
     super();
+    Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
+      this.countryCodeOptions.push({
+        text: countryObj.userinfo_country_code[value].toString(),
+        key: value
+      })
+    });
     this.store.select(UserSelectors.selectResumeBasicInfo)
       .subscribe(res => {
         this.nameCFormCtl.setValue(res?.nameC);
@@ -102,13 +124,40 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
         this.idNoFormCtl.setValue(res?.idNo);
         this.sexCodeFormCtl.setValue(res?.sexCode);
         this.birthDateFormCtl.setValue(res?.birthDate);
-        this.currentTelFormCtl.setValue(res?.currentTel);
+        const phoneOjb = this.getPhoneFormat(res?.currentTel || '');
+        this.countryCodeFormCtl.setValue(phoneOjb.code);
+        this.currentTelFormCtl.setValue(phoneOjb.phone);
         this.currentAddFormCtl.setValue(res?.currentAdd);
         this.emailFormCtl.setValue(res?.email);
       });
   }
 
   ngOnInit(): void {
+  }
+
+  getPhoneFormat(phone: string) {
+    if (!phone.startsWith('+')) {
+      return {
+        code: '',
+        phone: phone
+      };
+    }
+    // 判斷區域
+    let countryCode = '';
+    let purePhone = '';
+    for (let code in this.countryObj.id_to_countrycode) {
+      let codeStr = this.countryObj.id_to_countrycode[code].toString();
+      if (phone.startsWith(codeStr)) {
+        countryCode = code;
+        purePhone = phone.substring(codeStr.length);
+        break;
+      }
+    }
+
+    return {
+      code: countryCode,
+      phone: purePhone
+    };
   }
 
 
@@ -122,6 +171,9 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
       return;
     }
 
-    this.dialogRef.close(isSuccess ? this.infoForm.value : false);
+    this.dialogRef.close(isSuccess ? {
+      ...this.infoForm.value,
+      currentTel: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.currentTelFormCtl.value
+    } : false);
   }
 }

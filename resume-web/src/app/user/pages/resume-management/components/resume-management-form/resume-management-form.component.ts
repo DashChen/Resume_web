@@ -427,6 +427,41 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   openEducationDialog(event: MouseEvent): void {
     const dialogConfig: IBasicDialog = {
+      title: '新增學歷',
+      subTitle: '',
+      successBtnText: '儲存',
+      cancelBtnText: '取消',
+      showSuccessBtn: true,
+      showCancelBtn: true,
+    };
+    const dialogRef = this.dialog.open(ResumeInvitationEducationDialogComponent, {
+      height: '833px',
+      width: '614px',
+      maxWidth: '100%',
+      maxHeight: '85vh',
+      // panelClass: '',
+      data: {
+        ...dialogConfig,
+        item: {} as ResumeEducationsEducationDto
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      // 送出新增學歷請求
+      if (result) {
+        console.log('openEducationDialog', result);
+        this.store.dispatch(UserActions.createEduction({
+          payload: {
+            ...result,
+            resumeCode: this.resumeCode
+          }
+        }));
+      }
+    });
+  }
+
+  // 編輯學歷
+  editEduction(item: ResumeEducationsEducationDto) {
+    const dialogConfig: IBasicDialog = {
       title: '編輯學歷',
       subTitle: '',
       successBtnText: '儲存',
@@ -440,20 +475,66 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       maxWidth: '100%',
       maxHeight: '85vh',
       // panelClass: '',
-      data: dialogConfig,
+      data: {
+        ...dialogConfig,
+        item: item
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出編輯學歷請求
-      if (result) {
-        console.log('openEducationDialog', result);
-        this.store.dispatch(UserActions.addEduction({
-          payload: result
+      if (result && item.id) {
+        console.log('editEduction', result);
+        this.store.dispatch(UserActions.updateEduction({
+          payload: {
+            id: item.id,
+            data: {
+              ...result,
+              resumeCode: this.resumeCode
+            }
+          }
         }));
       }
     });
   }
 
+  // 刪除學歷
+  delEduction(item: ResumeEducationsEducationDto) {
+    const dialogRef = this.infoDialog('確認刪除', '');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && item.id) {
+        this.store.dispatch(UserActions.delEduction({ payload: item.id }));
+      }
+    });
+  }
+
   openWorkDialog(event: MouseEvent): void {
+    const dialogConfig: IBasicDialog = {
+      title: '新增工作經歷',
+      subTitle: '',
+      successBtnText: '儲存',
+      cancelBtnText: '取消',
+      showSuccessBtn: true,
+      showCancelBtn: true,
+    };
+    const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
+      width: '614px',
+      // panelClass: '',
+      data: {
+        ...dialogConfig,
+        item: {} as ResumeExperiencesExperienceDto
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('openLicenseDialog', result);
+        this.store.dispatch(UserActions.createExperience({
+          payload: result
+        }));
+      }
+    });
+  }
+  // 編輯經歷
+  editExperience(item: ResumeExperiencesExperienceDto) {
     const dialogConfig: IBasicDialog = {
       title: '編輯工作經歷',
       subTitle: '',
@@ -465,14 +546,26 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
       width: '614px',
       // panelClass: '',
-      data: dialogConfig,
+      data: {
+        ...dialogConfig,
+        item: item
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('openLicenseDialog', result);
-        this.store.dispatch(UserActions.createExperience({
+        console.log('editExperience', result);
+        this.store.dispatch(UserActions.updateExperience({
           payload: result
         }));
+      }
+    });
+  }
+  // 刪除經歷
+  delExperience(item: ResumeExperiencesExperienceDto) {
+    const dialogRef = this.infoDialog('確認刪除', '');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && item.id) {
+        this.store.dispatch(UserActions.delExperience({ payload: item.id }));
       }
     });
   }
@@ -540,7 +633,10 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       if (result) {
         console.log('openAutobiographyDialog', result);
         this.store.dispatch(UserActions.createAutobiographies({
-          payload: result,
+          payload: {
+            resumeCode: this.resumeCode,
+            content: result.autobiographies
+          },
         }));
       }
     });
@@ -569,32 +665,44 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       // todo: 送出編輯附件請求
       if (result) {
         console.log('openAppendixDialog', result);
-        this.store.dispatch(UserActions.createAppendices({
-          payload: {
-            createFileInputWithStream: result.AppendixType === 'file' ? result.createFileInputWithStream : undefined,
-            query: {
-              ResumeCode: this.resumeCode,
-              AppendixName: result.AppendixName,
-              AppendixContent: result.AppendixContent
-            }
+        if (result.AppendixType === 'file' && Array.isArray(result.createFileInputWithStream)) {
+          for(let i in result.createFileInputWithStream) {
+            this.store.dispatch(UserActions.createAppendices({
+              payload: {
+                createFileInputWithStream: result.createFileInputWithStream[i],
+                query: {
+                  ResumeCode: this.resumeCode,
+                  AppendixName: result.AppendixName,
+                  AppendixContent: result.AppendixContent
+                }
+              }
+            }));
           }
-        }));
+        } else {
+          this.store.dispatch(UserActions.createAppendices({
+            payload: {
+              createFileInputWithStream: undefined,
+              query: {
+                ResumeCode: this.resumeCode,
+                AppendixName: result.AppendixName,
+                AppendixContent: result.AppendixContent
+              }
+            }
+          }));
+        }
+      }
+    });
+  }
+  // 刪除附件
+  delAppendix(item: ResumeAppendicesAppendixDto) {
+    const dialogRef = this.infoDialog('確認刪除', '');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && item.id) {
+        this.store.dispatch(UserActions.delAppendice({ payload: item.id }));
       }
     });
   }
 
-  delEduction(item: ResumeEducationsEducationDto) {
-
-  }
-  editEduction(item: ResumeEducationsEducationDto) {
-
-  }
-  delExperience(item: ResumeExperiencesExperienceDto) {
-
-  }
-  editExperience(item: ResumeExperiencesExperienceDto) {
-
-  }
   getStayMonth(item: ResumeExperiencesExperienceDto) {
     if (!item.dateA) {
       return '';

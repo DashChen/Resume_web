@@ -98,8 +98,19 @@
             </div>
 
             <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="phoneForm">
-                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                <mat-form-field class="country-code mat-form-field__label" appearance="fill">
                     <label class="mat-form-field__lable--top">手機</label>
+                    <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                        <ng-container *ngFor="let option of countryCodeOptions">
+                            <mat-option [value]="option.key">{{option.text}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error class="h3-text--medium" *ngIf="countryCodeFormCtl.invalid">
+                        {{ getCountryCodeErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
                     <input matInput [placeholder]="focusBtnKey === 'Phone' ? '例:0912-3456-789' : '未填寫'" formControlName="Phone" required
                         [errorStateMatcher]="matcher">
                     <mat-error class="h3-text--medium" *ngIf="phoneFormCtl.invalid">
@@ -117,7 +128,7 @@
                 </button>
 
                 <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
-                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true">
+                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)">
                     <span>{{ focusBtnKey !== 'Phone' ? '編輯' : (bounded.phone ? '解除綁定' : '儲存') }}</span>
                 </button>
                 <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
@@ -141,7 +152,10 @@
                 class="app-shared-member-management__card__body__field">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
                     <label class="mat-form-field__lable--top">輸入驗證碼</label>
-                    <input matInput placeholder="請輸入驗證碼" [(ngModel)]="smsCode" required [errorStateMatcher]="matcher" [disabled]="waitVerifiedSms">
+                    <input matInput placeholder="請輸入驗證碼" [formControl]="smsCode"  required [errorStateMatcher]="matcher">
+                    <mat-error class="h3-text--medium" *ngIf="smsCode.invalid">
+                        {{ getSmsCodeErrorMessage() }}
+                    </mat-error>
                 </mat-form-field>
 
                 <div fxLayout="row" fxLayoutGap="20px" class="app-shared-member-management__card__body__field--send-sms">
@@ -149,7 +163,8 @@
                         (click)="sendSMS()" [disabled]="showCountdown || phoneFormCtl.value.length === 0">
                         <span>{{ showCountdown ? ('00:' + countdown) : '傳送驗證碼'  }}</span>
                     </button>
-                    <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular" (click)="verifidPhone()">
+                    <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                        [disabled]="smsCode.value.length === 0 || smsCode.invalid || verifiedSmsCode" (click)="verifidPhone()">
                         <span>確定</span>
                     </button>
                 </div>

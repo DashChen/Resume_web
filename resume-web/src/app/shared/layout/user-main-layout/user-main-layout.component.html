@@ -13,23 +13,22 @@
         </div>
 
         <ng-container *ngFor="let item of links">
-          <div fxShow="true" fxHide.lt-md="true" class="app-user-main-layout__link" [ngClass]="{'app-user-main-layout__link--active': item.active}">
-            <ng-container *ngTemplateOutlet="(item.children !== undefined) ? menuLink : emptyMenu; context: { item: item }"></ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="drawNav; context: { item: item, child: false }"></ng-container>
+          <ng-container *ngFor="let _item of item.children">
+            <ng-container *ngTemplateOutlet="drawNav; context: { item: _item, child: true }"></ng-container>
+          </ng-container>
         </ng-container>
-        <ng-template #emptyMenu let-item="item">
-          <a [routerLink]="item.link">
-            <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
-            <span class="h2-text--bold">{{ item.title }}</span>
-          </a>
-        </ng-template>
 
-        <ng-template #menuLink let-item="item">
-          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu">
-            <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
-            <span class="h2-text--bold">{{ item.title }}</span>
-          </a>
-          <app-menu-panel #panel [items]="item.children || []" [class]="item.key + '-panel'"></app-menu-panel>
+        <ng-template #drawNav let-item="item" let-child="child">
+          <div class="app-user-main-layout__link"
+            [ngClass]="{'app-user-main-layout__link--active': item.active, 'app-user-main-layout__link--child': child }">
+            <a [routerLink]="item.link">
+              <div fxLayout="row" fxLayoutAlign="center center" class="app-user-main-layout__link__icon">
+                <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
+              </div>
+              <span class="h2-text--bold">{{ item.title }}</span>
+            </a>
+          </div>
         </ng-template>
 
         <div mat-menu-item class="app-user-main-layout__member__content__menu__logout" (click)="logout()">

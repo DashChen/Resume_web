@@ -1,8 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { loginResponseDto } from '@app/core/models/login.model';
 import { LoginProps } from '@app/core/interfaces/login';
-import { act } from '@ngrx/effects';
 
 export const actionType = {
     LOGIN: '[User Login Page] Login effect',
@@ -34,24 +33,36 @@ export const actionType = {
     SET_EDUCTIONS: '[User Resume Management Page] Set eductions list',
     CREATE_EDUCTIONS: '[User Resume Management Page] Create eductions list',
     ADD_EDUCTIONS: '[User Resume Management Page] Add eductions list',
+    UPDATE_EDUCTION: '[User Resume Management Page] Update eduction',
+    UPDATE_EDUCTION_STORE: '[User Resume Management Page] Update eduction store',
+    DELETE_EDUCTION: '[User Resume Management Page] Delete eduction',
+    DELETE_EDUCTION_STORE: '[User Resume Management Page] Delete eduction store',
     // 經歷
     GET_EXPERIENCES: '[User Resume Management Page] Get experiences list',
     SET_EXPERIENCES: '[User Resume Management Page] Set experiences list',
     CREATE_EXPERIENCES: '[User Resume Management Page] Create experiences list',
+    UPDATE_EXPERIENCE: '[User Resume Management Page] Update experience',
+    UPDATE_EXPERIENCE_STORE: '[User Resume Management Page] Update experience store',
+    DELETE_EXPERIENCE: '[User Resume Management Page] Delete experience',
+    DELETE_EXPERIENCE_STORE: '[User Resume Management Page] Delete experience store',
     ADD_EXPERIENCES: '[User Resume Management Page] Add experiences list',
     // 專業證照
     GET_LICENSES: '[User Resume Management Page] Get Licenses list',
     SET_LICENSES: '[User Resume Management Page] Set Licenses list',
     CREATE_LICENSES: '[User Resume Management Page] Create Licenses list',
+    UPDATE_LICENSE: '[User Resume Management Page] Update License',
     // 自傳
     GET_AUTOBIOGRAPHIES: '[User Resume Management Page] Get Autobiographies list',
     SET_AUTOBIOGRAPHIES: '[User Resume Management Page] Set Autobiographies list',
     CREATE_AUTOBIOGRAPHIES: '[User Resume Management Page] Create Autobiographies list',
+    UPDATE_AUTOBIOGRAPHY: '[User Resume Management Page] Update Autobiography',
     ADD_AUTOBIOGRAPHIES: '[User Resume Management Page] Add Autobiographies list',
     // 附件
     GET_APPENDICES: '[User Resume Management Page] Get Appendices list',
     SET_APPENDICES: '[User Resume Management Page] Set Appendices list',
     CREATE_APPENDICES: '[User Resume Management Page] Create Appendices list',
+    DELETE_APPENDICE: '[User Resume Management Page] Delete Appendice',
+    DELETE_APPENDICE_STORE: '[User Resume Management Page] Delete Appendice store',
     ADD_APPENDICES: '[User Resume Management Page] Add Appendices list',
     // 學歷代碼
     GET_EDUCTIONCODE: '[User Resume Management Page] Get eduction Code list',
@@ -214,10 +225,32 @@ export const createEduction = createAction(
     props<{ payload: ResumeEducationsEducationCreateDto }>(),
 );
 
+export const updateEduction = createAction(
+    actionType.UPDATE_EDUCTION,
+    props<{ payload: {id: string, data: ResumeEducationsEducationUpdateDto} }>(),
+);
+
+export const updateEductionStore = createAction(
+    actionType.UPDATE_EDUCTION_STORE,
+    props<{ payload: ResumeEducationsEducationDto }>(),
+);
+
+export const delEduction = createAction(
+    actionType.DELETE_EDUCTION,
+    props<{ payload: string }>(),
+);
+
+export const delEductionStore = createAction(
+    actionType.DELETE_EDUCTION_STORE,
+    props<{ payload: string }>(),
+);
+
 export const addEduction = createAction(
     actionType.ADD_EDUCTIONS,
     props<{ payload: ResumeEducationsEducationDto }>(),
 );
+
+
 
 export const createExperience = createAction(
     actionType.CREATE_EXPERIENCES,
@@ -229,8 +262,33 @@ export const addExperience = createAction(
     props<{ payload: ResumeExperiencesExperienceDto }>(),
 );
 
+export const updateExperience = createAction(
+    actionType.UPDATE_EXPERIENCE,
+    props<{ payload: {id: string, data: ResumeExperiencesExperienceUpdateDto} }>(),
+);
+
+export const updateExperienceStore = createAction(
+    actionType.UPDATE_EXPERIENCE_STORE,
+    props<{ payload: ResumeExperiencesExperienceDto }>(),
+);
+
+export const delExperience = createAction(
+    actionType.DELETE_EXPERIENCE,
+    props<{ payload: string }>(),
+);
+
+export const delExperienceStore = createAction(
+    actionType.DELETE_EXPERIENCE_STORE,
+    props<{ payload: string }>(),
+);
+
 export const createLicense = createAction(
     actionType.CREATE_LICENSES,
+    props<{ payload: ResumeLicensesLicenseCreateDto }>()
+);
+
+export const updateLicense = createAction(
+    actionType.UPDATE_LICENSE,
     props<{ payload: ResumeLicensesLicenseCreateDto }>()
 );
 
@@ -244,6 +302,11 @@ export const addAutobiographies = createAction(
     props<{ payload: ResumeAutobiographiesAutobiographyDto }>(),
 );
 
+export const updateAutobiography = createAction(
+    actionType.UPDATE_AUTOBIOGRAPHY,
+    props<{ payload: ResumeAutobiographiesAutobiographyCreateDto }>(),
+);
+
 export const createAppendices = createAction(
     actionType.CREATE_APPENDICES,
     props<{ payload: { createFileInputWithStream?: File, query: { ResumeCode: string; AppendixName: string; AppendixContent: string } } }>(),
@@ -252,6 +315,16 @@ export const createAppendices = createAction(
 export const addAppendices = createAction(
     actionType.ADD_APPENDICES,
     props<{ payload: ResumeAppendicesAppendixDto }>(),
+);
+
+export const delAppendice = createAction(
+    actionType.DELETE_APPENDICE,
+    props<{ payload: string }>(),
+);
+
+export const delAppendiceStore = createAction(
+    actionType.DELETE_APPENDICE_STORE,
+    props<{ payload: string }>(),
 );
 
 export const uploadProfilePicture = createAction(

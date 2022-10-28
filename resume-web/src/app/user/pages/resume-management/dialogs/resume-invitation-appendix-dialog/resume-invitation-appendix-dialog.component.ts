@@ -10,7 +10,6 @@ import { basicDialog } from '@app/core/interfaces/basic-dialog';
 })
 export class ResumeInvitationAppendixDialogComponent implements OnInit {
 
-  createFileInputWithStream?: File;
   uploadFiles: File[] = [];
 
   appendixForm = new FormGroup({
@@ -54,7 +53,7 @@ export class ResumeInvitationAppendixDialogComponent implements OnInit {
   closeDialog(isSuccess: boolean) {
     this.dialogRef.close(isSuccess ? {
       ...this.appendixForm.value,
-      createFileInputWithStream: this.createFileInputWithStream,
+      createFileInputWithStream: this.uploadFiles,
     } : false);
   }
 

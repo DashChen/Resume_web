@@ -24,6 +24,7 @@ import { omitBy } from 'lodash';
 
 export interface MessageSearchDialogData extends basicDialog {
   type: string;
+  tabSelected: number;
 }
 
 export interface MessagePreviewDialogData extends basicDialog {
@@ -376,17 +377,39 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     const dialogRef = this.dialog.open(MessageSearchDialogComponent, {
       width: 'calc(100vw - 48px)',
       maxWidth: '100%',
-      height: '401px',
+      height: '726px',
+      maxHeight: '80vh',
       panelClass: 'admin-message__dialog--search',
       data: {
         ...this.dialogConfig,
         type: this.currentType,
+        tabSelected: this.tabSelected.value
       },
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
         // TODO 搜尋
+        let query: { [key: string]: any } = {};
+        Object.keys(result).forEach(key => {
+          const val = result[key];
+          if (val !== null && val !== '') {
+            if (key === 'sendDate') {
+              console.log(typeof val, val);
+              query['Send_DateMin'] = DateTime.fromMillis(val.ts).startOf('day').toFormat('yyyy/MM/dd HH:mm:ss');
+              query['Send_DateMax'] = DateTime.fromMillis(val.ts).endOf('day').toFormat('yyyy/MM/dd HH:mm:ss');
+            } else {
+              query[this.requestKeyMap[key]] = val;
+            }
+          }
+        })
+        query = omitBy(query, v => v == null || v == '');
+        console.log(query);
+        if (this.currentType === 'email') {
+          this.getEmailData(query);
+        } else {
+          this.getSmsData(query);
+        }
       }
     });
   }

@@ -1,7 +1,7 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import { DataService } from '@app/core';
-import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeExperiencesExperienceCreateDto, ResumeLicensesLicenseCreateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
@@ -289,6 +289,48 @@ export class UserEffects {
             )
         })
     ));
+    // 更新學歷
+    updateEduction$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.updateEduction),
+        map(params => params.payload),
+        exhaustMap((payload: {id: string, data: ResumeEducationsEducationUpdateDto}) => {
+            return from(this.dataService.api.appEducationsUpdate(payload.id, payload.data, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('updateEduction', res);
+                    return UserActions.updateEductionStore({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('updateEduction error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 刪除學歷
+    delEduction$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.delEduction),
+        map(params => params.payload),
+        exhaustMap((payload: string) => {
+            return from(this.dataService.api.appEducationsDelete(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('delEduction', res);
+                    return UserActions.delEductionStore({ payload: payload });
+                }),
+                catchError(error => {
+                    console.error('delEduction error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
     // 新增經歷
     createExperience$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.createExperience),
@@ -310,6 +352,50 @@ export class UserEffects {
             )
         })
     ));
+    // 更新經歷
+    updateExperience$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.updateExperience),
+        map(params => params.payload),
+        exhaustMap((payload: {id: string, data: ResumeExperiencesExperienceUpdateDto}) => {
+            return from(this.dataService.api.appExperiencesUpdate(payload.id, payload.data, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('updateExperience', res);
+                    return UserActions.updateEductionStore({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('updateExperience error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 刪除經歷
+    delExperience$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.delExperience),
+        map(params => params.payload),
+        exhaustMap((payload: string) => {
+            return from(this.dataService.api.appExperiencesDelete(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('delExperience', res);
+                    return UserActions.delExperienceStore({ payload: payload });
+                }),
+                catchError(error => {
+                    console.error('delExperience error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+
+
     // 新增證照
     createLicense$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.createLicense),
@@ -375,6 +461,28 @@ export class UserEffects {
             )
         })
     ));
+    // 刪除附件
+    delAppendices$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.delAppendice),
+        map(params => params.payload),
+        exhaustMap((payload: string) => {
+            return from(this.dataService.api.appAppendicesDelete(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('delAppendices', res);
+                    return UserActions.delAppendiceStore({ payload: payload });
+                }),
+                catchError(error => {
+                    console.error('delAppendices error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+
     // 上傳大頭貼
     uploadProfilePicture$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.uploadProfilePicture),

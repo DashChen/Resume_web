@@ -1,8 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
+import { ResumeExperiencesExperienceDto } from '@app/core/models/Api';
 import { BaseFormComponent } from '@app/shared/components/base-form.component';
 import { DateTime } from 'luxon';
+
+export interface ResumeInvitationWorkDialogData extends basicDialog {
+  item: ResumeExperiencesExperienceDto;
+}
 
 @Component({
   selector: 'app-resume-invitation-work-dialog',
@@ -97,9 +103,14 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ResumeInvitationWorkDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: ResumeInvitationWorkDialogData,
   ) {
     super();
+    this.nameFormCtl.setValue(data.item?.name || '');
+    this.jobTitleFormCtl.setValue(data.item?.jobTitle || '');
+    this.dateAFormCtl.setValue(data.item?.dateA || '');
+    this.dateDFormCtl.setValue(data.item?.dateD || '');
+    this.jobDescriptionFormCtl.setValue(data.item?.jobDescription || '');
   }
 
   closeDialog(isSuccess: boolean) {
@@ -110,5 +121,4 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
     }
     this.dialogRef.close(isSuccess ? this.workForm.value : false);
   }
-
 }

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '@app/core';
 import { ApiConfig, ResumeUserDatasUserDto } from '@app/core/models/Api';
@@ -12,6 +12,9 @@ import { MediaObserver } from '@angular/flex-layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
 import { DateTime } from 'luxon';
+import { ISelectOption } from '@app/core/interfaces/select-option';
+import { COUNTRY_TOKEN } from '@app/app.module';
+import { ICountry } from '@app/core/interfaces/country';
 
 @Component({
   selector: 'app-shared-member-management',
@@ -68,6 +71,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   phoneForm: FormGroup = new FormGroup({
+    countryCode: new FormControl({
+      value: 'TW',
+      disabled: true
+    }, [Validators.required]),
     Phone: new FormControl({
       value:'',
       disabled: true
@@ -78,12 +85,39 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     ]),
   });
 
+  get countryCodeFormCtl() {
+    return this.phoneForm.get('countryCode') as FormControl;
+  }
+
+  getCountryCodeErrorMessage() {
+    if (this.countryCodeFormCtl.hasError('required')) {
+      return '請選擇這個欄位';
+    }
+    return '';
+  }
+
   get phoneFormCtl() {
     return this.phoneForm.get('Phone') as FormControl;
   }
 
   getMobileErrorMessage() {
     return '手機號碼格式錯誤';
+  }
+  // 已經驗證過
+  verifiedSmsCode: boolean = false;
+  smsCode: FormControl = new FormControl({
+    value: '',
+    disabled: true,
+  },[
+    Validators.required,
+    Validators.pattern('[0-9]{6}')
+  ]);
+
+  getSmsCodeErrorMessage() {
+    if (this.smsCode.hasError('required')) {
+      return '請填寫這個欄位';
+    }
+    return this.smsCode.hasError('pattern') ? '驗證碼格錯誤' : '';
   }
 
   emailForm: FormGroup = new FormGroup({
@@ -135,8 +169,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     return this.newConfirmPasswordFormCtl.hasError('mismatch') ? '密碼輸入不正確' : '';
   }
 
-
-
+  countryCodeOptions: ISelectOption[] = [];
   defaultPassword: string = '********';;
   hasPwd: boolean = true;
 
@@ -161,9 +194,6 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   showNewConfirmPassword: boolean = false;
 
   requestData$: any = null;
-
-  smsCode: string = '';
-  waitVerifiedSms: boolean = false;
   timer$ = interval(1000);
   showCountdown: boolean = false;
   basicCountdown: number = 30;
@@ -178,8 +208,15 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
     public mediaObserver: MediaObserver,
+    @Inject(COUNTRY_TOKEN) public countryObj: ICountry
   ) {
     super(store, dialog);
+    Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
+      this.countryCodeOptions.push({
+        text: countryObj.userinfo_country_code[value].toString(),
+        key: value
+      })
+    });
     mediaObserver.asObservable().subscribe(res => {
       console.log('mediaObserver', res);
       res.forEach(mediaChange => {
@@ -187,7 +224,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           this.isSP = true;
         }
       })
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -211,7 +248,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         this.user = res.data;
         this.nameFormCtl.setValue(res.data.name || '');
         this.idNoFormCtl.setValue(res.data.idNo || '');
-        this.phoneFormCtl.setValue(res.data.phone || '');
+        const phoneOjb = this.getPhoneFormat(res.data.phone || '');
+        this.countryCodeFormCtl.setValue(phoneOjb.code);
+        this.phoneFormCtl.setValue(phoneOjb.phone);
         this.emailFormCtl.setValue(res.data.email || '');
         this.birthdayFormCtl.setValue(res.data.birthDay || '');
       },
@@ -219,6 +258,31 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  getPhoneFormat(phone: string) {
+    if (!phone.startsWith('+')) {
+      return {
+        code: '',
+        phone: phone
+      };
+    }
+    // 判斷區域
+    let countryCode = '';
+    let purePhone = '';
+    for (let code in this.countryObj.id_to_countrycode) {
+      let codeStr = this.countryObj.id_to_countrycode[code].toString();
+      if (phone.startsWith(codeStr)) {
+        countryCode = code;
+        purePhone = phone.substring(codeStr.length);
+        break;
+      }
+    }
+
+    return {
+      code: countryCode,
+      phone: purePhone
+    };
   }
 
   editMember(event: MouseEvent, type: string) {
@@ -273,11 +337,15 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
               this.phoneForm.markAllAsTouched();
               return;
             }
-            requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate(this.phoneForm.value,{
-              headers: {
-                ...this.dataService.getAuthorizationToken(this.authorizeType)
-              }
-            });
+            if (this.verifiedSmsCode) {
+              requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate({
+                Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
+              },{
+                headers: {
+                  ...this.dataService.getAuthorizationToken(this.authorizeType)
+                }
+              });
+            }
           }
           break;
         case 'IdNo':
@@ -299,6 +367,8 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
           }),
           finalize(() => {
+            // 更新 user 資訊
+            this.updateUserData(type);
             this.focusBtnKey = '';
             this.disOrEnableFormCtl(type, true);
             requestHttp$.unsubscribe()
@@ -316,32 +386,86 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     }
   }
 
+  updateUserData(type: string) {
+    switch (type) {
+      case 'Name':
+        if (this.user?.name) {
+          this.user.name = this.nameFormCtl.value;
+        }
+        break;
+      case 'Birthday':
+        if (this.user?.birthDay) {
+          this.user.birthDay = this.birthdayFormCtl.value;
+        }
+        break;
+      case 'Email':
+        if (this.user?.email) {
+          this.user.email = this.emailFormCtl.value;
+        }
+        break;
+      case 'Phone':
+        if (this.user?.phone) {
+          this.user.phone = this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value;
+        }
+        break;
+      case 'IdNo':
+        if (this.user?.idNo) {
+          this.user.idNo = this.idNoFormCtl.value;
+        }
+        break;
+    }
+  }
+
   disOrEnableFormCtl(type: string, disable: boolean) {
     if (!type) {
       return;
     }
-    let formCtl;
     switch (type) {
       case 'Name':
-        formCtl = this.nameFormCtl;
+        if (disable) {
+          this.nameFormCtl.setValue(this.user?.name || '');
+          this.nameFormCtl.disable();
+        } else {
+          this.nameFormCtl.enable();
+        }
         break;
       case 'Birthday':
-        formCtl = this.birthdayFormCtl;
+        if (disable) {
+          this.birthdayFormCtl.setValue(this.user?.birthDay || '');
+          this.birthdayFormCtl.disable();
+        } else {
+          this.birthdayFormCtl.enable();
+        }
         break;
       case 'Email':
-        formCtl = this.emailFormCtl;
+        if (disable) {
+          this.emailFormCtl.setValue(this.user?.email || '');
+          this.emailFormCtl.disable();
+        } else {
+          this.emailFormCtl.enable();
+        }
         break;
       case 'Phone':
-        formCtl = this.phoneFormCtl;
+        if (disable) {
+          this.verifiedSmsCode = false;
+          const phoneOjb = this.getPhoneFormat(this.user?.phone || '');
+          this.countryCodeFormCtl.setValue(phoneOjb.code);
+          this.phoneFormCtl.setValue(phoneOjb.phone);
+          this.countryCodeFormCtl.disable();
+          this.phoneFormCtl.disable();
+        } else {
+          this.countryCodeFormCtl.enable();
+          this.phoneFormCtl.enable();
+        }
         break;
       case 'IdNo':
-        formCtl = this.idNoFormCtl;
+        if (disable) {
+          this.idNoFormCtl.setValue(this.user?.idNo || '');
+          this.idNoFormCtl.disable();
+        } else {
+          this.idNoFormCtl.enable();
+        }
         break;
-    }
-    if (disable) {
-      (formCtl as FormControl).disable();
-    } else {
-      (formCtl as FormControl).enable();
     }
   }
 
@@ -425,42 +549,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
 
   // 傳送驗證碼
   sendSMS() {
-    const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate(this.phoneForm.value))
-    .pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-      }),
-      finalize(() => {
-        requestHttp$.unsubscribe();
-      }),
-      takeUntil(this.destroy$),
-    ).subscribe((next) => {
-      console.log(next);
-      this.showCountdown = true;
-      this.countdown = 30;
-      const countdown$ = this.timer$.pipe(
-        map(n => this.countdown = this.basicCountdown - n - 1),
-        tap(() => {
-          this.disabledSendAgain = this.countdown > 0;
-        }),
-        take(this.basicCountdown),
-        startWith(this.basicCountdown),
-        finalize(() => {
-          this.showCountdown = false;
-          countdown$.unsubscribe();
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe();
-    });
-  }
+    // 確認手機號是否正確
+    if (this.phoneForm.invalid) {
+      this.phoneForm.markAllAsTouched();
+      return;
+    }
 
-  // 確認驗證碼
-  verifidPhone() {
-    this.waitVerifiedSms = true;
-    const requestHttp$ = from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
-      Phone: this.phoneFormCtl.value,
-      Code: this.smsCode,
+    const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+      Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
     }))
     .pipe(
       catchError((err: HttpErrorResponse) => {
@@ -468,19 +564,64 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
       finalize(() => {
-        this.waitVerifiedSms = false;
-        this.smsCode = '';
+        requestHttp$.unsubscribe();
+      }),
+      takeUntil(this.destroy$),
+    ).subscribe((next) => {
+      console.log(next);
+      this.smsCode.disable();
+      if (next.ok) {
+        this.smsCode.enable();
+        this.showCountdown = true;
+        this.countdown = 30;
+        const countdown$ = this.timer$.pipe(
+          map(n => this.countdown = this.basicCountdown - n - 1),
+          tap(() => {
+            this.disabledSendAgain = this.countdown > 0;
+          }),
+          take(this.basicCountdown),
+          startWith(this.basicCountdown),
+          finalize(() => {
+            this.showCountdown = false;
+            countdown$.unsubscribe();
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe();
+      }
+    });
+  }
+
+  // 確認驗證碼
+  verifidPhone() {
+    if (this.smsCode.invalid) {
+      this.smsCode.markAsTouched();
+      return;
+    }
+    this.smsCode.disable();
+    const requestHttp$ = from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
+      Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value,
+      Code: this.smsCode.value,
+    }))
+    .pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+      finalize(() => {
+        this.smsCode.reset();
+        this.smsCode.setValue('');
         requestHttp$.unsubscribe();
       }),
       takeUntil(this.destroy$),
     ).subscribe((next) => {
       console.log(next);
       if (next.data) {
-        // TODO 是否代表綁定?
-        this.focusBtnKey = '';
-        this.bounded.phone = true;
+        this.showCountdown = false;
+        this.verifiedSmsCode = true;
+        this.smsCode.disable();
       } else {
         this.errDialog('驗證失敗', '請重新輸入驗證碼!', '確定');
+        this.smsCode.enable();
       }
     });
   }

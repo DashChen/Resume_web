@@ -62,6 +62,11 @@ $this: '.app-shared-member-management';
                             margin-bottom: 35px;
                         }
                     }
+                    .country-code {
+                        ::ng-deep .mat-form-field-flex {
+                            width: 120px;
+                        }
+                    }
                     .mat-form-field {
                         ::ng-deep .mat-form-field-flex {
                             .mat-form-field-infix {

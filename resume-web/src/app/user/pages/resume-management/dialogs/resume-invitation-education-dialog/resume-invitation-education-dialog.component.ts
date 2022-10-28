@@ -5,7 +5,7 @@ import { BaseFormComponent } from '@app/shared/components/base-form.component';
 import { Store } from '@ngrx/store';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
-import { ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
+import { ResumeEducationsEducationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
 import { takeUntil } from 'rxjs';
 import { area, areas, areasList } from '@app/core/interfaces/ares.model';
 import { DateTime } from 'luxon';
@@ -13,6 +13,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { LuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
+
+export interface ResumeInvitationEducationDialogData extends basicDialog {
+  item: ResumeEducationsEducationDto;
+}
 
 export const MY_FORMATS = {
   parse: {
@@ -119,9 +124,16 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
   constructor(
     private store: Store,
     public dialogRef: MatDialogRef<ResumeInvitationEducationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: ResumeInvitationEducationDialogData,
   ) {
     super();
+    this.schoolFormCtl.setValue(data.item?.school || '');
+    this.educationCodeFormCtl.setValue(data.item?.educationCode || '');
+    this.majorFormCtl.setValue(data.item?.major || '');
+    this.dateAFormCtl.setValue(data.item?.dateA || '');
+    this.dateDFormCtl.setValue(data.item?.dateD || '');
+    this.graduationCodeFormCtl.setValue(data.item?.graduationCode || '');
+    this.schoolLocationFormCtl.setValue(data.item?.schoolLocation || '');
   }
 
   ngOnInit(): void {

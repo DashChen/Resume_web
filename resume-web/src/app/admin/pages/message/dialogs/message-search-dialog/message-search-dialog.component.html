@@ -12,6 +12,34 @@
             <mat-datepicker #picker1></mat-datepicker>
         </mat-form-field>
 
+        <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" *ngIf="tabSelected === 0 || type === 'sms'">
+          <label class="mat-form-field__lable--top">發送狀態</label>
+          <select matNativeControl formControlName="sendStatus" [errorStateMatcher]="matcher">
+              <option class="default-option" label="請選擇" [ngValue]="null"></option>
+              <ng-container *ngFor="let option of sendStatusOptions">
+                  <option [ngValue]="option.key">{{option.text}}</option>
+              </ng-container>
+          </select>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill" *ngIf="tabSelected === 0 && type === 'email'">
+            <label class="mat-form-field__lable--top">開啟狀態</label>
+            <select matNativeControl formControlName="openStatus" [errorStateMatcher]="matcher">
+                <option class="default-option" label="請選擇" [ngValue]="null"></option>
+                <ng-container *ngFor="let option of openStatusOptions">
+                    <option [ngValue]="option.key">{{option.text}}</option>
+                </ng-container>
+            </select>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
+            <label class="mat-form-field__lable--top">人員階段</label>
+            <select matNativeControl formControlName="stage" [errorStateMatcher]="matcher">
+                <option class="default-option" label="請選擇" [ngValue]="null"></option>
+                <ng-container *ngFor="let option of stageOptions">
+                    <option [value]="option.key">{{option.text}}</option>
+                </ng-container>
+            </select>
+        </mat-form-field>
+
         <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
             <label class="mat-form-field__lable--top">姓名</label>
             <input matInput placeholder="例:王大大明" formControlName="name" [errorStateMatcher]="matcher">
@@ -20,10 +48,10 @@
     </form>
   </div>
   <div mat-dialog-actions align="center" class="admin-message-search-dialog__action">
-    <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="isSuccess = false">
+    <button mat-raised-button mat-dialog-close class="mat-button--medium" (click)="closeDialog(false)">
       <span>{{ data.cancelBtnText }}</span>
     </button>
-    <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="confirm()">
+    <button mat-raised-button cdkFocusInitial class="mat-button--medium mat-button--orange" (click)="closeDialog(true)">
       <span>{{ data.successBtnText }}</span>
     </button>
   </div>
