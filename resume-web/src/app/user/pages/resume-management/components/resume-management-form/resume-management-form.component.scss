@@ -3,10 +3,75 @@
 $this: '.app-resume-management-form';
 
 :host {
+  .nav-resume {
+    background: #EAEDF1;
+    height: calc(100vh - 72px);
+    position: fixed;
+    right: -240px;
+    top: 72px;
+    width: 230px;
+    -webkit-transition: right 1s; /* Safari */
+    transition: right 1s;
+    z-index: 999;
+    &-drawer {
+      background: #FFFFFF;
+      border-top-left-radius: 40px;
+      border-bottom-left-radius: 40px;
+      height: 59px;
+      position: absolute;
+      top: 0;
+      left: -40px;
+      width: 270px;
+      &__icon {
+        align-items: center;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        width: 40px;
+      }
+      div {
+        color: $colorLight;
+      }
+    }
+    &-list {
+      background: #FFFFFF;
+      height: auto;
+      padding-top: 59px;
+      width: 100%;
+      mat-selection-list {
+        padding-top: 0;
+
+        mat-list-option.mat-list-item {
+          color: $colorSecond;
+          height: 59px;
+
+          &.mat-list-single-selected-option {
+            background-color: #E0EFFD;
+          }
+
+          ::ng-deep .mat-list-item-content {
+            .mat-list-text {
+              @include lt-md {
+                @include Noto-Sans-TCBody12-Regular;
+              }
+            }
+          }
+        }
+      }
+    }
+    &--active {
+      right: 0;
+    }
+  }
+
   #{$this} {
     background-color: #F4F9FD;
     min-height: calc(100vh - 64px - 40px);
     padding: 24px 40px;
+
+    @include lt-md {
+      padding: 24px;
+    }
 
     &__head {
       &__block {}
@@ -25,6 +90,10 @@ $this: '.app-resume-management-form';
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
         padding: 26px 30px;
         background-color: #FFF;
+
+        @include lt-md {
+          padding: 24px;
+        }
       }
 
       &__resume {
@@ -279,6 +348,19 @@ $this: '.app-resume-management-form';
         font-size: 14px;
         line-height: 25px;
         color: #6C7A8E;
+      }
+    }
+
+    .mat-icon-button {
+      &-origin {
+        color: $colorSecond;
+      }
+      &-regular {
+        border-radius: 4px;
+        color: #FFFFFF;
+        height: 30px;
+        width: 30px;
+        line-height: 0;
       }
     }
   }

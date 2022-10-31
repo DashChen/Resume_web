@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, concatMap, finalize, from, Subscription, takeUntil, throwError } from 'rxjs';
@@ -18,6 +18,7 @@ import { DataService, HelperService } from '@app/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { getEductionCodeList } from '@app/shared/store/user/user.actions';
 import { DateTime } from 'luxon';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-resume-management-form',
@@ -46,6 +47,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
   appendices: ResumeAppendicesAppendixDto[] = [];
   eductionCodeList: ResumeShareCodesShareCodeDto[] = [];
   graduateCodeList: ResumeShareCodesShareCodeDto[] = [];
+
+  showDrawer: boolean = false;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -351,7 +354,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationBasicDialogComponent, {
       height: '833px',
       width: '614px',
-      maxWidth: '100%',
+      maxWidth: 'calc(100vw - 48px)',
       maxHeight: '85vh',
       // panelClass: '',
       data: dialogConfig,
@@ -404,6 +407,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     };
     const dialogRef = this.dialog.open(ResumeInvitationProfileDialogComponent, {
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       // panelClass: '',
       data: dialogConfig,
     });
@@ -437,7 +441,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationEducationDialogComponent, {
       height: '833px',
       width: '614px',
-      maxWidth: '100%',
+      maxWidth: 'calc(100vw - 48px)',
       maxHeight: '85vh',
       // panelClass: '',
       data: {
@@ -518,6 +522,9 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     };
     const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
+      height: '100%',
+      maxHeight: '85vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
@@ -545,6 +552,9 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     };
     const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
+      height: '100%',
+      maxHeight: '85vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
@@ -581,7 +591,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     };
     const dialogRef = this.dialog.open(ResumeInvitationLicenseDialogComponent, {
       width: '614px',
-      maxWidth: '100%',
+      maxWidth: 'calc(100vw - 48px)',
       // panelClass: '',
       data: dialogConfig,
     });
@@ -617,8 +627,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
-      width: '100%',
-      maxWidth: '614px',
+      width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       height: '100%',
       maxHeight: '417px',
       // panelClass: '',
@@ -652,8 +662,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationAppendixDialogComponent, {
-      width: '100%',
-      maxWidth: '614px',
+      width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       height: 'auto',
       maxHeight: '80vh',
       // panelClass: '',
@@ -757,5 +767,9 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   goTitle(id: string) {
     window.location.hash = '#' + id;
+  }
+
+  changeDrawer() {
+    this.showDrawer = !this.showDrawer;
   }
 }

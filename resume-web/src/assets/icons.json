@@ -30,5 +30,6 @@
   "user-pic-icon": "user-pic-icon.svg",
   "camera-icon": "camera-icon.svg",
   "notice": "notice.svg",
-  "upload-icon": "upload-icon.svg"
+  "upload-icon": "upload-icon.svg",
+  "send": "send.svg"
 }
