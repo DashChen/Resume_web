@@ -8,6 +8,10 @@ $this: '.app-resume-management-form';
     min-height: calc(100vh - 64px - 40px);
     padding: 24px 40px;
 
+    @include lt-md {
+      padding: 24px;
+    }
+
     &__head {
       &__block {}
 
@@ -17,7 +21,20 @@ $this: '.app-resume-management-form';
         &__sub {}
       }
 
-      &__action {}
+      &__action {
+        &__block {
+          [mat-icon-button] {
+            border-radius: 4px;
+            color: #FFFFFF;
+            height: 50px;
+            width: 50px;
+            mat-icon {
+              height: 30px;
+              width: 30px;
+            }
+          }
+        }
+      }
     }
 
     &__title {
@@ -149,7 +166,21 @@ $this: '.app-resume-management-form';
             height: auto;
           }
         }
-  
+
+        &--licenses {
+          padding: 24px 0px 24px 24px;
+        }
+
+        &--autobiographies {
+          padding: 24px 0px 24px 24px;
+        }
+
+        &--appendices {
+          min-height: 162px;
+          padding: 40px 24px;
+          position: relative;
+        }
+
         &--appendix {
           &-file {
             background: #EAEDF1;

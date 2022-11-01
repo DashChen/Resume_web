@@ -523,7 +523,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      height: '100%',
+      height: 'auto',
       maxHeight: '85vh',
       // panelClass: '',
       data: {
@@ -553,7 +553,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationWorkDialogComponent, {
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      height: '100%',
+      height: 'auto',
       maxHeight: '85vh',
       // panelClass: '',
       data: {
@@ -629,8 +629,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      height: '100%',
-      maxHeight: '417px',
+      height: 'auto',
+      maxHeight: '80vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
