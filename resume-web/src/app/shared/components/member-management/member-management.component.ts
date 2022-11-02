@@ -571,6 +571,8 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       console.log(next);
       this.smsCode.disable();
       if (next.ok) {
+        this.countryCodeFormCtl.disable();
+        this.phoneFormCtl.disable();
         this.smsCode.enable();
         this.showCountdown = true;
         this.countdown = 30;

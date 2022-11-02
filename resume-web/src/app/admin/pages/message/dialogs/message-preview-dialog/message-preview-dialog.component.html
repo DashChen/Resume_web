@@ -7,7 +7,7 @@
     <form class="admin-message-preview-dialog__content__form" [formGroup]="messageForm">
       <mat-form-field class="mat-form-field__block" appearance="fill">
         <label class="mat-form-field__lable--top">信件主旨</label>
-        <input matInput placeholder="請完成入職前填寫" formControlName="subject" required>
+        <input matInput placeholder="請完成入職前填寫" formControlName="subject" readonly>
         <mat-error class="h3-text--medium" *ngIf="subjectFormCtl.invalid">
           {{ getSubjectErrorMessage() }}
         </mat-error>
@@ -17,7 +17,7 @@
         <label class="mat-form-field__lable--top">
           {{ (data.type === 'email' ? '信件': '簡訊')+ '內容'}}
         </label>
-        <textarea matInput placeholder="請完成入職前填寫" formControlName="body" required></textarea>
+        <textarea matInput placeholder="請完成入職前填寫" formControlName="body" readonly></textarea>
         <mat-error class="h3-text--medium" *ngIf="bodyFormCtl.invalid">
           {{ getBodyErrorMessage() }}
         </mat-error>

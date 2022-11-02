@@ -26,9 +26,10 @@
       }
 
       &__loader {
-        width: 566px;
-        height: 172px;
         border: 1px dashed #C5D0DF;
+        cursor: pointer;
+        height: 172px;
+        width: 566px;
       }
 
       &__icon {

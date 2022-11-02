@@ -22,7 +22,7 @@ export class CompanyJobAddDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
 
   addForm = new FormGroup({
-    jobName: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
+    jobName: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z\u4E00-\u9FFF]+')]),
     mailTplCode: new FormControl('', [Validators.required]),
     smsTplCode: new FormControl('', [Validators.required]),
   });

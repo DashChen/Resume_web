@@ -314,7 +314,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
         }
       }
     })
-    query = omitBy(query, v => v == null || v == '');
+    query = omitBy(query, v => v === null || v === '');
     console.log(query);
     if (this.currentType === 'email') {
       this.getEmailData(query);
