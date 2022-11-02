@@ -323,11 +323,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             this.emailForm.markAllAsTouched();
             return;
           }
-          requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
-            headers: {
-              ...this.dataService.getAuthorizationToken(this.authorizeType)
-            }
-          });
+          // 信箱不一致才保存
+          if (this.emailFormCtl.value !== this.user?.email) {
+            requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
+              headers: {
+                ...this.dataService.getAuthorizationToken(this.authorizeType)
+              }
+            });
+          }
           break;
         case 'Phone':
           if (this.bounded.phone) {
@@ -401,6 +404,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       case 'Email':
         if (this.user?.email) {
           this.user.email = this.emailFormCtl.value;
+        }
+        // 自動綁定
+        if (this.emailFormCtl.value) {
+          this.sendBoundEmail();
         }
         break;
       case 'Phone':
@@ -508,43 +515,48 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
 
   boundEmail() {
     // 取消按鈕
-    if (this.focusBtnKey === 'Email') {
+    if (this.focusBtnKey !== '') {
+      this.disOrEnableFormCtl(this.focusBtnKey, true);
       this.focusBtnKey = '';
-      this.emailFormCtl.disable();
-    } else if (this.focusBtnKey === '' && !this.isSP && !this.bounded.email) {
-      // TODO 綁定信箱
-      const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailFormCtl.value,{
-        headers: {
-          ...this.dataService.getAuthorizationToken(this.authorizeType)
-        }
-      })).pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
-        finalize(() => { requestHttp$.unsubscribe() }),
-        takeUntil(this.destroy$),
-      ).subscribe(
-        res => {
+    } else if (!this.isSP) {
+      if (!this.bounded.email) {
+        this.sendBoundEmail();
+      } else {
+        const subtitle = `按下確認後即解除${this.emailFormCtl.value}此電子郵件，請問是否解除?`;
+        const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
+        dialogRef.afterClosed().subscribe((res) => {
           console.log(res);
-          this.bounded.email = true;
-          this.successDialog('系統已發出驗證信件', '麻煩至您填寫的信箱進行驗證！', '確定');
-        },
-        err => {
-          console.log(err);
-        }
-      )
-    } else if (this.focusBtnKey === '' && !this.isSP && this.bounded.email) {
-      const subtitle = `按下確認後即解除${this.emailFormCtl.value}此電子郵件，請問是否解除?`;
-      const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
-      dialogRef.afterClosed().subscribe((res) => {
-        console.log(res);
-        if (res) {
-          // TODO 解除綁定信箱
-          this.bounded.email = false;
-        }
-      })
+          if (res) {
+            // TODO 解除綁定信箱
+            this.bounded.email = false;
+          }
+        });
+      }
     }
+  }
+
+  sendBoundEmail() {
+    const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
+      headers: {
+        ...this.dataService.getAuthorizationToken(this.authorizeType)
+      }
+    })).pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+      finalize(() => { requestHttp$.unsubscribe() }),
+      takeUntil(this.destroy$),
+    ).subscribe(
+      res => {
+        console.log(res);
+        this.bounded.email = true;
+        this.successDialog('系統已發出驗證信件', '麻煩至您填寫的信箱進行驗證！', '確定');
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 
   // 傳送驗證碼
@@ -610,8 +622,6 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
       }),
       finalize(() => {
-        this.smsCode.reset();
-        this.smsCode.setValue('');
         requestHttp$.unsubscribe();
       }),
       takeUntil(this.destroy$),
@@ -620,11 +630,13 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       if (next.data) {
         this.showCountdown = false;
         this.verifiedSmsCode = true;
+        this.smsCode.reset();
         this.smsCode.disable();
       } else {
         this.errDialog('驗證失敗', '請重新輸入驗證碼!', '確定');
         this.smsCode.enable();
       }
+      this.smsCode.setValue('');
     });
   }
 
@@ -694,6 +706,17 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         (res) => {
           if (res) {
             // TODO 三方登入解除綁定
+            switch (provider) {
+              case 'google':
+                this.bounded.google = false;
+                break;
+              case 'line':
+                this.bounded.line = false;
+                break;
+              case 'facebook':
+                this.bounded.facebook = false;
+                break;
+            }
           }
         }
       )

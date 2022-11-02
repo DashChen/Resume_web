@@ -10,7 +10,7 @@ import { Actions as UserActions, Selectors as UserSelectors } from '.';
 import { LoginProps } from '@app/core/interfaces/login';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions } from '@app/shared/store/common';
-import { createAppendices } from './user.actions';
+import { sortBy } from 'lodash';
 
 @Injectable()
 export class UserEffects {
@@ -222,8 +222,11 @@ export class UserEffects {
                 }
             })).pipe(
                 map(res => {
-                    console.log('getEductionCode', res);
-                    return UserActions.setEductionCodeList({ payload: res.data.items || [] });
+                    // console.log('getEductionCode', res);
+                    return UserActions.setEductionCodeList({ payload: sortBy(res.data.items || [], (e) => {
+                        // console.log(e);
+                        return parseInt(e.sort || '0');
+                    }) });
                 }),
                 catchError(error => of(UserActions.getUserFail({ payload: error }))),
             )
@@ -239,8 +242,11 @@ export class UserEffects {
                 }
             })).pipe(
                 map(res => {
-                    console.log('getGraduateCode', res);
-                    return UserActions.setGraduateCodeList({ payload: res.data.items || [] });
+                    // console.log('getGraduateCode', res);
+                    return UserActions.setGraduateCodeList({ payload: sortBy(res.data.items || [], (e) => {
+                        // console.log(e);
+                        return parseInt(e.sort || '0');
+                    }) });
                 }),
                 catchError(error => of(UserActions.getUserFail({ payload: error }))),
             )
@@ -438,6 +444,28 @@ export class UserEffects {
             )
         })
     ));
+    // 更新自傳
+    updateAutobiography$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.updateAutobiography),
+        map(params => params.payload),
+        exhaustMap((payload: { id: string, data: ResumeAutobiographiesAutobiographyCreateDto}) => {
+            return from(this.dataService.api.appAutobiographiesUpdate(payload.id, payload.data, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('createAutobiographies', res);
+                    return UserActions.updateAutobiographyStore({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('createAutobiographies error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+
     // 新增附件
     createAppendices$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.createAppendices),

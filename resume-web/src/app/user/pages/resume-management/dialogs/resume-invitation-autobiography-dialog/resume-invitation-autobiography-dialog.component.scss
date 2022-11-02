@@ -8,7 +8,7 @@ $this: '.app-resume-invitation-autobiography-dialog';
         &__head {
             border-bottom: 1px solid #C5D0DF;
             margin-bottom: 0;
-            padding: 11.5px 24px;
+            padding: 8.5px 24px;
             mat-icon {
                 color: $colorSecond;
                 cursor: pointer;
@@ -17,8 +17,14 @@ $this: '.app-resume-invitation-autobiography-dialog';
         }
 
         &__content {
+            max-height: calc(100% - 51px - 130px);
+            overflow: hidden;
+            overflow-y: auto;
             margin: 0;
-            padding: 40px 24px 0;
+            padding-top: 40px;
+            padding-bottom: calc(40px - 1.34375em);
+            padding-right: 24px;
+            padding-left: 24px;
 
             &__form {
                 position: relative;
@@ -49,8 +55,9 @@ $this: '.app-resume-invitation-autobiography-dialog';
         }
 
         &__action {
-            margin-top: 40px;
-            padding: 0;
+            padding: 0 0 40px;
+            min-height: unset;
+            margin-bottom: unset;
         }
     }
 }

@@ -45,17 +45,15 @@ export class MessagePreviewDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  confirm() {
-    if (this.messageForm.invalid) {
-      this.messageForm.markAllAsTouched();
-      return;
-    }
-    this.isSuccess = true;
-    this.closeDialog();
-  }
+  closeDialog(isSuccess: boolean) {
+    // if (isSuccess) {
+    //   if (this.messageForm.invalid) {
+    //     this.messageForm.markAllAsTouched();
+    //     return;
+    //   }
+    // }
 
-  closeDialog() {
-    this.dialogRef.close(this.isSuccess ? this.messageForm.value : false);
+    this.dialogRef.close(isSuccess ? this.messageForm.value : false);
   }
 
 }

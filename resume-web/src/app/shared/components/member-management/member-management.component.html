@@ -160,7 +160,7 @@
 
                 <div fxLayout="row" fxLayoutGap="20px" class="app-shared-member-management__card__body__field--send-sms">
                     <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
-                        (click)="sendSMS()" [disabled]="showCountdown || phoneFormCtl.value.length === 0">
+                        (click)="sendSMS()" [disabled]="showCountdown || phoneFormCtl.value.length === 0 || verifiedSmsCode">
                         <span>{{ showCountdown ? ('00:' + countdown) : '傳送驗證碼'  }}</span>
                     </button>
                     <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"

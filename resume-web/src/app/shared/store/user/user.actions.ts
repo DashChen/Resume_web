@@ -56,6 +56,7 @@ export const actionType = {
     SET_AUTOBIOGRAPHIES: '[User Resume Management Page] Set Autobiographies list',
     CREATE_AUTOBIOGRAPHIES: '[User Resume Management Page] Create Autobiographies list',
     UPDATE_AUTOBIOGRAPHY: '[User Resume Management Page] Update Autobiography',
+    UPDATE_AUTOBIOGRAPHY_STORE: '[User Resume Management Page] Update Autobiography store',
     ADD_AUTOBIOGRAPHIES: '[User Resume Management Page] Add Autobiographies list',
     // 附件
     GET_APPENDICES: '[User Resume Management Page] Get Appendices list',
@@ -304,7 +305,12 @@ export const addAutobiographies = createAction(
 
 export const updateAutobiography = createAction(
     actionType.UPDATE_AUTOBIOGRAPHY,
-    props<{ payload: ResumeAutobiographiesAutobiographyCreateDto }>(),
+    props<{ payload: { id: string, data: ResumeAutobiographiesAutobiographyCreateDto} }>(),
+);
+
+export const updateAutobiographyStore = createAction(
+    actionType.UPDATE_AUTOBIOGRAPHY_STORE,
+    props<{ payload: ResumeAutobiographiesAutobiographyDto }>(),
 );
 
 export const createAppendices = createAction(

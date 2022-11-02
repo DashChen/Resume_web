@@ -8,9 +8,9 @@
       <mat-form-field class="mat-form-field__block" appearance="fill">
         <label class="mat-form-field__lable--top">信件主旨</label>
         <input matInput placeholder="請完成入職前填寫" formControlName="subject" readonly>
-        <mat-error class="h3-text--medium" *ngIf="subjectFormCtl.invalid">
+        <!-- <mat-error class="h3-text--medium" *ngIf="subjectFormCtl.invalid">
           {{ getSubjectErrorMessage() }}
-        </mat-error>
+        </mat-error> -->
       </mat-form-field>
 
       <mat-form-field class="mat-form-field__block mat-form-field__block--textarea" appearance="fill">
@@ -18,18 +18,18 @@
           {{ (data.type === 'email' ? '信件': '簡訊')+ '內容'}}
         </label>
         <textarea matInput placeholder="請完成入職前填寫" formControlName="body" readonly></textarea>
-        <mat-error class="h3-text--medium" *ngIf="bodyFormCtl.invalid">
+        <!-- <mat-error class="h3-text--medium" *ngIf="bodyFormCtl.invalid">
           {{ getBodyErrorMessage() }}
-        </mat-error>
+        </mat-error> -->
       </mat-form-field>
 
     </form>
   </div>
   <div mat-dialog-actions align="center" class="admin-message-preview-dialog__action">
-    <button mat-raised-button mat-dialog-close (click)="isSuccess = false">
+    <button mat-raised-button mat-dialog-close (click)="closeDialog(false)">
       <span>{{ data.cancelBtnText }}</span>
     </button>
-    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="confirm()">
+    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="closeDialog(true)">
       <span>{{ data.successBtnText }}</span>
     </button>
   </div>

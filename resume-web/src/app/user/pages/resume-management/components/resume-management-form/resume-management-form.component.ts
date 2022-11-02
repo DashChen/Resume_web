@@ -629,23 +629,24 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      height: 'auto',
-      maxHeight: '80vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
         // TODO
-        autobiographies: '',
+        autobiographies: this.autobiographies[0].content || '',
       },
     });
     dialogRef.afterClosed().subscribe(result => {
       // todo: 送出編輯自傳請求
-      if (result) {
+      if (result && this.autobiographies[0].id) {
         console.log('openAutobiographyDialog', result);
-        this.store.dispatch(UserActions.createAutobiographies({
+        this.store.dispatch(UserActions.updateAutobiography({
           payload: {
-            resumeCode: this.resumeCode,
-            content: result.autobiographies
+            id: this.autobiographies[0].id,
+            data: {
+              resumeCode: this.autobiographies[0].resumeCode,
+              content: result.autobiographies
+            }
           },
         }));
       }
