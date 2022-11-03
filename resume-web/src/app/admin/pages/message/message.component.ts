@@ -151,7 +151,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
         }));
       }
       this.requestSmsData$ = (query: any = {}) => {
-        return from(this.dataService.api.appSMSTplsList(query, {
+        return from(this.dataService.api.appSMSQuenesList(query, {
           headers: {
             ...this.dataService.getAuthorizationToken('admin')
           }
@@ -307,8 +307,15 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       if (val !== null && val !== '') {
         if (key === 'sendDate') {
           console.log(typeof val, val);
-          query['Send_DateMin'] = DateTime.fromMillis(val.ts).startOf('day').toFormat('yyyy/MM/dd HH:mm:ss');
-          query['Send_DateMax'] = DateTime.fromMillis(val.ts).endOf('day').toFormat('yyyy/MM/dd HH:mm:ss');
+          let A = 'Send_DateMin', B = 'Send_DateMax';
+          if (this.currentType === 'email') {
+            A = this.tabSelected.value === 1 ? 'DateAMin' : A;
+            B = this.tabSelected.value === 1 ? 'DateAMax' : B;
+          } else {
+
+          }
+          query[A] = DateTime.fromMillis(val.ts).startOf('day').toISO();
+          query[B] = DateTime.fromMillis(val.ts).endOf('day').toISO();
         } else {
           query[this.requestKeyMap[key]] = val;
         }

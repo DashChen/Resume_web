@@ -108,17 +108,40 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
     super();
     this.nameFormCtl.setValue(data.item?.name || '');
     this.jobTitleFormCtl.setValue(data.item?.jobTitle || '');
-    this.dateAFormCtl.setValue(data.item?.dateA || '');
-    this.dateDFormCtl.setValue(data.item?.dateD || '');
+    if (data.item?.dateA) {
+      this.dateAFormCtl.setValue(DateTime.fromISO(data.item?.dateA));
+    } else {
+      this.dateAFormCtl.setValue('');
+    }
+    if (data.item?.dateD) {
+      this.dateDFormCtl.setValue(DateTime.fromISO(data.item?.dateD));
+    } else {
+      this.dateDFormCtl.setValue('');
+    }
     this.jobDescriptionFormCtl.setValue(data.item?.jobDescription || '');
   }
 
   closeDialog(isSuccess: boolean) {
+    let res: any = false;
     if (isSuccess) {
       if (this.workForm.invalid) {
+        console.log(this.workForm, this.workForm.errors);
         return;
       }
+      res = {...this.workForm.value} as {
+        name: string;
+        jobTitle: string;
+        dateA: string | DateTime;
+        dateD: string | DateTime;
+        jobDescription: string;
+      };
+      if (res.dateA instanceof DateTime) {
+        res.dateA = res.dateA.toUTC().toISO();
+      }
+      if (res.dateD instanceof DateTime) {
+        res.dateD = res.dateD.toUTC().toISO();
+      }
     }
-    this.dialogRef.close(isSuccess ? this.workForm.value : false);
+    this.dialogRef.close(res);
   }
 }

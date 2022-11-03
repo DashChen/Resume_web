@@ -33,7 +33,7 @@
       <label class="mat-form-field__lable--top">就學期間*</label>
       <div fxLayout="row" fxLayoutGap="12px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0">
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never" [ngStyle]="{'padding-top.px': 0}">
-          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="開始月份" formControlName="dateA">
+          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="開始月份" formControlName="dateA" (click)="picker.open()">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker startView="multi-year" (monthSelected)="setStartMonthAndYear($event, picker)"></mat-datepicker>
           <mat-error *ngIf="dateAFormCtl.invalid" class="h3-text--medium">
@@ -42,7 +42,7 @@
         </mat-form-field>
         <div [ngStyle]="{'position': 'relative', 'top.px': 12}" [fxHide.lt-md]="true">-</div>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
-          <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="dateFilterE" placeholder="結束月份" formControlName="dateD">
+          <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="dateFilterE" placeholder="結束月份" formControlName="dateD" (click)="picker1.open()">
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1 startView="multi-year" (monthSelected)="setEndMonthAndYear($event, picker1)"></mat-datepicker>
           <mat-error *ngIf="dateDFormCtl.invalid" class="h3-text--medium">

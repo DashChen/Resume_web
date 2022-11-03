@@ -370,7 +370,7 @@ export class UserEffects {
             })).pipe(
                 map(res => {
                     console.log('updateExperience', res);
-                    return UserActions.updateEductionStore({ payload: res.data });
+                    return UserActions.updateExperienceStore({ payload: res.data });
                 }),
                 catchError(error => {
                     console.error('updateExperience error', error);
@@ -460,6 +460,27 @@ export class UserEffects {
                 }),
                 catchError(error => {
                     console.error('createAutobiographies error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    // 刪除自傳
+    delAutobiography$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.delAutobiography),
+        map(params => params.payload),
+        exhaustMap((payload: string) => {
+            return from(this.dataService.api.appAutobiographiesDelete(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('delAutobiography', res);
+                    return UserActions.delAutobiographyStore({ payload: payload });
+                }),
+                catchError(error => {
+                    console.error('delAutobiography error', error);
                     return of(UserActions.getUserFail({ payload: error }));
                 }),
             )

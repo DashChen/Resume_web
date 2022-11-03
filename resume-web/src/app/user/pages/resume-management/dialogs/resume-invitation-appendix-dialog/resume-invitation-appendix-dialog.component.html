@@ -22,7 +22,8 @@
             </mat-error>
         </mat-form-field>
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="app-resume-invitation-appendix-dialog__content__upload-block"
-            (click)="fileInput.click()">
+            [ngClass]="{'app-resume-invitation-appendix-dialog__content__upload-block--disabled': uploadFiles.length > 0}"
+            (click)="uploadFiles.length === 0 ? fileInput.click() : false">
             <mat-icon class="app-resume-invitation-appendix-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
             <label class="app-resume-invitation-appendix-dialog__content__input">
             <span class="h1-title">按此匯入檔案</span>

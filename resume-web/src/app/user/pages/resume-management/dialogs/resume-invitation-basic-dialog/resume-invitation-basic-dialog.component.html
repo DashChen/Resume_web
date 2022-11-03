@@ -37,7 +37,7 @@
     </div>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">出生日期</label>
-      <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" placeholder="請選擇日期" formControlName="birthDate">
+      <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" placeholder="請選擇日期" formControlName="birthDate" (click)="picker.open()">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

@@ -18,7 +18,10 @@
     <form class="admin-resume-invitation-send-form__card__form" [formGroup]="editForm">
       <div fxLayout="column" fxLayoutGap="35px">
         <div fxLayout="column" fxLayoutGap="4px">
-          <div class="h2-text--medium">收件者</div>
+          <div class="h2-text--medium">
+            <span>收件者</span>
+            <mat-error *ngIf="showPersonErr">(請至少選擇1人)</mat-error>
+          </div>
           <div fxLayout="row wrap" fxLayoutGap="18px" fxLayoutAlign="flex-start center" fxLayoutAlign.lt-md="flex-start center" fxLayoutGap.lt-md="0px"
             class="admin-resume-invitation-send-form__tags">
             <ng-container *ngFor="let person of selectedPerson; let index = index">
@@ -65,7 +68,7 @@
                 </mat-radio-button>
                 <mat-form-field class="mat-form-field--hide-error admin-resume-invitation-send-form__card__form__datepicker"
                   floatLabel="never" appearance="fill" >
-                  <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'">
+                  <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'" (click)="picker1.open()">
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
@@ -78,13 +81,13 @@
           <div class="h2-text--medium">網址填寫期限</div>
           <div fxLayout="row" fxLayoutAlign="center center" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px" fxLayoutAlign.lt-md="center flex-start">
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
-              <input matInput [matDatepicker]="picker2" formControlName="date2" placeholder="請選擇日期">
+              <input matInput [matDatepicker]="picker2" formControlName="date2" placeholder="請選擇日期" (click)="picker2.open()">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
             <div class="admin-resume-invitation-send-form__card__form__to">到</div>
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
-              <input matInput [matDatepicker]="picker3" formControlName="date3" placeholder="請選擇日期">
+              <input matInput [matDatepicker]="picker3" formControlName="date3" placeholder="請選擇日期" (click)="picker3.open()">
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
               <mat-datepicker #picker3></mat-datepicker>
             </mat-form-field>
@@ -99,13 +102,13 @@
                 <div>
                   <div class="h2-text--medium">主旨</div>
                   <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
-                    <input matInput placeholder="請完成入職前填寫資料">
+                    <input matInput formControlName="emailTitle" placeholder="請完成入職前填寫資料">
                   </mat-form-field>
                 </div>
                 <div>
                   <div class="h2-text--medium">信件內容</div>
                   <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" appearance="fill">
-                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+                    <textarea matInput formControlName="emailContent" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -115,7 +118,7 @@
                 <div>
                   <div class="h2-text--medium">簡訊內容</div>
                   <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" floatLabel="never" appearance="fill">
-                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+                    <textarea matInput formControlName="mailContent" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
                   </mat-form-field>
                 </div>
               </div>

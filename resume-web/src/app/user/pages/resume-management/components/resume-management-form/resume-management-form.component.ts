@@ -19,6 +19,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { getEductionCodeList } from '@app/shared/store/user/user.actions';
 import { DateTime } from 'luxon';
 import { MatDrawer } from '@angular/material/sidenav';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-resume-management-form',
@@ -535,7 +536,10 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       if (result) {
         console.log('openLicenseDialog', result);
         this.store.dispatch(UserActions.createExperience({
-          payload: result
+          payload: {
+            ...result,
+            resumeCode: this.resumeCode
+          }
         }));
       }
     });
@@ -562,10 +566,17 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       },
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && item.id) {
         console.log('editExperience', result);
         this.store.dispatch(UserActions.updateExperience({
-          payload: result
+          payload: {
+            id: item.id,
+            data: {
+              ...item,
+              ...result,
+              resumeCode: this.resumeCode
+            }
+          }
         }));
       }
     });
@@ -619,7 +630,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   openAutobiographyDialog(event: MouseEvent): void {
     const dialogConfig: IBasicDialog = {
-      title: '編輯自傳',
+      title: '新增自傳',
       subTitle: '',
       successBtnText: '儲存',
       cancelBtnText: '取消',
@@ -637,7 +648,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       },
     });
     dialogRef.afterClosed().subscribe(result => {
-      // todo: 送出編輯自傳請求
       if (result && this.autobiographies[0].id) {
         console.log('openAutobiographyDialog', result);
         this.store.dispatch(UserActions.updateAutobiography({
@@ -652,10 +662,53 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       }
     });
   }
+  // 編輯自傳
+  editAutobiographyDialog(item: ResumeAutobiographiesAutobiographyDto): void {
+    const dialogConfig: IBasicDialog = {
+      title: '編輯自傳',
+      subTitle: '',
+      successBtnText: '儲存',
+      cancelBtnText: '取消',
+      showSuccessBtn: true,
+      showCancelBtn: true,
+    };
+    const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
+      width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
+      // panelClass: '',
+      data: {
+        ...dialogConfig,
+        // TODO
+        autobiographies: item.content || '',
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && item.id) {
+        console.log('editAutobiographyDialog', result);
+        this.store.dispatch(UserActions.updateAutobiography({
+          payload: {
+            id: item.id,
+            data: {
+              content: result.autobiographies
+            }
+          },
+        }));
+      }
+    });
+  }
+  // 刪除自傳
+  delAutobiography(item: ResumeAutobiographiesAutobiographyDto) {
+    const dialogRef = this.infoDialog('確認刪除', '');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && item.id) {
+        this.store.dispatch(UserActions.delAutobiography({ payload: item.id }));
+      }
+    });
+  }
 
   openAppendixDialog(event: MouseEvent): void {
     const dialogConfig: IBasicDialog = {
-      title: '編輯附件',
+      title: '新增附件',
       subTitle: '',
       successBtnText: '儲存',
       cancelBtnText: '取消',

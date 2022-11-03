@@ -177,7 +177,7 @@
                 <mat-form-field class="mat-form-field__block mat-form-field__label" floatLabel="never" appearance="fill" >
                     <label class="mat-form-field__lable--top">生日</label>
                     <input matInput [matDatepicker]="picker1" formControlName="Birthday" [min]="minDate" [max]="maxDate"
-                        [placeholder]="focusBtnKey !== 'Birthday' ? '未填寫': '請選擇日期'">
+                        [placeholder]="focusBtnKey !== 'Birthday' ? '未填寫': '請選擇日期'" (click)="picker1.open()">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>

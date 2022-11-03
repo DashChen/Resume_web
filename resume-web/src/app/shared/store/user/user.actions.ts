@@ -58,6 +58,8 @@ export const actionType = {
     UPDATE_AUTOBIOGRAPHY: '[User Resume Management Page] Update Autobiography',
     UPDATE_AUTOBIOGRAPHY_STORE: '[User Resume Management Page] Update Autobiography store',
     ADD_AUTOBIOGRAPHIES: '[User Resume Management Page] Add Autobiographies list',
+    DELETE_AUTOBIOGRAPHY: '[User Resume Management Page] Delete Autobiography',
+    DELETE_AUTOBIOGRAPHY_STORE: '[User Resume Management Page] Delete Autobiography store',
     // 附件
     GET_APPENDICES: '[User Resume Management Page] Get Appendices list',
     SET_APPENDICES: '[User Resume Management Page] Set Appendices list',
@@ -311,6 +313,16 @@ export const updateAutobiography = createAction(
 export const updateAutobiographyStore = createAction(
     actionType.UPDATE_AUTOBIOGRAPHY_STORE,
     props<{ payload: ResumeAutobiographiesAutobiographyDto }>(),
+);
+
+export const delAutobiography = createAction(
+    actionType.DELETE_AUTOBIOGRAPHY,
+    props<{ payload: string }>(),
+);
+
+export const delAutobiographyStore = createAction(
+    actionType.DELETE_AUTOBIOGRAPHY_STORE,
+    props<{ payload: string }>(),
 );
 
 export const createAppendices = createAction(

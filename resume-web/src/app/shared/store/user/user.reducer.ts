@@ -89,6 +89,14 @@ export const userReducer = createReducer(
         }
         return {...state, resumeExperiences: [...items]};
     }),
+    on(UserActions.delAutobiographyStore, (state, { payload }) => {
+        const index = state.resumeAutobiographies.findIndex(_item => _item.id === payload);
+        let items = [...state.resumeAutobiographies];
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        return {...state, resumeAutobiographies: [...items]};
+    }),
     on(UserActions.delAppendiceStore, (state, { payload }) => {
         const index = state.resumeAppendices.findIndex(_item => _item.id === payload);
         let items = [...state.resumeAppendices];
