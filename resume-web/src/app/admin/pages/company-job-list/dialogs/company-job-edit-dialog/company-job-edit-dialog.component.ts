@@ -23,7 +23,7 @@ export class CompanyJobEditDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
 
   editForm = new FormGroup({
-    jobName: new FormControl(this.data.item?.jobName, [Validators.required, Validators.pattern('[\\W]+')]),
+    jobName: new FormControl(this.data.item?.jobName, [Validators.required, Validators.pattern('^[A-Za-z0-9\u4E00-\u9FFF]+')]),
     mailTplCode: new FormControl(this.data.item?.mailTplCode, [Validators.required]),
     smsTplCode: new FormControl(this.data.item?.smsTplCode, [Validators.required]),
   });

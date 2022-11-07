@@ -72,9 +72,9 @@
       </div>
       <div [fxHide]="true" [fxShow.lt-md]="true" fxLayout.lt-md="row" fxLayoutGap.lt-md="12px">
         <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="edit b icon" (click)="onShowPreview(true)">
-          <mat-icon [svgIcon]="'eye-open'"></mat-icon>
+          <mat-icon [svgIcon]="'eye-open-2'"></mat-icon>
         </button>
-        <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="edit b icon" (click)="onSaveResume()">
+        <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="send icon" [disabled]="invitationCode.length === 0" (click)="onSaveResume()">
           <mat-icon [svgIcon]="'send'"></mat-icon>
         </button>
       </div>
@@ -128,9 +128,8 @@
               </button>
             </div>
           </div>
-          <div class="app-resume-management-form__content__card__body app-resume-management-form__content__card__body--empty"
-            fxLayout="row" fxLayoutGap="40px" fxLayout.lt-md="column">
-            <div fxLayout="column" fxLayoutAlign.lt-md="center center">
+          <div class="app-resume-management-form__content__card__body app-resume-management-form__content__card__body--empty" fxLayout="row" fxLayoutGap="40px" fxLayout.lt-md="column">
+            <div fxLayout="column" fxLayoutGap="12px" class="app-resume-management-form__content__image__block">
               <img class="app-resume-management-form__content__image__avatar" [src]="userPic" (error)="onImgError($event)" alt="">
               <button mat-stroked-button class="app-resume-management-form__content__button__upload" (click)="openProfileDialog($event)">
                 <span>上傳照片</span>
@@ -263,10 +262,10 @@
             <span class="app-resume-management-form__content__card__header__title">專業證照</span>
             <div fxFlex fxLayoutAlign="end">
               <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openLicenseDialog($event)" [fxShow.lt-md]="false">
-                <span>編輯</span>
+                <span>新增</span>
               </button>
               <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="edit b icon" (click)="openLicenseDialog($event)" [fxHide]="true" [fxShow.lt-md]="true">
-                <mat-icon [svgIcon]="'edit-b-icon'"></mat-icon>
+                <mat-icon [svgIcon]="'plus'"></mat-icon>
               </button>
             </div>
           </div>
@@ -276,14 +275,21 @@
             </div>
             <ng-container *ngIf="licenses.length > 0">
               <ng-container *ngFor="let item of licenses">
-                <div fxLayout="column" fxLayoutGap="24px" class="app-resume-management-form__content__card--licenses">
-                  <div fxLayout="row" fxLayoutGap="24px">
-                    <div class="h2-text--bold">證照名稱</div>
-                    <div class="h2-text--regular">{{item.name}}</div>
+                <div class="app-resume-management-form__content__card--licenses">
+                  <div class="app-resume-management-form__content__card--licenses-btns">
+                    <button mat-icon-button class="mat-button--icon" (click)="delLicense(item)">
+                      <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button>
                   </div>
-                  <div fxLayout="row" fxLayoutGap="24px">
-                    <div class="h2-text--bold">其他證照</div>
-                    <div class="h2-text--regular">{{item.note}}</div>
+                  <div fxLayout="column" fxLayoutGap="24px">
+                    <div fxLayout="row" fxLayoutGap="24px">
+                      <div class="h2-text--bold">證照名稱</div>
+                      <div class="h2-text--regular">{{item.name}}</div>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="24px">
+                      <div class="h2-text--bold">其他證照</div>
+                      <div class="h2-text--regular">{{item.note}}</div>
+                    </div>
                   </div>
                 </div>
               </ng-container>
@@ -295,10 +301,10 @@
             <span class="app-resume-management-form__content__card__header__title">自傳</span>
             <div fxFlex fxLayoutAlign="end">
               <button mat-raised-button class="mat-button--blue h2-text--regular" (click)="openAutobiographyDialog($event)" [fxShow.lt-md]="false">
-                <span>新增</span>
+                <span>{{ this.autobiographies.length === 0 ? '新增' : '編輯' }}</span>
               </button>
               <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="edit b icon" (click)="openAutobiographyDialog($event)" [fxHide]="true" [fxShow.lt-md]="true">
-                <mat-icon [svgIcon]="'plus'"></mat-icon>
+                <mat-icon [svgIcon]="this.autobiographies.length === 0 ? 'plus' : 'edit-b-icon'"></mat-icon>
               </button>
             </div>
           </div>
@@ -312,9 +318,6 @@
                   <div class="app-resume-management-form__content__card--autobiographies-btns">
                     <button mat-icon-button class="mat-button--icon" (click)="delAutobiography(item)">
                       <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
-                    </button>
-                    <button mat-icon-button class="mat-button--icon mat-button--blue" (click)="editAutobiographyDialog(item)">
-                      <mat-icon [svgIcon]="'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
                     </button>
                   </div>
                   <div class="h2-text--regular">{{item.content}}</div>

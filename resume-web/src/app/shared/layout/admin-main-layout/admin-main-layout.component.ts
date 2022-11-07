@@ -16,6 +16,8 @@ export class AdminMainLayoutComponent implements OnInit {
   currentUser$ = this.store.select(AdminSelectors.selectCurrentUser);
   startYear: string = '2022/3';
   currentYear: string = '';
+  version: string = '1.1.0';
+
   username: string = '';
   email: string = '';
 

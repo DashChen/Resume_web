@@ -63,6 +63,14 @@
                         </ng-container>
                     </select>
                 </mat-form-field>
+                <ng-container matColumnDef="sendDate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <span class="h2-text--bold text-main">寄件日期</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element" [attr.data-th]="'寄件日期'">
+                      <div class="mat-cell-content">{{ element.send_Date | date: 'yyyy/M/dd' }}</div>
+                    </td>
+                </ng-container>
                 <mat-form-field class="mat-form-field__block mat-form-field--hide-error" appearance="fill">
                     <label class="mat-form-field__lable--top">姓名</label>
                     <input matInput placeholder="例:王大大明" formControlName="name" [errorStateMatcher]="matcher">
@@ -125,7 +133,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="sendDate" *ngIf="displayedColumns.includes('sendDate')">
+                <ng-container matColumnDef="sendDate">
                   <th mat-header-cell *matHeaderCellDef>
                     <span class="h2-text--bold text-main">寄件日期</span>
                   </th>

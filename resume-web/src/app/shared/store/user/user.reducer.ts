@@ -43,6 +43,7 @@ export const userReducer = createReducer(
 
     on(UserActions.addExperience, (state, { payload }) => ({ ...state, resumeExperiences: [...state.resumeExperiences, payload] })),
     on(UserActions.addEduction, (state, { payload }) => ({ ...state, resumeEductions: [...state.resumeEductions, payload] })),
+    on(UserActions.addLicense, (state, { payload }) => ({ ...state, resumeLicenses: [...state.resumeLicenses, payload] })),
     on(UserActions.addAutobiographies, (state, { payload }) => ({ ...state, resumeAutobiographies: [...state.resumeAutobiographies, payload] })),
     on(UserActions.addAppendices, (state, { payload }) => ({ ...state, resumeAppendices: [...state.resumeAppendices, payload] })),
     on(UserActions.setProfilePicture, (state, { payload }) => ({ ...state, profilePicture: payload })),
@@ -88,6 +89,14 @@ export const userReducer = createReducer(
             items.splice(index, 1);
         }
         return {...state, resumeExperiences: [...items]};
+    }),
+    on(UserActions.delLicenseStore, (state, { payload }) => {
+        const index = state.resumeLicenses.findIndex(_item => _item.id === payload);
+        let items = [...state.resumeLicenses];
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        return {...state, resumeLicenses: [...items]};
     }),
     on(UserActions.delAutobiographyStore, (state, { payload }) => {
         const index = state.resumeAutobiographies.findIndex(_item => _item.id === payload);

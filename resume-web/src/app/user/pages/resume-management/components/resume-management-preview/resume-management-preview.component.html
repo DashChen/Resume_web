@@ -168,7 +168,6 @@
                                 <div *ngIf="item.appendixType == '1'">
                                   <div fxLayout="row" fxLayoutAlign="space-between center" class="app-resume-management-form__content__card--appendix-file">
                                     <a href="#" (click)="downloadAppendixFile($event, item)">{{item.appendixContent}}</a>
-                                    <mat-icon mat-dialog-close [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
                                   </div>
                                 </div>
                                 <div *ngIf="item.appendixType != '1'">

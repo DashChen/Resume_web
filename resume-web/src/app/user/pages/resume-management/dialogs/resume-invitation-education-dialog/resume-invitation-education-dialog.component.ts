@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseFormComponent } from '@app/shared/components/base-form.component';
@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { ResumeEducationsEducationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
-import { takeUntil } from 'rxjs';
+import { Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { area, areas, areasList } from '@app/core/interfaces/ares.model';
 import { DateTime } from 'luxon';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { LuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
+import { omit, omitBy } from 'lodash';
 
 export interface ResumeInvitationEducationDialogData extends basicDialog {
   item: ResumeEducationsEducationDto;
@@ -50,7 +51,7 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
   graduateCodeList: ResumeShareCodesShareCodeDto[] = [];
   areasList: areasList[] = [];
   mainAreas: area[] = [];
-  choicedAreas: areas[] = [];
+  choicedAreas$: Observable<areas[]> = of([]);
 
   eductionForm = new FormGroup({
     school: new FormControl('', [Validators.required]),
@@ -59,11 +60,14 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     dateA: new FormControl('', [Validators.required]),
     dateD: new FormControl('', [Validators.required]),
     graduationCode: new FormControl(''),
-    area: new FormControl(''),
     schoolLocation: new FormControl(''),
+    note: new FormControl(''),
+    area: new FormControl(''),
+    region: new FormControl(''),
   });
-
-  showArea: boolean = false;
+  item: ResumeEducationsEducationDto = {} as ResumeEducationsEducationDto;
+  changed: boolean = false;
+  tempArea: area = {} as area;
 
   get schoolFormCtl() {
     return this.eductionForm.get('school') as FormControl;
@@ -113,12 +117,20 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     return this.graduationCodeFormCtl.hasError('required') ? '此欄位必填' : '';
   }
 
+  get schoolLocationFormCtl() {
+    return this.eductionForm.get('schoolLocation') as FormControl;
+  }
+
+  get noteFormCtl() {
+    return this.eductionForm.get('note') as FormControl;
+  }
+
   get areaFormCtl() {
     return this.eductionForm.get('area') as FormControl;
   }
 
-  get schoolLocationFormCtl() {
-    return this.eductionForm.get('schoolLocation') as FormControl;
+  get regionFormCtl() {
+    return this.eductionForm.get('region') as FormControl;
   }
 
   constructor(
@@ -127,6 +139,7 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     @Inject(MAT_DIALOG_DATA) public data: ResumeInvitationEducationDialogData,
   ) {
     super();
+    this.item = data.item;
     this.schoolFormCtl.setValue(data.item?.school || '');
     this.educationCodeFormCtl.setValue(data.item?.educationCode || '');
     this.majorFormCtl.setValue(data.item?.major || '');
@@ -134,6 +147,31 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     this.dateDFormCtl.setValue(data.item?.dateD || '');
     this.graduationCodeFormCtl.setValue(data.item?.graduationCode || '');
     this.schoolLocationFormCtl.setValue(data.item?.schoolLocation || '');
+    this.areaFormCtl.valueChanges.subscribe(no => {
+      const index = this.areasList.findIndex(i => i.no === no);
+      console.log(no, index);
+      if (index > -1) {
+        this.choicedAreas$ = of(this.areasList[index].n || []);
+        this.tempArea = this.areasList[index];
+        if (!this.changed && this.item.note) {
+          console.log('changed')
+          this.regionFormCtl.setValue(this.item.note.split('_')[1]);
+          this.changed = true;
+        }
+      }
+    });
+    this.regionFormCtl.valueChanges.subscribe(no => {
+      this.choicedAreas$.pipe(
+        tap(items => {
+          const area = items.find(i => i.no === no);
+          const val = this.tempArea.des ? this.tempArea.des + '_' + (area?.des || '') : (area?.des || '');
+          this.schoolLocationFormCtl.setValue(val);
+          if (area?.no) {
+            this.noteFormCtl.setValue(this.tempArea.no + '_' + area?.no);
+          }
+        })
+      )
+    });
   }
 
   ngOnInit(): void {
@@ -157,13 +195,13 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
       ).subscribe(res => {
         this.mainAreas = res;
       });
-    this.areaFormCtl.valueChanges.subscribe(res => {
-      console.log('areaFormCtl.valueChanges', res);
-      this.showArea = res === 'foreign';
-    });
+    if (this.item?.note?.includes('_')) {
+      this.areaFormCtl.setValue(this.item.note.split('_')[0]);
+    }
   }
 
   closeDialog(isSuccess: boolean) {
+    let res = {...this.eductionForm.value};
     if (isSuccess) {
       this.graduationCodeFormCtl.setValidators([Validators.required]);
       this.graduationCodeFormCtl.updateValueAndValidity();
@@ -171,8 +209,9 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
       if (this.eductionForm.invalid) {
         return;
       }
+      res = omit(res, ['area', 'region']);
     }
-    this.dialogRef.close(isSuccess ? this.eductionForm.value : false);
+    this.dialogRef.close(isSuccess ? res : false);
   }
 
   dateFilter = (d: Date | null): boolean => {
@@ -229,18 +268,5 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     console.log(normalizedMonthAndYear);
     this.dateDFormCtl.setValue(normalizedMonthAndYear);
     datepicker.close();
-  }
-
-  changeArea(no: any) {
-    console.log('changeArea', no);
-    const index = this.areasList.findIndex(i => i.no === no);
-    if (index > -1) {
-      this.choicedAreas = this.areasList[index].n || [];
-    }
-  }
-  changeCountry(no: any) {
-    console.log('changeCountry', no);
-    const area = this.choicedAreas.find(i => i.no === no);
-    this.schoolLocationFormCtl.setValue(area?.des || '');
   }
 }

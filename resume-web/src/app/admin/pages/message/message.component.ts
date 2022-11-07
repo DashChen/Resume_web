@@ -60,7 +60,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     sendStatus: new FormControl(this.initialValue.sendStatus),
     openStatus: new FormControl(this.initialValue.openStatus),
     stage: new FormControl(this.initialValue.stage),
-    name: new FormControl(this.initialValue.name, [Validators.pattern('[\\W]+')]),
+    name: new FormControl(this.initialValue.name, [Validators.pattern('^[A-Za-z0-9\u4E00-\u9FFF]+')]),
   });
 
   get nameFormCtl() {

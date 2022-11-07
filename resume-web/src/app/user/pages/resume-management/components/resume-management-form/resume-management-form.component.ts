@@ -593,7 +593,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   openLicenseDialog(event: MouseEvent): void {
     const dialogConfig: IBasicDialog = {
-      title: '編輯專業證照',
+      title: '新增專業證照',
       subTitle: '',
       successBtnText: '儲存',
       cancelBtnText: '取消',
@@ -610,13 +610,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       // todo: 送出編輯專業證照請求
       if (result) {
         console.log('openLicenseDialog', result);
-        this.licenses = [
-          ...(Array.isArray(this.licenses) ? this.licenses : []),
-          {
-            name: result.name,
-            note: result.note
-          }
-        ];
         this.store.dispatch(UserActions.createLicense({
           payload: {
             name: result.name,
@@ -627,40 +620,51 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       }
     });
   }
-
-  openAutobiographyDialog(event: MouseEvent): void {
-    const dialogConfig: IBasicDialog = {
-      title: '新增自傳',
-      subTitle: '',
-      successBtnText: '儲存',
-      cancelBtnText: '取消',
-      showSuccessBtn: true,
-      showCancelBtn: true,
-    };
-    const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
-      width: '614px',
-      maxWidth: 'calc(100vw - 48px)',
-      // panelClass: '',
-      data: {
-        ...dialogConfig,
-        // TODO
-        autobiographies: this.autobiographies[0].content || '',
-      },
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && this.autobiographies[0].id) {
-        console.log('openAutobiographyDialog', result);
-        this.store.dispatch(UserActions.updateAutobiography({
-          payload: {
-            id: this.autobiographies[0].id,
-            data: {
-              resumeCode: this.autobiographies[0].resumeCode,
-              content: result.autobiographies
-            }
-          },
-        }));
+  // 刪除專業證照
+  delLicense(item: ResumeLicensesLicenseDto) {
+    const dialogRef = this.infoDialog('確認刪除', '');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && item.id) {
+        this.store.dispatch(UserActions.delLicense({ payload: item.id }));
       }
     });
+  }
+
+  // 新增自傳
+  openAutobiographyDialog(event: MouseEvent): void {
+    if (this.autobiographies.length > 0) {
+      this.editAutobiographyDialog(this.autobiographies[0]);
+    } else {
+      const dialogConfig: IBasicDialog = {
+        title: '新增自傳',
+        subTitle: '',
+        successBtnText: '儲存',
+        cancelBtnText: '取消',
+        showSuccessBtn: true,
+        showCancelBtn: true,
+      };
+      const dialogRef = this.dialog.open(ResumeInvitationAutobiographyDialogComponent, {
+        width: '614px',
+        maxWidth: 'calc(100vw - 48px)',
+        // panelClass: '',
+        data: {
+          ...dialogConfig,
+          // TODO
+          autobiographies: '',
+        },
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('openAutobiographyDialog', result);
+          this.store.dispatch(UserActions.createAutobiographies({
+            payload: {
+              resumeCode: this.resumeCode,
+              content: result.autobiographies
+            },
+          }));
+        }
+      });
+    }
   }
   // 編輯自傳
   editAutobiographyDialog(item: ResumeAutobiographiesAutobiographyDto): void {

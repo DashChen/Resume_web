@@ -94,6 +94,10 @@ $this: '.app-resume-management-form';
         @include lt-md {
           padding: 24px;
         }
+
+        button.mat-button-disabled {
+          background: #C5D0DF;
+        }
       }
 
       &__resume {
@@ -362,10 +366,15 @@ $this: '.app-resume-management-form';
         }
       }
       &__image {
+        &__block {
+          @include lt-md {
+            align-items: center;
+            justify-content: center;
+          }
+        }
         &__avatar {
           width: 100px;
           height: 100px;
-          margin-bottom: 12px;
         }
       }
       &__button {

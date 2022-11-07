@@ -179,6 +179,8 @@ $this: '.app-admin-main-layout';
 
     &__footer {
       color: $colorLight;
+      display: flex;
+      justify-content: space-between;
       margin-top: auto;
       min-height: 39px;
       padding: 0 40px;

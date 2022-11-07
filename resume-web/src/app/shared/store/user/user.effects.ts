@@ -414,7 +414,7 @@ export class UserEffects {
             })).pipe(
                 map(res => {
                     console.log('createLicense', res);
-                    return UserActions.setResumeLicenses({ payload: [res.data] });
+                    return UserActions.addLicense({ payload: res.data });
                 }),
                 catchError(error => {
                     console.error('createLicense error', error);
@@ -423,6 +423,28 @@ export class UserEffects {
             )
         })
     ));
+    // 刪除證照
+    delLicense$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.delLicense),
+        map(params => params.payload),
+        exhaustMap((payload: string) => {
+            return from(this.dataService.api.appLicensesDelete(payload, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('delLicense', res);
+                    return UserActions.delLicenseStore({ payload: payload });
+                }),
+                catchError(error => {
+                    console.error('delLicense error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+
     // 新增自傳
     createAutobiographies$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.createAutobiographies),
@@ -455,11 +477,11 @@ export class UserEffects {
                 }
             })).pipe(
                 map(res => {
-                    console.log('createAutobiographies', res);
+                    console.log('updateAutobiography', res);
                     return UserActions.updateAutobiographyStore({ payload: res.data });
                 }),
                 catchError(error => {
-                    console.error('createAutobiographies error', error);
+                    console.error('updateAutobiography error', error);
                     return of(UserActions.getUserFail({ payload: error }));
                 }),
             )

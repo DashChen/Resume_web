@@ -207,7 +207,7 @@
                     <input matInput [placeholder]="focusBtnKey !== 'newPassword' ? '未填寫' : '請輸入舊密碼'"
                         autocomplete="nope" formControlName="password" required [errorStateMatcher]="matcher"
                         [type]="showPassword ? 'text' : 'password'">
-                    <mat-icon [svgIcon]="showNewPassword ? 'eye-open' : 'eye-close'"
+                    <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'"
                         aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword" *ngIf="focusBtnKey === 'newPassword'"></mat-icon>
                 </mat-form-field>
 

@@ -14,7 +14,8 @@
         <input
           placeholder="請輸入關鍵字"
           [matChipInputFor]="chipList"
-          (matChipInputTokenEnd)="showSelectLicense($event)">
+          (matChipInputTokenEnd)="showSelectLicense($event)"
+          (click)="showSelectLicenseBlock = true">
       </mat-chip-list>
       <mat-hint align="end">{{licensesControl.value?.length || 0}}/{{choiceLimit}}</mat-hint>
     </mat-form-field>

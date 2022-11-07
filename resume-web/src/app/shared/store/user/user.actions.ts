@@ -51,6 +51,9 @@ export const actionType = {
     SET_LICENSES: '[User Resume Management Page] Set Licenses list',
     CREATE_LICENSES: '[User Resume Management Page] Create Licenses list',
     UPDATE_LICENSE: '[User Resume Management Page] Update License',
+    DELETE_LICENSE: '[User Resume Management Page] Delete License',
+    DELETE_LICENSE_STORE: '[User Resume Management Page] Delete License store',
+    ADD_LICENSE: '[User Resume Management Page] Add License',
     // 自傳
     GET_AUTOBIOGRAPHIES: '[User Resume Management Page] Get Autobiographies list',
     SET_AUTOBIOGRAPHIES: '[User Resume Management Page] Set Autobiographies list',
@@ -290,9 +293,24 @@ export const createLicense = createAction(
     props<{ payload: ResumeLicensesLicenseCreateDto }>()
 );
 
+export const addLicense = createAction(
+    actionType.ADD_LICENSE,
+    props<{ payload: ResumeLicensesLicenseDto }>()
+);
+
 export const updateLicense = createAction(
     actionType.UPDATE_LICENSE,
     props<{ payload: ResumeLicensesLicenseCreateDto }>()
+);
+
+export const delLicense = createAction(
+    actionType.DELETE_LICENSE,
+    props<{ payload: string }>()
+);
+
+export const delLicenseStore = createAction(
+    actionType.DELETE_LICENSE_STORE,
+    props<{ payload: string }>()
 );
 
 export const createAutobiographies = createAction(
