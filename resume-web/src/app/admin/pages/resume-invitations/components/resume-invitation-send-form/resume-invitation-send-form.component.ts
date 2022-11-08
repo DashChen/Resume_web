@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, filter, finalize, forkJoin, from, Observable, of, Subscription, take, takeUntil, throwError } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { DateTime } from 'luxon';
 
 export interface ReceiverDialogData extends basicDialog {
   stageOptions: ISelectOption[];
+  selectedPerson: ResumeResumeInvitationsResumeInvitationDto[];
 }
 
 @Component({
@@ -43,7 +44,10 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
   stageOptions: ISelectOption[] = [];
   selectedPerson: ResumeResumeInvitationsResumeInvitationDto[] = [];
 
+  tabSelected = new FormControl(0);
+
   showPersonErr: boolean = false;
+  showTemplateErr: boolean = false;
 
   editForm = new FormGroup({
     mailTpl: new FormControl(null),
@@ -69,28 +73,56 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
     return this.editForm.get('send_Date') as FormControl;
   }
 
+  getSendDateErrorMessage() {
+    return this.date2FormCtl.hasError('sendDateFormCtl') ? '請填此欄位' : '';
+  }
+
   get date2FormCtl() {
     return this.editForm.get('date2') as FormControl;
+  }
+
+  getDate2ErrorMessage() {
+    return this.date2FormCtl.hasError('required') ? '請填此欄位' : '';
   }
 
   get date3FormCtl() {
     return this.editForm.get('date3') as FormControl;
   }
 
+  getDate3ErrorMessage() {
+    return this.date3FormCtl.hasError('required') ? '請填此欄位' : '';
+  }
+
   get sendDateTypeFormCtl() {
     return this.editForm.get('sendDateType') as FormControl;
+  }
+
+  getSendDateTypeErrorMessage() {
+    return this.sendDateTypeFormCtl.hasError('required') ? '請選擇發送類型' : '';
   }
 
   get emailTitleFormCtl() {
     return this.editForm.get('emailTitle') as FormControl;
   }
 
+  getEmailTitleErrorMessage() {
+    return this.emailTitleFormCtl.hasError('required') ? '請填此欄位' : '';
+  }
+
   get emailContentFormCtl() {
     return this.editForm.get('emailContent') as FormControl;
   }
 
+  getEmailContentErrorMessage() {
+    return this.emailContentFormCtl.hasError('required') ? '請填此欄位' : '';
+  }
+
   get mailContentFormCtl() {
     return this.editForm.get('mailContent') as FormControl;
+  }
+
+  getMailContentErrorMessage() {
+    return this.mailContentFormCtl.hasError('required') ? '請填此欄位' : '';
   }
 
   constructor(
@@ -130,6 +162,20 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
       this.stageList = list || [];
       this.stageOptions = list.map(item => ({text: item.name, key: item.code} as ISelectOption));
     });
+    this.sendDateTypeFormCtl.valueChanges.subscribe(type => {
+      if (type === 'none') {
+        this.date3FormCtl.clearValidators();
+      } else {
+        this.date3FormCtl.addValidators([Validators.required]);
+      }
+      this.date2FormCtl.updateValueAndValidity();
+    });
+    this.mailTplFormCtl.valueChanges.subscribe(val => {
+      this.showTemplateErr = !val && !this.smsTplFormCtl.value;
+    });
+    this.smsTplFormCtl.valueChanges.subscribe(val => {
+      this.showTemplateErr = !val && !this.mailTplFormCtl.value;
+    });
   }
 
 
@@ -148,14 +194,22 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
       maxWidth: '614px',
       data: {
         ...this.dialogConfig,
-        stageOptions: this.stageOptions
+        stageOptions: this.stageOptions,
+        selectedPerson: this.selectedPerson || []
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
         // todo: 新增人員
-        this.selectedPerson = result;
+        if (Array.isArray(result)) {
+          result.forEach(_item => {
+            const index = this.selectedPerson.findIndex(person => person.id === _item.id);
+            if (index < 0) {
+              this.selectedPerson.push(_item);
+            }
+          });
+        }
         this.showPersonErr = this.selectedPerson.length === 0;
       }
     });
@@ -177,10 +231,40 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
       this.showPersonErr = true;
       return;
     }
+    if (!this.mailTplFormCtl.value && !this.smsTplFormCtl.value) {
+      this.showTemplateErr = true;
+      return;
+    }
+    if (!this.sendDateTypeFormCtl.value) {
+      this.sendDateTypeFormCtl.setValidators([Validators.required]);
+      this.sendDateTypeFormCtl.updateValueAndValidity();
+      return;
+    }
+
+    if (!this.date2FormCtl.value) {
+      this.date2FormCtl.setValidators([Validators.required]);
+      this.date2FormCtl.updateValueAndValidity();
+      return;
+    }
+
+    if (!this.date3FormCtl.value) {
+      this.date3FormCtl.setValidators([Validators.required]);
+      this.date3FormCtl.updateValueAndValidity();
+      return;
+    }
 
     const requestList: Observable<any>[] = [];
     // 有選信件樣板送信件
     if (this.mailTplFormCtl.value) {
+      this.emailTitleFormCtl.setValidators([Validators.required]);
+      this.emailTitleFormCtl.updateValueAndValidity();
+      this.emailContentFormCtl.setValidators([Validators.required]);
+      this.emailContentFormCtl.updateValueAndValidity();
+      if (this.emailTitleFormCtl.invalid || this.emailContentFormCtl.invalid) {
+        this.tabSelected.setValue(0);
+        return;
+      }
+
       this.selectedPerson.forEach(person => {
         requestList.push(of(this.dataService.api.appMailQuenesCreate({
           systemCode: 'Resume',
@@ -198,10 +282,16 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
           }
         })));
       });
-
     }
     // 有選簡訊樣板送簡訊
     if (this.smsTplFormCtl.value) {
+      this.mailContentFormCtl.setValidators([Validators.required]);
+      this.mailContentFormCtl.updateValueAndValidity();
+      if (this.mailContentFormCtl.invalid) {
+        this.tabSelected.setValue(1);
+        return;
+      }
+
       this.selectedPerson.forEach(person => {
         requestList.push(of(this.dataService.api.appSMSQuenesCreate({
           systemCode: 'Resume',
@@ -237,7 +327,12 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
           mailContent: '',
         });
         this.selectedPerson = [];
-        requestList$.unsubscribe();
+        const title = '相關' + ([this.mailTplFormCtl.value ? '信件' : '', this.smsTplFormCtl.value ? '簡訊' : ''].join('/')) + '已發送';
+        const dialogRef = this.successDialog(title, '', '返回列表');
+        dialogRef.afterClosed().subscribe(() => {
+          this.showSendMsg(false);
+          requestList$.unsubscribe();
+        });
       }),
       takeUntil(this.destroy$)
     ).subscribe((res) => {

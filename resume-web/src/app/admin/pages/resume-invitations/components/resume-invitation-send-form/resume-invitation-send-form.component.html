@@ -54,8 +54,9 @@
               </ng-container>
             </select>
           </mat-form-field>
+          <mat-error *ngIf="showTemplateErr">請選擇一種樣板</mat-error>
         </div>
-        <div fxLayout="column" fxLayoutGap="4px">
+        <div fxLayout="column" fxLayoutGap="4px" class="admin-resume-invitation-send-form__card__form__mails">
           <div class="h2-text--medium">信件簡訊發送日期</div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px">
             <mat-radio-group aria-label="Select an option" formControlName="sendDateType" fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="12px">
@@ -71,8 +72,14 @@
                   <input matInput [matDatepicker]="picker1" formControlName="send_Date" placeholder="請選擇日期" [disabled]="sendDateTypeFormCtl.value !== 'design'" (click)="picker1.open()">
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1></mat-datepicker>
+                  <mat-error class="h3-text--medium" *ngIf="sendDateFormCtl.invalid">
+                    {{ getSendDateErrorMessage() }}
+                  </mat-error>
                 </mat-form-field>
               </div>
+              <mat-error class="h3-text--medium" *ngIf="sendDateTypeFormCtl.invalid">
+                {{ getSendDateTypeErrorMessage() }}
+              </mat-error>
             </mat-radio-group>
           </div>
         </div>
@@ -84,31 +91,43 @@
               <input matInput [matDatepicker]="picker2" formControlName="date2" placeholder="請選擇日期" (click)="picker2.open()">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
+              <mat-error class="h3-text--medium" *ngIf="date2FormCtl.invalid">
+                {{ getDate2ErrorMessage() }}
+              </mat-error>
             </mat-form-field>
             <div class="admin-resume-invitation-send-form__card__form__to">到</div>
             <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
               <input matInput [matDatepicker]="picker3" formControlName="date3" placeholder="請選擇日期" (click)="picker3.open()">
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
               <mat-datepicker #picker3></mat-datepicker>
+              <mat-error class="h3-text--medium" *ngIf="date3FormCtl.invalid">
+                {{ getDate3ErrorMessage() }}
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
 
         <div>
           <div class="h2-text--medium">檢視信件/簡訊內容</div>
-          <mat-tab-group animationDuration="0ms">
+          <mat-tab-group animationDuration="0ms" [selectedIndex]="tabSelected.value">
             <mat-tab label="信件內容">
               <div fxLayout="column" fxLayoutGap="38px" class="admin-resume-invitation-send-form__card__tab-body-content">
                 <div>
                   <div class="h2-text--medium">主旨</div>
                   <mat-form-field class="mat-form-field__block mat-form-field--hide-error" floatLabel="never" appearance="fill">
                     <input matInput formControlName="emailTitle" placeholder="請完成入職前填寫資料">
+                    <mat-error class="h3-text--medium" *ngIf="emailTitleFormCtl.invalid">
+                      {{ getEmailTitleErrorMessage() }}
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div>
                   <div class="h2-text--medium">信件內容</div>
                   <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" appearance="fill">
                     <textarea matInput formControlName="emailContent" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+                    <mat-error class="h3-text--medium" *ngIf="emailContentFormCtl.invalid">
+                      {{ getEmailContentErrorMessage() }}
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -119,6 +138,9 @@
                   <div class="h2-text--medium">簡訊內容</div>
                   <mat-form-field class="mat-form-field__block mat-form-field__block--textarea mat-form-field--hide-error" floatLabel="never" appearance="fill">
                     <textarea matInput formControlName="mailContent" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+                    <mat-error class="h3-text--medium" *ngIf="mailContentFormCtl.invalid">
+                      {{ getMailContentErrorMessage() }}
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>

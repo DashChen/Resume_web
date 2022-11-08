@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { ObserveElementDirective } from './directives/observe-element.directive';
 import { GetValueByKeyFromListPipe } from './pipes/get-value-by-key-from-list.pipe';
 
 @NgModule({
@@ -7,10 +9,14 @@ import { GetValueByKeyFromListPipe } from './pipes/get-value-by-key-from-list.pi
   providers: [
   ],
   declarations: [
-    GetValueByKeyFromListPipe
+    GetValueByKeyFromListPipe,
+    ObserveElementDirective,
+    ClickOutsideDirective
   ],
   exports: [
-    GetValueByKeyFromListPipe
+    GetValueByKeyFromListPipe,
+    ObserveElementDirective,
+    ClickOutsideDirective
   ]
 })
 export class SharedModule {}

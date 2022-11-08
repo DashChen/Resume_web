@@ -288,8 +288,7 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     } else {
       minD = DateTime.fromJSDate(this.dateAFormCtl.value).valueOf();
     }
-    const maxD = this.maxDate.valueOf();
-    return choiceD >= minD && choiceD <= maxD;
+    return choiceD >= minD;
   }
 
   setStartMonthAndYear(normalizedMonthAndYear: DateTime, datepicker: MatDatepicker<DateTime>) {

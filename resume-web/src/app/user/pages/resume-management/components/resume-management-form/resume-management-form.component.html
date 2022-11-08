@@ -1,5 +1,5 @@
 <div class="app-resume-management-form" fxLayout="column" fxLayoutGap="24px">
-  <div class="nav-resume" fxHide fxShow.lt-md  [ngClass]="showDrawer ? 'nav-resume--active' : ''">
+  <div class="nav-resume" fxHide fxShow.lt-md  [ngClass]="showDrawer ? 'nav-resume--active' : ''" (clickOutside)="checkClickOutSide($event)">
     <div class="nav-resume-drawer" fxLayout.lt-md="row" fxLayoutGap.lt-md="12px" fxLayoutAlign.lt-md="flex-start center" (click)="changeDrawer()">
       <div class="nav-resume-drawer__icon">
         <mat-icon [svgIcon]="showDrawer ? 'arrow-right' : 'arrow-left'"></mat-icon>
@@ -7,23 +7,23 @@
       <div class="h2-text--bold">我的履歷表</div>
     </div>
     <div class="nav-resume-list">
-      <mat-selection-list #shoes [multiple]="false">
-        <mat-list-option (click)="goTitle('basicInfoBlock')">
+      <mat-selection-list #navSelectList [multiple]="false">
+        <mat-list-option (click)="goTitle('basicInfoBlock')" [selected]="focusNav === 'basicInfoBlock'">
           <div mat-line>基本資料</div>
         </mat-list-option>
-        <mat-list-option (click)="goTitle('educationBlock')">
+        <mat-list-option (click)="goTitle('educationBlock')" [selected]="focusNav === 'educationBlock'">
           <div mat-line>學歷</div>
         </mat-list-option>
-        <mat-list-option (click)="goTitle('workBlock')">
+        <mat-list-option (click)="goTitle('workBlock')" [selected]="focusNav === 'workBlock'">
           <div mat-line>工作經歷</div>
         </mat-list-option>
-        <mat-list-option (click)="goTitle('licenseBlock')">
+        <mat-list-option (click)="goTitle('licenseBlock')" [selected]="focusNav === 'licenseBlock'">
           <div mat-line>專業證照</div>
         </mat-list-option>
-        <mat-list-option (click)="goTitle('autobiographyBlock')">
+        <mat-list-option (click)="goTitle('autobiographyBlock')" [selected]="focusNav === 'autobiographyBlock'">
           <div mat-line>自傳</div>
         </mat-list-option>
-        <mat-list-option (click)="goTitle('appendixBlock')">
+        <mat-list-option (click)="goTitle('appendixBlock')" [selected]="focusNav === 'appendixBlock'">
           <div mat-line>附件</div>
         </mat-list-option>
       </mat-selection-list>
@@ -116,7 +116,8 @@
         </mat-selection-list>
       </div>
       <div fxLayout="column" fxFlex fxLayoutGap="24px" fxLayoutAlign="none stretch">
-        <div class="app-resume-management-form__content__card" fxLayout="column" fxFlex id="basicInfoBlock">
+        <div class="app-resume-management-form__content__card" fxLayout="column" fxFlex id="basicInfoBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'basicInfoBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">基本資料</span>
             <div fxFlex fxLayoutAlign="end">
@@ -174,7 +175,8 @@
             </div>
           </div>
         </div>
-        <div class="app-resume-management-form__content__card" fxFlex id="educationBlock">
+        <div class="app-resume-management-form__content__card" fxFlex id="educationBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'educationBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">學歷</span>
             <div fxFlex fxLayoutAlign="end">
@@ -216,7 +218,8 @@
             </ng-container>
           </div>
         </div>
-        <div class="app-resume-management-form__content__card" fxFlex id="workBlock">
+        <div class="app-resume-management-form__content__card" fxFlex id="workBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'workBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">工作經歷</span>
             <div fxFlex fxLayoutAlign="end">
@@ -257,7 +260,8 @@
             </ng-container>
           </div>
         </div>
-        <div class="app-resume-management-form__content__card" fxFlex id="licenseBlock">
+        <div class="app-resume-management-form__content__card" fxFlex id="licenseBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'licenseBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">專業證照</span>
             <div fxFlex fxLayoutAlign="end">
@@ -296,7 +300,8 @@
             </ng-container>
           </div>
         </div>
-        <div class="app-resume-management-form__content__card" fxFlex id="autobiographyBlock">
+        <div class="app-resume-management-form__content__card" fxFlex id="autobiographyBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'autobiographyBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">自傳</span>
             <div fxFlex fxLayoutAlign="end">
@@ -326,7 +331,8 @@
             </ng-container>
           </div>
         </div>
-        <div class="app-resume-management-form__content__card" fxFlex id="appendixBlock">
+        <div class="app-resume-management-form__content__card" fxFlex id="appendixBlock"
+          appObserveElement [threshold]="1" (isIntersecting)="isIntersecting($event, 'appendixBlock')" [isContinuous]="true">
           <div class="app-resume-management-form__content__card__header" fxLayoutAlign="start center">
             <span class="app-resume-management-form__content__card__header__title">附件</span>
             <div fxFlex fxLayoutAlign="end">

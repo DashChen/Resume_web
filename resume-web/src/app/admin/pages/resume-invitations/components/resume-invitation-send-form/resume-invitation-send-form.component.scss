@@ -37,6 +37,18 @@ $this: '.admin-resume-invitation-send-form';
       &__form {
         &__template {
           margin-top: 20px;
+          position: relative;
+          mat-error {
+            bottom: -22px;
+            position: absolute;
+          }
+        }
+        &__mails {
+          position: relative;
+          mat-error {
+            bottom: -12px;
+            position: absolute;
+          }
         }
         &__radio {
           display: flex;
@@ -61,6 +73,7 @@ $this: '.admin-resume-invitation-send-form';
 
       &__tab-body-content {
         padding-top: 36px;
+        padding-bottom: 24px;
       }
     }
 

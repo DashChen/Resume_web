@@ -76,7 +76,7 @@ export class ResumeInvitationSendAddDialogComponent extends BaseFormComponent im
         this.personList = res.data.items?.map(item => {
           return {
             ...item,
-            checked: false
+            checked: this.data.selectedPerson.findIndex(_item => _item.id === item.id) > -1,
           } as CheckResumeResumeInvitationsResumeInvitationDto
         }) || [];
       },

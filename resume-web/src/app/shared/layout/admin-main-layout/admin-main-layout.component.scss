@@ -122,6 +122,36 @@ $this: '.app-admin-main-layout';
       }
     }
 
+    &__panel {
+      &.mat-expansion-panel {
+        box-shadow: none;
+        border-radius: 0;
+        background: transparent;
+
+        &:not(.mat-expanded):not([aria-disabled=true]) {
+          ::ng-deep .mat-expansion-panel-header:hover {
+            background: transparent;
+          }
+        }
+
+        mat-expansion-panel-header {
+          background: transparent;
+          padding: 0;
+          ::ng-deep .mat-content {
+            #{$this}__link {
+              flex-grow: 1;
+            }
+          }
+          ::ng-deep .mat-expansion-indicator {
+            display: none;
+          }
+        }
+        ::ng-deep .mat-expansion-panel-body {
+          padding: 0;
+        }
+      }
+    }
+
     &__member {
       padding: 14.5px 0;
 

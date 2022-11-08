@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { catchError, concatMap, finalize, from, Subscription, takeUntil, throwError } from 'rxjs';
+import { catchError, concatMap, finalize, from, fromEvent, Subscription, takeUntil, throwError } from 'rxjs';
 
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
@@ -19,7 +19,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { getEductionCodeList } from '@app/shared/store/user/user.actions';
 import { DateTime } from 'luxon';
 import { MatDrawer } from '@angular/material/sidenav';
-import { isEmpty } from 'lodash';
+import { isEmpty, isString } from 'lodash';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-resume-management-form',
@@ -27,7 +28,8 @@ import { isEmpty } from 'lodash';
   styleUrls: ['./resume-management-form.component.scss']
 })
 export class ResumeManagementFormComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  @ViewChild('navSelectList') navSelectListEle!: MatSelectionList;
+  focusNav: string = '';
   title: string = '我的第一份履歷表';
   logoUrl: string = '/assets/common/logo.svg';
   defaultUserPic: string = '/assets/icons/user-pic-icon.svg';
@@ -829,5 +831,27 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
 
   changeDrawer() {
     this.showDrawer = !this.showDrawer;
+  }
+
+  isIntersecting(status: boolean, id: string) {
+    if (status) {
+      // console.log('isIntersecting', id);
+      this.focusNav = id;
+    }
+  }
+
+  checkClickOutSide(event: MouseEvent) {
+    let inside = false;
+    for(let i = 0; i < event.composedPath().length; i++) {
+      const element = (event.composedPath()[i] as HTMLElement);
+      // console.log('checkClickOutSide', element, element.className);
+      if (isString(element.className) && element.className.includes('nav-resume--active')) {
+        inside = true;
+        break;
+      }
+    }
+    if (!inside) {
+      this.showDrawer = false;
+    }
   }
 }

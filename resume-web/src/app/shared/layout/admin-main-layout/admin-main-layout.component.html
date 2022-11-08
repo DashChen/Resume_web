@@ -13,10 +13,17 @@
         </div>
 
         <ng-container *ngFor="let item of links">
-          <ng-container *ngTemplateOutlet="drawNav; context: { item: item, child: false }"></ng-container>
-          <ng-container *ngFor="let _item of item.children">
-            <ng-container *ngTemplateOutlet="drawNav; context: { item: _item, child: true }"></ng-container>
+          <ng-container *ngIf="!item.children || item.children.length === 0">
+            <ng-container *ngTemplateOutlet="drawNav; context: { item: item, child: false }"></ng-container>
           </ng-container>
+          <mat-expansion-panel class="app-admin-main-layout__panel" *ngIf="item.children && item.children.length > 0">
+            <mat-expansion-panel-header>
+              <ng-container *ngTemplateOutlet="drawNav; context: { item: item, child: false }"></ng-container>
+            </mat-expansion-panel-header>
+            <ng-container *ngFor="let _item of item.children">
+              <ng-container *ngTemplateOutlet="drawNav; context: { item: _item, child: true }"></ng-container>
+            </ng-container>
+          </mat-expansion-panel>
         </ng-container>
 
         <ng-template #drawNav let-item="item" let-child="child">
