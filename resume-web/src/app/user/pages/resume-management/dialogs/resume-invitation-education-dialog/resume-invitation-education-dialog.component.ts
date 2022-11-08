@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { ResumeEducationsEducationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
-import { Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { area, areas, areasList } from '@app/core/interfaces/ares.model';
 import { DateTime } from 'luxon';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -51,7 +51,8 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
   graduateCodeList: ResumeShareCodesShareCodeDto[] = [];
   areasList: areasList[] = [];
   mainAreas: area[] = [];
-  choicedAreas$: Observable<areas[]> = of([]);
+  choicedAreasList: areas[] = [];
+  choicedAreas$ = new BehaviorSubject<area[]>([]);
 
   eductionForm = new FormGroup({
     school: new FormControl('', [Validators.required]),
@@ -143,34 +144,49 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
     this.schoolFormCtl.setValue(data.item?.school || '');
     this.educationCodeFormCtl.setValue(data.item?.educationCode || '');
     this.majorFormCtl.setValue(data.item?.major || '');
-    this.dateAFormCtl.setValue(data.item?.dateA || '');
-    this.dateDFormCtl.setValue(data.item?.dateD || '');
+    if (data.item?.dateA) {
+      this.dateAFormCtl.setValue(DateTime.fromISO(data.item?.dateA));
+    } else {
+      this.dateAFormCtl.setValue('');
+    }
+    if (data.item?.dateD) {
+      this.dateDFormCtl.setValue(DateTime.fromISO(data.item?.dateD));
+    } else {
+      this.dateDFormCtl.setValue('');
+    }
     this.graduationCodeFormCtl.setValue(data.item?.graduationCode || '');
     this.schoolLocationFormCtl.setValue(data.item?.schoolLocation || '');
-    this.areaFormCtl.valueChanges.subscribe(no => {
+    this.areaFormCtl.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(no => {
       const index = this.areasList.findIndex(i => i.no === no);
       console.log(no, index);
       if (index > -1) {
-        this.choicedAreas$ = of(this.areasList[index].n || []);
+        this.choicedAreas$.next(this.areasList[index].n || []);
         this.tempArea = this.areasList[index];
         if (!this.changed && this.item.note) {
-          console.log('changed')
+          // console.log('changed')
           this.regionFormCtl.setValue(this.item.note.split('_')[1]);
           this.changed = true;
         }
       }
     });
-    this.regionFormCtl.valueChanges.subscribe(no => {
-      this.choicedAreas$.pipe(
-        tap(items => {
-          const area = items.find(i => i.no === no);
-          const val = this.tempArea.des ? this.tempArea.des + '_' + (area?.des || '') : (area?.des || '');
-          this.schoolLocationFormCtl.setValue(val);
-          if (area?.no) {
-            this.noteFormCtl.setValue(this.tempArea.no + '_' + area?.no);
-          }
-        })
-      )
+    this.regionFormCtl.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(no => {
+      const area = this.choicedAreasList.find(i => i.no === no);
+      const val = this.tempArea.des ? this.tempArea.des + '_' + (area?.des || '') : (area?.des || '');
+      this.schoolLocationFormCtl.setValue(val);
+      // console.log('regionFormCtl', no, area, val, this.choicedAreasList);
+      if (area?.no) {
+        // console.log('noteFormCtl', area)
+        this.noteFormCtl.setValue(this.tempArea.no + '_' + area?.no);
+      }
+    });
+    this.choicedAreas$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(res => {
+      this.choicedAreasList = res;
     });
   }
 
@@ -201,15 +217,33 @@ export class ResumeInvitationEducationDialogComponent extends BaseFormComponent 
   }
 
   closeDialog(isSuccess: boolean) {
-    let res = {...this.eductionForm.value};
+    let res = {...this.eductionForm.value} as {
+      school: string;
+      educationCode: string;
+      major: string;
+      dateA: string | DateTime;
+      dateD: string | DateTime;
+      graduationCode: string;
+      schoolLocation: string;
+      note: string;
+      area?: string;
+      region?: string;
+    }
     if (isSuccess) {
       this.graduationCodeFormCtl.setValidators([Validators.required]);
       this.graduationCodeFormCtl.updateValueAndValidity();
       this.eductionForm.markAllAsTouched();
       if (this.eductionForm.invalid) {
+        // console.log('closeDialog', this.eductionForm);
         return;
       }
       res = omit(res, ['area', 'region']);
+      if (res.dateA instanceof DateTime) {
+        res.dateA = res.dateA.toUTC().toISO();
+      }
+      if (res.dateD instanceof DateTime) {
+        res.dateD = res.dateD.toUTC().toISO();
+      }
     }
     this.dialogRef.close(isSuccess ? res : false);
   }

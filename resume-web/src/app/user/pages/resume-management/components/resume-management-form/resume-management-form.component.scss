@@ -60,6 +60,7 @@ $this: '.app-resume-management-form';
       }
     }
     &--active {
+      filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.25));
       right: 0;
     }
   }
@@ -174,13 +175,23 @@ $this: '.app-resume-management-form';
           }
         }
         &--eduction {
-          min-height: 56px;
+          min-height: 136px;
           padding: 40px 24px;
           position: relative;
+          &:hover {
+            background: #E0EFFD;
+            #{$this}__content__card--eduction-btns {
+              display: flex;
+            }
+          }
+
           &-btns {
-            display: flex;
+            display: none;
             gap: 12px;
             justify-content: flex-end;
+            inset: 0;
+            padding: 6px 24px 0 0;
+            position: absolute;
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -206,11 +217,20 @@ $this: '.app-resume-management-form';
           min-height: 162px;
           padding: 40px 24px;
           position: relative;
+          &:hover {
+            background: #E0EFFD;
+            #{$this}__content__card--experiences-btns {
+              display: flex;
+            }
+          }
 
           &-btns {
-            display: flex;
+            display: none;
             gap: 12px;
             justify-content: flex-end;
+            inset: 0;
+            padding: 6px 24px 0 0;
+            position: absolute;
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -241,10 +261,19 @@ $this: '.app-resume-management-form';
         &--licenses {
           padding: 24px;
           position: relative;
+          &:hover {
+            background: #E0EFFD;
+            #{$this}__content__card--licenses-btns {
+              display: flex;
+            }
+          }
           &-btns {
-            display: flex;
+            display: none;
             gap: 12px;
             justify-content: flex-end;
+            inset: 0;
+            padding: 6px 24px 0 0;
+            position: absolute;
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -269,10 +298,19 @@ $this: '.app-resume-management-form';
         &--autobiographies {
           padding: 24px;
           position: relative;
+          &:hover {
+            background: #E0EFFD;
+            #{$this}__content__card--autobiographies-btns {
+              display: flex;
+            }
+          }
           &-btns {
-            display: flex;
+            display: none;
             gap: 12px;
             justify-content: flex-end;
+            inset: 0;
+            padding: 6px 24px 0 0;
+            position: absolute;
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -298,11 +336,19 @@ $this: '.app-resume-management-form';
           min-height: 162px;
           padding: 40px 24px;
           position: relative;
-
+          &:hover {
+            background: #E0EFFD;
+            #{$this}__content__card--appendices-btns {
+              display: flex;
+            }
+          }
           &-btns {
-            display: flex;
+            display: none;
             gap: 12px;
             justify-content: flex-end;
+            inset: 0;
+            padding: 6px 24px 0 0;
+            position: absolute;
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;

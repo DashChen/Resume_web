@@ -274,7 +274,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.searchTitle = '信件搜尋';
       this.displayedColumns = index === 0
         ? ['select', 'name', 'stage', 'sendDate', 'job', 'sendSuccess', 'open', 'resume', 'action']
-        : ['select', 'name', 'stage', 'modifyDate', 'subject', 'action'];
+        : ['select', 'name', 'stage', 'sendDate', 'modifyDate', 'subject', 'action'];
       this.tableEmptyText = index === 0 ? '您還沒有發送任何信件' : '您還沒有儲存任何信件';
       this.sendBtnText = '再次發送信件';
       this.title = '信件管理';
@@ -283,7 +283,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.tabText2 = '儲存的信件';
     } else {
       this.searchTitle = '簡訊搜尋';
-      this.displayedColumns = ['select', 'name', 'stage', 'modifyDate', 'sendSuccess', 'action'];
+      this.displayedColumns = ['select', 'name', 'stage', 'sendDate', 'modifyDate', 'sendSuccess', 'action'];
       this.tableEmptyText = index === 0 ? '您還沒有發送任何簡訊' : '您還沒有儲存任何簡訊';
       this.sendBtnText = '再次發送簡訊';
       this.title = '簡訊管理';
@@ -293,10 +293,12 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     }
     this.searchForm.reset({...this.initialValue});
     this.headerColspan = this.isSP ? this.displayedColumns.length : 1;
+    this.search();
   }
 
   search() {
     if (this.searchForm.invalid) {
+      console.log('search invalid', this.searchForm);
       return;
     }
 

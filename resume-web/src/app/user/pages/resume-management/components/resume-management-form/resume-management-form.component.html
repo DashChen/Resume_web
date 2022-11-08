@@ -2,7 +2,7 @@
   <div class="nav-resume" fxHide fxShow.lt-md  [ngClass]="showDrawer ? 'nav-resume--active' : ''">
     <div class="nav-resume-drawer" fxLayout.lt-md="row" fxLayoutGap.lt-md="12px" fxLayoutAlign.lt-md="flex-start center" (click)="changeDrawer()">
       <div class="nav-resume-drawer__icon">
-        <mat-icon [svgIcon]="'arrow-left'"></mat-icon>
+        <mat-icon [svgIcon]="showDrawer ? 'arrow-right' : 'arrow-left'"></mat-icon>
       </div>
       <div class="h2-text--bold">我的履歷表</div>
     </div>
