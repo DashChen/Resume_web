@@ -1,7 +1,7 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import { DataService } from '@app/core';
-import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseUpdateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
@@ -418,6 +418,26 @@ export class UserEffects {
                 }),
                 catchError(error => {
                     console.error('createLicense error', error);
+                    return of(UserActions.getUserFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+    updateLicense$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.updateLicense),
+        map(params => params.payload),
+        exhaustMap((payload: { id: string, data: ResumeLicensesLicenseUpdateDto }) => {
+            return from(this.dataService.api.appLicensesUpdate(payload.id, payload.data, {
+                headers: {
+                    ...this.dataService.getAuthorizationToken('user'),
+                }
+            })).pipe(
+                map(res => {
+                    console.log('updateLicense', res);
+                    return UserActions.updateLicenseStore({ payload: res.data });
+                }),
+                catchError(error => {
+                    console.error('updateLicense error', error);
                     return of(UserActions.getUserFail({ payload: error }));
                 }),
             )

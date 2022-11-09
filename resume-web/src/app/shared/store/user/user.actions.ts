@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeLicensesLicenseUpdateDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { loginResponseDto } from '@app/core/models/login.model';
 import { LoginProps } from '@app/core/interfaces/login';
 
@@ -51,6 +51,7 @@ export const actionType = {
     SET_LICENSES: '[User Resume Management Page] Set Licenses list',
     CREATE_LICENSES: '[User Resume Management Page] Create Licenses list',
     UPDATE_LICENSE: '[User Resume Management Page] Update License',
+    UPDATE_LICENSE_STORE: '[User Resume Management Page] Update License store',
     DELETE_LICENSE: '[User Resume Management Page] Delete License',
     DELETE_LICENSE_STORE: '[User Resume Management Page] Delete License store',
     ADD_LICENSE: '[User Resume Management Page] Add License',
@@ -300,7 +301,12 @@ export const addLicense = createAction(
 
 export const updateLicense = createAction(
     actionType.UPDATE_LICENSE,
-    props<{ payload: ResumeLicensesLicenseCreateDto }>()
+    props<{ payload: { id: string, data: ResumeLicensesLicenseUpdateDto } }>()
+);
+
+export const updateLicenseStore = createAction(
+    actionType.UPDATE_LICENSE_STORE,
+    props<{ payload: ResumeLicensesLicenseDto }>()
 );
 
 export const delLicense = createAction(

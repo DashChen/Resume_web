@@ -35,6 +35,13 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     super();
+    if (data?.item) {
+      const skills =JSON.parse(data.item?.name);
+      if (skills) {
+        this.licensesControl.setValue(skills);
+      }
+      this.otherLicense.setValue(data.item?.note || '');
+    }
   }
 
   ngOnInit(): void {
@@ -70,6 +77,7 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   closeDialog(isSuccess: boolean) {
     this.dialogRef.close(isSuccess ? {
       name: this.choicedSkills.map(v => v.des).join(','),
+      // name: JSON.stringify(this.choicedSkills),
       note: this.otherLicense.value,
     } : false);
   }

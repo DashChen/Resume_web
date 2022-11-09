@@ -192,6 +192,11 @@ $this: '.app-resume-management-form';
             inset: 0;
             padding: 6px 24px 0 0;
             position: absolute;
+
+            @include lt-md {
+              display: flex;
+            }
+
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -231,6 +236,11 @@ $this: '.app-resume-management-form';
             inset: 0;
             padding: 6px 24px 0 0;
             position: absolute;
+
+            @include lt-md {
+              display: flex;
+            }
+
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -259,7 +269,7 @@ $this: '.app-resume-management-form';
         }
 
         &--licenses {
-          padding: 24px;
+          padding: 40px 24px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -274,6 +284,11 @@ $this: '.app-resume-management-form';
             inset: 0;
             padding: 6px 24px 0 0;
             position: absolute;
+
+            @include lt-md {
+              display: flex;
+            }
+
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -296,7 +311,7 @@ $this: '.app-resume-management-form';
         }
 
         &--autobiographies {
-          padding: 24px;
+          padding: 40px 24px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -311,6 +326,11 @@ $this: '.app-resume-management-form';
             inset: 0;
             padding: 6px 24px 0 0;
             position: absolute;
+
+            @include lt-md {
+              display: flex;
+            }
+
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -349,6 +369,11 @@ $this: '.app-resume-management-form';
             inset: 0;
             padding: 6px 24px 0 0;
             position: absolute;
+
+            @include lt-md {
+              display: flex;
+            }
+
             [mat-icon-button].mat-button--icon {
               align-items: center;
               display: flex;
@@ -466,6 +491,10 @@ $this: '.app-resume-management-form';
         width: 30px;
         line-height: 0;
       }
+    }
+
+    .text-nowrap {
+      white-space: nowrap;
     }
   }
 }

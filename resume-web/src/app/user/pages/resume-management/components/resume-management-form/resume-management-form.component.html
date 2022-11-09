@@ -284,14 +284,17 @@
                     <button mat-icon-button class="mat-button--icon" (click)="delLicense(item)">
                       <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
                     </button>
+                    <!-- <button mat-icon-button class="mat-button--icon mat-button--blue" (click)="editLicense(item)">
+                      <mat-icon [svgIcon]="'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                    </button> -->
                   </div>
                   <div fxLayout="column" fxLayoutGap="24px">
                     <div fxLayout="row" fxLayoutGap="24px">
-                      <div class="h2-text--bold">證照名稱</div>
+                      <div class="h2-text--bold text-nowrap">證照名稱</div>
                       <div class="h2-text--regular">{{item.name}}</div>
                     </div>
                     <div fxLayout="row" fxLayoutGap="24px">
-                      <div class="h2-text--bold">其他證照</div>
+                      <div class="h2-text--bold text-nowrap">其他證照</div>
                       <div class="h2-text--regular">{{item.note}}</div>
                     </div>
                   </div>

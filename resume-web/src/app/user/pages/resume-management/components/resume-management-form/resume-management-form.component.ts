@@ -592,7 +592,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       }
     });
   }
-
+  // 新增專業證照
   openLicenseDialog(event: MouseEvent): void {
     const dialogConfig: IBasicDialog = {
       title: '新增專業證照',
@@ -617,6 +617,41 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
             name: result.name,
             note: result.note,
             resumeCode: this.resumeCode,
+          },
+        }));
+      }
+    });
+  }
+  // 編輯專業證照
+  editLicense(item: ResumeLicensesLicenseDto) {
+    const dialogConfig: IBasicDialog = {
+      title: '編輯專業證照',
+      subTitle: '',
+      successBtnText: '儲存',
+      cancelBtnText: '取消',
+      showSuccessBtn: true,
+      showCancelBtn: true,
+    };
+    const dialogRef = this.dialog.open(ResumeInvitationLicenseDialogComponent, {
+      width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
+      // panelClass: '',
+      data: {
+        ...dialogConfig,
+        item,
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      // todo: 送出編輯專業證照請求
+      if (result && item.id) {
+        console.log('editLicense', result);
+        this.store.dispatch(UserActions.updateLicense({
+          payload: {
+            id: item.id,
+            data: {
+              name: result.name,
+              note: result.note,
+            }
           },
         }));
       }
