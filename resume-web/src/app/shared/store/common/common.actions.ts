@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { ResumeMailTplsMailTplDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSMSTplDto } from "@app/core/models/Api";
 import { areas, areasList } from '@app/core/interfaces/ares.model';
 import { skill, skillsList } from '@app/core/interfaces/skill.model';
+import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 
 export const actionType = {
     LOADING: '[Common] API Loging',
@@ -26,6 +27,8 @@ export const actionType = {
     SEX_SUCCESS: '[Common] Sex list get success',
     SEX_FAIL: '[Common] Sex list get fail',
 
+    SET_ERR: '[Common] Set error',
+    SET_ERR_RES: '[Common] Set error res',
     RESET_ERR: '[Common] Reset error',
 
     GET_AREAS: '[Common] Get Area json',
@@ -35,6 +38,9 @@ export const actionType = {
     GET_SKILLS: '[Common] Get Skills json',
     SET_SKILLS: '[Common] Set Skills',
     SET_MAIN_SKILLS: '[Common] Set main Skills',
+
+    GET_THIRD_PARTY_CODES: '[Common] Get third-party codes',
+    SET_THIRD_PARTY_CODES: '[Common] Set third-party codes',
 }
 
 export const setApiLoading = createAction(
@@ -112,6 +118,16 @@ export const getSexListFail = createAction(
     props<{ payload: any }>(),
 );
 
+export const setErr = createAction(
+    actionType.SET_ERR,
+    props<{ payload: {errMsg: string, data?: IBasicDialog, config?: any} }>(),
+);
+
+export const setErrRes = createAction(
+    actionType.SET_ERR_RES,
+    props<{ payload: any }>(),
+);
+
 export const resetErr = createAction(
     actionType.RESET_ERR
 );
@@ -142,4 +158,13 @@ export const setSkills = createAction(
 export const setMainSkills = createAction(
     actionType.SET_MAIN_SKILLS,
     props<{ payload: skill[] }>(),
+);
+
+export const getThirdPartyCodes = createAction(
+    actionType.GET_THIRD_PARTY_CODES,
+);
+
+export const setThirdPartyCodes = createAction(
+    actionType.SET_THIRD_PARTY_CODES,
+    props<{ payload: ResumeShareCodesShareCodeDto[] }>(),
 );

@@ -14,6 +14,8 @@ export const initialState: CommonState = {
     mailTpls: null,
     // 性別
     sexList: null,
+    // 三方列表
+    thirdPartyCodes: [],
     // 錯誤
     errorMessage: null,
     skillsList: [],
@@ -34,12 +36,9 @@ export const commonReducer = createReducer(
     on(CommonActions.setMainAreas, (state, { payload }) => ({ ...state, mainAreas: payload })),
     on(CommonActions.setSkills, (state, { payload }) => ({ ...state, skillsList: payload })),
     on(CommonActions.setMainSkills, (state, { payload }) => ({ ...state, mainSkills: payload })),
+    on(CommonActions.setThirdPartyCodes, (state, { payload }) => ({ ...state, thirdPartyCodes: payload })),
     // error
-    on(CommonActions.getStageListFail, (state, { payload }) => ({ ...state, errorMessage: payload  })),
-    on(CommonActions.getWriteStatusFail, (state, { payload }) => ({ ...state, errorMessage: payload  })),
-    on(CommonActions.getSmsTplFail, (state, { payload }) => ({ ...state, errorMessage: payload  })),
-    on(CommonActions.getMailTplFail, (state, { payload }) => ({ ...state, errorMessage: payload  })),
-    on(CommonActions.getSexListFail, (state, { payload }) => ({ ...state, errorMessage: payload  })),
+    on(CommonActions.setErr, (state, { payload }) => ({ ...state, errorMessage: payload  })),
     // reset
     on(CommonActions.resetErr, (state) => ({ ...state, errorMessage: null })),
 );

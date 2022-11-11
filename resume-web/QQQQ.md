@@ -81,3 +81,17 @@ USER 履歷管理
 4. Q: 工作經歷可以多筆? 可以刪除?
 5. Q: 取得專業證照分類列表的API?
 6. Q: 學歷中的學校(海內外)該如何取得?
+
+
+
+目前來說，第三方登入時的部分，我們的做法是先由您那邊呼叫第三方的連結（client資訊我們會提供），呼叫完後會取得code，用code去呼叫我這邊的api，login的話會把token回傳。
+
+UserCode先不用傳
+thirdPartyAccountCode為呼叫回傳的code
+thirdPartyTypeCode為第三方的名稱"Google"，"Line"，"Facebook"
+
+如果有更好的作法也請提供
+
+智生 (2022/11/03) : 第三方綁定 (*請參考5.1.5-1) {GET} api/app/third-parties/Auth
+第三方登入 (*請參考5.1.2-3) {GET} api/app/third-parties/Login
+解除綁定 (*請參考5.1.5-1) {GET} api/app/third-parties/UnAuth

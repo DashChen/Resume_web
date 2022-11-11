@@ -23,6 +23,8 @@ export interface CommonState {
     areasList: areasList[];
     // 各大區
     mainAreas: area[];
+    // 三方列表
+    thirdPartyCodes: ResumeShareCodesShareCodeDto[],
     // 錯誤
     errorMessage: any;
 }

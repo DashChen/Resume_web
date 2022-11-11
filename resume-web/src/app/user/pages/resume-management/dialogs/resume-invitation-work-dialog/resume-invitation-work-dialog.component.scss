@@ -17,7 +17,7 @@
     }
 
     &__content {
-      max-height: calc(100% - 51px - 130px);
+      max-height: calc(100vh - 51px - 130px - 48px);
       overflow: hidden;
       overflow-y: auto;
       margin: 0;

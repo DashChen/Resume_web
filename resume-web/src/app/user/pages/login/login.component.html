@@ -46,19 +46,28 @@
     </div>
 
     <div class="app-login__social">
-        <button mat-stroked-button (click)="loginBySocial('google')">
+        <!-- <ng-container *ngFor="let item of thirdPartyCodes">
+            <button mat-stroked-button (click)="loginBySocial(item.code || '')">
+                <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                    <mat-icon [svgIcon]="(item.code || '').toLowerCase() + '-icon'" aria-hidden="false" [attr.ariaLabel]="(item.code || '').toLowerCase() + 'icon'"></mat-icon>
+                    <div class="app-login__social__name h2-text--bold">{{item.name}}</div>
+                </div>
+            </button>
+        </ng-container> -->
+
+        <button mat-stroked-button (click)="loginBySocial('Google')">
             <div fxFlex fxLayout="row" fxLayoutAlign="center center">
                 <mat-icon svgIcon="google-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
                 <div class="app-login__social__name h2-text--bold">Google</div>
             </div>
         </button>
-        <button mat-stroked-button (click)="loginBySocial('fb')">
+        <button mat-stroked-button (click)="loginBySocial('Facebook')">
             <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-                <mat-icon svgIcon="fb-icon" aria-hidden="false" aria-label="Facebook icon"></mat-icon>
+                <mat-icon svgIcon="facebook-icon" aria-hidden="false" aria-label="Facebook icon"></mat-icon>
                 <div class="app-login__social__name h2-text--bold">Facebook</div>
             </div>
         </button>
-        <button mat-stroked-button (click)="loginBySocial('line')">
+        <button mat-stroked-button (click)="loginBySocial('Line')">
             <div fxFlex fxLayout="row" fxLayoutAlign="center center">
                 <mat-icon svgIcon="line-icon" aria-hidden="false" aria-label="line icon"></mat-icon>
                 <div class="app-login__social__name h2-text--bold">LINE</div>

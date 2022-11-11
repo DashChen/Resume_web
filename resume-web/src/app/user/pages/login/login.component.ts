@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '@app/core';
-import { ApiConfig, ContentType, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
+import { ApiConfig, ContentType, ResumeShareCodesShareCodeDto, ResumeThirdPartiesThirdPartyCreateDto, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Store } from '@ngrx/store';
-import { catchError, from, of, skip, startWith, take, takeUntil, tap, throwError, filter } from 'rxjs';
+import { catchError, from, of, skip, startWith, take, takeUntil, tap, throwError, filter, iif, mergeMap, map, EMPTY, finalize } from 'rxjs';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as RouterActions } from '@app/shared/store/router';
-import { Actions as CommonActions } from '@app/shared/store/common';
+import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { createPasswordStrengthValidator } from '@app/core/validators';
 
 
@@ -42,6 +42,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   showLoginError: boolean = false;
   disableLoginBtn: boolean = false;
+  thirdPartyCodes: ResumeShareCodesShareCodeDto[] = [];
 
   constructor(
     public override store: Store,
@@ -53,6 +54,15 @@ export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(selectedValue => {
       this.showLoginError = false;
+    });
+    this.store.select(CommonSelectors.selectThirdPartyCodes).pipe(
+      map(res => iif(() => res.length > 0, of(res), EMPTY))
+    ).subscribe(res => {
+      if (!!res) {
+        this.store.dispatch(CommonActions.getThirdPartyCodes());
+      } else {
+        this.thirdPartyCodes = res;
+      }
     });
   }
 
@@ -128,7 +138,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       });
   }
 
-  loginBySocial(target: string) {
+  loginBySocial(target?: string) {
     this.dialogConfig.icon = 'unsuccessful';
     this.dialogConfig.title = '您尚未綁定';
     this.dialogConfig.subTitle = '您尚未將帳號做綁定，請登入到會員˙管理做綁定，下次再次登入時才能使用登入';
@@ -139,12 +149,29 @@ export class LoginComponent extends BaseComponent implements OnInit {
       width: '614px',
       data: this.dialogConfig
     });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        let accountCode = '';
+        // 先使用 client 跳轉取回 三方登入的 account
+        const request$ = from(this.dataService.api.appThirdPartiesLoginCreate({
+          thirdPartyAccountCode: accountCode,
+          thirdPartyTypeCode: target,
+        } as ResumeThirdPartiesThirdPartyCreateDto)).pipe(
+          finalize(() => {
+            request$.unsubscribe();
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe(res => {
+          console.log(res);
+        });
+      }
+    });
   }
 
   goTo(event: MouseEvent, path: string) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('goTo', path);
+    // console.log('goTo', path);
     this.store.dispatch(RouterActions.Go({ path: [path]}));
   }
 }

@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DataService } from '@app/core';
 import { area, areasList } from '@app/core/interfaces/ares.model';
+import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 import { skill, skillsList } from '@app/core/interfaces/skill.model';
 import { ApiConfig, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
+import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
+import { sortBy } from 'lodash';
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, catchError, tap, switchMap, finalize, exhaustMap } from 'rxjs/operators';
 import * as CommonActions from './common.actions';
@@ -15,7 +19,31 @@ export class CommonEffects {
         private action$: Actions,
         private store: Store,
         private dataService: DataService<ApiConfig>,
+        public dialog: MatDialog,
     ) { }
+
+    setErr$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(CommonActions.setErr),
+        tap((res) => {
+            console.log('setErr', res);
+            this.dialog.open(CommonDialogComponent, {
+                height: '311px',
+                maxHeight: 'calc(100vh - 48px)',
+                width: '614px',
+                maxWidth: 'calc(100vw - 48px)',
+                data: {
+                    icon: 'unsuccessful',
+                    title: '發生錯誤',
+                    subTitle: res.payload.errMsg,
+                    showSuccessBtn: true,
+                    successBtnText: '關閉',
+                    ...(res.payload.data || {}),
+                },
+                ...(res.payload.config || {})
+            });
+            this.store.dispatch(CommonActions.resetErr());
+        })
+    ), {dispatch:false});
 
     stageEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(CommonActions.getStageList),
@@ -30,7 +58,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('stageEffect error', error);
-                    return of(CommonActions.getStageListFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -49,7 +77,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('writeStateEffect error', error);
-                    return of(CommonActions.getWriteStatusFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -68,7 +96,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('smsTplsEffect error', error);
-                    return of(CommonActions.getSmsTplFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -87,7 +115,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('mailTplsEffect error', error);
-                    return of(CommonActions.getMailTplFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -107,7 +135,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('sexEffect error', error);
-                    return of(CommonActions.getSexListFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -140,7 +168,7 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('getAreasEffect error', error);
-                    return of(CommonActions.getSexListFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })
@@ -173,7 +201,30 @@ export class CommonEffects {
                 }),
                 catchError(error => {
                     console.error('getSkillsEffect error', error);
-                    return of(CommonActions.getSexListFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: error }));
+                })
+            )
+        })
+    ));
+
+    // 取回三方登入列表
+    getThirdPartyCodes: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(CommonActions.getThirdPartyCodes),
+        exhaustMap(() => {
+            return from(this.dataService.api.appShareCodesGetThirdPartyCodeListList({
+                // headers: {
+                //     ...this.dataService.getAuthorizationToken('user')
+                // }
+            })).pipe(
+                map(res => {
+                    return CommonActions.setThirdPartyCodes({ payload: sortBy(res?.data?.items || [], (e) => {
+                        // console.log(e);
+                        return parseInt(e.sort || '0');
+                    }) });
+                }),
+                catchError(error => {
+                    console.error('getThirdPartyCodes error', error);
+                    return of(CommonActions.setErr({ payload: error }));
                 })
             )
         })

@@ -28,7 +28,9 @@ export class BaseComponent extends BaseFormComponent {
       this.dialogConfig.successBtnText = successBtnText;
       const dialogRef = this.dialog.open(CommonDialogComponent, {
         height: '311px',
+        maxHeight: 'calc(100vh - 48px)',
         width: '614px',
+        maxWidth: 'calc(100vw - 48px)',
         data: this.dialogConfig
       });
       this.store.dispatch(AdminActions.resetErr());
@@ -43,7 +45,9 @@ export class BaseComponent extends BaseFormComponent {
     this.dialogConfig.successBtnText = successBtnText;
     const dialogRef = this.dialog.open(CommonDialogComponent, {
       height: '311px',
+      maxHeight: 'calc(100vh - 48px)',
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       data: this.dialogConfig
     });
     this.store.dispatch(AdminActions.resetErr());
@@ -60,7 +64,9 @@ export class BaseComponent extends BaseFormComponent {
     this.dialogConfig.cancelBtnText = cancelBtnText;
     const dialogRef = this.dialog.open(CommonDialogComponent, {
       height: '311px',
+      maxHeight: 'calc(100vh - 48px)',
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       data: this.dialogConfig
     });
     this.store.dispatch(AdminActions.resetErr());
@@ -76,6 +82,7 @@ export class BaseComponent extends BaseFormComponent {
     this.dialogConfig.showCancelBtn = true;
     const dialogRef = this.dialog.open(CommonDialogComponent, {
       width: '614px',
+      maxWidth: 'calc(100vw - 48px)',
       data: this.dialogConfig,
     });
     return dialogRef;

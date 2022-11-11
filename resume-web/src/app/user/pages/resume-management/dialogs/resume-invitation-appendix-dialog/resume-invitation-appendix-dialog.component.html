@@ -23,14 +23,14 @@
         </mat-form-field>
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="app-resume-invitation-appendix-dialog__content__upload-block"
             [ngClass]="{'app-resume-invitation-appendix-dialog__content__upload-block--disabled': uploadFiles.length > 0}"
-            (click)="uploadFiles.length === 0 ? fileInput.click() : false">
+            (click)="showInput($event, fileInput)">
             <mat-icon class="app-resume-invitation-appendix-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
             <label class="app-resume-invitation-appendix-dialog__content__input">
             <span class="h1-title">按此匯入檔案</span>
-            <input #fileInput type="file" hidden accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" (change)="uploadFile($event)">
             </label>
             <div class="app-resume-invitation-appendix-dialog__content__text h2-text--regular">不可上傳exe檔案，最大10MB</div>
         </div>
+        <input #fileInput type="file" hidden accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" (change)="uploadFile($event)">
         <mat-nav-list *ngIf="uploadFiles.length > 0">
             <mat-list-item *ngFor="let file of uploadFiles; let index = index;">
                 <a href="#" (click)="downloadFile($event, file)">{{file.name}}</a>

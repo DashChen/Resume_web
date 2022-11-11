@@ -59,3 +59,8 @@ export const selectMainSkills = createSelector(
     selectFeature,
     state => state.mainSkills,
 );
+
+export const selectThirdPartyCodes = createSelector(
+    selectFeature,
+    state => state.thirdPartyCodes,
+);

@@ -58,6 +58,9 @@ $this: '.app-resume-invitation-appendix-dialog';
                 &--disabled {
                     cursor: not-allowed;
                 }
+                > * {
+                    pointer-events: none;
+                }
             }
             &__icon {
                 height: 70px;

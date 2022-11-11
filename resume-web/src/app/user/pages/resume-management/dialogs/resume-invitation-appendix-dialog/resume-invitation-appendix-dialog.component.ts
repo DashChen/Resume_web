@@ -80,4 +80,15 @@ export class ResumeInvitationAppendixDialogComponent implements OnInit {
   removeFile(index: number) {
     this.uploadFiles.splice(index, 1);
   }
+
+  showInput(event: MouseEvent, element: HTMLInputElement) {
+    // console.log(event.target);
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    if (this.uploadFiles.length > 0) {
+      return;
+    }
+    // console.log(this.uploadFiles);
+    element.click();
+  }
 }

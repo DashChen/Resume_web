@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '@app/core';
 import { ApiConfig, ResumeUserDatasUserDto } from '@app/core/models/Api';
 import { Store } from '@ngrx/store';
-import { catchError, finalize, from, interval, map, Observable, startWith, take, takeUntil, tap, throwError } from 'rxjs';
+import { catchError, finalize, from, interval, map, Observable, startWith, Subscription, take, takeUntil, tap, throwError } from 'rxjs';
 import { BaseComponent } from '../base.component';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Actions as CommonActions } from '@app/shared/store/common';
@@ -15,6 +15,7 @@ import { DateTime } from 'luxon';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { ICountry } from '@app/core/interfaces/country';
+import { basicDialog } from '@app/core/interfaces/basic-dialog';
 
 @Component({
   selector: 'app-shared-member-management',
@@ -233,9 +234,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         ...this.dataService.getAuthorizationToken(this.authorizeType)
       }
     })).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
         this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
@@ -253,6 +261,11 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         this.phoneFormCtl.setValue(phoneOjb.phone);
         this.emailFormCtl.setValue(res.data.email || '');
         this.birthdayFormCtl.setValue(res.data.birthDay || '');
+        this.bounded.email = res.data.mailVerify || false;
+        this.bounded.phone = res.data.phoneVerify || false;
+        this.bounded.google = res.data.googleVerify || false;
+        this.bounded.facebook = res.data.fbVerify || false;
+        this.bounded.line = res.data.lineVerify || false;
       },
       err => {
         console.log(err);
@@ -365,9 +378,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       }
       if (requestApi) {
         const requestHttp$ = from(requestApi).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             // 更新 user 資訊
@@ -541,9 +561,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         ...this.dataService.getAuthorizationToken(this.authorizeType)
       }
     })).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => { requestHttp$.unsubscribe() }),
       takeUntil(this.destroy$),
@@ -571,9 +598,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
     }))
     .pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
         requestHttp$.unsubscribe();
@@ -617,9 +651,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       Code: this.smsCode.value,
     }))
     .pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
         requestHttp$.unsubscribe();
@@ -657,9 +698,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             ...this.dataService.getAuthorizationToken(this.authorizeType)
           }
         })).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             this.focusBtnKey = '';
@@ -689,39 +737,100 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   boundMFA(provider: string) {
     let showCancelError = false;
     switch (provider) {
-      case 'google':
+      case 'Google':
         showCancelError = this.bounded.google;
         break;
-      case 'line':
+      case 'Line':
         showCancelError = this.bounded.line;
         break;
-      case 'facebook':
+      case 'Facebook':
         showCancelError = this.bounded.facebook;
         break;
     }
+    let request$: Subscription;
     if (showCancelError) {
       const subtitle = `按下確認後即解除${this.accountId}此帳號，請問是否解除?`;
       const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
       dialogRef.afterClosed().subscribe(
         (res) => {
           if (res) {
-            // TODO 三方登入解除綁定
-            switch (provider) {
-              case 'google':
-                this.bounded.google = false;
-                break;
-              case 'line':
-                this.bounded.line = false;
-                break;
-              case 'facebook':
-                this.bounded.facebook = false;
-                break;
-            }
+            // 需要取得三方 accountCode
+            request$ = from(this.dataService.api.appThirdPartiesAuthList({
+              ThirdPartyAccountCode: '',
+              ThirdPartyTypeCode: provider
+            })).pipe(
+              catchError(err => {
+                return throwError(() => {
+                  const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+                  this.store.dispatch(CommonActions.setErr({
+                    payload: {
+                      errMsg
+                    }
+                  }));
+                  return new Error(errMsg);
+                });
+              }),
+              finalize(() => {
+                request$.unsubscribe();
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe(res => {
+              if (res.data) {
+                // TODO 三方登入解除綁定
+                switch (provider) {
+                  case 'Google':
+                    this.bounded.google = true;
+                    break;
+                  case 'Line':
+                    this.bounded.line = true;
+                    break;
+                  case 'Facebook':
+                    this.bounded.facebook = true;
+                    break;
+                }
+              }
+            });
           }
         }
       )
     } else {
       // TODO 三方登入綁定
+      // 需要取得三方 accountCode
+      request$ = from(this.dataService.api.appThirdPartiesUnAuthList({
+        ThirdPartyAccountCode: '',
+        ThirdPartyTypeCode: provider
+      })).pipe(
+        catchError(err => {
+          return throwError(() => {
+            const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+            this.store.dispatch(CommonActions.setErr({
+              payload: {
+                errMsg
+              }
+            }));
+            return new Error(errMsg);
+          });
+        }),
+        finalize(() => {
+          request$.unsubscribe();
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe(res => {
+        if (res.data) {
+          // TODO 三方登入解除綁定
+          switch (provider) {
+            case 'Google':
+              this.bounded.google = false;
+              break;
+            case 'line':
+              this.bounded.line = false;
+              break;
+            case 'facebook':
+              this.bounded.facebook = false;
+              break;
+          }
+        }
+      });
     }
   }
 }
