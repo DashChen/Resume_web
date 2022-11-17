@@ -79,21 +79,13 @@
                 color: $colorSecond;
             }
             &__login__btn {
-                background-color: #F4781E;
-                border-radius: 8px;
                 margin-top: 35px;
-                width: 100%;
-                height: 50px;
                 @include lt-md {
                     margin-top: 30px;
                 }
 
                 &--no-countdown {
                     margin-top: 0;
-                }
-
-                ::ng-deep .mat-button-wrapper {
-                    color: #FFFFFF;
                 }
             }
         }

@@ -20,8 +20,8 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
   workForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     jobTitle: new FormControl('', [Validators.required]),
-    dateA: new FormControl(''),
-    dateD: new FormControl(''),
+    dateA: new FormControl('', [Validators.required]),
+    dateD: new FormControl('', [Validators.required]),
     jobDescription: new FormControl('', [Validators.maxLength(2000)]),
   });
 
@@ -45,8 +45,16 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
     return this.workForm.get('dateA') as FormControl;
   }
 
+  getDateAErrorMessage() {
+    return this.dateAFormCtl.hasError('required') ? '請填此欄位' : '';
+  }
+
   get dateDFormCtl() {
     return this.workForm.get('dateD') as FormControl;
+  }
+
+  getDateDErrorMessage() {
+    return this.dateDFormCtl.hasError('required') ? '請填此欄位' : '';
   }
 
   get jobDescriptionFormCtl() {
@@ -125,9 +133,11 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
     let res: any = false;
     if (isSuccess) {
       if (this.workForm.invalid) {
+        this.workForm.markAllAsTouched();
         console.log(this.workForm, this.workForm.errors);
         return;
       }
+
       res = {...this.workForm.value} as {
         name: string;
         jobTitle: string;

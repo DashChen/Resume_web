@@ -128,7 +128,7 @@
                 </button>
 
                 <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
-                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)">
+                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode && !bounded.phone)">
                     <span>{{ focusBtnKey !== 'Phone' ? '編輯' : (bounded.phone ? '解除綁定' : '儲存') }}</span>
                 </button>
                 <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"

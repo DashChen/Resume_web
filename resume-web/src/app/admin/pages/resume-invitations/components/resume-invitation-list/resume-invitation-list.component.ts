@@ -10,8 +10,6 @@ import { catchError, filter, finalize, forkJoin, from, Observable, of, Subscript
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
-import { AddPersonDialogComponent } from '@app/shared/dialog/add-person-dialog/add-person-dialog.component';
-import { BatchLevelEditDialogComponent } from '@app/shared/dialog/batch-level-edit-dialog/batch-level-edit-dialog.component';
 import { MessageSnackbarComponent } from '@app/shared/snackbar/message-snackbar/message-snackbar.component';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Store } from '@ngrx/store';
@@ -26,6 +24,8 @@ import { Actions as RouterActions } from '@app/shared/store/router';
 import { ResumeInvitationImportDialogComponent } from '@app/admin';
 import { MediaObserver } from '@angular/flex-layout';
 import { ResumeInvitationSearchDialogComponent } from '../../dialogs/resume-invitation-search-dialog/resume-invitation-search-dialog.component';
+import { ResumeAddPersonDialogComponent } from '../../dialogs/resume-add-person-dialog/resume-add-person-dialog.component';
+import { ResumeBatchLevelEditDialogComponent } from '../../dialogs/resume-batch-level-edit-dialog/resume-batch-level-edit-dialog.component';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeResumeInvitationsResumeInvitationDto;
@@ -288,7 +288,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.title = '新增人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
-    const dialogRef = this.dialog.open(AddPersonDialogComponent, {
+    const dialogRef = this.dialog.open(ResumeAddPersonDialogComponent, {
       height: '833px',
       width: '614px',
       maxWidth: '100%',
@@ -394,7 +394,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.title = '批次階段編輯';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
-    const dialogRef = this.dialog.open(BatchLevelEditDialogComponent, {
+    const dialogRef = this.dialog.open(ResumeBatchLevelEditDialogComponent, {
       height: '353px',
       width: '614px',
       maxWidth: '100%',
@@ -504,7 +504,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.title = '編輯人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
-    const dialogRef = this.dialog.open(AddPersonDialogComponent, {
+    const dialogRef = this.dialog.open(ResumeAddPersonDialogComponent, {
       height: '833px',
       width: '614px',
       maxWidth: '100%',

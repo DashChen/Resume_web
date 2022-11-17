@@ -13,8 +13,10 @@ import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { Store } from '@ngrx/store';
-import { from, interval, Observable, of } from 'rxjs';
+import { from, interval, Observable, of, throwError } from 'rxjs';
 import { catchError, finalize, map, shareReplay, startWith, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Actions as CommonActions } from '@app/shared/store/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -133,12 +135,22 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     // 代表等待送出驗證碼
     if (!this.showCountryCode) {
       if (this.validationForm.valid) {
-        from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
+        const request$ = from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
           Phone: this.tempPhone,
           Code: this.verificationCodeFormControl.value,
         }))
         .pipe(
-          catchError(err => of(err)),
+          catchError((err: HttpErrorResponse) => {
+            // console.log(err);
+            this.store.dispatch(CommonActions.setErr({ payload: {
+              errMsg: err.error.error.message,
+            }}));
+            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          }),
+          finalize(() => {
+            
+            request$.unsubscribe();
+          }),
         ).subscribe((next) => {
           // console.log(next);
           if (next.data) {
@@ -215,10 +227,16 @@ export class RegisterComponent extends BaseComponent implements OnInit {
       Phone: this.tempPhone
     }))
     .pipe(
+      catchError((err: HttpErrorResponse) => {
+        // console.log(err);
+        this.store.dispatch(CommonActions.setErr({ payload: {
+          errMsg: err.error.error.message,
+        }}));
+        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
       finalize(() => {
         request$.unsubscribe();
       }),
-      catchError(err => of(err)),
     ).subscribe((next) => {
       console.log(next);
       this.title = '驗證碼已發送';

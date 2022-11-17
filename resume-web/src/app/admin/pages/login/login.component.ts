@@ -26,7 +26,7 @@ export class AdminLoginComponent extends BaseComponent implements OnInit {
     account: new FormControl('', [Validators.required]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(8),
+      // Validators.minLength(8),
     ]),
     rememberMe: new FormControl(false),
   })

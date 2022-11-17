@@ -10,7 +10,7 @@ import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Actions as CommonActions } from '@app/shared/store/common';
 import { MediaObserver } from '@angular/flex-layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
+import { createPasswordStrengthValidator, idCardValidator, MatchValidator } from '@app/core/validators';
 import { DateTime } from 'luxon';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { COUNTRY_TOKEN } from '@app/app.module';
@@ -33,7 +33,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     Name: new FormControl({
       value:'',
       disabled: true
-    }, [Validators.pattern('[\\W]+')]),
+    }, [
+      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+    ]),
   });
 
   get nameFormCtl() {
@@ -49,7 +51,10 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     IdNo: new FormControl({
       value:'',
       disabled: true
-    }, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
+    }, [
+      Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$'),
+      idCardValidator(),
+    ]),
   });
 
   get idNoFormCtl() {
@@ -57,7 +62,11 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getIdNoErrorMessage() {
-    return this.idNoFormCtl.hasError('pattern') ? '格式不正確，例:A123456789' : '';
+    if (this.idNoFormCtl.hasError('pattern')) {
+      return '格式不正確，例:A123456789';
+    }
+
+    return this.idNoFormCtl.hasError('idCard') ? '此身分證無效' : '';
   }
 
   birthdayForm: FormGroup = new FormGroup({

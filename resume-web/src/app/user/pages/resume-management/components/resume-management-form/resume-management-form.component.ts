@@ -5,7 +5,6 @@ import { catchError, concatMap, finalize, from, fromEvent, Subscription, takeUnt
 
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { BaseComponent } from '@app/shared';
-import { ResumeManagementService } from '@app/user/pages/shared/resume-management.service';
 import { ResumeInvitationAppendixDialogComponent, ResumeInvitationAutobiographyDialogComponent, ResumeInvitationBasicDialogComponent, ResumeInvitationEducationDialogComponent, ResumeInvitationLicenseDialogComponent, ResumeInvitationProfileDialogComponent, ResumeInvitationTitleDialogComponent, ResumeInvitationWorkDialogComponent } from '@app/user/pages';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { IBasicDialog } from '@app/core/interfaces/basic-dialog';

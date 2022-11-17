@@ -12,11 +12,11 @@ import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/sha
 import { ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
 
 @Component({
-  selector: 'app-add-person-dialog',
-  templateUrl: './add-person-dialog.component.html',
-  styleUrls: ['./add-person-dialog.component.scss']
+  selector: 'admin-resume-add-person-dialog',
+  templateUrl: './resume-add-person-dialog.component.html',
+  styleUrls: ['./resume-add-person-dialog.component.scss']
 })
-export class AddPersonDialogComponent implements OnInit {
+export class ResumeAddPersonDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
   isSuccess: boolean = false;
 
@@ -25,7 +25,10 @@ export class AddPersonDialogComponent implements OnInit {
   stageList: ResumeShareCodesShareCodeDto[] = [];
 
   addForm = new FormGroup({
-    name: new FormControl(this.data.item.name, [Validators.required, Validators.pattern('[\\W]+')]),
+    name: new FormControl(this.data.item.name, [
+      Validators.required,
+      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+    ]),
     phone: new FormControl(this.data.item.phone, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
@@ -97,7 +100,7 @@ export class AddPersonDialogComponent implements OnInit {
 
   constructor(
     public store: Store,
-    public dialogRef: MatDialogRef<AddPersonDialogComponent>,
+    public dialogRef: MatDialogRef<ResumeAddPersonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ResumeDialogData,
   ) {
     this.jobOptions = data.jobOptions;
@@ -124,4 +127,3 @@ export class AddPersonDialogComponent implements OnInit {
     this.dialogRef.close(this.isSuccess ? {...this.addForm.value} : false);
   }
 }
-

@@ -1,13 +1,13 @@
 <div class="app-forget__content">
     <app-page-title [title]="title" [subtitle]="subtitle"></app-page-title>
     <div class="app-forget__form">
-        <ng-container *ngTemplateOutlet="showCountdown ? validateCode : tabItems"></ng-container>
+        <ng-container *ngTemplateOutlet="showValidateCode ? validateCode : tabItems"></ng-container>
         <ng-template #tabItems>
             <ng-container *ngTemplateOutlet="validateErrorTimes > 0 ? sendVerificationCode : tabGroup"></ng-container>
             <ng-template #tabGroup>
                 <mat-tab-group [selectedIndex]="tabSelected.value"
                         (selectedIndexChange)="changeTab($event)"
-                        *ngIf="!showCountdown">
+                        *ngIf="!showValidateCode">
                     <mat-tab label="Email" class="app-forget__form__tab">
                         <form [formGroup]="emailValidationForm">
                             <mat-form-field class="mat-form-field__block" appearance="fill">
@@ -57,8 +57,9 @@
         <div class="app-forget__form__countdown" *ngIf="showCountdown">
             <span class="h2-text--bold">剩餘時間</span><span>{{ getCountdownStr() }}</span>
         </div>
-        <button mat-raised-button class="app-forget__form__login__btn"
+        <button mat-raised-button class="app-forget__form__login__btn mat-button--block mat-button--orange"
             [ngClass]="{'app-forget__form__login__btn--no-countdown': !showCountdown}"
+            [disabled]="disBtn"
             (click)="sendVerification()">
             <span>{{btnText}}</span>
         </button>

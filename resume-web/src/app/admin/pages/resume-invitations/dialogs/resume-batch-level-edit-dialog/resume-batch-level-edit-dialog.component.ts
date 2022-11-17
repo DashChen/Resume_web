@@ -10,11 +10,11 @@ export interface batchStageDialogData extends basicDialog {
 }
 
 @Component({
-  selector: 'app-batch-level-edit-dialog',
-  templateUrl: './batch-level-edit-dialog.component.html',
-  styleUrls: ['./batch-level-edit-dialog.component.scss']
+  selector: 'admin-resume-batch-level-edit-dialog',
+  templateUrl: './resume-batch-level-edit-dialog.component.html',
+  styleUrls: ['./resume-batch-level-edit-dialog.component.scss']
 })
-export class BatchLevelEditDialogComponent implements OnInit {
+export class ResumeBatchLevelEditDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
   isSuccess: boolean = false;
 
@@ -33,7 +33,7 @@ export class BatchLevelEditDialogComponent implements OnInit {
   }
 
   constructor(
-    public dialogRef: MatDialogRef<BatchLevelEditDialogComponent>,
+    public dialogRef: MatDialogRef<ResumeBatchLevelEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: batchStageDialogData
   ) {
     this.stageOptions = data.options;

@@ -19,23 +19,29 @@
       </mat-error>
     </mat-form-field>
     <div class="mat-form-field__block" fxLayout="column">
-      <label class="mat-form-field__lable--top">起訖日期</label>
+      <label class="mat-form-field__lable--top">起訖日期*</label>
       <div fxLayout="row" fxLayoutGap="12px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0">
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never" [ngStyle]="{'padding-top.px': 0}">
           <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="開始日期" formControlName="dateA" (click)="picker.open()">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="dateAFormCtl.invalid" class="h3-text--medium">
+            {{getDateAErrorMessage()}}
+          </mat-error>
         </mat-form-field>
         <div [ngStyle]="{'position': 'relative', 'top.px': 12}" [fxHide.lt-md]="true">-</div>
         <mat-form-field class="mat-form-field__block" appearance="fill" floatLabel="never">
           <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="dateFilterE" placeholder="結束日期" formControlName="dateD" (click)="picker1.open()">
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
+          <mat-error *ngIf="dateDFormCtl.invalid" class="h3-text--medium">
+            {{getDateDErrorMessage()}}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
     <mat-form-field class="mat-form-field__block" appearance="fill">
-      <label class="mat-form-field__lable--top">工作內容*</label>
+      <label class="mat-form-field__lable--top">工作內容</label>
       <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="10" placeholder="請輸入內容" formControlName="jobDescription"></textarea>
       <mat-error *ngIf="jobDescriptionFormCtl.invalid" class="h3-text--medium">
         {{getJobDescriptionErrorMessage()}}

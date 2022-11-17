@@ -11,6 +11,7 @@ import { LoginProps } from '@app/core/interfaces/login';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions } from '@app/shared/store/common';
 import { sortBy } from 'lodash';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class UserEffects {
@@ -97,7 +98,12 @@ export class UserEffects {
                     console.log('getBasicInfo', res);
                     return UserActions.setResumeBasicInfo({ payload: res.data.length > 0 ? res.data[0] : {} });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getBasicInfo error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -120,7 +126,12 @@ export class UserEffects {
                     console.log('getEducations', res);
                     return UserActions.setResumeEductions({ payload: res.data });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getEducations error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -142,7 +153,12 @@ export class UserEffects {
                     console.log('getExperiences', res);
                     return UserActions.setResumeExperiences({ payload: res.data });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getExperiences error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -164,7 +180,12 @@ export class UserEffects {
                     console.log('getLicenses', res);
                     return UserActions.setResumeLicenses({ payload: res.data });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getLicenses error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -186,7 +207,12 @@ export class UserEffects {
                     console.log('getAutobiographies', res);
                     return UserActions.setResumeAutobiographies({ payload: res.data });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getAutobiographies error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -208,7 +234,12 @@ export class UserEffects {
                     console.log('getAppendices', res);
                     return UserActions.setResumeAppendices({ payload: res.data });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getAppendices error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -228,7 +259,12 @@ export class UserEffects {
                         return parseInt(e.sort || '0');
                     }) });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getEductionCode error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -248,7 +284,12 @@ export class UserEffects {
                         return parseInt(e.sort || '0');
                     }) });
                 }),
-                catchError(error => of(UserActions.getUserFail({ payload: error }))),
+                catchError((error: HttpErrorResponse) => {
+                    console.error('getGraduateCode error', error);
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
+                }),
             )
         })
     ));
@@ -267,9 +308,11 @@ export class UserEffects {
                     console.log('updateBasicInfo', res);
                     return UserActions.setResumeBasicInfo({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('updateBasicInfo error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -288,9 +331,11 @@ export class UserEffects {
                     console.log('createEduction', res);
                     return UserActions.addEduction({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('createEduction error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -309,9 +354,11 @@ export class UserEffects {
                     console.log('updateEduction', res);
                     return UserActions.updateEductionStore({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('updateEduction error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -330,9 +377,11 @@ export class UserEffects {
                     console.log('delEduction', res);
                     return UserActions.delEductionStore({ payload: payload });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('delEduction error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -351,9 +400,11 @@ export class UserEffects {
                     console.log('createExperience', res);
                     return UserActions.addExperience({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('createExperience error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -372,9 +423,11 @@ export class UserEffects {
                     console.log('updateExperience', res);
                     return UserActions.updateExperienceStore({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('updateExperience error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -393,9 +446,11 @@ export class UserEffects {
                     console.log('delExperience', res);
                     return UserActions.delExperienceStore({ payload: payload });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('delExperience error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -416,9 +471,11 @@ export class UserEffects {
                     console.log('createLicense', res);
                     return UserActions.addLicense({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('createLicense error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -436,9 +493,11 @@ export class UserEffects {
                     console.log('updateLicense', res);
                     return UserActions.updateLicenseStore({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('updateLicense error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -457,9 +516,11 @@ export class UserEffects {
                     console.log('delLicense', res);
                     return UserActions.delLicenseStore({ payload: payload });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('delLicense error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -479,9 +540,11 @@ export class UserEffects {
                     console.log('createAutobiographies', res);
                     return UserActions.addAutobiographies({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('createAutobiographies error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -500,9 +563,11 @@ export class UserEffects {
                     console.log('updateAutobiography', res);
                     return UserActions.updateAutobiographyStore({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('updateAutobiography error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -521,9 +586,11 @@ export class UserEffects {
                     console.log('delAutobiography', res);
                     return UserActions.delAutobiographyStore({ payload: payload });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('delAutobiography error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -545,9 +612,11 @@ export class UserEffects {
                     console.log('createAppendices', res);
                     return UserActions.addAppendices({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('createAppendices error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -566,9 +635,11 @@ export class UserEffects {
                     console.log('delAppendices', res);
                     return UserActions.delAppendiceStore({ payload: payload });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('delAppendices error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -589,9 +660,11 @@ export class UserEffects {
                 tap(res => {
                     console.log('uploadProfilePicture', res);
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('uploadProfilePicture error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })
@@ -609,9 +682,11 @@ export class UserEffects {
                     console.log('getProfilePicture', res);
                     return UserActions.setProfilePicture({ payload: res.data });
                 }),
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     console.error('getProfilePicture error', error);
-                    return of(UserActions.getUserFail({ payload: error }));
+                    return of(CommonActions.setErr({ payload: {
+                        errMsg: error.error.error.message,
+                    } }));
                 }),
             )
         })

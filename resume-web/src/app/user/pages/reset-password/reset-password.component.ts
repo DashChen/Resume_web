@@ -10,7 +10,9 @@ import { ApiConfig } from '@app/core/models/Api';
 import { createPasswordStrengthValidator, MatchValidator } from '@app/core/validators';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, from, of, tap } from 'rxjs';
+import { catchError, finalize, from, of, tap, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Component({
   selector: 'app-reset-password',
@@ -72,14 +74,24 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     if (this.resetForm.valid) {
       this.disabledBtn = true;
 
-      const observable$ = from(this.dataService.api.appRegisterResumeResetPasswordCreate({
+      const request$ = from(this.dataService.api.appRegisterResumeResetPasswordCreate({
         PhoneOrEmail: this.tempAccount,
         newPassword: this.passwordFormCtl.value,
       }))
       .pipe(
-        catchError(err => of(err)),
-      )
-      .subscribe((next: any) => {
+        catchError((err: HttpErrorResponse) => {
+          // console.log(err);
+          this.store.dispatch(CommonActions.setErr({ payload: {
+            errMsg: err.error.error.message,
+          }}));
+          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+        }),
+        finalize(() => {
+          this.disabledBtn = false;
+          request$.unsubscribe();
+        }),
+      ).subscribe(
+        (next: any) => {
         console.log(next);
         this.dialogConfig.icon = next.data ? 'success' : 'unsuccessful';
         this.dialogConfig.title = next.data ? '密碼設定成功' : '密碼設定失敗';

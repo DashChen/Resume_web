@@ -8,6 +8,7 @@ import { BaseFormComponent } from '@app/shared/components/base-form.component';
 import { ICountry } from '@app/core/interfaces/country';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { ISelectOption } from '@app/core/interfaces/select-option';
+import { idCardValidator } from '@app/core/validators';
 
 @Component({
   selector: 'app-resume-invitation-basic-dialog',
@@ -17,9 +18,15 @@ import { ISelectOption } from '@app/core/interfaces/select-option';
 export class ResumeInvitationBasicDialogComponent extends BaseFormComponent implements OnInit {
   countryCodeOptions: ISelectOption[] = [];
   infoForm = new FormGroup({
-    nameC: new FormControl('', [Validators.required, Validators.pattern('[\\W]+')]),
+    nameC: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+    ]),
     nameE: new FormControl('', [Validators.pattern('^[a-zA-Z ]+$')]),
-    idNo: new FormControl('', [Validators.pattern('[A-Z][0-9]{9}')]),
+    idNo: new FormControl('', [
+      Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$'),
+      idCardValidator(),
+    ]),
     sexCode: new FormControl(null),
     birthDate: new FormControl(''),
     countryCode: new FormControl('TW', [Validators.required]),
@@ -52,7 +59,11 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
   }
 
   getIdNoErrorMessage() {
-    return this.idNoFormCtl.hasError('pattern') ? '格式不正確，例:A123456789' : '';
+    if (this.idNoFormCtl.hasError('pattern')) {
+      return '格式不正確，例:A123456789';
+    }
+
+    return this.idNoFormCtl.hasError('idCard') ? '此身分證無效' : '';
   }
 
   get sexCodeFormCtl() {

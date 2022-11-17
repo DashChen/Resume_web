@@ -11,9 +11,10 @@ import { ISelectOption } from '@app/core/interfaces/select-option';
 import { ApiConfig } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
-import { catchError, EMPTY, from, interval, map, of, startWith, take, takeUntil, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, finalize, from, interval, map, of, startWith, take, takeUntil, tap, throwError } from 'rxjs';
 import { Actions as UserActions } from '@app/shared/store/user';
 import { Actions as RouterActions } from '@app/shared/store/router';
+import { Actions as CommonActions } from '@app/shared/store/common';
 
 @Component({
   selector: 'app-forget',
@@ -85,6 +86,8 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   validateErrorTimes: number = 0;
   timer$ = interval(1000);
   disabledSendAgain: boolean = true;
+  showValidateCode: boolean = false;
+  disBtn: boolean = false;
 
   constructor(
     public override store: Store,
@@ -145,13 +148,19 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
   sendVerification() {
     if (this.tabSelected.value === 0) {
-      from(this.dataService.api.appRegisterResumeMailVerifyCodeCreate({
+      const request$ = from(this.dataService.api.appRegisterResumeMailVerifyCodeCreate({
         Email: this.emailAddressFormCtl.value,
       }))
       .pipe(
         catchError((err: HttpErrorResponse) => {
           // console.log(err);
+          this.store.dispatch(CommonActions.setErr({ payload: {
+            errMsg: err.error.error.message,
+          }}));
           return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+        }),
+        finalize(() => {
+          request$.unsubscribe();
         }),
       ).subscribe((next) => {
         console.log(next);
@@ -175,22 +184,6 @@ export class ForgetComponent extends BaseComponent implements OnInit {
             }
           });
         }
-      },
-      (err: Error) => {
-        this.dialogConfig.icon = 'unsuccessful';
-        this.dialogConfig.title = '信件發送失敗';
-        this.dialogConfig.subTitle = err.message;
-        this.dialogConfig.showSuccessBtn = true;
-        this.dialogConfig.successBtnText = '再試一次';
-        this.dialog.open(CommonDialogComponent, {
-          height: '311px',
-          width: '614px',
-          data: this.dialogConfig
-        });
-        return null;
-      },
-      () => {
-        return null;
       });
     } else if (this.tabSelected.value === 1 && !this.showCountdown) {
       this.sendVerificationCode();
@@ -203,14 +196,20 @@ export class ForgetComponent extends BaseComponent implements OnInit {
   }
 
   sendConfirmVerificationCode() {
-    from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
+    const request$ = from(this.dataService.api.appRegisterConfirmVerifyCodeCreate({
       Phone: this.tempPhone,
       Code: this.verificationCodeFormControl.value,
     }))
     .pipe(
       catchError((err: HttpErrorResponse) => {
         // console.log(err);
+        this.store.dispatch(CommonActions.setErr({ payload: {
+          errMsg: err.error.error.message,
+        }}));
         return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      }),
+      finalize(() => {
+        request$.unsubscribe();
       }),
     ).subscribe((next) => {
       console.log(next);
@@ -219,30 +218,12 @@ export class ForgetComponent extends BaseComponent implements OnInit {
         this.store.dispatch(RouterActions.Go({path: ['/user/reset-password']}));
       } else {
         this.validateErrorTimes++;
-        this.showCountdown = false;
+        this.btnText = '再次驗證';
         this.title = '驗證失敗';
-        this.subtitle = '請輸入您的手機號碼，進行驗證';
+        this.subtitle = `請輸入傳送到${this.maskPhone(this.tempPhone)}的驗證碼以繼續`;
         this.otherTitle = '沒有收到驗證碼嗎?';
         this.otherSubtitle = '再次發送驗證碼';
-        this.mobileValidationForm.reset();
-        this.countryCodeFormControl.setValue('TW');
       }
-    },
-    (err: Error) => {
-      this.dialogConfig.icon = 'unsuccessful';
-      this.dialogConfig.title = '驗證失敗';
-      this.dialogConfig.subTitle = err.message;
-      this.dialogConfig.showSuccessBtn = true;
-      this.dialogConfig.successBtnText = '再試一次';
-      this.dialog.open(CommonDialogComponent, {
-        height: '311px',
-        width: '614px',
-        data: this.dialogConfig
-      });
-      return null;
-    },
-    () => {
-      return null;
     });
   }
 
@@ -255,23 +236,40 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
     // 代表等待送出驗證碼
     if (this.validateErrorTimes < 3) {
-      from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+      this.disBtn = false;
+      const request$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
         Phone: this.tempPhone,
       }))
       .pipe(
-        catchError(err => of(err)),
+        catchError((err: HttpErrorResponse) => {
+          // console.log(err);
+          this.store.dispatch(CommonActions.setErr({ payload: {
+            errMsg: err.error.error.message,
+          }}));
+          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+        }),
+        finalize(() => {
+          request$.unsubscribe();
+        }),
       ).subscribe((next) => {
         console.log(next);
+        this.showValidateCode = true;
+        this.btnText = '進行驗證';
         this.title = '驗證碼已發送';
-        this.subtitle = `請輸入傳送到${this.maskPhone(this.countryCodeFormControl.value)}的驗證碼以繼續`;
+        this.subtitle = `請輸入傳送到${this.maskPhone(this.tempPhone)}的驗證碼以繼續`;
         this.showCountdown = true;
         this.countdown = 60;
         this.otherTitle = '沒有收到驗證碼嗎?';
         this.otherSubtitle = '再次發送驗證碼';
-        this.timer$.pipe(
+        const observe$ = this.timer$.pipe(
           map(n => this.countdown = this.basicCountdown - n - 1),
           tap(() => {
             this.disabledSendAgain = this.countdown > 0;
+            if (this.countdown === 0) {
+              this.verificationCodeFormControl.disable();
+              this.disBtn = true;
+              observe$.unsubscribe();
+            }
           }),
           take(this.basicCountdown),
           startWith(this.basicCountdown),

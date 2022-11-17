@@ -17,7 +17,7 @@
     }
 
     &__content {
-      max-height: calc(100% - 51px - 130px);
+      max-height: calc(80vh - 51px - 130px);
       overflow: hidden;
       overflow-y: auto;
       margin: 0;
@@ -89,6 +89,9 @@
           &-type-name {
             height: 49px;
             padding: 0 24px;
+            @include lt-md {
+              padding: 0 12px;
+            }
           }
 
           &-list {
@@ -130,6 +133,11 @@
                   flex-direction: row;
                   justify-content: space-between;
                   padding: 0 24px;
+
+                  @include lt-md {
+                    padding: 0;
+                  }
+
                   .mat-list-text {
                     * {
                       @include Noto-Sans-TCBody14-Regular;
@@ -163,6 +171,9 @@
 
               mat-expansion-panel-header {
                 height: 49px;
+                @include lt-md {
+                  padding: 0 12px;
+                }
               }
               ::ng-deep .mat-expansion-panel-content {
                 .mat-expansion-panel-body {
@@ -170,8 +181,17 @@
                 }
               }
               mat-list-item {
-                height: 49px;
+                min-height: 49px;
                 padding: 12px 24px;
+                @include lt-md {
+                  padding: 12px;
+                }
+                ::ng-deep .mat-list-item-content {
+                  max-width: 100%;
+                  .mat-checkbox-layout {
+                    white-space: normal;
+                  }
+                }
               }
             }
           }

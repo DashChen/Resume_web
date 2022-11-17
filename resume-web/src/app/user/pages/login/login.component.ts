@@ -24,7 +24,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   loginForm = new FormGroup({
     account: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), createPasswordStrengthValidator()]),
+    password: new FormControl('', [
+      Validators.required,
+      // Validators.minLength(8),
+      // createPasswordStrengthValidator()
+    ]),
     rememberMe: new FormControl(false),
   })
 
