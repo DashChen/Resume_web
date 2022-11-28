@@ -66,7 +66,7 @@
     </mat-form-field>
     <mat-form-field class="mat-form-field__block" appearance="fill">
       <label class="mat-form-field__lable--top">電子郵件</label>
-      <input matInput placeholder="請輸入電子郵件" formControlName="email">
+      <input type="email" matInput placeholder="請輸入電子郵件" formControlName="email">
       <mat-error *ngIf="emailFormCtl.invalid" class="h3-text--medium">
         {{getEmailErrorMessage()}}
       </mat-error>

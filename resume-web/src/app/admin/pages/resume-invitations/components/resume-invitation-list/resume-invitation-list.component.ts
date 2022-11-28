@@ -77,6 +77,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   selection = new SelectionModel<ResumeResumeInvitationsResumeInvitationDto>(true, []);
 
   disabledDelBtn: boolean = true;
+  disabledBatchEditBtn: boolean = true;
 
   // 使否響應小版(Figma 上的SP)
   isSP: boolean = false;
@@ -135,12 +136,6 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           ...this.dataService.getAuthorizationToken('admin')
         }
       })
-    ).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-      }),
-      takeUntil(this.destroy$)
     );
     this.resizeService.onResize$.subscribe((size: ViewportSize) => {
       console.log('ViewportSize', size);
@@ -184,9 +179,16 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         }
       })
     ).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
         this.dataSource.data = [...this.originalData];
@@ -207,12 +209,19 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.fetchResumes();
 
     const httpRequest = this.requestJobData$.pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
-        console.log('finalize httpRequest unsubscribe');
+        // console.log('finalize httpRequest unsubscribe');
         httpRequest.unsubscribe();
       }),
       takeUntil(this.destroy$)
@@ -281,6 +290,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
 
   rowToggle(row: ResumeResumeInvitationsResumeInvitationDto) {
     this.selection.toggle(row);
+    this.disabledBatchEditBtn = this.selection.selected.length === 0;
     this.disabledDelBtn = this.selection.selected.length === 0;
   }
 
@@ -315,9 +325,16 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
             ...this.dataService.getAuthorizationToken('admin')
           }
         })).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             console.log('finalize httpRequest unsubscribe');
@@ -327,7 +344,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           takeUntil(this.destroy$)
         ).subscribe(res => {
           console.log('appResumeInvitationsCreate', res);
-          this.originalData.push(res.data);
+          this.originalData.unshift(res.data);
         });
       }
     });
@@ -374,12 +391,24 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         res => {
           console.log(res);
           const query = omitBy(res, v => v == null || v == '');
+          if (query['JobName'] && query['JobName'].toString().includes('-')) {
+            const jobOption = this.jobOptions.find(_job => _job.key === query['JobName']);
+            if (jobOption) {
+              query['JobName'] = jobOption.text;
+            }
+          }
           this.fetchResumes(query);
         }
       );
     } else {
       const query = omitBy(this.searchForm.value, v => v == null || v == '');
       console.log(query);
+      if (query['JobName'] && query['JobName'].toString().includes('-')) {
+        const jobOption = this.jobOptions.find(_job => _job.key === query['JobName']);
+        if (jobOption) {
+          query['JobName'] = jobOption.text;
+        }
+      }
       this.fetchResumes(query);
     }
   }
@@ -424,9 +453,16 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           }
         });
         const requestList$ = forkJoin(requestList).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             this.selection.clear();
@@ -476,9 +512,16 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
           })));
         });
         const requestList$ = forkJoin(requestList).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             this.selection.clear();
@@ -527,19 +570,34 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
-        const request$ = from(this.dataService.api.appResumeInvitationsUpdate(item.id as string, result, {
+        let jobName = result.jobName;
+        if (jobName.toString().includes('-')) {
+          const jobOption = this.jobOptions.find(_job => _job.key === jobName);
+          if (jobOption) {
+            jobName = jobOption.text;
+          }
+        }
+        const _newItem = {...item, ...result, jobName};
+        const request$ = from(this.dataService.api.appResumeInvitationsUpdate(item.id as string, _newItem, {
           headers: {
             ...this.dataService.getAuthorizationToken('admin')
           }
         })).pipe(
-          catchError((err: HttpErrorResponse) => {
-            // console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
           finalize(() => {
             const index = this.originalData.findIndex(_item => _item.id === item.id);
             if (index > -1) {
-              this.originalData.splice(index, 1, {...item, ...result});
+              this.originalData.splice(index, 1, _newItem);
             }
             // console.log('finalize httpRequest unsubscribe', this.originalData);
             this.dataSource.data = [...this.originalData];
@@ -554,9 +612,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   copyUrl(item: ResumeResumeInvitationsResumeInvitationDto) {
-    console.log('copyUrl', item);
+    // console.log('copyUrl', item);
     this.snackBar.openFromComponent(MessageSnackbarComponent, {
       ...this.configSuccess,
+      duration: 3000,
       data: {
         title: '連結複製成功',
         textIcon: 'check-circle',

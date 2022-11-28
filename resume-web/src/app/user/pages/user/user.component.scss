@@ -3,5 +3,7 @@
 $this: '.app-user';
 :host {
   height: auto;
+  max-height: 100vh;
+  overflow-y: auto;
   width: 100%;
 }

@@ -49,10 +49,18 @@
     }
 
     &__action {
+      display: flex;
+      flex-wrap: nowrap;
       gap: 20px;
       padding: 6.7px 0 40px;
       min-height: unset;
       margin-bottom: unset;
+      @include lt-md {
+        padding: 12px 24px;
+        [mat-raised-button] {
+          flex-shrink: 1;
+        }
+      }
     }
   }
 }

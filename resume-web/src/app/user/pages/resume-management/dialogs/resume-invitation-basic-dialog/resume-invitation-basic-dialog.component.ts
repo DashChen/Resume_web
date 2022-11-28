@@ -8,7 +8,7 @@ import { BaseFormComponent } from '@app/shared/components/base-form.component';
 import { ICountry } from '@app/core/interfaces/country';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { ISelectOption } from '@app/core/interfaces/select-option';
-import { idCardValidator } from '@app/core/validators';
+import { idCardValidator, nameValidator } from '@app/core/validators';
 
 @Component({
   selector: 'app-resume-invitation-basic-dialog',
@@ -20,9 +20,12 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
   infoForm = new FormGroup({
     nameC: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+      nameValidator(),
     ]),
-    nameE: new FormControl('', [Validators.pattern('^[a-zA-Z ]+$')]),
+    nameE: new FormControl('', [
+      Validators.pattern('^[a-zA-Z]+[\s]?[a-zA-Z]+$'),
+      Validators.maxLength(50),
+    ]),
     idNo: new FormControl('', [
       Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$'),
       idCardValidator(),
@@ -30,9 +33,9 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
     sexCode: new FormControl(null),
     birthDate: new FormControl(''),
     countryCode: new FormControl('TW', [Validators.required]),
-    currentTel: new FormControl('', [Validators.pattern('[0-9\-]+')]),
+    currentTel: new FormControl('', [Validators.pattern('[0-9\-]{9,15}')]),
     currentAdd: new FormControl(''),
-    email: new FormControl(''),
+    email: new FormControl('', [Validators.email]),
   });
 
   get nameCFormCtl() {
@@ -43,7 +46,11 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
     if (this.nameCFormCtl.hasError('required')) {
       return '請填寫此欄位'
     }
-    return this.nameCFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+    // console.log('getNameErrorMessage', this.nameFormCtl.errors);
+    if (this.nameCFormCtl.hasError('maxlength')) {
+      return `長度最多${this.nameCFormCtl.getError('maxlength').maxLength}`;
+    }
+    return this.nameCFormCtl.hasError('name') ? '格式不正確，例:王大明' : '';
   }
 
   get nameEFormCtl() {
@@ -51,7 +58,13 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
   }
 
   getNameEErrorMessage() {
-    return this.nameEFormCtl.hasError('pattern') ? '格式不正確，例:Dash Chen' : '';
+    if (this.nameEFormCtl.hasError('pattern')) {
+      return '格式不正確，例:Dash Chen'
+    }
+    if (this.nameEFormCtl.hasError('maxlength')) {
+      return `長度最多${this.nameEFormCtl.getError('maxlength').requiredLength}`;
+    }
+    return '';
   }
 
   get idNoFormCtl() {

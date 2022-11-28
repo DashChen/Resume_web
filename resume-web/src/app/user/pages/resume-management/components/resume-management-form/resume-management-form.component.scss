@@ -176,7 +176,7 @@ $this: '.app-resume-management-form';
         }
         &--eduction {
           min-height: 136px;
-          padding: 40px 24px;
+          padding: 40px 24px 20px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -220,7 +220,7 @@ $this: '.app-resume-management-form';
 
         &--experiences {
           min-height: 162px;
-          padding: 40px 24px;
+          padding: 40px 24px 20px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -269,7 +269,7 @@ $this: '.app-resume-management-form';
         }
 
         &--licenses {
-          padding: 40px 24px;
+          padding: 40px 24px 20px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -311,7 +311,8 @@ $this: '.app-resume-management-form';
         }
 
         &--autobiographies {
-          padding: 40px 24px;
+          min-height: 98px;
+          padding: 24px;
           position: relative;
           &:hover {
             background: #E0EFFD;
@@ -353,9 +354,12 @@ $this: '.app-resume-management-form';
         }
 
         &--appendices {
-          min-height: 162px;
-          padding: 40px 24px;
+          min-height: 151px;
+          padding: 40px 24px 20px;
           position: relative;
+          &:not(:last-of-type) {
+            border-bottom: 1px solid #C5D0DF;
+          }
           &:hover {
             background: #E0EFFD;
             #{$this}__content__card--appendices-btns {

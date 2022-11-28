@@ -80,7 +80,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   getPasswordErrorMessage() {
     if (this.passwordFormCtl.hasError('required')) {
-      return '請輸入關鍵字'
+      return '請填寫這個欄位'
     }
     if (this.passwordFormCtl.hasError('passwordStrength')) {
       return '密碼須包含大小寫英文、數字等';

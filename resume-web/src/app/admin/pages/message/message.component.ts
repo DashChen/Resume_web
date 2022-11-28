@@ -280,7 +280,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.title = '信件管理';
       this.subtitle = index === 0 ? '已發送的信件' : '儲存信件';
       this.tabText1 = '已發送的信件';
-      this.tabText2 = '儲存的信件';
+      this.tabText2 = '發送信件';
     } else {
       this.searchTitle = '簡訊搜尋';
       this.displayedColumns = ['select', 'name', 'stage', 'sendDate', 'modifyDate', 'sendSuccess', 'action'];
@@ -289,7 +289,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
       this.title = '簡訊管理';
       this.subtitle = index === 0 ? '已發送的簡訊' : '儲存簡訊';
       this.tabText1 = '已發送的簡訊';
-      this.tabText2 = '儲存的簡訊';
+      this.tabText2 = '發送簡訊';
     }
     this.searchForm.reset({...this.initialValue});
     this.headerColspan = this.isSP ? this.displayedColumns.length : 1;

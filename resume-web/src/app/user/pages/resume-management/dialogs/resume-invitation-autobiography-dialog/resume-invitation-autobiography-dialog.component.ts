@@ -12,7 +12,7 @@ export interface autobiographiesDialogData extends basicDialog {
   templateUrl: './resume-invitation-autobiography-dialog.component.html',
   styleUrls: ['./resume-invitation-autobiography-dialog.component.scss']
 })
-export class ResumeInvitationAutobiographyDialogComponent implements OnInit {
+export class ResumeInvitationAutobiographyDialogComponent {
 
   autobiographiesForm = new FormGroup({
     autobiographies: new FormControl('', [Validators.maxLength(4000)]),
@@ -20,10 +20,6 @@ export class ResumeInvitationAutobiographyDialogComponent implements OnInit {
 
   get autobiographiesFormCtl() {
     return this.autobiographiesForm.get('autobiographies') as FormControl;
-  }
-
-  getAutobiographiesErrorMessage() {
-    return this.autobiographiesFormCtl.hasError('maxlenght') ? '超過長度限制' : '';
   }
 
   get contentLen() {
@@ -37,10 +33,10 @@ export class ResumeInvitationAutobiographyDialogComponent implements OnInit {
     this.autobiographiesFormCtl.setValue(data.autobiographies);
   }
 
-  ngOnInit(): void {
-  }
-
   closeDialog(isSuccess: boolean) {
+    if (isSuccess && this.autobiographiesForm.invalid) {
+      return;
+    }
     this.dialogRef.close(isSuccess ? this.autobiographiesForm.value : false);
   }
 }

@@ -44,7 +44,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
 
   getPasswordErrorMessage() {
     if (this.passwordFormCtl.hasError('required')) {
-      return '請輸入關鍵字'
+      return '請填寫此欄位'
     }
     return this.passwordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
   }

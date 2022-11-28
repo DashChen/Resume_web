@@ -81,7 +81,7 @@
         <span>發送信件&訊息</span>
       </button>
       <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular"
-        (click)="batchEdit($event)">
+        [disabled]="disabledBatchEditBtn" (click)="batchEdit($event)">
         <span>批次編輯</span>
       </button>
       <button mat-raised-button class="admin-resume-invitation-list__table__head__btn mat-button--blue h2-text--regular"

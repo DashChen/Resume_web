@@ -109,9 +109,16 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         }
       })
     ).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       takeUntil(this.destroy$)
     );
@@ -164,6 +171,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
   }
 
   public updateManualPage(index: number): void {
+    console.log('updateManualPage', index);
     this.manualPage = index;
     this.paginator.pageIndex = index;
     this.dataSource.paginator = this.paginator;
@@ -183,8 +191,13 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
   }
 
   searchKeyword(event: any) {
-    console.log('serarch keyword', event);
-    const data = this.originalData.filter((item) => item.jobName?.includes(event));
+    // console.log('serarch keyword', event, this.originalData);
+    const data = this.originalData.filter((item) => {
+      const job = item.jobName?.includes(event);
+      const mail = this.mailList.find(_mail => _mail.code === item.mailTplCode)?.name?.includes(event);
+      const sms = this.smsList.find(_sms => _sms.code === item.smsTplCode)?.name?.includes(event);
+      return job || mail || sms;
+    });
     this.dataSource.data = data;
     this.updatePageInfo(this.dataSource.data.length);
     this.clearManualPage();
@@ -215,9 +228,16 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
             }
           })
         ).pipe(
-          catchError((err: HttpErrorResponse) => {
-            console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
         ).subscribe({
           next: (value) => {
@@ -229,6 +249,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
           },
           complete: () => {
             this.updatePageInfo(this.dataSource.data.length);
+            this.updateManualPage(0);
           }
         });
       }
@@ -261,9 +282,16 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
             }
           })
         ).pipe(
-          catchError((err: HttpErrorResponse) => {
-            console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
         ).subscribe({
           next: (value) => {
@@ -309,9 +337,16 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
             }
           })
         ).pipe(
-          catchError((err: HttpErrorResponse) => {
-            console.log(err);
-            return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
           }),
         ).subscribe({
           next: (value) => {

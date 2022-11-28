@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiConfig, ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeEducationsEducationDto, ResumeExperiencesExperienceDto, ResumeLicensesLicenseDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto } from '@app/core/models/Api';
 import { Store } from '@ngrx/store';
-import { Selectors as UserSelectors } from '@app/shared/store/user';
+import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Selectors as CommonSelectors } from '@app/shared/store/common';
 import { BaseComponent } from '@app/shared';
@@ -55,6 +55,8 @@ export class ResumeManagementPreviewComponent extends BaseComponent implements O
   }
 
   ngOnInit(): void {
+    this.getEductionCodeList();
+    this.getGraduateCodeList();
     // 取回學歷
     this.getEductions();
     // 取回經歷
@@ -65,6 +67,26 @@ export class ResumeManagementPreviewComponent extends BaseComponent implements O
     this.getAutobiographies();
     // 取回附件
     this.getAppendices();
+  }
+
+  getEductionCodeList() {
+    this.store.dispatch(UserActions.getEductionCodeList());
+    this.store.select(UserSelectors.selectEductionCodeList)
+      .pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(res => {
+        this.eductionCodeList = res;
+      });
+  }
+
+  getGraduateCodeList() {
+    this.store.dispatch(UserActions.getGraduateCodeList());
+    this.store.select(UserSelectors.selectGraduateCodeList)
+      .pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(res => {
+        this.graduateCodeList = res;
+      });
   }
 
   getEductions() {

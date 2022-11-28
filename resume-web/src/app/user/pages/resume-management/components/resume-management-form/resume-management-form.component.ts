@@ -20,6 +20,7 @@ import { DateTime } from 'luxon';
 import { MatDrawer } from '@angular/material/sidenav';
 import { isEmpty, isString } from 'lodash';
 import { MatSelectionList } from '@angular/material/list';
+import { skill } from '@app/core/interfaces/skill.model';
 
 @Component({
   selector: 'app-resume-management-form',
@@ -70,55 +71,59 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     ).subscribe(res => {
       this.invitationCode = res;
     });
-  // 取回 resume code
-  const request$ = from(this.dataService.api.appResumeMainsGetListByAccountIdList({
-    headers: {
-      ...this.dataService.getAuthorizationToken('user')
-    }
-  })).pipe(
-    catchError((err: HttpErrorResponse) => {
-      // console.log(err);
-      return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-    }),
-    finalize(() => {
-      request$.unsubscribe();
-      // 取回基本資料
-      this.getBasicInfo();
-      // 取回學歷
-      this.getEductions();
-      // 取回經歷
-      this.getExperiences();
-      // 取回專業證照
-      this.getLicenses();
-      // 取回自傳
-      this.getAutobiographies();
-      // 取回附件
-      this.getAppendices();
-    }),
-    takeUntil(this.destroy$)
-  ).subscribe(res => {
-    if (res.data.length > 0) {
-      // 取第一筆ID當作 resumeCode
-      this.store.dispatch(UserActions.setResumeBasicInfo({
-        payload: {
-          ...this.basicInfo,
-          resumeCode: res.data[0].id
-        }
-      }));
-      this.resumeCode = res.data[0].id || '';
-    }
-  });
-    // this.store.select(UserSelectors.selectCurrentUser).pipe(
-    //     takeUntil(this.destroy$)
-    //   ).subscribe(res => {
-    //     this.currentUser = res || {};
-    //     this.basicInfo = {
-    //       ...this.basicInfo,
-    //       nameC: res?.name,
-    //       email: res?.email
-    //     };
-    //     this.store.dispatch(UserActions.setResumeBasicInfo({ payload: this.basicInfo }));
-    //   });
+    // 取回 resume code
+    const request$ = from(this.dataService.api.appResumeMainsGetListByAccountIdList({
+      headers: {
+        ...this.dataService.getAuthorizationToken('user')
+      }
+    })).pipe(
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
+      }),
+      finalize(() => {
+        // 取回職缺
+        this.getJobOptions();
+        // 取回基本資料
+        this.getBasicInfo();
+        // 取回學歷
+        this.getEductions();
+        // 取回經歷
+        this.getExperiences();
+        // 取回專業證照
+        this.getLicenses();
+        // 取回自傳
+        this.getAutobiographies();
+        // 取回附件
+        this.getAppendices();
+        request$.unsubscribe();
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(res => {
+      if (res.data.length > 0) {
+        // 取第一筆ID當作 resumeCode
+        this.store.dispatch(UserActions.setResumeBasicInfo({
+          payload: {
+            ...this.basicInfo,
+            resumeCode: res.data[0].id
+          }
+        }));
+        this.resumeCode = res.data[0].id || '';
+      }
+    });
+    this.store.select(UserSelectors.selectCurrentUser)
+    .pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(res => {
+      this.currentUser = res || {};
+    });
   }
 
   ngAfterViewInit(): void {
@@ -138,6 +143,42 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       }
   }
 
+  getJobOptions() {
+    const request$ = from(
+      this.dataService.api.appCompanyJobsGetListByCompanyIdList({
+        headers: {
+          ...this.dataService.getAuthorizationToken('user')
+        }
+      })
+    ).pipe(
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
+      }),
+      finalize(() => {
+        // console.log('finalize httpRequest unsubscribe');
+        request$.unsubscribe();
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (value) => {
+        this.jobOptions = value.data.map(item => {
+          return {
+            text: item.jobName,
+            key: item.id
+          } as ISelectOption;
+        })
+      },
+    });
+  }
+
   getBasicInfo() {
     this.store.dispatch(UserActions.getBasicInfo());
     this.store.select(UserSelectors.selectResumeBasicInfo).pipe(
@@ -151,10 +192,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getResumeEductions());
     this.store.select(UserSelectors.selectResumeEductions)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.eductions = res;
@@ -165,10 +202,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getResumeExperiences());
     this.store.select(UserSelectors.selectResumeExperiences)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.experiences = res;
@@ -180,10 +213,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getResumeLicenses());
     this.store.select(UserSelectors.selectResumeLicenses)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.licenses = res;
@@ -191,14 +220,19 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(CommonActions.getSkills());
   }
 
+  getLicenseNameStr(str: any) {
+    try {
+      const arr = JSON.parse(str) as skill[];
+      return arr.map((v: skill) => v.des).join(',');
+    } catch (e) {
+      return str;
+    }
+  }
+
   getAutobiographies() {
     this.store.dispatch(UserActions.getResumeAutobiographies());
     this.store.select(UserSelectors.selectResumeAutobiographies)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.autobiographies = res;
@@ -209,10 +243,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getResumeAppendices());
     this.store.select(UserSelectors.selectResumeAppendices)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.appendices = res;
@@ -223,10 +253,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getEductionCodeList());
     this.store.select(UserSelectors.selectEductionCodeList)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.eductionCodeList = res;
@@ -237,10 +263,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.dispatch(UserActions.getGraduateCodeList());
     this.store.select(UserSelectors.selectGraduateCodeList)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
         takeUntil(this.destroy$)
       ).subscribe(res => {
         this.graduateCodeList = res;
@@ -287,9 +309,16 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
                 ...this.dataService.getAuthorizationToken('user'),
             }
           })).pipe(
-            catchError((err: HttpErrorResponse) => {
-              // console.log(err);
-              return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+            catchError(err => {
+              return throwError(() => {
+                const errMsg = `${err.error.error.message}`;
+                this.store.dispatch(CommonActions.setErr({
+                  payload: {
+                    errMsg
+                  }
+                }));
+                return new Error(errMsg);
+              });
             }),
             finalize(() => {
               request$.unsubscribe();
@@ -339,7 +368,33 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       // todo: 送出更改履歷名稱請求
       if (result) {
         console.log('openTitleDialog', result);
-        this.title = result.title;
+        const request$ = from(this.dataService.api.appResumeMainsUpdateResumeNameUpdate({
+          Id: this.resumeCode,
+          ResumeName: result.title,
+        }, {
+          headers: {
+            ...this.dataService.getAuthorizationToken('user')
+          }
+        })).pipe(
+          catchError((err: HttpErrorResponse) => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
+          }),
+          finalize(() => {
+            this.title = result.title;
+            request$.unsubscribe();
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe(res => {
+          console.log(res);
+        });
       }
     });
   }
@@ -662,6 +717,13 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     });
   }
 
+  showHtml(content: string|undefined|null) {
+    if (content) {
+      return content.replace(/\n/g, '<br>');
+    }
+    return '';
+  }
+
   // 新增自傳
   openAutobiographyDialog(event: MouseEvent): void {
     if (this.autobiographies.length > 0) {
@@ -836,9 +898,16 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       concatMap((token) => from(this.dataService.api.fileManagementFileDescriptorDownloadDetail(id, {
         token: token.data.token || undefined
       }))),
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       finalize(() => {
         request$.unsubscribe();

@@ -10,6 +10,8 @@ import { ResumeData } from '@app/core/datas';
 import { Store } from '@ngrx/store';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
+import { COUNTRY_TOKEN } from '@app/app.module';
+import { ICountry } from '@app/core/interfaces/country';
 
 @Component({
   selector: 'admin-resume-add-person-dialog',
@@ -20,6 +22,7 @@ export class ResumeAddPersonDialogComponent implements OnInit {
   matcher = new FormErrorStateMatcher();
   isSuccess: boolean = false;
 
+  countryCodeOptions: ISelectOption[] = [];
   jobOptions: ISelectOption[] = [];
   stageOptions: ISelectOption[] = [];
   stageList: ResumeShareCodesShareCodeDto[] = [];
@@ -29,11 +32,10 @@ export class ResumeAddPersonDialogComponent implements OnInit {
       Validators.required,
       Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
     ]),
+    countryCode: new FormControl('TW', [Validators.required]),
     phone: new FormControl(this.data.item.phone, [
       Validators.required,
-      Validators.pattern('^[0-9]*$'),
-      Validators.minLength(9),
-      Validators.maxLength(13)
+      Validators.pattern('[0-9\-]{9,15}'),
     ]),
     idno: new FormControl(this.data.item?.accountCode, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
     email: new FormControl(this.data.item.email, [Validators.required, Validators.email]),
@@ -72,6 +74,17 @@ export class ResumeAddPersonDialogComponent implements OnInit {
     return this.nameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
   }
 
+  get countryCodeFormCtl() {
+    return this.addForm.get('countryCode') as FormControl;
+  }
+
+  getCountryCodeErrorMessage() {
+    if (this.countryCodeFormCtl.hasError('required')) {
+      return '請選擇這個欄位';
+    }
+    return '';
+  }
+
   getPhoneErrorMessage() {
     if (this.phoneFormCtl.getError('required')) {
       return '請填寫此欄位';
@@ -102,7 +115,14 @@ export class ResumeAddPersonDialogComponent implements OnInit {
     public store: Store,
     public dialogRef: MatDialogRef<ResumeAddPersonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ResumeDialogData,
+    @Inject(COUNTRY_TOKEN) public countryObj: ICountry
   ) {
+    Object.keys(countryObj.userinfo_country_code).forEach((value: string) => {
+      this.countryCodeOptions.push({
+        text: countryObj.userinfo_country_code[value].toString(),
+        key: value
+      })
+    });
     this.jobOptions = data.jobOptions;
   }
 
@@ -123,7 +143,35 @@ export class ResumeAddPersonDialogComponent implements OnInit {
     this.closeDialog();
   }
 
+  getPhoneFormat(phone: string) {
+    if (!phone.startsWith('+')) {
+      return {
+        code: '',
+        phone: phone
+      };
+    }
+    // 判斷區域
+    let countryCode = '';
+    let purePhone = '';
+    for (let code in this.countryObj.id_to_countrycode) {
+      let codeStr = this.countryObj.id_to_countrycode[code].toString();
+      if (phone.startsWith(codeStr)) {
+        countryCode = code;
+        purePhone = phone.substring(codeStr.length);
+        break;
+      }
+    }
+
+    return {
+      code: countryCode,
+      phone: purePhone
+    };
+  }
+
   closeDialog() {
-    this.dialogRef.close(this.isSuccess ? {...this.addForm.value} : false);
+    this.dialogRef.close(this.isSuccess ? {
+      ...this.addForm.value,
+      phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
+    } : false);
   }
 }

@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
 import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { link } from '@app/core/interfaces/menu.model';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-admin-main-layout',
@@ -95,5 +96,9 @@ export class AdminMainLayoutComponent implements OnInit {
 
   logout() {
     this.store.dispatch(AdminActions.logout());
+  }
+
+  closeMenu(event: MouseEvent, trigger: MatMenuTrigger) {
+    console.log(event);
   }
 }

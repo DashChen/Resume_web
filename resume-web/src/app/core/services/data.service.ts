@@ -72,7 +72,7 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
         'Authorization': type === 'user' ? this._userToken : this._adminToken,
       }
     } as SecurityDataType;
-    console.log('api setSecurityData');
+    // console.log('api setSecurityData');
     this.setSecurityData(data);
   }
 

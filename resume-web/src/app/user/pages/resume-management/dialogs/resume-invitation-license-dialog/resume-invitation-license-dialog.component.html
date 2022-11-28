@@ -15,9 +15,18 @@
           placeholder="請輸入關鍵字"
           [matChipInputFor]="chipList"
           (matChipInputTokenEnd)="showSelectLicense($event)"
+          (blur)="addLicense($event)"
+          (keydown.enter)="addLicense($event)"
           (click)="showSelectLicenseBlock = true">
       </mat-chip-list>
-      <mat-hint align="end">{{licensesControl.value?.length || 0}}/{{choiceLimit}}</mat-hint>
+      <mat-hint align="end">
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+          <mat-error *ngIf="licensesControl.invalid">
+            {{ getLicensesErrorMessage() }}
+          </mat-error>
+          <span>{{licensesControl.value?.length || 0}}/{{choiceLimit}}</span>
+        </div>
+      </mat-hint>
     </mat-form-field>
 
     <div fxLayout="column" fxLayoutGap="8px" class="resume-invitation-license-dialog__select__block" *ngIf="showSelectLicenseBlock">

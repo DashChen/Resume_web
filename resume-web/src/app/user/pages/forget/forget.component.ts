@@ -233,67 +233,85 @@ export class ForgetComponent extends BaseComponent implements OnInit {
 
   sendVerificationCode() {
     this.tempPhone = this.getCountryCode(this.countryCodeFormControl.value) + this.mobileFormControl.value;
-
-    // 代表等待送出驗證碼
-    if (this.validateErrorTimes < 3) {
-      this.disBtn = false;
-      const request$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
-        Phone: this.tempPhone,
-      }))
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          // console.log(err);
-          this.store.dispatch(CommonActions.setErr({ payload: {
-            errMsg: err.error.error.message,
-          }}));
-          return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
-        }),
-        finalize(() => {
-          request$.unsubscribe();
-        }),
-      ).subscribe((next) => {
-        console.log(next);
-        this.showValidateCode = true;
-        this.btnText = '進行驗證';
-        this.title = '驗證碼已發送';
-        this.subtitle = `請輸入傳送到${this.maskPhone(this.tempPhone)}的驗證碼以繼續`;
-        this.showCountdown = true;
-        this.countdown = 60;
-        this.otherTitle = '沒有收到驗證碼嗎?';
-        this.otherSubtitle = '再次發送驗證碼';
-        const observe$ = this.timer$.pipe(
-          map(n => this.countdown = this.basicCountdown - n - 1),
-          tap(() => {
-            this.disabledSendAgain = this.countdown > 0;
-            if (this.countdown === 0) {
-              this.verificationCodeFormControl.disable();
-              this.disBtn = true;
-              observe$.unsubscribe();
+    // 先檢查手機號是否存在
+    const request$ = from(this.dataService.api.appRegisterCheckPhoneExsistCreate({
+      Phone: this.tempPhone
+    })).pipe(
+      finalize(() => {
+        request$.unsubscribe();
+      }),
+      catchError(err => of(err)),
+    ).subscribe(res => {
+      console.log(res);
+      if (res.data) {
+        // 代表等待送出驗證碼
+        if (this.validateErrorTimes < 3) {
+          this.disBtn = false;
+          const request$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+            Phone: this.tempPhone,
+          }))
+          .pipe(
+            catchError((err: HttpErrorResponse) => {
+              // console.log(err);
+              this.store.dispatch(CommonActions.setErr({ payload: {
+                errMsg: err.error.error.message,
+              }}));
+              return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+            }),
+            finalize(() => {
+              request$.unsubscribe();
+            }),
+          ).subscribe((next) => {
+            console.log(next);
+            this.verificationCodeFormControl.enable();
+            this.showValidateCode = true;
+            this.btnText = '進行驗證';
+            this.title = '驗證碼已發送';
+            this.subtitle = `請輸入傳送到${this.maskPhone(this.tempPhone)}的驗證碼以繼續`;
+            this.showCountdown = true;
+            this.countdown = 60;
+            this.otherTitle = '沒有收到驗證碼嗎?';
+            this.otherSubtitle = '再次發送驗證碼';
+            const observe$ = this.timer$.pipe(
+              map(n => this.countdown = this.basicCountdown - n - 1),
+              tap(() => {
+                this.disabledSendAgain = this.countdown > 0;
+                if (this.countdown === 0) {
+                  this.verificationCodeFormControl.disable();
+                  this.disBtn = true;
+                  observe$.unsubscribe();
+                }
+              }),
+              take(this.basicCountdown),
+              startWith(this.basicCountdown),
+              takeUntil(this.destroy$)
+            ).subscribe();
+            this.validationForm.reset();
+          });
+        } else {
+          this.dialogConfig.icon = 'error';
+          this.dialogConfig.title = '重新輸入手機號碼';
+          this.dialogConfig.subTitle = '為確保您的手機號碼填寫正確，重新發送三次未收到需重新操作。';
+          this.dialogConfig.showSuccessBtn = true;
+          this.dialogConfig.successBtnText = '返回登入畫面';
+          const dialogRef = this.dialog.open(CommonDialogComponent, {
+            height: '311px',
+            width: '614px',
+            data: this.dialogConfig
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
             }
-          }),
-          take(this.basicCountdown),
-          startWith(this.basicCountdown),
-          takeUntil(this.destroy$)
-        ).subscribe();
-        this.validationForm.reset();
-      });
-    } else {
-      this.dialogConfig.icon = 'error';
-      this.dialogConfig.title = '重新輸入手機號碼';
-      this.dialogConfig.subTitle = '為確保您的手機號碼填寫正確，重新發送三次未收到需重新操作。';
-      this.dialogConfig.showSuccessBtn = true;
-      this.dialogConfig.successBtnText = '返回登入畫面';
-      const dialogRef = this.dialog.open(CommonDialogComponent, {
-        height: '311px',
-        width: '614px',
-        data: this.dialogConfig
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.store.dispatch(RouterActions.Go({path: ['/user/login']}));
+          })
         }
-      })
-    }
+      } else {
+        // 代表電話號碼已經存在
+        this.title = '此號碼尚未註冊';
+        this.subtitle = '';
+        this.mobileFormControl.setValue('');
+      }
+    });
   }
 
   otherAction(event: MouseEvent) {

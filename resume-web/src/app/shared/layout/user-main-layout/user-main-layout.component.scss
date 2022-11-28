@@ -175,6 +175,7 @@ $this: '.app-user-main-layout';
     }
 
     &__footer {
+      align-items: center;
       color: $colorLight;
       display: flex;
       justify-content: space-between;

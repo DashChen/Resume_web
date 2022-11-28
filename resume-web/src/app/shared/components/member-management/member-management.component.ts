@@ -10,7 +10,7 @@ import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Actions as CommonActions } from '@app/shared/store/common';
 import { MediaObserver } from '@angular/flex-layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { createPasswordStrengthValidator, idCardValidator, MatchValidator } from '@app/core/validators';
+import { createPasswordStrengthValidator, dateValidator, idCardValidator, MatchValidator, nameValidator } from '@app/core/validators';
 import { DateTime } from 'luxon';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { COUNTRY_TOKEN } from '@app/app.module';
@@ -34,7 +34,8 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       value:'',
       disabled: true
     }, [
-      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+      Validators.required,
+      nameValidator(),
     ]),
   });
 
@@ -43,7 +44,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getNameErrorMessage() {
-    return this.nameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+    if (this.nameFormCtl.hasError('required')) {
+      return '請填寫這個欄位';
+    }
+    // console.log('getNameErrorMessage', this.nameFormCtl.errors);
+    if (this.nameFormCtl.hasError('maxlength')) {
+      return `長度最多${this.nameFormCtl.getError('maxlength').maxLength}`;
+    }
+    return this.nameFormCtl.hasError('name') ? '格式不正確，例:王大明' : '';
   }
 
 
@@ -73,11 +81,23 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     Birthday: new FormControl({
       value:'',
       disabled: true
-    }),
+    },[
+      dateValidator(),
+    ]),
   });
 
   get birthdayFormCtl() {
     return this.birthdayForm.get('Birthday') as FormControl;
+  }
+
+  getBirthdayErrorMessage() {
+    if (this.birthdayFormCtl.hasError('required')) {
+      return '請輸入這個欄位';
+    }
+    if (this.birthdayFormCtl.hasError('date')) {
+      return '日期格式不正確';
+    }
+    return '';
   }
 
   phoneForm: FormGroup = new FormGroup({
@@ -156,8 +176,15 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     return this.passwordForm.get('password') as FormControl;
   }
 
+  getPasswordErrorMessage() {
+    if (this.passwordFormCtl.hasError('required')) {
+      return '請填寫這個欄位';
+    }
+    return '';
+  }
+
   newPasswordForm: FormGroup = new FormGroup({
-    newPassword: new FormControl('', [Validators.minLength(8), createPasswordStrengthValidator()]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8), createPasswordStrengthValidator()]),
     newConfirmPassword: new FormControl('', [Validators.required, MatchValidator('newPassword', 'newConfirmPassword')]),
   });
 
@@ -166,8 +193,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getNewPasswordErrorMessage() {
-    console.log(this.newPasswordFormCtl.errors);
-    return this.newPasswordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
+    if (this.newPasswordFormCtl.hasError('required')) {
+      return '請填寫這個欄位';
+    }
+    if (this.newPasswordFormCtl.hasError('minlength')) {
+      return `密碼設定長度至少為${this.newPasswordFormCtl.getError('minlength').requiredLength}個字串`;
+    }
+
+    return this.newPasswordFormCtl.hasError('passwordStrength') ? '密碼強度不足(英文大小寫、數字)' : '';
   }
 
   get newConfirmPasswordFormCtl() {
@@ -175,7 +208,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getConfirmPwdErrorMessage() {
-    console.log(this.newConfirmPasswordFormCtl.errors);
+    if (this.newConfirmPasswordFormCtl.hasError('required')) {
+      return '請填寫這個欄位';
+    }
     return this.newConfirmPasswordFormCtl.hasError('mismatch') ? '密碼輸入不正確' : '';
   }
 
@@ -245,7 +280,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     })).pipe(
       catchError(err => {
         return throwError(() => {
-          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          const errMsg = `${err.error.error.message}`;
           this.store.dispatch(CommonActions.setErr({
             payload: {
               errMsg
@@ -334,6 +369,12 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             this.birthdayForm.markAllAsTouched();
             return;
           }
+          this.birthdayFormCtl.addValidators([Validators.required]);
+          this.birthdayFormCtl.updateValueAndValidity();
+          this.birthdayFormCtl.markAsTouched();
+          if (this.birthdayForm.invalid) {
+            return;
+          }
           requestApi = this.dataService.api.appUserDatasUpdateBirthdayUpdate(this.birthdayForm.value,{
             headers: {
               ...this.dataService.getAuthorizationToken(this.authorizeType)
@@ -389,7 +430,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         const requestHttp$ = from(requestApi).pipe(
           catchError(err => {
             return throwError(() => {
-              const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+              const errMsg = `${err.error.error.message}`;
               this.store.dispatch(CommonActions.setErr({
                 payload: {
                   errMsg
@@ -409,6 +450,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         ).subscribe(
           res => {
             console.log(res);
+            if (res.ok) {
+              this.successDialog('更新完成', '');
+            }
           },
           err => {
             console.log(err);
@@ -572,7 +616,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     })).pipe(
       catchError(err => {
         return throwError(() => {
-          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          const errMsg = `${err.error.error.message}`;
           this.store.dispatch(CommonActions.setErr({
             payload: {
               errMsg
@@ -609,7 +653,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     .pipe(
       catchError(err => {
         return throwError(() => {
-          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          const errMsg = `${err.error.error.message}`;
           this.store.dispatch(CommonActions.setErr({
             payload: {
               errMsg
@@ -662,7 +706,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     .pipe(
       catchError(err => {
         return throwError(() => {
-          const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+          const errMsg = `${err.error.error.message}`;
           this.store.dispatch(CommonActions.setErr({
             payload: {
               errMsg
@@ -691,7 +735,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   changePwd(isChange: boolean) {
-    console.log(isChange);
+    console.log(isChange, this.focusBtnKey);
     if (isChange) {
       if (this.focusBtnKey !== 'newPassword') {
         this.focusBtnKey = 'newPassword';
@@ -699,17 +743,27 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         this.passwordFormCtl.setValue('');
         this.passwordFormCtl.enable();
       } else {
+        // 需要確認
+        if (!this.passwordFormCtl.value || this.newPasswordForm.invalid) {
+          this.passwordFormCtl.setValidators([Validators.required]);
+          this.passwordFormCtl.updateValueAndValidity();
+          this.passwordFormCtl.markAsTouched();
+          this.newPasswordForm.markAllAsTouched();
+          return;
+        }
         const requestHttp$ = from(this.dataService.api.accountMyProfileChangePasswordCreate({
           currentPassword: this.passwordFormCtl.value,
           newPassword: this.newPasswordFormCtl.value
         },{
           headers: {
             ...this.dataService.getAuthorizationToken(this.authorizeType)
-          }
+          },
+          format: 'json'
         })).pipe(
           catchError(err => {
+            // console.log(err);
             return throwError(() => {
-              const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+              const errMsg = `${err.error.error.message}`;
               this.store.dispatch(CommonActions.setErr({
                 payload: {
                   errMsg
@@ -719,28 +773,40 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             });
           }),
           finalize(() => {
-            this.focusBtnKey = '';
-            this.showPassword = true;
-            this.passwordFormCtl.setValue(this.defaultPassword);
-            this.passwordFormCtl.disable();
+            this.defaultChangePws();
             requestHttp$.unsubscribe()
           }),
           takeUntil(this.destroy$),
         ).subscribe(
           res => {
-            console.log(res);
+            // console.log(res);
+            if (res.ok) {
+              this.successDialog('更新完成', '');
+            }
           },
           err => {
-            console.log(err);
+            // console.log(err);
           }
         )
       }
     } else {
-      this.focusBtnKey = '';
-      this.showPassword = true;
-      this.passwordFormCtl.setValue(this.defaultPassword);
-      this.passwordFormCtl.disable();
+      this.defaultChangePws();
     }
+  }
+
+  defaultChangePws() {
+    this.focusBtnKey = '';
+    this.showPassword = true;
+    this.passwordFormCtl.removeValidators([Validators.required]);
+    this.passwordFormCtl.updateValueAndValidity();
+    this.passwordFormCtl.reset();
+    this.passwordFormCtl.setValue(this.defaultPassword);
+    this.passwordFormCtl.disable();
+    this.newPasswordForm.reset();
+    this.newPasswordForm.setValue({
+      newPassword: '',
+      newConfirmPassword: ''
+    });
   }
 
   boundMFA(provider: string) {
@@ -770,7 +836,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
             })).pipe(
               catchError(err => {
                 return throwError(() => {
-                  const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+                  const errMsg = `${err.error.error.message}`;
                   this.store.dispatch(CommonActions.setErr({
                     payload: {
                       errMsg
@@ -798,6 +864,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
                     break;
                 }
               }
+              if (res.ok) {
+                this.successDialog('更新完成', '');
+              }
             });
           }
         }
@@ -811,7 +880,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       })).pipe(
         catchError(err => {
           return throwError(() => {
-            const errMsg = `Error Code: ${err.status}\nMessage: ${err.error.error.message}`;
+            const errMsg = `${err.error.error.message}`;
             this.store.dispatch(CommonActions.setErr({
               payload: {
                 errMsg
@@ -838,6 +907,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
               this.bounded.facebook = false;
               break;
           }
+        }
+        if (res.ok) {
+          this.successDialog('更新完成', '');
         }
       });
     }

@@ -110,7 +110,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
+                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill" style="min-width: 100px;">
                     <input matInput [placeholder]="focusBtnKey === 'Phone' ? '例:0912-3456-789' : '未填寫'" formControlName="Phone" required
                         [errorStateMatcher]="matcher">
                     <mat-error class="h3-text--medium" *ngIf="phoneFormCtl.invalid">
@@ -178,6 +178,9 @@
                     <label class="mat-form-field__lable--top">生日</label>
                     <input matInput [matDatepicker]="picker1" formControlName="Birthday" [min]="minDate" [max]="maxDate"
                         [placeholder]="focusBtnKey !== 'Birthday' ? '未填寫': '請選擇日期'" (click)="picker1.open()">
+                    <mat-error class="h3-text--medium" *ngIf="birthdayFormCtl.invalid">
+                        {{ getBirthdayErrorMessage() }}
+                    </mat-error>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
@@ -207,6 +210,9 @@
                     <input matInput [placeholder]="focusBtnKey !== 'newPassword' ? '未填寫' : '請輸入舊密碼'"
                         autocomplete="nope" formControlName="password" required [errorStateMatcher]="matcher"
                         [type]="showPassword ? 'text' : 'password'">
+                    <mat-error class="h3-text--medium" *ngIf="newPasswordFormCtl.invalid">
+                        {{ getPasswordErrorMessage() }}
+                    </mat-error>
                     <mat-icon [svgIcon]="showPassword ? 'eye-open' : 'eye-close'"
                         aria-hidden="false" aria-label="google icon" (click)="showPassword = !showPassword" *ngIf="focusBtnKey === 'newPassword'"></mat-icon>
                 </mat-form-field>

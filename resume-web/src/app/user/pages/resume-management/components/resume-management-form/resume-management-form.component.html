@@ -291,7 +291,7 @@
                   <div fxLayout="column" fxLayoutGap="24px">
                     <div fxLayout="row" fxLayoutGap="24px">
                       <div class="h2-text--bold text-nowrap">證照名稱</div>
-                      <div class="h2-text--regular">{{item.name}}</div>
+                      <div class="h2-text--regular">{{getLicenseNameStr(item.name)}}</div>
                     </div>
                     <div fxLayout="row" fxLayoutGap="24px">
                       <div class="h2-text--bold text-nowrap">其他證照</div>
@@ -323,12 +323,7 @@
             <ng-container *ngIf="autobiographies.length > 0">
               <ng-container *ngFor="let item of autobiographies">
                 <div class="app-resume-management-form__content__card--autobiographies">
-                  <div class="app-resume-management-form__content__card--autobiographies-btns">
-                    <button mat-icon-button class="mat-button--icon" (click)="delAutobiography(item)">
-                      <mat-icon [svgIcon]="'trash'" aria-hidden="false" aria-label="edit icon"></mat-icon>
-                    </button>
-                  </div>
-                  <div class="h2-text--regular">{{item.content}}</div>
+                  <div class="h2-text--regular" [innerHTML]="showHtml(item.content)"></div>
                 </div>
               </ng-container>
             </ng-container>

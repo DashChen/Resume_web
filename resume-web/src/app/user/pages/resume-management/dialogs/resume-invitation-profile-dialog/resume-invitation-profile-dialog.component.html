@@ -8,10 +8,10 @@
     <mat-icon class="resume-invitation-profile-dialog__content__icon" [svgIcon]="'upload-icon'"></mat-icon>
     <label class="resume-invitation-profile-dialog__content__input">
       <span>按此上傳圖片</span>
-      <input #imageInput type="file" hidden accept="image/*" (change)="uploadImageFile($event)">
     </label>
     <div class="resume-invitation-profile-dialog__content__text">檔案格式為jpg/png,最佳尺寸360x360</div>
   </div>
+  <input #imageInput type="file" hidden accept="image/*" (change)="uploadImageFile($event)">
   <app-shared-cropperjs #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="cropperImageUrl"
     (export)="cropperResult($event)" *ngIf="cropperImageUrl"></app-shared-cropperjs>
 </div>

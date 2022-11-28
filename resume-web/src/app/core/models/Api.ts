@@ -4796,11 +4796,12 @@ export class HttpClient<SecurityDataType = unknown> {
       const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
-
+      // console.log('api responseFormat', responseFormat);
       const data = !responseFormat
         ? r
         : await response[responseFormat]()
             .then((data) => {
+              // console.log('api', data);
               if (r.ok) {
                 r.data = data;
               } else {
@@ -4809,6 +4810,7 @@ export class HttpClient<SecurityDataType = unknown> {
               return r;
             })
             .catch((e) => {
+              // console.log('api e', e);
               r.error = e;
               return r;
             });
@@ -5796,26 +5798,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Appendix
-     * @name AppAppendicesCreateList
-     * @request GET:/api/app/appendices/Create
-     * @secure
-     */
-    appAppendicesCreateList: (query: { Name: string }, data: { File?: File }, params: RequestParams = {}) =>
-      this.request<boolean, VoloAbpHttpRemoteServiceErrorResponse>({
-        path: `/api/app/appendices/Create`,
-        method: "GET",
-        query: query,
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
         format: "json",
         ...params,
       }),
@@ -10928,6 +10910,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Register
+     * @name AppRegisterMailVerifyCodeList
+     * @request GET:/api/app/register/mail-verify-code
+     * @secure
+     */
+    appRegisterMailVerifyCodeList: (query?: { Email?: string }, params: RequestParams = {}) =>
+      this.request<string, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/register/mail-verify-code`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Register
      * @name AppRegisterConfirmVerifyCodeCreate
      * @request POST:/api/app/register/confirm-verify-code
      * @secure
@@ -11661,6 +11661,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ResumeResumeMainsResumeMainDto[], VoloAbpHttpRemoteServiceErrorResponse>({
         path: `/api/app/resume-mains/GetListByAccountId`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ResumeMain
+     * @name AppResumeMainsUpdateResumeNameUpdate
+     * @request PUT:/api/app/resume-mains/UpdateResumeName
+     * @secure
+     */
+    appResumeMainsUpdateResumeNameUpdate: (query?: { Id?: string; ResumeName?: string }, params: RequestParams = {}) =>
+      this.request<ResumeResumeMainsResumeMainDto, VoloAbpHttpRemoteServiceErrorResponse>({
+        path: `/api/app/resume-mains/UpdateResumeName`,
+        method: "PUT",
+        query: query,
         secure: true,
         format: "json",
         ...params,

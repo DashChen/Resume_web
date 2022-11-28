@@ -1,4 +1,5 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="admin-resume-add-person-dialog__head" mat-dialog-title>
+<div fxLayout="row" fxLayoutAlign="space-between center" class="admin-resume-add-person-dialog__head" mat-dialog-title
+>
     <div class="admin-resume-add-person-dialog__head__title h1-title text-second">{{data.title}}</div>
     <mat-icon mat-dialog-close [svgIcon]="data.icon || 'close-icon'" aria-hidden="false" aria-label="close icon"></mat-icon>
 </div>
@@ -11,13 +12,25 @@
                 {{ getNameErrorMessage() }}
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="mat-form-field__block" appearance="fill">
-            <label class="mat-form-field__lable--top">電話*</label>
-            <input matInput placeholder="例:0912345678" formControlName="phone" required [errorStateMatcher]="matcher">
-            <mat-error *ngIf="phoneFormCtl.invalid">
-                {{ getPhoneErrorMessage() }}
-            </mat-error>
-        </mat-form-field>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0">
+            <mat-form-field class="country-code" appearance="fill">
+              <label class="mat-form-field__lable--top">電話*</label>
+              <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                  <ng-container *ngFor="let option of countryCodeOptions">
+                      <mat-option [value]="option.key">{{option.text}}</mat-option>
+                  </ng-container>
+              </mat-select>
+              <mat-error class="h3-text--medium" *ngIf="countryCodeFormCtl.invalid">
+                  {{ getCountryCodeErrorMessage() }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field__block" appearance="fill">
+              <input matInput placeholder="例:0912345678" formControlName="phone">
+              <mat-error *ngIf="phoneFormCtl.invalid" class="h3-text--medium">
+                {{getPhoneErrorMessage()}}
+              </mat-error>
+            </mat-form-field>
+        </div>
         <mat-form-field class="mat-form-field__block" appearance="fill">
             <label class="mat-form-field__lable--top">身分證號碼</label>
             <input matInput placeholder="請輸入身分證號碼" formControlName="idno" [errorStateMatcher]="matcher">

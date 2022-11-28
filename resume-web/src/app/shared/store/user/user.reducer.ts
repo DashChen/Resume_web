@@ -32,7 +32,14 @@ export const userReducer = createReducer(
     on(UserActions.getUserSuccess, (state, { payload }) => ({ ...state, currentUser: payload })),
     on(UserActions.logoutSuccess, (state) => ({ ...state, isLoggedIn: false, token: null, currentUser: null })),
     on(UserActions.setReusmeTitle, (state, { payload }) => ({ ...state, resumeTitle: payload })),
-    on(UserActions.setResumeBasicInfo, (state, { payload }) => ({ ...state, resumeBasicInfo: payload })),
+    on(UserActions.setResumeBasicInfo, (state, { payload }) => ({
+        ...state,
+        resumeBasicInfo:  {
+            ...payload,
+            nameC: payload.nameC || state.currentUser?.name || '',
+            idNo: payload.idNo || state.currentUser?.idNo || '',
+        }
+    })),
     on(UserActions.setResumeEductions, (state, { payload }) => ({ ...state, resumeEductions: payload })),
     on(UserActions.setResumeExperiences, (state, { payload }) => ({ ...state, resumeExperiences: payload })),
     on(UserActions.setResumeLicenses, (state, { payload }) => ({ ...state, resumeLicenses: payload })),

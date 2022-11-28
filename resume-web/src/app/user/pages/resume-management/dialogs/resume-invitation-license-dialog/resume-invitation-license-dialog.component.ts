@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/sha
 import { BaseDestoryComponent } from '@app/shared/components/base-destory.component';
 import { filter, takeUntil } from 'rxjs';
 import { skill, skills, skillsList } from '@app/core/interfaces/skill.model';
+import { minLengthArrayValidator } from '@app/core/validators';
 
 @Component({
   selector: 'app-resume-invitation-license-dialog',
@@ -17,7 +18,14 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
 
   choiceLimit: number = 20;
 
-  licensesControl = new FormControl([]);
+  licensesControl = new FormControl([], [minLengthArrayValidator()]);
+  getLicensesErrorMessage() {
+    if (this.licensesControl.hasError('minLengthArray')) {
+      return '請至少填入一項證照';
+    }
+    return '';
+  }
+
   licenseList: skillsList[] = [];
   mainLicenses: skill[] = [];
   showSelectLicenseBlock: boolean = false;
@@ -36,7 +44,7 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   ) {
     super();
     if (data?.item) {
-      const skills =JSON.parse(data.item?.name);
+      const skills = JSON.parse(data.item?.name);
       if (skills) {
         this.licensesControl.setValue(skills);
       }
@@ -61,6 +69,19 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
       });
   }
 
+  addLicense(event: any) {
+    // console.log('addLicense', event, this.licensesControl.value);
+    const value = this.licensesControl.value;
+    if (Array.isArray(value) && event.target.value) {
+      value.push({
+        no: '',
+        des: event.target.value
+      } as skill);
+      this.licensesControl.setValue(value);
+      event.target.value = '';
+    }
+  }
+
   onLicenseRemoved(license: string) {
     const licenses = this.licensesControl.value as string[];
     this.removeFirst(licenses, license);
@@ -75,9 +96,16 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   }
 
   closeDialog(isSuccess: boolean) {
+    if (isSuccess) {
+      if (!this.licensesControl.value || Array.isArray(this.licensesControl.value) && this.licensesControl.value.length === 0) {
+        this.licensesControl.markAsTouched();
+        return;
+      }
+    }
+
     this.dialogRef.close(isSuccess ? {
-      name: this.choicedSkills.map(v => v.des).join(','),
-      // name: JSON.stringify(this.choicedSkills),
+      name: this.licensesControl.value.map((v: skill) => v.des).join(','),
+      // name: JSON.stringify(this.licensesControl.value),
       note: this.otherLicense.value,
     } : false);
   }
@@ -90,7 +118,13 @@ export class ResumeInvitationLicenseDialogComponent extends BaseDestoryComponent
   confirmAddLicenses() {
     console.log('confirmAddLicenses');
     this.showSelectLicenseBlock = false;
-    this.licensesControl.setValue(this.choicedSkills);
+    const value = this.licensesControl.value;
+    this.choicedSkills.forEach(v => {
+      if (Array.isArray(value)) {
+        value.push(v);
+      }
+    });
+    this.licensesControl.setValue(value);
   }
 
   closeShowLicense() {

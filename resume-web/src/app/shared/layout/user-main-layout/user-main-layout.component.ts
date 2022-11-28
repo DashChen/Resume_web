@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DateTime } from 'luxon';
@@ -8,6 +8,7 @@ import { Actions as UserActions } from '@app/shared/store/user';
 import { selectCurrentUser } from '@app/shared/store/user/user.selectors';
 import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { Actions as CommonActions } from '@app/shared/store/common';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-user-main-layout',
@@ -15,6 +16,7 @@ import { Actions as CommonActions } from '@app/shared/store/common';
   styleUrls: ['./user-main-layout.component.scss']
 })
 export class UserMainLayoutComponent implements OnInit {
+  @ViewChild('sidenav') sidenavRef !: MatDrawer;
   currentUser$ = this.store.select(selectCurrentUser);
   username: string = '';
   email: string = '';
@@ -49,7 +51,7 @@ export class UserMainLayoutComponent implements OnInit {
   ngOnInit(): void {
     this.currentYear = DateTime.now().toFormat('yyyy/M');
     this.store.select(RouterSelectors.selectCurrentUrl).subscribe(url => {
-      console.log('selectCurrentUrl', url);
+      // console.log('selectCurrentUrl', url);
       this.links.forEach((l: link) => {
         l.active = !!(l.link && l.link.includes(url));
         if (l.children) {
@@ -57,8 +59,9 @@ export class UserMainLayoutComponent implements OnInit {
             cl.active = !!(cl.link && cl.link.includes(url));
           });
         }
-      })
-    })
+      });
+      this.sidenavRef.close();
+    });
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';
       this.email = user?.email || '';
