@@ -8,7 +8,7 @@ export function idCardValidator(): ValidatorFn {
         if (!value) {
             return null;
         }
-        const verification = value.match("^[A-Z]{1}[1-2]{1}[0-9]{8}$")
+        const verification = value.toString().match(/^[A-Z]{1}[1-2]{1}[0-9]{8}$/g);
         let checkSumPass = false;
         if (verification) {
             let conver = "ABCDEFGHJKLMNPQRSTUVXYWZIO"

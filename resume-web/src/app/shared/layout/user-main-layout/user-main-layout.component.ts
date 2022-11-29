@@ -60,7 +60,7 @@ export class UserMainLayoutComponent implements OnInit {
           });
         }
       });
-      this.sidenavRef.close();
+      this.sidenavRef?.close();
     });
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';

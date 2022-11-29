@@ -51,4 +51,27 @@ export class HelperService {
   blobToFile(blob: Blob, filename: string) {
     return new File([blob], filename, { type: blob.type });
   }
+
+  download(dataURL: string, filename: string) {
+    const blob = this.dataURLtoBlob(dataURL);
+    if (blob) {
+      this.downloadFromBlob(blob, filename);
+    }
+  }
+
+  downloadFromBlob(_blob: Blob, filename: string) {
+    if (_blob) {
+      const url = window.URL.createObjectURL(_blob);
+      this.downloadFromObjectURL(url, filename);
+    }
+  }
+
+  downloadFromObjectURL(url: string, filename: string) {
+    const a = document.createElement("a") as HTMLAnchorElement;
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
 }

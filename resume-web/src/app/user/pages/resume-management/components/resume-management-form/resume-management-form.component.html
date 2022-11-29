@@ -95,22 +95,22 @@
       <div class="app-resume-management-form__sidebar__card" fxFlex="230px" [fxShow.lt-md]="false">
         <mat-selection-list #shoes [multiple]="false">
           <div mat-subheader>我的履歷表</div>
-          <mat-list-option (click)="goTitle('basicInfoBlock')">
+          <mat-list-option (click)="goTitle('basicInfoBlock')" [selected]="focusNav === 'basicInfoBlock'">
             <div mat-line>基本資料</div>
           </mat-list-option>
-          <mat-list-option (click)="goTitle('educationBlock')">
+          <mat-list-option (click)="goTitle('educationBlock')" [selected]="focusNav === 'educationBlock'">
             <div mat-line>學歷</div>
           </mat-list-option>
-          <mat-list-option (click)="goTitle('workBlock')">
+          <mat-list-option (click)="goTitle('workBlock')" [selected]="focusNav === 'workBlock'">
             <div mat-line>工作經歷</div>
           </mat-list-option>
-          <mat-list-option (click)="goTitle('licenseBlock')">
+          <mat-list-option (click)="goTitle('licenseBlock')" [selected]="focusNav === 'licenseBlock'">
             <div mat-line>專業證照</div>
           </mat-list-option>
-          <mat-list-option (click)="goTitle('autobiographyBlock')">
+          <mat-list-option (click)="goTitle('autobiographyBlock')" [selected]="focusNav === 'autobiographyBlock'">
             <div mat-line>自傳</div>
           </mat-list-option>
-          <mat-list-option (click)="goTitle('appendixBlock')">
+          <mat-list-option (click)="goTitle('appendixBlock')" [selected]="focusNav === 'appendixBlock'">
             <div mat-line>附件</div>
           </mat-list-option>
         </mat-selection-list>

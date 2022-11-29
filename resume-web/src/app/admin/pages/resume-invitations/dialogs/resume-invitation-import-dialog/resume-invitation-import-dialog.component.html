@@ -1,18 +1,25 @@
 <mat-dialog-content class="admin-resume-invitation-import-dialog__content">
-    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px" style="cursor: pointer;" (click)="inputFile.click()">
+    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px" style="cursor: pointer;" (click)="inputFile.click()" *ngIf="!showFileList">
         <div class="admin-resume-invitation-import-dialog__upload-icon">
             <mat-icon [svgIcon]="'upload-icon'" aria-hidden="false" aria-label="upload icon"></mat-icon>
         </div>
         <div class="admin-resume-invitation-import-dialog__title h1-title">按此匯入檔案</div>
-        <div class="admin-resume-invitation-import-dialog__subtitle h2-text--regular">XLSX (8MB max)</div>
+        <div class="admin-resume-invitation-import-dialog__subtitle h2-text--regular">
+            <span>XLSX (8MB max)</span>
+            <a href="/assets/person.xlsx" download (click)="downloadExample($event)">下載範例檔</a>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="admin-resume-invitation-import-dialog__file" *ngIf="showFileList">
+        <a href="#" (click)="downloadFile($event)">{{uploadFile?.name}}</a>
+        <mat-icon [svgIcon]="'close-icon'" aria-hidden="false" aria-label="close icon" (click)="removeData()"></mat-icon>
     </div>
     <input type="file" accept=".xls,.xlsx,.csv" (change)="onChange($event)" #inputFile style="display: none;">
 </mat-dialog-content>
 <mat-dialog-actions align="center" class="admin-resume-invitation-import-dialog__action">
-    <button mat-raised-button (click)="closeDialog()">
+    <button mat-raised-button (click)="closeDialog(false)">
         <span>{{data.cancelBtnText}}</span>
     </button>
-    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="closeDialog()">
+    <button mat-raised-button cdkFocusInitial class="mat-button--orange" (click)="closeDialog(true)">
         <span>{{data.successBtnText}}</span>
     </button>
 </mat-dialog-actions>

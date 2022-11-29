@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ComponentModule } from '@app/shared';
 import { SharedModule } from '@app/shared/shared.module';
+import { environment } from '../../environments/environment';
 import { UserRoutingModule } from './user-routing.module';
 import { MaterialModule } from '../material-module';
 import {
@@ -28,6 +29,7 @@ import {
   ResumeInvitationAutobiographyDialogComponent,
   ResumeInvitationAppendixDialogComponent,
 } from './pages';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@app/core/social-login/public-api';
 
 @NgModule({
   declarations: [
@@ -59,8 +61,38 @@ import {
     ReactiveFormsModule,
     FlexLayoutModule,
     SharedModule,
-    ComponentModule
+    ComponentModule,
+    SocialLoginModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              environment.social.GOOGLE.client_id,
+              {
+                client_id: environment.social.GOOGLE.client_id,
+                ...environment.social.GOOGLE.options
+              }
+            )
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(
+              environment.social.FACEBOOK.client_id,
+              environment.social.FACEBOOK.options
+            )
+          },
+        ],
+        onError: (err: any) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    }
+  ],
 })
 export class UserModule { }

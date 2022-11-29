@@ -176,7 +176,7 @@ export class ResumeManagementPreviewComponent extends BaseComponent implements O
     if (diff.years) {
       return `${Math.abs(diff.years)}年${Math.abs(diff.months)}月`;
     }
-    return `${Math.abs(diff.months)}月`;
+    return `${Math.round(Math.abs(diff.months))}月`;
   }
 
   downloadAppendixFile(event: MouseEvent, item: ResumeAppendicesAppendixDto) {

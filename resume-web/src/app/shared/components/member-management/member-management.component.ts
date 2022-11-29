@@ -131,6 +131,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getMobileErrorMessage() {
+    if (this.phoneFormCtl.hasError('exist') || this.phoneFormCtl.hasError('same')) {
+      return '該手機號碼已被註冊';
+    }
     return '手機號碼格式錯誤';
   }
   // 已經驗證過
@@ -315,6 +318,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         console.log(err);
       }
     );
+    this.phoneFormCtl.valueChanges.subscribe(res => {
+      const tempPhone = this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + res;
+      if (tempPhone === this.user?.phone) {
+        console.log('same phone');
+      }
+      if (this.phoneFormCtl.hasError('exist') || this.phoneFormCtl.hasError('same')) {
+        this.phoneFormCtl.reset();
+        this.phoneFormCtl.setValue(res);
+      }
+    });
   }
 
   getPhoneFormat(phone: string) {
@@ -643,53 +656,89 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   sendSMS() {
     // 確認手機號是否正確
     if (this.phoneForm.invalid) {
+      console.log(this.phoneForm);
       this.phoneForm.markAllAsTouched();
       return;
     }
-
-    const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
-      Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
-    }))
-    .pipe(
-      catchError(err => {
-        return throwError(() => {
-          const errMsg = `${err.error.error.message}`;
-          this.store.dispatch(CommonActions.setErr({
-            payload: {
-              errMsg
+    const tempPhone = this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value;
+    // 檢查新手機號是否已被註冊
+    if (tempPhone != this.user?.phone) {
+      const request$ = from(this.dataService.api.appRegisterCheckPhoneExsistCreate({
+        Phone: tempPhone
+      })).pipe(
+        finalize(() => {
+          request$.unsubscribe();
+        }),
+        catchError(err => {
+          return throwError(() => {
+            const errMsg = `${err.error.error.message}`;
+            this.store.dispatch(CommonActions.setErr({
+              payload: {
+                errMsg
+              }
+            }));
+            return new Error(errMsg);
+          });
+        }),
+      ).subscribe(res => {
+        console.log(res);
+        if (!res.data) {
+          // 代表等待送出驗證碼
+          const requestHttp$ = from(this.dataService.api.appRegisterResumeSendVerifyCodeCreate({
+            Phone: tempPhone
+          }))
+          .pipe(
+            catchError(err => {
+              return throwError(() => {
+                const errMsg = `${err.error.error.message}`;
+                this.store.dispatch(CommonActions.setErr({
+                  payload: {
+                    errMsg
+                  }
+                }));
+                return new Error(errMsg);
+              });
+            }),
+            finalize(() => {
+              requestHttp$.unsubscribe();
+            }),
+            takeUntil(this.destroy$),
+          ).subscribe((next) => {
+            console.log(next);
+            this.smsCode.disable();
+            if (next.ok) {
+              this.countryCodeFormCtl.disable();
+              this.phoneFormCtl.disable();
+              this.smsCode.enable();
+              this.showCountdown = true;
+              this.countdown = 30;
+              const countdown$ = this.timer$.pipe(
+                map(n => this.countdown = this.basicCountdown - n - 1),
+                tap(() => {
+                  this.disabledSendAgain = this.countdown > 0;
+                }),
+                take(this.basicCountdown),
+                startWith(this.basicCountdown),
+                finalize(() => {
+                  this.showCountdown = false;
+                  countdown$.unsubscribe();
+                }),
+                takeUntil(this.destroy$)
+              ).subscribe();
             }
-          }));
-          return new Error(errMsg);
-        });
-      }),
-      finalize(() => {
-        requestHttp$.unsubscribe();
-      }),
-      takeUntil(this.destroy$),
-    ).subscribe((next) => {
-      console.log(next);
-      this.smsCode.disable();
-      if (next.ok) {
-        this.countryCodeFormCtl.disable();
-        this.phoneFormCtl.disable();
-        this.smsCode.enable();
-        this.showCountdown = true;
-        this.countdown = 30;
-        const countdown$ = this.timer$.pipe(
-          map(n => this.countdown = this.basicCountdown - n - 1),
-          tap(() => {
-            this.disabledSendAgain = this.countdown > 0;
-          }),
-          take(this.basicCountdown),
-          startWith(this.basicCountdown),
-          finalize(() => {
-            this.showCountdown = false;
-            countdown$.unsubscribe();
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe();
-      }
-    });
+          });
+        } else {
+          // 代表電話號碼已經存在
+          this.phoneFormCtl.setErrors({
+            exist: true
+          });
+        }
+      });
+    } else {
+      this.phoneFormCtl.setErrors({
+        same: true
+      });
+    }
   }
 
   // 確認驗證碼

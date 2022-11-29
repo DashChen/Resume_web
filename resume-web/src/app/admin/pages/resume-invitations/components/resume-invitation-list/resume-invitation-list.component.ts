@@ -282,10 +282,14 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   masterToggle() {
     if (this.isAllSelected()) {
       this.selection.clear();
+      this.disabledBatchEditBtn = true;
+      this.disabledDelBtn = true;
       return;
     }
 
     this.selection.select(...this.dataSource.data);
+    this.disabledBatchEditBtn = false;
+    this.disabledDelBtn = false;
   }
 
   rowToggle(row: ResumeResumeInvitationsResumeInvitationDto) {
@@ -353,6 +357,32 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
+        // 批次匯入
+        const httpRequest$ = from(this.dataService.api.appResumeInvitationsCreateListAsyncCreate(result, {
+          headers: {
+            ...this.dataService.getAuthorizationToken('admin')
+          }
+        })).pipe(
+          catchError(err => {
+            return throwError(() => {
+              const errMsg = `${err.error.error.message}`;
+              this.store.dispatch(CommonActions.setErr({
+                payload: {
+                  errMsg
+                }
+              }));
+              return new Error(errMsg);
+            });
+          }),
+          finalize(() => {
+            console.log('finalize httpRequest unsubscribe');
+            this.fetchResumes();
+            httpRequest$.unsubscribe();
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe(res => {
+          console.log('appResumeInvitationsCreateListAsyncCreate', res);
+        });
       }
     });
   }

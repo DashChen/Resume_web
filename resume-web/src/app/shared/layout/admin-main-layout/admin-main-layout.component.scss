@@ -239,12 +239,29 @@ $this: '.app-admin-main-layout';
         padding-top: 0;
         padding-bottom: 4px;
       }
-
+      &__block {
+        @include lt-md {
+          border-bottom: 1px solid #C5D0DF;
+        }
+        &__logout {
+          align-items: center;
+          color: #FFFFFF;
+          display: flex;
+          justify-content: center;
+          height: 59px;
+          padding: 4px 0;
+          &:hover:not([disabled]) {
+            background: rgba(0,0,0,.04);
+          }
+        }
+      }
       &__info {
         border-bottom: 1px solid #C5D0DF;
         height: 100%;
         padding: 16px;
         @include lt-md {
+          border-bottom: unset;
+          height: auto;
           padding: 31px;
         }
 

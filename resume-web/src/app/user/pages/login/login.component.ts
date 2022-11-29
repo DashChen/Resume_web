@@ -12,6 +12,7 @@ import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/
 import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { createPasswordStrengthValidator } from '@app/core/validators';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@app/core/social-login/public-api';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { createPasswordStrengthValidator } from '@app/core/validators';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends BaseComponent implements OnInit {
+  user: SocialUser | null = null;
   showPassword: boolean = false;
 
   loginForm = new FormGroup({
@@ -51,7 +53,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   constructor(
     public override store: Store,
     public override dialog: MatDialog,
-    public dataService: DataService<ApiConfig>) {
+    public dataService: DataService<ApiConfig>,
+    private readonly _authService: SocialAuthService) {
     super(store, dialog);
   }
 
@@ -67,6 +70,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
       } else {
         this.thirdPartyCodes = res;
       }
+    });
+    this._authService.authState.subscribe((user) => {
+      console.log('authState', user);
+      this.user = user;
     });
   }
 
@@ -142,7 +149,21 @@ export class LoginComponent extends BaseComponent implements OnInit {
       });
   }
 
-  loginBySocial(target?: string) {
+  
+
+  loginBySocial(target?: 'Google' | 'Facebook' | 'Line') {
+    switch (target) {
+      case 'Google':
+        this._authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        break;
+      case 'Facebook':
+        this._authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+        break;
+      case 'Line':
+        break;
+    }
+    return;
+
     this.dialogConfig.icon = 'unsuccessful';
     this.dialogConfig.title = '您尚未綁定';
     this.dialogConfig.subTitle = '您尚未將帳號做綁定，請登入到會員˙管理做綁定，下次再次登入時才能使用登入';

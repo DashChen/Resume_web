@@ -27,7 +27,7 @@
       "@layout/*": ["app/shared/layout/*"],
       "@assets/*": ["assets/*"]
     },
-    "types": ["node"],
+    "types": ["node", "google.accounts"],
     "typeRoots": ["node_modules/@types"],
     "resolveJsonModule": true
   },

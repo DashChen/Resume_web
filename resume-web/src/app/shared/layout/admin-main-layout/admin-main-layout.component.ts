@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '@app/core';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/share
 import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { link } from '@app/core/interfaces/menu.model';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-admin-main-layout',
@@ -14,6 +15,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./admin-main-layout.component.scss']
 })
 export class AdminMainLayoutComponent implements OnInit {
+  @ViewChild('sidenav') sidenavRef !: MatDrawer;
   currentUser$ = this.store.select(AdminSelectors.selectCurrentUser);
   startYear: string = '2022/3';
   currentYear: string = '';
@@ -88,8 +90,9 @@ export class AdminMainLayoutComponent implements OnInit {
             cl.active = !!(cl.link && cl.link.includes(url));
           });
         }
-      })
-    })
+      });
+      this.sidenavRef?.close();
+    });
     this.currentUser$.subscribe(user => {
       this.username = user?.name || '';
       this.email = user?.email || '';

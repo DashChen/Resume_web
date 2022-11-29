@@ -10,6 +10,9 @@ $this: '.admin-resume-invitation-import-dialog';
     justify-content: center;
     padding: 40px 24px;
     #{$this} {
+        &__content {
+            width: 100%;
+        }
         &__upload-icon {
             text-align: center;
             mat-icon {
@@ -23,7 +26,18 @@ $this: '.admin-resume-invitation-import-dialog';
         }
         &__subtitle {
             color: #6C7A8E;
-            text-align: center;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        &__file {
+            background: #EAEDF1;
+            border-radius: 5px;
+            height: 50px;
+            padding: 12.5px 20px;
+            mat-icon {
+                cursor: pointer;
+            }
         }
         &__action {
             padding: 0;
