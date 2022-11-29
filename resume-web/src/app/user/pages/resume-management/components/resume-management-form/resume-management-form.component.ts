@@ -409,10 +409,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationBasicDialogComponent, {
-      height: '833px',
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      maxHeight: '85vh',
       // panelClass: '',
       data: dialogConfig,
     });
@@ -496,10 +494,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationEducationDialogComponent, {
-      height: '833px',
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      maxHeight: '85vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
@@ -531,10 +527,8 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
       showCancelBtn: true,
     };
     const dialogRef = this.dialog.open(ResumeInvitationEducationDialogComponent, {
-      height: '833px',
       width: '614px',
       maxWidth: '100%',
-      maxHeight: '85vh',
       // panelClass: '',
       data: {
         ...dialogConfig,
@@ -816,8 +810,6 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeInvitationAppendixDialogComponent, {
       width: '614px',
       maxWidth: 'calc(100vw - 48px)',
-      height: 'auto',
-      maxHeight: '80vh',
       // panelClass: '',
       data: {
         ...dialogConfig

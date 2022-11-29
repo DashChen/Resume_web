@@ -58,14 +58,14 @@
           </div>
         </ng-container>
         <ng-template #emptyMenu let-item="item">
-          <a [routerLink]="item.link">
+          <a [routerLink]="item.link" (mouseover)="closeMenu($event)">
             <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
             <span class="h2-text--bold">{{ item.title }}</span>
           </a>
         </ng-template>
 
         <ng-template #menuLink let-item="item">
-          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu" #locationMenuTrigger="matMenuTrigger" (mouseover)="locationMenuTrigger.openMenu()" (mouseleave)="closeMenu($event, locationMenuTrigger)">
+          <a [routerLink]="item.link" [matMenuTriggerFor]="panel.menu" #locationMenuTrigger="matMenuTrigger" (mouseover)="showMenu(locationMenuTrigger)">
             <mat-icon [svgIcon]="item.icon" aria-hidden="false" [attr.aria-label]="item.title"></mat-icon>
             <span class="h2-text--bold">{{ item.title }}</span>
           </a>

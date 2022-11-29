@@ -157,7 +157,7 @@
             <span class="h2-text--bold text-main">職缺</span>
           </th>
           <td mat-cell *matCellDef="let element" [attr.data-th]="'職缺'">
-            <div class="mat-cell-content">{{element.jobName}}</div>
+            <div class="mat-cell-content">{{element.jobName | getValueByKeyFromList: [jobList, 'id', 'jobName']}}</div>
           </td>
         </ng-container>
 

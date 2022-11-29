@@ -18,9 +18,9 @@ $this: '.app-resume-invitation-appendix-dialog';
 
         &__content {
             margin: 0;
-            padding: 40px 24px 0;
 
             &__form {
+                padding-top: 40px;
                 position: relative;
 
                 mat-form-field {
@@ -69,8 +69,9 @@ $this: '.app-resume-invitation-appendix-dialog';
         }
 
         &__action {
-            margin: 40px 0;
-            padding: 0;
+            padding: 20px 0 40px;
+            min-height: unset;
+            margin-bottom: unset;
         }
     }
 }

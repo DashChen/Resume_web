@@ -69,6 +69,8 @@ export class AdminMainLayoutComponent implements OnInit {
     },
   ];
 
+  activeMenuTrigger!: MatMenuTrigger;
+
   constructor(
     private appService: AppService,
     private router: Router,
@@ -98,7 +100,14 @@ export class AdminMainLayoutComponent implements OnInit {
     this.store.dispatch(AdminActions.logout());
   }
 
-  closeMenu(event: MouseEvent, trigger: MatMenuTrigger) {
-    console.log(event);
+  showMenu(trigger: MatMenuTrigger) {
+    this.activeMenuTrigger = trigger;
+    trigger.openMenu();
+  }
+
+  closeMenu(event: MouseEvent) {
+    if (this.activeMenuTrigger) {
+      this.activeMenuTrigger.closeMenu();
+    }
   }
 }

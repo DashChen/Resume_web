@@ -16,15 +16,12 @@
         }
 
         &__content {
-            max-height: calc(100% - 51px - 130px);
-            overflow: hidden;
-            overflow-y: auto;
             margin: 0;
-            padding: 40px 24px 0;
             &__form {
                 display: flex;
                 flex-direction: column;
                 gap: 2px;
+                padding-top: 40px;
 
                 .default-option {
                     color: $colorLight;
@@ -37,6 +34,9 @@
         }
         &__action {
             gap: 20px;
+            padding: 20px 0 40px;
+            min-height: unset;
+            margin-bottom: unset;
         }
     }
 }

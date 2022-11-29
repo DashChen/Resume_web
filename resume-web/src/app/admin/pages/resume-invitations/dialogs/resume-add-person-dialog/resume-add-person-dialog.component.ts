@@ -28,19 +28,21 @@ export class ResumeAddPersonDialogComponent implements OnInit {
   stageList: ResumeShareCodesShareCodeDto[] = [];
 
   addForm = new FormGroup({
-    name: new FormControl(this.data.item.name, [
+    name: new FormControl('', [
       Validators.required,
       Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
     ]),
     countryCode: new FormControl('TW', [Validators.required]),
-    phone: new FormControl(this.data.item.phone, [
+    phone: new FormControl('', [
       Validators.required,
       Validators.pattern('[0-9\-]{9,15}'),
     ]),
-    idno: new FormControl(this.data.item?.accountCode, [Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')]),
-    email: new FormControl(this.data.item.email, [Validators.required, Validators.email]),
-    jobName: new FormControl(this.data.item.jobName, [Validators.required]),
-    stage: new FormControl(this.data.item.stage, [Validators.required])
+    idno: new FormControl('', [
+      Validators.pattern('^[A-Z]{1}[1-2]{1}[0-9]{8}$')
+    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    jobName: new FormControl('', [Validators.required]),
+    stage: new FormControl('', [Validators.required])
   });
 
   get nameFormCtl() {
@@ -124,6 +126,16 @@ export class ResumeAddPersonDialogComponent implements OnInit {
       })
     });
     this.jobOptions = data.jobOptions;
+    if (this.data.item) {
+      this.nameFormCtl.setValue(this.data.item.name || '');
+      this.idnoFormCtl.setValue(this.data.item?.accountCode || '');
+      this.emailFormCtl.setValue(this.data.item.email || '');
+      this.jobNameFormCtl.setValue(this.data.item.jobName || '');
+      this.stageFormCtl.setValue(this.data.item.stage || '');
+      const phoneOjb = this.getPhoneFormat(data.item?.phone || '');
+      this.countryCodeFormCtl.setValue(phoneOjb.code || 'TW');
+      this.phoneFormCtl.setValue(phoneOjb.phone);
+    }
   }
 
   ngOnInit(): void {
@@ -171,6 +183,7 @@ export class ResumeAddPersonDialogComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close(this.isSuccess ? {
       ...this.addForm.value,
+      accountCode: this.idnoFormCtl.value,
       phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
     } : false);
   }

@@ -299,20 +299,10 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
     const dialogRef = this.dialog.open(ResumeAddPersonDialogComponent, {
-      height: '833px',
       width: '614px',
-      maxWidth: '100%',
-      maxHeight: '85vh',
+      maxWidth: 'calc(100vw - 48px)',
       data: {
         ...this.dialogConfig,
-        item: {
-          name: '',
-          phone: '',
-          idno: '',
-          email: '',
-          jobName: null,
-          stage: null,
-        } as ResumeResumeInvitationsResumeInvitationDto,
         jobOptions: this.jobOptions
       }
     });
@@ -354,10 +344,8 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
     const dialogRef = this.dialog.open(ResumeInvitationImportDialogComponent, {
-      height: '311px',
       width: '614px',
-      maxWidth: '100%',
-      maxHeight: '85vh',
+      maxWidth: 'calc(100vw - 48px)',
       data: {
         ...this.dialogConfig,
       }
@@ -376,10 +364,8 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       this.dialogConfig.showSuccessBtn = true;
       this.dialogConfig.successBtnText = '查詢';
       const dialogRef = this.dialog.open(ResumeInvitationSearchDialogComponent, {
-        height: '617px',
         width: '567px',
         maxWidth: 'calc(100vw - 48px)',
-        maxHeight: '85vh',
         data: {
           ...this.dialogConfig,
           stageOptions: this.stageOptions,
@@ -426,7 +412,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     const dialogRef = this.dialog.open(ResumeBatchLevelEditDialogComponent, {
       height: '353px',
       width: '614px',
-      maxWidth: '100%',
+      maxWidth: 'calc(100vw - 48px)',
       data: {
         ...this.dialogConfig,
         options: this.stageOptions
@@ -544,40 +530,26 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   editItem(item: ResumeResumeInvitationsResumeInvitationDto) {
+    console.log(item);
     this.dialogConfig.title = '編輯人員';
     this.dialogConfig.successBtnText = '確認';
     this.dialogConfig.cancelBtnText = '取消';
     const dialogRef = this.dialog.open(ResumeAddPersonDialogComponent, {
-      height: '833px',
       width: '614px',
-      maxWidth: '100%',
-      maxHeight: '85vh',
+      maxWidth: 'calc(100vw - 48px)',
       panelClass: 'admin-resume-invitation-list__dialog--edit',
       data: {
         ...this.dialogConfig,
-        item: {
-          name: item.name,
-          phone: item.phone,
-          idno: item.accountCode,
-          email: item.email,
-          // TODO 應該要 jobID
-          jobName: item.jobName,
-          stage: item.stage,
-        } as ResumeResumeInvitationsResumeInvitationDto,
+        item: item,
         jobOptions: this.jobOptions
       },
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
-        let jobName = result.jobName;
-        if (jobName.toString().includes('-')) {
-          const jobOption = this.jobOptions.find(_job => _job.key === jobName);
-          if (jobOption) {
-            jobName = jobOption.text;
-          }
-        }
-        const _newItem = {...item, ...result, jobName};
+        const _newItem = {
+          ...item, ...result
+        };
         const request$ = from(this.dataService.api.appResumeInvitationsUpdate(item.id as string, _newItem, {
           headers: {
             ...this.dataService.getAuthorizationToken('admin')

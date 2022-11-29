@@ -18,9 +18,9 @@ $this: '.admin-resume-invitation-search-dialog';
 
         &__content {
             margin: 0;
-            padding: 40px 24px 0;
         }
         &__search__conditions {
+            padding-top: 40px;
             .default-option {
                 color: $colorLight;
             }
@@ -37,8 +37,9 @@ $this: '.admin-resume-invitation-search-dialog';
             }
         }
         &__action {
-            margin-top: 40px;
-            padding: 0;
+            padding: 20px 0 40px;
+            min-height: unset;
+            margin-bottom: unset;
         }
     }
 }
