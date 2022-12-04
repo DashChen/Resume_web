@@ -12,7 +12,6 @@ import * as Stores from './shared/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { LayoutModule, DialogModule, ComponentModule } from './shared';
 import { AdminModule } from './admin';
 import { environment } from '../environments/environment';
 import { UserModule } from './user';
@@ -87,11 +86,9 @@ export const BREAK_POINT_OPTION_TOKEN = new InjectionToken<BreakPointType>('brea
       logOnly: environment.production
     }),
     EffectsModule.forRoot(Stores.Effects),
-    LayoutModule,
-    ComponentModule,
-    DialogModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SharedModule,
     AdminModule,
     UserModule,
     AppRoutingModule,

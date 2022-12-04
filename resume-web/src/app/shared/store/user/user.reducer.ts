@@ -40,6 +40,7 @@ export const userReducer = createReducer(
             idNo: payload.idNo || state.currentUser?.idNo || '',
         }
     })),
+    on(UserActions.setResumeCode, (state, { payload }) => ({ ...state, resumeBasicInfo: { ...state.resumeBasicInfo, resumeCode: payload } })),
     on(UserActions.setResumeEductions, (state, { payload }) => ({ ...state, resumeEductions: payload })),
     on(UserActions.setResumeExperiences, (state, { payload }) => ({ ...state, resumeExperiences: payload })),
     on(UserActions.setResumeLicenses, (state, { payload }) => ({ ...state, resumeLicenses: payload })),

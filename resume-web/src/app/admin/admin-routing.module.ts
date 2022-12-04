@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminAuthGuard } from '@app/core/guards/admin-auth.guard';
+import { ResumeManagementPreviewComponent } from '@app/shared/components/resume-management-preview/resume-management-preview.component';
 
 import { Layouts } from '../app.component';
 import {
@@ -30,6 +31,7 @@ const routes: Routes = [
             { path: 'message/:type', component: MessageComponent, data: { layout: Layouts.adminMain }, },
             { path: 'company-job', component: CompanyJobListComponent, data: { layout: Layouts.adminMain }, },
             { path: 'member', component: MemberManagementComponent, data: { layout: Layouts.adminMain }, },
+            { path: 'resume-management-preview', component: ResumeManagementPreviewComponent, data: { layout: Layouts.adminMain }, },
         ],
         canLoad: [AdminAuthGuard]
     },

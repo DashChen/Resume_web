@@ -2,17 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '@app/core/guards/auth.guard';
+import { ResumeManagementPreviewComponent } from '@app/shared/components/resume-management-preview/resume-management-preview.component';
 import { Layouts } from '../app.component';
 import {
-  ForgetComponent,
-  LoginComponent,
   MemberManagementComponent,
-  RegisterInfoComponent,
-  RegisterComponent,
-  ResetPasswordComponent,
   UserComponent,
   ResumeManagementComponent,
-  ResumeManagementPreviewComponent,
 } from './pages';
 
 const routes: Routes = [

@@ -319,10 +319,6 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       }
     );
     this.phoneFormCtl.valueChanges.subscribe(res => {
-      const tempPhone = this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + res;
-      if (tempPhone === this.user?.phone) {
-        console.log('same phone');
-      }
       if (this.phoneFormCtl.hasError('exist') || this.phoneFormCtl.hasError('same')) {
         this.phoneFormCtl.reset();
         this.phoneFormCtl.setValue(res);
@@ -738,6 +734,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       this.phoneFormCtl.setErrors({
         same: true
       });
+      this.phoneForm.markAllAsTouched();
     }
   }
 
@@ -879,7 +876,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
         (res) => {
           if (res) {
             // 需要取得三方 accountCode
-            request$ = from(this.dataService.api.appThirdPartiesAuthList({
+            request$ = from(this.dataService.api.appThirdPartiesUnAuthList({
               ThirdPartyAccountCode: '',
               ThirdPartyTypeCode: provider
             })).pipe(
@@ -923,7 +920,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     } else {
       // TODO 三方登入綁定
       // 需要取得三方 accountCode
-      request$ = from(this.dataService.api.appThirdPartiesUnAuthList({
+      request$ = from(this.dataService.api.appThirdPartiesAuthList({
         ThirdPartyAccountCode: '',
         ThirdPartyTypeCode: provider
       })).pipe(

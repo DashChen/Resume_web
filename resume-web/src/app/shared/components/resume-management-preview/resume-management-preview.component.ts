@@ -18,6 +18,7 @@ import { DateTime } from 'luxon';
   styleUrls: ['./resume-management-preview.component.scss']
 })
 export class ResumeManagementPreviewComponent extends BaseComponent implements OnInit {
+  isAdmin: boolean = false;
   title: string = '';
   logoUrl: string = '/assets/common/logo.svg';
 
@@ -40,6 +41,10 @@ export class ResumeManagementPreviewComponent extends BaseComponent implements O
     public override dialog: MatDialog,
   ) {
     super(store, dialog);
+    this.store.select(CommonSelectors.selectIsAdmin)
+      .subscribe(res => {
+        this.isAdmin = res;
+      });
     this.store.select(UserSelectors.selectResumeTitle)
       .subscribe(res => {
         this.title = res;
@@ -155,7 +160,11 @@ export class ResumeManagementPreviewComponent extends BaseComponent implements O
   }
 
   goToEdit() {
-    this.store.dispatch(RouterActions.Go({ path: ['/user/resume-management']}));
+    if (this.isAdmin) {
+      this.store.dispatch(RouterActions.Go({ path: ['admin', 'message', 'email']}));
+    } else {
+      this.store.dispatch(RouterActions.Go({ path: ['/user/resume-management']}));
+    }
   }
 
   onImgError(event: Event): void {

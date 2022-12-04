@@ -33,7 +33,7 @@
                 </button>
             </div>
 
-            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="idNoForm">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="idNoForm">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
                     <label class="mat-form-field__lable--top">身分證字號</label>
                     <input matInput [placeholder]="focusBtnKey !== 'IdNo' ? '未填寫':'例:A123456789'" formControlName="IdNo" required
@@ -73,8 +73,8 @@
                 </mat-form-field>
 
                 <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
-                    [ngClass]="{'mat-button--blue': focusBtnKey !== 'Email'}" (click)="boundEmail()" [fxHide.lt-md]="true">
-                    <span>{{ focusBtnKey !== 'Email' ? (bounded.email ? '解除綁定' : '綁定') : '取消' }}</span>
+                    [ngClass]="{'mat-button--blue': focusBtnKey !== 'Email'}" (click)="boundEmail()" *ngIf="focusBtnKey === 'Email'" [fxHide.lt-md]="true">
+                    <span>取消</span>
                 </button>
                 <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"
                     (click)="cancelEdit($event, 'Email')" *ngIf="focusBtnKey === 'Email'" [fxHide.gt-sm]="true">
@@ -91,58 +91,50 @@
                 </button>
             </div>
 
-            <div fxLayout="row" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.gt-sm]="true">
-                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--block mat-button--blue h2-text--regular" style="margin-top: 0;margin-bottom: 35px;" (click)="boundEmail()">
-                    <span>{{ bounded.email ? '解除綁定' : '綁定' }}電子郵件</span>
-                </button>
+            <div fxLayout="row" fxLayoutGap="0" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field mobile" [formGroup]="phoneForm">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0" fxFlex="1 1 100%">
+                    <mat-form-field class="country-code mat-form-field__label" appearance="fill">
+                        <label class="mat-form-field__lable--top">手機</label>
+                        <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
+                            <ng-container *ngFor="let option of countryCodeOptions">
+                                <mat-option [value]="option.key">{{option.text}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error class="h3-text--medium" *ngIf="countryCodeFormCtl.invalid">
+                            {{ getCountryCodeErrorMessage() }}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%">
+                        <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill" style="min-width: 100px;">
+                            <input matInput [placeholder]="focusBtnKey === 'Phone' ? '例:0912-3456-789' : '未填寫'" formControlName="Phone" required
+                                [errorStateMatcher]="matcher">
+                            <mat-error class="h3-text--medium" *ngIf="phoneFormCtl.invalid">
+                                {{ getMobileErrorMessage() }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
+                            (click)="cancelEdit($event, 'Phone')" *ngIf="focusBtnKey === 'Phone'" [fxHide.lt-md]="true">
+                            <span>取消</span>
+                        </button>
+                        <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"
+                            (click)="cancelEdit($event, 'Phone')" *ngIf="focusBtnKey === 'Phone'" [fxHide.gt-sm]="true">
+                            <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
+                        </button>
+
+                        <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
+                            (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)">
+                            <span>{{ focusBtnKey !== 'Phone' ? '編輯' : '儲存' }}</span>
+                        </button>
+                        <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
+                            (click)="editMember($event, 'Phone')" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)"
+                            *ngIf="!bounded.phone || focusBtnKey === ''" [fxHide.gt-sm]="true">
+                            <mat-icon [svgIcon]="focusBtnKey === 'Phone' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
+                        </button>
+                    </div>
+                </div>
             </div>
-
-            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="phoneForm">
-                <mat-form-field class="country-code mat-form-field__label" appearance="fill">
-                    <label class="mat-form-field__lable--top">手機</label>
-                    <mat-select formControlName="countryCode" [errorStateMatcher]="matcher">
-                        <ng-container *ngFor="let option of countryCodeOptions">
-                            <mat-option [value]="option.key">{{option.text}}</mat-option>
-                        </ng-container>
-                    </mat-select>
-                    <mat-error class="h3-text--medium" *ngIf="countryCodeFormCtl.invalid">
-                        {{ getCountryCodeErrorMessage() }}
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill" style="min-width: 100px;">
-                    <input matInput [placeholder]="focusBtnKey === 'Phone' ? '例:0912-3456-789' : '未填寫'" formControlName="Phone" required
-                        [errorStateMatcher]="matcher">
-                    <mat-error class="h3-text--medium" *ngIf="phoneFormCtl.invalid">
-                        {{ getMobileErrorMessage() }}
-                    </mat-error>
-                </mat-form-field>
-
-                <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
-                    (click)="cancelEdit($event, 'Phone')" *ngIf="focusBtnKey === 'Phone'" [fxHide.lt-md]="true">
-                    <span>取消</span>
-                </button>
-                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"
-                    (click)="cancelEdit($event, 'Phone')" *ngIf="focusBtnKey === 'Phone'" [fxHide.gt-sm]="true">
-                    <mat-icon svgIcon="close-icon" aria-hidden="false" aria-label="close icon"></mat-icon>
-                </button>
-
-                <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--blue h2-text--regular"
-                    (click)="editMember($event, 'Phone')" [fxHide.lt-md]="true" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode && !bounded.phone)">
-                    <span>{{ focusBtnKey !== 'Phone' ? '編輯' : (bounded.phone ? '解除綁定' : '儲存') }}</span>
-                </button>
-                <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
-                    (click)="editMember($event, 'Phone')" [fxHide.gt-sm]="true" *ngIf="!bounded.phone || focusBtnKey === ''">
-                    <mat-icon [svgIcon]="focusBtnKey === 'Phone' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
-                </button>
-            </div>
-        </div>
-
-        <div fxLayout="row" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.gt-sm]="true" *ngIf="focusBtnKey === 'Phone'">
-            <button mat-raised-button class="app-shared-member-management__edit__btn mat-button--block mat-button--blue h2-text--regular" style="margin-top: 0;margin-bottom: 35px;"
-                (click)="editMember($event, 'Phone')">
-                <span>{{ bounded.phone ? '解除綁定' : '綁定' }}手機</span>
-            </button>
         </div>
 
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'Phone' && !bounded.phone">
@@ -173,7 +165,7 @@
 
 
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="birthdayForm">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="birthdayForm">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" floatLabel="never" appearance="fill" >
                     <label class="mat-form-field__lable--top">生日</label>
                     <input matInput [matDatepicker]="picker1" formControlName="Birthday" [min]="minDate" [max]="maxDate"
@@ -204,7 +196,7 @@
                 </button>
             </div>
 
-            <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="passwordForm">
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="passwordForm">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
                     <label class="mat-form-field__lable--top">{{focusBtnKey !== 'newPassword' ? '密碼' : '舊密碼*' }}</label>
                     <input matInput [placeholder]="focusBtnKey !== 'newPassword' ? '未填寫' : '請輸入舊密碼'"
@@ -284,7 +276,7 @@
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" class="app-shared-member-management__card__body__column--one">
             <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                    <label class="mat-form-field__lable--top">google</label>
+                    <label class="mat-form-field__lable--top">Google</label>
                     <input matInput placeholder="未綁定" [value]="accountId" required [errorStateMatcher]="matcher" disabled>
                 </mat-form-field>
 
@@ -309,7 +301,7 @@
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
             <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" class="app-shared-member-management__card__body__field--one">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" appearance="fill">
-                    <label class="mat-form-field__lable--top">FACEBOOK</label>
+                    <label class="mat-form-field__lable--top">Facebook</label>
                     <input matInput placeholder="未綁定" [value]="accountId" required [errorStateMatcher]="matcher" disabled>
                 </mat-form-field>
 

@@ -92,7 +92,7 @@
             </button>
         </div>
         <div class="admin-message__table__body">
-            <table mat-table [dataSource]="dataSource" [ngClass]="('tab-' + tabSelected.value)">
+            <table mat-table [dataSource]="dataSource" [ngClass]="('tab-' + tabSelected.value)" matSort (matSortChange)="announceSortChange($event)">
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="headerColspan">
@@ -116,7 +116,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                     <span class="h2-text--bold text-main">收件者</span>
                   </th>
                   <td mat-cell *matCellDef="let element" [attr.data-th]="'收件者'">
@@ -125,7 +125,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="stage">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                     <span class="h2-text--bold text-main">人員階段</span>
                   </th>
                   <td mat-cell *matCellDef="let element" [attr.data-th]="'人員階段'">
@@ -134,7 +134,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="sendDate">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                     <span class="h2-text--bold text-main">寄件日期</span>
                   </th>
                   <td mat-cell *matCellDef="let element" [attr.data-th]="'寄件日期'">
@@ -144,7 +144,7 @@
 
 
                 <ng-container matColumnDef="job" *ngIf="displayedColumns.includes('job')">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                     <span class="h2-text--bold text-main">職務</span>
                   </th>
                   <td mat-cell *matCellDef="let element" [attr.data-th]="'職務'">
@@ -153,7 +153,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="sendSuccess" *ngIf="displayedColumns.includes('sendSuccess')">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                         <span class="h2-text--bold text-main">發送成功</span>
                     </th>
                     <td mat-cell *matCellDef="let element" [attr.data-th]="'發送成功'">
@@ -164,7 +164,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="open" *ngIf="displayedColumns.includes('open')">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                         <span class="h2-text--bold text-main">開啟狀態</span>
                     </th>
                     <td mat-cell *matCellDef="let element" [attr.data-th]="'開啟狀態'">
@@ -190,7 +190,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="modifyDate" *ngIf="displayedColumns.includes('modifyDate')">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                         <span class="h2-text--bold text-main">儲存日期</span>
                     </th>
                     <td mat-cell *matCellDef="let element" [attr.data-th]="'儲存日期'">
@@ -199,7 +199,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="subject" *ngIf="displayedColumns.includes('subject')">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
                         <span class="h2-text--bold text-main">信件主旨</span>
                     </th>
                     <td mat-cell *matCellDef="let element" [attr.data-th]="'信件主旨'">

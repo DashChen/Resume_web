@@ -5,6 +5,8 @@ import { ResumeMailTplsMailTplDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSM
 export interface CommonState {
     // 讀取中?
     isLoading: boolean;
+    // 是管理者?
+    isAdmin: boolean;
     // 階段列表
     stageList: ResumeShareCodesShareCodeDto[];
     // 寫入階段列表
@@ -25,6 +27,8 @@ export interface CommonState {
     mainAreas: area[];
     // 三方列表
     thirdPartyCodes: ResumeShareCodesShareCodeDto[],
+    // 共用 Resume Code
+    resumeCode: string;
     // 錯誤
     errorMessage: any;
 }

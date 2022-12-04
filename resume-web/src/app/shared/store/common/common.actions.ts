@@ -6,6 +6,7 @@ import { IBasicDialog } from '@app/core/interfaces/basic-dialog';
 
 export const actionType = {
     LOADING: '[Common] API Loging',
+    SET_ADMIN: '[Common] Set admin',
 
     STAGE: '[Common] Stage list',
     STAGE_SUCCESS: '[Common] Stage get success',
@@ -41,12 +42,19 @@ export const actionType = {
 
     GET_THIRD_PARTY_CODES: '[Common] Get third-party codes',
     SET_THIRD_PARTY_CODES: '[Common] Set third-party codes',
+
+    SET_RESUME_CODE: '[Common] Set resume code',
 }
 
 export const setApiLoading = createAction(
     actionType.LOADING,
     props<{ payload: boolean }>(),
-)
+);
+
+export const setAdmin = createAction(
+    actionType.SET_ADMIN,
+    props<{ payload: boolean }>(),
+);
 
 export const getStageList = createAction(
     actionType.STAGE,
@@ -167,4 +175,9 @@ export const getThirdPartyCodes = createAction(
 export const setThirdPartyCodes = createAction(
     actionType.SET_THIRD_PARTY_CODES,
     props<{ payload: ResumeShareCodesShareCodeDto[] }>(),
+);
+
+export const setResumeCode = createAction(
+    actionType.SET_RESUME_CODE,
+    props<{ payload: string }>()
 );

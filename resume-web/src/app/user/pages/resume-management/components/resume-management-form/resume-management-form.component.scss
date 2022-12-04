@@ -369,8 +369,9 @@ $this: '.app-resume-management-form';
           &-btns {
             display: none;
             gap: 12px;
-            justify-content: flex-end;
             inset: 0;
+            justify-content: flex-end;
+            max-height: 30px;
             padding: 6px 24px 0 0;
             position: absolute;
 
@@ -404,6 +405,7 @@ $this: '.app-resume-management-form';
             width: 100%;
             a {
               color: #006CD0;
+              cursor: pointer;
             }
             mat-icon {
               color: $colorMain;

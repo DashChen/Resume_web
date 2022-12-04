@@ -6,7 +6,6 @@ export * from './register-info/register-info.component';
 export * from './reset-password/reset-password.component';
 export * from './resume-management/resume-management.component';
 export * from './resume-management/components/resume-management-form/resume-management-form.component';
-export * from './resume-management/components/resume-management-preview/resume-management-preview.component';
 export * from './resume-management/dialogs/resume-invitation-appendix-dialog/resume-invitation-appendix-dialog.component';
 export * from './resume-management/dialogs/resume-invitation-autobiography-dialog/resume-invitation-autobiography-dialog.component';
 export * from './resume-management/dialogs/resume-invitation-basic-dialog/resume-invitation-basic-dialog.component';

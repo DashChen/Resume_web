@@ -22,6 +22,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatLuxonDateModule } from '@angular/material-luxon-adapter';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   exports: [
@@ -47,6 +48,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatRadioModule,
     MatLuxonDateModule,
     MatChipsModule,
+    MatSortModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'zh-TW' },

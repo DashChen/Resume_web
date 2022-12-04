@@ -8,7 +8,12 @@ export const selectFeature = createFeatureSelector<CommonState>(featureKey);
 export const selectApiLoading = createSelector(
     selectFeature,
     state => state.isLoading,
-)
+);
+
+export const selectIsAdmin = createSelector(
+    selectFeature,
+    state => state.isAdmin,
+);
 
 export const selectErr = createSelector(
     selectFeature,
@@ -63,4 +68,9 @@ export const selectMainSkills = createSelector(
 export const selectThirdPartyCodes = createSelector(
     selectFeature,
     state => state.thirdPartyCodes,
+);
+
+export const selectResumeCode = createSelector(
+    selectFeature,
+    state => state.resumeCode,
 );

@@ -32,6 +32,7 @@ export class StartupService {
       }
       this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
       if (isAdmin) {
+        this.store.dispatch(CommonActions.setAdmin({ payload: true }));
         // 取管理者 data
         this.store.dispatch(AdminActions.setToken({
           payload: {
@@ -54,6 +55,7 @@ export class StartupService {
           resolve(res);
         });
       } else {
+        this.store.dispatch(CommonActions.setAdmin({ payload: false }));
         this.store.dispatch(UserActions.setToken({
           payload: {
             token_type: 'bearer',

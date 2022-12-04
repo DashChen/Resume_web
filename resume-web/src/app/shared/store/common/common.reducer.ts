@@ -4,6 +4,8 @@ import * as CommonActions from './common.actions';
 
 export const initialState: CommonState = {
     isLoading: false,
+    // 是管理者?
+    isAdmin: false,
     // 階段列表
     stageList: [],
     // 寫入階段列表
@@ -22,11 +24,13 @@ export const initialState: CommonState = {
     mainSkills: [],
     areasList: [],
     mainAreas: [],
+    resumeCode: '',
 }
 
 export const commonReducer = createReducer(
     initialState,
     on(CommonActions.setApiLoading, (state, { payload }) => ({ ...state, isLoading: payload })),
+    on(CommonActions.setAdmin, (state, { payload }) => ({ ...state, isAdmin: payload })),
     on(CommonActions.getStageListSuccess, (state, { payload }) => ({ ...state, stageList: payload })),
     on(CommonActions.getWriteStatusSuccess, (state, { payload }) => ({ ...state, writeStatusList: payload })),
     on(CommonActions.getSmsTplSuccess, (state, { payload }) => ({ ...state, smsTpls: payload })),
@@ -37,6 +41,7 @@ export const commonReducer = createReducer(
     on(CommonActions.setSkills, (state, { payload }) => ({ ...state, skillsList: payload })),
     on(CommonActions.setMainSkills, (state, { payload }) => ({ ...state, mainSkills: payload })),
     on(CommonActions.setThirdPartyCodes, (state, { payload }) => ({ ...state, thirdPartyCodes: payload })),
+    on(CommonActions.setResumeCode, (state, { payload }) => ({ ...state, resumeCode: payload })),
     // error
     on(CommonActions.setErr, (state, { payload }) => ({ ...state, errorMessage: payload  })),
     // reset

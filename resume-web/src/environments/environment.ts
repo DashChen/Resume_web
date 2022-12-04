@@ -9,17 +9,15 @@ export const environment = {
   apiBaseUrl: BASE_URL,
   social: {
     'GOOGLE': {
-      client_id: '808313774683-061do9kvu3d7j5klhs90evvut73ik5jh.apps.googleusercontent.com',
+      client_id: '652926792990-4trudv8ao50a90991o3bm9d86pua0dnv.apps.googleusercontent.com',
       options: {
         scopes: 'openid',
-        redirect_uri: 'https://jyebaw.vjinc.biz',
       }
     },
     'FACEBOOK': {
       client_id: '1033332980685759',
       options: {
         state: '12345abcde',
-        redirect_uri: 'https://jyebaw.vjinc.biz',
       }
     },
     'LINE': {
@@ -27,7 +25,6 @@ export const environment = {
       options: {
         scopes: 'openid',
         state: '12345abcde',
-        redirect_uri: 'https://jyebaw.vjinc.biz',
       }
     }
   }

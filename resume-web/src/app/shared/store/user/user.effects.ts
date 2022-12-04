@@ -9,7 +9,7 @@ import { map, mergeMap, catchError, tap, switchMap, finalize, exhaustMap, withLa
 import { Actions as UserActions, Selectors as UserSelectors } from '.';
 import { LoginProps } from '@app/core/interfaces/login';
 import { Actions as RouterActions } from '@app/shared/store/router';
-import { Actions as CommonActions } from '@app/shared/store/common';
+import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { sortBy } from 'lodash';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -38,6 +38,7 @@ export class UserEffects {
                     }
                     // session storage
                     sessionStorage.setItem('JbToken', res.data.access_token);
+                    this.store.dispatch(CommonActions.setAdmin({ payload: false }));
                     return UserActions.setToken({ payload: res.data });
                 }),
                 catchError(error => {
@@ -53,6 +54,7 @@ export class UserEffects {
         map(() => {
             this.cookie.delete('JbToken');
             sessionStorage.clear();
+            this.store.dispatch(CommonActions.setAdmin({ payload: false }));
             this.store.dispatch(RouterActions.Go({ path: ['/user/login']}));
             return UserActions.logoutSuccess();
         })
@@ -83,15 +85,18 @@ export class UserEffects {
     // 取回基本資料
     getBasicInfo$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getBasicInfo),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getBasicInfo', resumeCode);
             return from(this.dataService.api.appBaseBasicsGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin': 'user')
                 }
             })).pipe(
                 map(res => {
@@ -111,15 +116,18 @@ export class UserEffects {
     // 取回學歷
     getEducations$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getResumeEductions),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getEducations', resumeCode);
             return from(this.dataService.api.appEducationsGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
@@ -138,15 +146,18 @@ export class UserEffects {
     // 取回經歷
     getExperiences$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getResumeExperiences),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getExperiences', resumeCode);
             return from(this.dataService.api.appExperiencesGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
@@ -165,15 +176,18 @@ export class UserEffects {
     // 取回專業證照
     getLicenses$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getResumeLicenses),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getLicenses', resumeCode);
             return from(this.dataService.api.appLicensesGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
@@ -192,15 +206,18 @@ export class UserEffects {
     // 取回自傳
     getAutobiographies$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getResumeAutobiographies),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getAutobiographies', resumeCode);
             return from(this.dataService.api.appAutobiographiesGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
@@ -219,15 +236,18 @@ export class UserEffects {
     // 取回附件
     getAppendices$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getResumeAppendices),
-        withLatestFrom(this.store.select(UserSelectors.selectReusmeCode)),
-        filter(([action, resumeCode]) => !!resumeCode),
-        exhaustMap(([action, resumeCode]) => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectResumeCode),
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        filter(([action, resumeCode, isAdmin]) => !!resumeCode),
+        exhaustMap(([action, resumeCode, isAdmin]) => {
             console.log('getAppendices', resumeCode);
             return from(this.dataService.api.appAppendicesGetListByResumeCodeList({
                 ResumeCode: resumeCode || undefined,
             },{
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
@@ -246,14 +266,18 @@ export class UserEffects {
     // 取回學歷代碼
     getEductionCode$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getEductionCodeList),
-        exhaustMap(() => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        exhaustMap(([isAdmin]) => {
+            console.log('getEductionCode is admin', isAdmin);
             return from(this.dataService.api.appShareCodesGetEducationCodeListList({
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
-                    // console.log('getEductionCode', res);
+                    console.log('getEductionCode', res);
                     return UserActions.setEductionCodeList({ payload: sortBy(res.data.items || [], (e) => {
                         // console.log(e);
                         return parseInt(e.sort || '0');
@@ -271,14 +295,17 @@ export class UserEffects {
     // 取回畢業代碼
     getGraduateCode$: Observable<Action> = createEffect(() => this.action$.pipe(
         ofType(UserActions.getGraduateCodeList),
-        exhaustMap(() => {
+        withLatestFrom(
+            this.store.select(CommonSelectors.selectIsAdmin),
+        ),
+        exhaustMap(([isAdmin]) => {
             return from(this.dataService.api.appShareCodesGetGraduateCodeListList({
                 headers: {
-                    ...this.dataService.getAuthorizationToken('user')
+                    ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')
                 }
             })).pipe(
                 map(res => {
-                    // console.log('getGraduateCode', res);
+                    console.log('getGraduateCode', res);
                     return UserActions.setGraduateCodeList({ payload: sortBy(res.data.items || [], (e) => {
                         // console.log(e);
                         return parseInt(e.sort || '0');

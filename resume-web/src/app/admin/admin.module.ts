@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ComponentModule } from '@app/shared';
 import { SharedModule } from '@app/shared/shared.module';
 import { MaterialModule } from '@app/material-module';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -69,7 +68,6 @@ import {
     ReactiveFormsModule,
     FlexLayoutModule,
     SharedModule,
-    ComponentModule,
   ],
   providers: [],
 })

@@ -30,7 +30,7 @@ import { skill } from '@app/core/interfaces/skill.model';
 export class ResumeManagementFormComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('navSelectList') navSelectListEle!: MatSelectionList;
   focusNav: string = '';
-  title: string = '我的第一份履歷表';
+  title: string = '';
   logoUrl: string = '/assets/common/logo.svg';
   defaultUserPic: string = '/assets/icons/user-pic-icon.svg';
   userPicObjectUrl: string = '';
@@ -109,13 +109,14 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     ).subscribe(res => {
       if (res.data.length > 0) {
         // 取第一筆ID當作 resumeCode
-        this.store.dispatch(UserActions.setResumeBasicInfo({
-          payload: {
-            ...this.basicInfo,
-            resumeCode: res.data[0].id
-          }
+        this.store.dispatch(UserActions.setResumeCode({
+          payload: res.data[0].id || ''
+        }));
+        this.store.dispatch(CommonActions.setResumeCode({
+          payload: res.data[0].id || ''
         }));
         this.resumeCode = res.data[0].id || '';
+        this.title = res.data[0].name || '我的第一份履歷表';
       }
     });
     this.store.select(UserSelectors.selectCurrentUser)
@@ -877,6 +878,7 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
   downloadAppendixFile(event: MouseEvent, item: ResumeAppendicesAppendixDto) {
     event.stopPropagation();
     event.preventDefault();
+    console.log(item);
     // 下載附件，先取得 token
     if (!item.appendixContent) {
       return;

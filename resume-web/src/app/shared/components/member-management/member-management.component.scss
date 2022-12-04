@@ -32,6 +32,28 @@ $this: '.app-shared-member-management';
                     [mat-icon-button] {
                         margin-top: 20px;
                     }
+                    &.mobile {
+                        mat-form-field.mat-form-field {
+                            margin-bottom: 0;
+
+                            &:not(.country-code) {
+                                margin-bottom: 20px;
+                                @include lt-md {
+                                    margin-top: 0;
+                                    margin-bottom: 0px;
+                                    ::ng-deep .mat-form-field-subscript-wrapper {
+                                        padding-left: 0;
+                                        text-align: left;
+                                    }
+                                }
+                            }
+                        }
+                        @include lt-md {
+                            [mat-icon-button] {
+                                margin-top: 0;
+                            }
+                        }
+                    }
                     &--one {
                         flex-grow: 1;
                         max-width: calc(50% - 20px);
@@ -65,6 +87,9 @@ $this: '.app-shared-member-management';
                     .country-code {
                         ::ng-deep .mat-form-field-flex {
                             width: 120px;
+                            @include lt-md {
+                                width: 100%;
+                            }
                         }
                     }
                     .mat-form-field {

@@ -2,25 +2,25 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { omitBy } from 'lodash';
+import { DateTime } from 'luxon';
+import { catchError, from, take, takeUntil, throwError } from 'rxjs';
 import { DataService, ResizeService } from '@app/core';
 import { ApiConfig, ResumeMailQuenesMailQueneDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSMSTplDto } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
-import { Store } from '@ngrx/store';
-import { Selectors as RouterSelectors } from '@app/shared/store/router';
+import { Actions as RouterActions, Selectors as RouterSelectors } from '@app/shared/store/router';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
+import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { ISelectOption } from '@app/core/interfaces/select-option';
-import { catchError, from, take, takeUntil, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { DateTime } from 'luxon';
-import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
 import { basicDialog } from '@app/core/interfaces/basic-dialog';
 import { MessagePreviewDialogComponent } from '@app/admin/pages';
 import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 import { BreakPointType, ViewportSize, DeviceType } from '@app/core/interfaces/breakpoints';
 import { MessageSearchDialogComponent } from './dialogs/message-search-dialog/message-search-dialog.component';
-import { omitBy } from 'lodash';
 
 export interface MessageSearchDialogData extends basicDialog {
   type: string;
@@ -39,6 +39,8 @@ export interface MessagePreviewDialogData extends basicDialog {
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent extends BaseComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatSort) sort: MatSort | undefined;
+
   title: string = '信件管理';
   subtitle: string = '已發送的信件';
   currentType: string = 'email';
@@ -188,13 +190,38 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     });
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  /** Announce the change in sort state for assistive technology. */
+  announceSortChange(sortState: Sort) {
+    console.log(sortState);
+    // This example uses English messages. If your application supports
+    // multiple language, you would internationalize these strings.
+    // Furthermore, you can customize the message to add additional
+    // details about the values being sorted.
+    if (sortState.direction) {
+      
+    } else {
+      
+    }
+  }
 
   getEmailData(query: any = {}) {
     this.requestEmailData$(query).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       take(1),
       takeUntil(this.destroy$)
@@ -213,9 +240,16 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
 
   getSmsData(query: any = {}) {
     this.requestSmsData$(query).pipe(
-      catchError((err: HttpErrorResponse) => {
-        // console.log(err);
-        return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
+      catchError(err => {
+        return throwError(() => {
+          const errMsg = `${err.error.error.message}`;
+          this.store.dispatch(CommonActions.setErr({
+            payload: {
+              errMsg
+            }
+          }));
+          return new Error(errMsg);
+        });
       }),
       take(1),
       takeUntil(this.destroy$)
@@ -353,6 +387,12 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     event.stopPropagation();
     event.preventDefault();
 
+    if (item.resumeCode) {
+      this.store.dispatch(CommonActions.setResumeCode({
+        payload: item.resumeCode
+      }));
+      this.store.dispatch(RouterActions.Go({ path: ['admin', 'resume-management-preview']}));
+    }
   }
 
   previewMessage(item: ResumeMailQuenesMailQueneDto|ResumeSMSTplsSMSTplDto) {

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ComponentModule } from '@app/shared';
 import { SharedModule } from '@app/shared/shared.module';
 import { environment } from '../../environments/environment';
 import { UserRoutingModule } from './user-routing.module';
@@ -19,7 +18,6 @@ import {
   UserComponent,
   ResumeManagementComponent,
   ResumeManagementFormComponent,
-  ResumeManagementPreviewComponent,
   ResumeInvitationTitleDialogComponent,
   ResumeInvitationProfileDialogComponent,
   ResumeInvitationBasicDialogComponent,
@@ -42,7 +40,6 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, So
     MemberManagementComponent,
     ResumeManagementComponent,
     ResumeManagementFormComponent,
-    ResumeManagementPreviewComponent,
     ResumeInvitationTitleDialogComponent,
     ResumeInvitationProfileDialogComponent,
     ResumeInvitationBasicDialogComponent,
@@ -61,7 +58,6 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, So
     ReactiveFormsModule,
     FlexLayoutModule,
     SharedModule,
-    ComponentModule,
     SocialLoginModule
   ],
   providers: [

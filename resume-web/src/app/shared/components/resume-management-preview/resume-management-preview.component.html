@@ -10,10 +10,10 @@
       </div>
       <div class="app-resume-management-form__head__action__block" fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.lt-md="start center">
         <button mat-raised-button [ngStyle.lt-md]="{'width.px': 105}" class="mat-button--blue h2-text--regular" (click)="goToEdit()" fxHide.lt-md>
-            <span>編輯</span>
+            <span>{{ isAdmin ? '返回' : '編輯' }}</span>
         </button>
         <button mat-icon-button class="mat-button--blue" aria-label="edit b icon" (click)="goToEdit()" [fxHide]="true" [fxShow.lt-md]="true">
-            <mat-icon [svgIcon]="'edit-b-icon'"></mat-icon>
+            <mat-icon [svgIcon]="isAdmin ? '' : 'edit-b-icon'">{{ isAdmin ? 'undo' : '' }}</mat-icon>
         </button>
       </div>
     </div>

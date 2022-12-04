@@ -32,6 +32,8 @@ export interface GoogleInitOptions extends google.accounts.id.IdConfiguration {
    * 'select_account' Prompt the user to select an account.
    */
   prompt? : '' | 'none' | 'consent' | 'select_account';
+
+  btnId?: string;
 }
 
 export class GoogleLoginProvider extends BaseLoginProvider {
@@ -105,6 +107,21 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                   }
                 },
               });
+            }
+            let btnId = 'googleLoginBtn';
+            if (this.initOptions?.btnId) {
+              btnId = this.initOptions.btnId;
+            }
+            const btnIdElement = document.getElementById(btnId);
+            if (btnIdElement) {
+              google.accounts.id.renderButton(
+                btnIdElement,
+                {
+                  theme: "outline",
+                  size: "large",
+                  type: 'standard',
+                }
+              );
             }
 
             resolve();

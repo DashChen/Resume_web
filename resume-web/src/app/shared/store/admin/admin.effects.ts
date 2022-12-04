@@ -36,6 +36,7 @@ export class AdminEffects {
                     }
                     // session storage
                     sessionStorage.setItem('JbToken', res.data.access_token);
+                    this.store.dispatch(CommonActions.setAdmin({payload: true}));
                     return AdminActions.setToken({ payload: res.data });
                 }),
                 catchError(error => {
@@ -51,6 +52,7 @@ export class AdminEffects {
         map(() => {
             this.cookie.delete('JbToken');
             sessionStorage.clear();
+            this.store.dispatch(CommonActions.setAdmin({payload: false}));
             this.store.dispatch(RouterActions.Go({ path: ['/admin/login']}));
             return AdminActions.logoutSuccess();
         })

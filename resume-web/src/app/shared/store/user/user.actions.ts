@@ -24,6 +24,7 @@ export const actionType = {
     RESET_ERR: '[User] Reset error',
 
     SET_RESUME_TITLE: '[User Resume Management Page] Set resume title',
+    SET_RESUME_CODE: '[User Resume Management Page] Set resume code',
     // 履歷基本資料
     GET_RESUME_BASIC_INFO: '[User Resume Management Page] Get resume basic info',
     SET_RESUME_BASIC_INFO: '[User Resume Management Page] Set resume basic info',
@@ -147,6 +148,11 @@ export const resetErr = createAction(
 
 export const setReusmeTitle = createAction(
     actionType.SET_RESUME_TITLE,
+    props<{ payload: string }>()
+);
+
+export const setResumeCode = createAction(
+    actionType.SET_RESUME_CODE,
     props<{ payload: string }>()
 );
 
