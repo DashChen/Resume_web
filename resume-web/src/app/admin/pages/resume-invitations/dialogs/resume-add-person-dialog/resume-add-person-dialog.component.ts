@@ -73,7 +73,7 @@ export class ResumeAddPersonDialogComponent implements OnInit {
     if (this.nameFormCtl.getError('required')) {
       return '請填寫此欄位';
     }
-    return this.nameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+    return this.nameFormCtl.hasError('pattern') ? '格式不正確，請輸入文字' : '';
   }
 
   get countryCodeFormCtl() {

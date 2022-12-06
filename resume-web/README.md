@@ -26,13 +26,40 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
+## API Swagger url
+https://cloud.jbhr.com.tw/Resume/swagger/index.html
 
 ## Generate api via swagger scheme.
 ```powershell
 npx swagger-typescript-api -p ./swagger.json -o ./src/app/core/models
 ```
 
-https://cloud.jbhr.com.tw/Resume/swagger/index.html
+## Add callback to generate Api file(Path: /src/app/core/models/Api.ts)
+```powershell
+# replace
+export class HttpClient<SecurityDataType = unknown>
+# to
+export class HttpClient<SecurityDataType = unknown> extends ApiExtra
+
+# add callback to function start
+public request = ...
+...
+{
+    if (typeof this.beforeRequest === 'function') {
+      this.beforeRequest();
+    }
+    ...
+    # add callback to function end
+    if (typeof this.afterRequest === 'function') {
+        this.afterRequest();
+    }
+    # end area
+    if (!response.ok) throw data;
+    return data;
+}
+
+```
+
 
 5.1 使用者前台功能需求
     5.1.1 註冊

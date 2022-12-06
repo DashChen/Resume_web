@@ -5,8 +5,9 @@ import { retry, catchError, tap } from 'rxjs/operators';
 import { Api, ApiConfig, ContentType, RequestParams, VoloAbpHttpRemoteServiceErrorResponse } from '../models/Api';
 import { loginRequestDto, loginResponseDto } from '../models/login.model';
 import { Store } from '@ngrx/store';
-import { Selectors as UserSelectors } from '@app/shared/store/user';
+import { Actions as CommonActions } from '@app/shared/store/common';
 import { Selectors as AdminSelectors } from '@app/shared/store/admin';
+import { Selectors as UserSelectors } from '@app/shared/store/user';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,15 @@ export class DataService<SecurityDataType extends unknown> extends Api<SecurityD
     ) {
       super({
         baseUrl: apiBaseUrl
-      } as ApiConfig)
+      } as ApiConfig);
+      this.beforeRequest = () => {
+        console.log('DataService beforeRequest');
+        this.store.dispatch(CommonActions.setApiLoading({ payload: true }));
+      };
+      this.afterRequest = () => {
+        console.log('DataService afterRequest');
+        this.store.dispatch(CommonActions.setApiLoading({ payload: false }));
+      };
     this.userToken$.subscribe(token => {
       if (token) {
         this._userToken = `${token.token_type} ${token.access_token}`;

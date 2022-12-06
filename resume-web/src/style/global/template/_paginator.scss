@@ -38,7 +38,11 @@
         line-height: 20px;
       }
     }
-    &__btns {}
+    &__btns {
+      [mat-icon-button].mat-button-disabled {
+        background-color: unset;
+      }
+    }
 
     &__btn {
       height: 14px;

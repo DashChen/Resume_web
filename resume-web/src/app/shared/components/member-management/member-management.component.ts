@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '@app/core';
 import { ApiConfig, ResumeUserDatasUserDto } from '@app/core/models/Api';
@@ -22,7 +22,7 @@ import { basicDialog } from '@app/core/interfaces/basic-dialog';
   templateUrl: './member-management.component.html',
   styleUrls: ['./member-management.component.scss']
 })
-export class MemberManagementComponent extends BaseComponent implements OnInit {
+export class MemberManagementComponent extends BaseComponent implements OnInit, AfterViewInit {
   @Input() showCommunity: boolean = false;
   @Input() authorizeType: 'user' | 'admin' = 'user';
 
@@ -51,7 +51,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     if (this.nameFormCtl.hasError('maxlength')) {
       return `長度最多${this.nameFormCtl.getError('maxlength').maxLength}`;
     }
-    return this.nameFormCtl.hasError('name') ? '格式不正確，例:王大明' : '';
+    return this.nameFormCtl.hasError('name') ? '格式不正確，請輸入文字' : '';
   }
 
 
@@ -70,20 +70,18 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getIdNoErrorMessage() {
-    if (this.idNoFormCtl.hasError('pattern')) {
-      return '格式不正確，例:A123456789';
+    if (this.idNoFormCtl.hasError('pattern') || this.idNoFormCtl.hasError('idCard')) {
+      return '格式不正確，需包含一個大寫字母與9位數';
     }
 
-    return this.idNoFormCtl.hasError('idCard') ? '此身分證無效' : '';
+    return '';
   }
 
   birthdayForm: FormGroup = new FormGroup({
     Birthday: new FormControl({
       value:'',
       disabled: true
-    },[
-      dateValidator(),
-    ]),
+    },[]),
   });
 
   get birthdayFormCtl() {
@@ -91,11 +89,8 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
   }
 
   getBirthdayErrorMessage() {
-    if (this.birthdayFormCtl.hasError('required')) {
-      return '請輸入這個欄位';
-    }
-    if (this.birthdayFormCtl.hasError('date')) {
-      return '日期格式不正確';
+    if (this.birthdayFormCtl.hasError('required') || this.birthdayFormCtl.hasError('date')) {
+      return '不正確的日期格式';
     }
     return '';
   }
@@ -199,11 +194,16 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
     if (this.newPasswordFormCtl.hasError('required')) {
       return '請填寫這個欄位';
     }
-    if (this.newPasswordFormCtl.hasError('minlength')) {
-      return `密碼設定長度至少為${this.newPasswordFormCtl.getError('minlength').requiredLength}個字串`;
+    if (this.newPasswordFormCtl.hasError('match')) {
+      return '新密碼與舊密碼不得相同';
     }
 
-    return this.newPasswordFormCtl.hasError('passwordStrength') ? '密碼強度不足(英文大小寫、數字)' : '';
+    const len = this.newPasswordFormCtl.getError('minlength').requiredLength;
+    if (this.newPasswordFormCtl.hasError('minlength') || this.newPasswordFormCtl.hasError('passwordStrength')) {
+      return `密碼設定長度${len}字元．包含英文大小寫及特殊符號`;
+    }
+
+    return '';
   }
 
   get newConfirmPasswordFormCtl() {
@@ -322,6 +322,35 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
       if (this.phoneFormCtl.hasError('exist') || this.phoneFormCtl.hasError('same')) {
         this.phoneFormCtl.reset();
         this.phoneFormCtl.setValue(res);
+      }
+    });
+    this.passwordFormCtl.valueChanges.subscribe(res => {
+      if (res && res.length > 0) {
+        if (res === this.newPasswordFormCtl.value) {
+          this.newPasswordFormCtl.setErrors({
+            match: true
+          });
+        } else {
+          this.newPasswordFormCtl.updateValueAndValidity();
+        }
+      }
+    });
+    this.newPasswordFormCtl.valueChanges.subscribe(res => {
+      if (res && res.length > 0) {
+        if (res === this.passwordFormCtl.value) {
+          this.newPasswordFormCtl.setErrors({
+            match: true
+          });
+        }
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.birthdayFormCtl.valueChanges.subscribe(res => {
+      // console.log('birthdayFormCtl', res);
+      if (!res) {
+        this.birthdayFormCtl.setErrors({date: true});
       }
     });
   }
@@ -488,9 +517,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit {
           this.user.email = this.emailFormCtl.value;
         }
         // 自動綁定
-        if (this.emailFormCtl.value) {
-          this.sendBoundEmail();
-        }
+        // if (this.emailFormCtl.value) {
+        //   this.sendBoundEmail();
+        // }
         break;
       case 'Phone':
         if (this.user?.phone) {

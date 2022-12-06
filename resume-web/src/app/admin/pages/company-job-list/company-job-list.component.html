@@ -25,7 +25,7 @@
 			</button>
 		</div>
 		<div class="admin-company-job-list__table__body">
-			<table mat-table [dataSource]="dataSource">
+			<table mat-table [dataSource]="dataSource" matSort>
 				<!-- Checkbox Column -->
 				<ng-container matColumnDef="select">
 					<th mat-header-cell *matHeaderCellDef [attr.colspan]="headerColspan">
@@ -51,7 +51,7 @@
 
 				<!-- JobName Column -->
 				<ng-container matColumnDef="jobName">
-					<th mat-header-cell *matHeaderCellDef>
+					<th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by job">
 						<span class="h2-text--bold text-main">職缺名稱</span>
 					</th>
 					<td mat-cell *matCellDef="let element" [attr.data-th]="'職缺名稱'">
@@ -61,7 +61,7 @@
 
 				<!-- MailTplCode Column -->
 				<ng-container matColumnDef="mailTplCode">
-					<th mat-header-cell *matHeaderCellDef>
+					<th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mail sample">
 						<span class="h2-text--bold text-main">信件樣板</span>
 					</th>
 					<td mat-cell *matCellDef="let element" [attr.data-th]="'信件樣板'">
@@ -71,7 +71,7 @@
 
 				<!-- SmsTplCode Column -->
 				<ng-container matColumnDef="smsTplCode">
-					<th mat-header-cell *matHeaderCellDef>
+					<th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by sms sample">
 						<span class="h2-text--bold text-main">訊息樣板</span>
 					</th>
 					<td mat-cell *matCellDef="let element" [attr.data-th]="'訊息樣板'">

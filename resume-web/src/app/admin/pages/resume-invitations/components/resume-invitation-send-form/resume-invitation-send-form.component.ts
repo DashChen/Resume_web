@@ -327,7 +327,7 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
           mailContent: '',
         });
         this.selectedPerson = [];
-        const title = '已發送';
+        const title = '信件/簡訊已發送';
         const dialogRef = this.successDialog(title, '', '返回列表');
         dialogRef.afterClosed().subscribe(() => {
           this.showSendMsg(false);

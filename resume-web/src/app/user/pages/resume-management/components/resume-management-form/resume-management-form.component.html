@@ -64,13 +64,13 @@
 
   <div class="app-resume-management-form__title__card" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px">
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <div>
+      <div class="app-resume-management-form__title__card__block">
         <span class="app-resume-management-form__title__resume h1-title">{{title}}</span>
         <button mat-icon-button class="mat-icon-button-origin" aria-label="edit b icon" (click)="openTitleDialog($event)">
           <mat-icon class="app-resume-management-form__title__icon" [svgIcon]="'edit-b-icon'"></mat-icon>
         </button>
       </div>
-      <div [fxHide]="true" [fxShow.lt-md]="true" fxFlex.lt-md="" fxLayout.lt-md="row" fxLayoutGap.lt-md="12px">
+      <div [fxHide]="true" [fxShow.lt-md]="true" class="app-resume-management-form__title__card__btns">
         <button mat-icon-button class="mat-button--blue mat-icon-button-regular" aria-label="edit b icon" (click)="onShowPreview(true)">
           <mat-icon [svgIcon]="'eye-open-2'"></mat-icon>
         </button>

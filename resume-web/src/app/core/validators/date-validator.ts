@@ -10,9 +10,9 @@ export function dateValidator(): ValidatorFn {
             return null;
         }
         try {
-            const date = DateTime.fromISO(value);
-            console.log(date);
-            return null;
+            const date = DateTime.fromFormat(value, 'yyyy/MM/dd');
+            console.log(value, date);
+            return date.isValid ? null : { date: {actual: value} };
         } catch (e) {
             return { date: {actual: value} };
         }

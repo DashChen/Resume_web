@@ -26,6 +26,7 @@ import { MediaObserver } from '@angular/flex-layout';
 import { ResumeInvitationSearchDialogComponent } from '../../dialogs/resume-invitation-search-dialog/resume-invitation-search-dialog.component';
 import { ResumeAddPersonDialogComponent } from '../../dialogs/resume-add-person-dialog/resume-add-person-dialog.component';
 import { ResumeBatchLevelEditDialogComponent } from '../../dialogs/resume-batch-level-edit-dialog/resume-batch-level-edit-dialog.component';
+import { MatSort } from '@angular/material/sort';
 
 export interface ResumeDialogData extends basicDialog {
   item: ResumeResumeInvitationsResumeInvitationDto;
@@ -44,7 +45,7 @@ export interface ResumeSearchDialogData extends basicDialog {
   styleUrls: ['./resume-invitation-list.component.scss']
 })
 export class ResumeInvitationListComponent extends BaseComponent implements OnInit, OnDestroy {
-
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   override dialogConfig: ResumeDialogData = {} as ResumeDialogData;
@@ -169,6 +170,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
     // this.showSend$ = this.resumeInvitationService.showSend$.subscribe(value => {
     //   this.showSend = value;
     // });
+    this.dataSource.sortData = this.sortData();
   }
 
   fetchResumes(query = {}) {
@@ -237,6 +239,68 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
         })
       },
     });
+
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  sortData() {
+    let sortFunction =
+      (items: ResumeResumeInvitationsResumeInvitationDto[], sort: MatSort): ResumeResumeInvitationsResumeInvitationDto[] =>  {
+        console.log('sortData', sort);
+        if (!sort.active || sort.direction === '') {
+          return items;
+        }
+        return items.sort((a: ResumeResumeInvitationsResumeInvitationDto, b: ResumeResumeInvitationsResumeInvitationDto) => {
+          let comparatorResult = 0;
+          let aText, bText;
+          switch (sort.active) {
+            case 'name':
+              if (a.name && b.name) {
+                comparatorResult = a.name.localeCompare(b.name);
+              }
+              break;
+            case 'phone':
+              if (a.phone && b.phone) {
+                comparatorResult = a.phone.localeCompare(b.phone);
+              }
+              break;
+            case 'email':
+              if (a.email && b.email) {
+                comparatorResult = a.email.localeCompare(b.email);
+              }
+              break;
+            case 'jobName':
+              if (a.jobName && b.jobName) {
+                comparatorResult = a.jobName.localeCompare(b.jobName);
+              } else if (!a.jobName) {
+                comparatorResult = -1;
+              } else if (!b.jobName) {
+                comparatorResult = 1;
+              }
+              break;
+            case 'stage':
+              aText = this.stageList.find(_stage => _stage.code === a.stage)?.name;
+              bText = this.stageList.find(_stage => _stage.code === b.stage)?.name;
+              if (aText && bText) {
+                comparatorResult = aText.localeCompare(bText);
+              } else if (!aText) {
+                comparatorResult = -1;
+              } else if (!bText) {
+                comparatorResult = 1;
+              }
+              break;
+            case 'writeStatus':
+              if ('writeStatus' in a && 'writeStatus' in b) {
+                comparatorResult = (a.writeStatus === b.writeStatus)? 0 : (a.writeStatus ? -1 : 1);
+              }
+              break;
+          }
+          return comparatorResult * (sort.direction == 'asc' ? 1 : -1);
+        });
+      };
+    return sortFunction;
   }
 
   public updatePageInfo(length: number) {

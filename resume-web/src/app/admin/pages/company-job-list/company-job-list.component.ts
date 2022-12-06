@@ -21,6 +21,7 @@ import { catchError, from, Observable, takeUntil, throwError } from 'rxjs';
 import { DataService } from '@app/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { validateBasis } from '@angular/flex-layout';
+import { MatSort } from '@angular/material/sort';
 
 export interface CompanyJobDialogData extends basicDialog {
   item: ResumeCompanyJobsCompanyJobDto | null;
@@ -33,7 +34,7 @@ export interface CompanyJobDialogData extends basicDialog {
   styleUrls: ['./company-job-list.component.scss']
 })
 export class CompanyJobListComponent extends BaseComponent implements OnInit, AfterViewInit {
-
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   override dialogConfig: CompanyJobDialogData = {} as CompanyJobDialogData;
@@ -139,6 +140,7 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         this.headerColspan = 0;
       }
     });
+    this.dataSource.sortData = this.sortData();
   }
 
   ngAfterViewInit(): void {
@@ -155,6 +157,58 @@ export class CompanyJobListComponent extends BaseComponent implements OnInit, Af
         this.updatePageInfo(this.dataSource.data.length);
       }
     });
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  sortData() {
+    let sortFunction =
+      (items: ResumeCompanyJobsCompanyJobDto[], sort: MatSort): ResumeCompanyJobsCompanyJobDto[] =>  {
+        console.log('sortData', sort);
+        if (!sort.active || sort.direction === '') {
+          return items;
+        }
+        return items.sort((a: ResumeCompanyJobsCompanyJobDto, b: ResumeCompanyJobsCompanyJobDto) => {
+          let comparatorResult = 0;
+          let aText, bText;
+          switch (sort.active) {
+            case 'jobName':
+              if (a.jobName && b.jobName) {
+                comparatorResult = a.jobName.localeCompare(b.jobName);
+              } else if (!a.jobName) {
+                comparatorResult = -1;
+              } else if (!b.jobName) {
+                comparatorResult = 1;
+              }
+              break;
+            case 'mailTplCode':
+              aText = this.mailList.find(_mail => _mail.code === a.mailTplCode)?.name;
+              bText = this.mailList.find(_mail => _mail.code === b.mailTplCode)?.name;
+              if (aText && bText) {
+                comparatorResult = aText.localeCompare(bText);
+              } else if (!aText) {
+                comparatorResult = -1;
+              } else if (!bText) {
+                comparatorResult = 1;
+              }
+              break;
+            case 'smsTplCode':
+              aText = this.smsList.find(_sms => _sms.code === a.smsTplCode)?.name;
+              bText = this.smsList.find(_sms => _sms.code === b.smsTplCode)?.name;
+              if (aText && bText) {
+                comparatorResult = aText.localeCompare(bText);
+              } else if (!aText) {
+                comparatorResult = -1;
+              } else if (!bText) {
+                comparatorResult = 1;
+              }
+              break;
+          }
+          return comparatorResult * (sort.direction == 'asc' ? 1 : -1);
+        });
+      };
+    return sortFunction;
   }
 
   public updatePageInfo(length: number) {

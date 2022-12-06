@@ -134,9 +134,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
         }
         this.dialogConfig.icon = 'unsuccessful';
         this.dialogConfig.title = '登入失敗';
-        this.dialogConfig.subTitle = err.error.error_description;
+        this.dialogConfig.subTitle = '您的帳號或密碼不正確，若您不記得密碼，請立即重新設定。';
         this.dialogConfig.showSuccessBtn = true;
-        this.dialogConfig.successBtnText = '再試一次';
+        this.dialogConfig.successBtnText = '關閉';
         this.dialog.open(CommonDialogComponent, {
           height: '311px',
           width: '614px',

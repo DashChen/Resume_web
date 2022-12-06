@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+import { ApiExtra } from "./api-extra";
+
 export interface ResumeAppendicesAppendixDto {
   /** @format uuid */
   id?: string;
@@ -4659,7 +4661,7 @@ export enum ContentType {
   UrlEncoded = "application/x-www-form-urlencoded",
 }
 
-export class HttpClient<SecurityDataType = unknown> {
+export class HttpClient<SecurityDataType = unknown> extends ApiExtra {
   public baseUrl: string = "/Resume";
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
@@ -4674,6 +4676,7 @@ export class HttpClient<SecurityDataType = unknown> {
   };
 
   constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
+    super();
     Object.assign(this, apiConfig);
   }
 
@@ -4774,6 +4777,9 @@ export class HttpClient<SecurityDataType = unknown> {
     cancelToken,
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
+    if (typeof this.beforeRequest === 'function') {
+      this.beforeRequest();
+    }
     const secureParams =
       ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
@@ -4818,7 +4824,9 @@ export class HttpClient<SecurityDataType = unknown> {
       if (cancelToken) {
         this.abortControllers.delete(cancelToken);
       }
-
+      if (typeof this.afterRequest === 'function') {
+        this.afterRequest();
+      }
       if (!response.ok) throw data;
       return data;
     });

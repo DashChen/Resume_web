@@ -92,7 +92,7 @@
             </button>
         </div>
         <div class="admin-message__table__body">
-            <table mat-table [dataSource]="dataSource" [ngClass]="('tab-' + tabSelected.value)" matSort (matSortChange)="announceSortChange($event)">
+            <table mat-table [dataSource]="dataSource" [ngClass]="('tab-' + tabSelected.value)" matSort>
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="headerColspan">

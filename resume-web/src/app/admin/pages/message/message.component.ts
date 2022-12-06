@@ -188,6 +188,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
         this.isSP = false;
       }
     });
+    this.dataSource.sortData = this.sortData();
   }
 
   ngAfterViewInit(): void {
@@ -196,18 +197,98 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
     }
   }
 
-  /** Announce the change in sort state for assistive technology. */
-  announceSortChange(sortState: Sort) {
-    console.log(sortState);
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
-    if (sortState.direction) {
-      
-    } else {
-      
-    }
+  sortData() {
+    let sortFunction =
+      (items: ResumeMailQuenesMailQueneDto[] | ResumeSMSTplsSMSTplDto[], sort: MatSort): ResumeMailQuenesMailQueneDto[] | ResumeSMSTplsSMSTplDto[] =>  {
+        console.log('sortData', sort);
+        if (!sort.active || sort.direction === '') {
+          return items;
+        }
+        return items.sort((a: ResumeMailQuenesMailQueneDto | ResumeSMSTplsSMSTplDto, b: ResumeMailQuenesMailQueneDto | ResumeSMSTplsSMSTplDto) => {
+          let comparatorResult = 0;
+          let aText, bText;
+          switch (sort.active) {
+            case 'name':
+              if ('to_Name' in a && 'to_Name' in b) {
+                if (a.to_Name && b.to_Name) {
+                  comparatorResult = a.to_Name.localeCompare(b.to_Name);
+                }
+              } else if ('name' in a && 'name' in b) {
+                if (a.name && b.name) {
+                  comparatorResult = a.name.localeCompare(b.name);
+                }
+              }
+              break;
+            case 'stage':
+              if ('stage' in a && 'stage' in b) {
+                aText = this.stageList.find(_stage => _stage.code === a.stage)?.name;
+                bText = this.stageList.find(_stage => _stage.code === b.stage)?.name;
+                if (aText && bText) {
+                  comparatorResult = aText.localeCompare(bText);
+                } else if (!aText) {
+                  comparatorResult = -1;
+                } else if (!bText) {
+                  comparatorResult = 1;
+                }
+              }
+              break;
+            case 'sendDate':
+            case 'modifyDate':
+              if ('send_Date' in a && 'send_Date' in b) {
+                if (a.send_Date && b.send_Date) {
+                  comparatorResult = DateTime.fromISO(a.send_Date).valueOf() - DateTime.fromISO(b.send_Date).valueOf();
+                } else if (!a.send_Date) {
+                  comparatorResult = -1;
+                } else if (!b.send_Date) {
+                  comparatorResult = 1;
+                }
+              }
+              if ('lastModificationTime' in a && 'lastModificationTime' in b) {
+                if (a.lastModificationTime && b.lastModificationTime) {
+                  comparatorResult = DateTime.fromISO(a.lastModificationTime).valueOf() - DateTime.fromISO(b.lastModificationTime).valueOf();
+                } else if (!a.lastModificationTime) {
+                  comparatorResult = -1;
+                } else if (!b.lastModificationTime) {
+                  comparatorResult = 1;
+                }
+              }
+              break;
+            case 'job':
+              if ('jobName' in a && 'jobName' in b) {
+                if (a.jobName && b.jobName) {
+                  comparatorResult = a.jobName.localeCompare(b.jobName);
+                } else if (!a.jobName) {
+                  comparatorResult = -1;
+                } else if (!b.jobName) {
+                  comparatorResult = 1;
+                }
+              }
+              break;
+            case 'sendSuccess':
+            case 'open':
+              if ('success' in a && 'success' in b) {
+                comparatorResult = (a.success === b.success)? 0 : (a.success ? -1 : 1);
+              }
+              if ('isOpened' in a && 'isOpened' in b) {
+                comparatorResult = (a.isOpened === b.isOpened)? 0 : (a.isOpened ? -1 : 1);
+              }
+              break;
+            case 'subject':
+              if ('subject' in a && 'subject' in b) {
+                if (a.subject && b.subject) {
+                  comparatorResult = a.subject.localeCompare(b.subject);
+                } else if (!a.subject) {
+                  comparatorResult = -1;
+                } else if (!b.subject) {
+                  comparatorResult = 1;
+                }
+              }
+              break;
+          }
+          return comparatorResult * (sort.direction == 'asc' ? 1 : -1);
+        });
+      };
+    return sortFunction;
   }
 
   getEmailData(query: any = {}) {
@@ -299,7 +380,7 @@ export class MessageComponent extends BaseComponent implements OnInit, AfterView
   }
 
   getNameErrorMessage() {
-    return this.nameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+    return this.nameFormCtl.hasError('pattern') ? '格式不正確，請輸入文字' : '';
   }
 
   changeTab(index: number) {

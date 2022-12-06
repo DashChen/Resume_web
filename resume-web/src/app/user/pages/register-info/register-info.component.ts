@@ -59,7 +59,7 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
     if (this.userNameFormCtl.hasError('required')) {
       return '請填寫此欄位'
     }
-    return this.userNameFormCtl.hasError('pattern') ? '格式不正確，例:王大明' : '';
+    return this.userNameFormCtl.hasError('pattern') ? '格式不正確，請輸入文字' : '';
   }
 
   getEmailAddressErrorMessage() {

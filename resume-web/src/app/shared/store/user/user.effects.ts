@@ -269,7 +269,7 @@ export class UserEffects {
         withLatestFrom(
             this.store.select(CommonSelectors.selectIsAdmin),
         ),
-        exhaustMap(([isAdmin]) => {
+        exhaustMap(([action, isAdmin]) => {
             console.log('getEductionCode is admin', isAdmin);
             return from(this.dataService.api.appShareCodesGetEducationCodeListList({
                 headers: {
@@ -298,7 +298,7 @@ export class UserEffects {
         withLatestFrom(
             this.store.select(CommonSelectors.selectIsAdmin),
         ),
-        exhaustMap(([isAdmin]) => {
+        exhaustMap(([action, isAdmin]) => {
             return from(this.dataService.api.appShareCodesGetGraduateCodeListList({
                 headers: {
                     ...this.dataService.getAuthorizationToken(isAdmin ? 'admin' : 'user')

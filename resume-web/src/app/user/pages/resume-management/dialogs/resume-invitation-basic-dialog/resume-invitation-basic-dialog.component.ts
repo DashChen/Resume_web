@@ -50,7 +50,7 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
     if (this.nameCFormCtl.hasError('maxlength')) {
       return `長度最多${this.nameCFormCtl.getError('maxlength').maxLength}`;
     }
-    return this.nameCFormCtl.hasError('name') ? '格式不正確，例:王大明' : '';
+    return this.nameCFormCtl.hasError('name') ? '格式不正確，請輸入文字' : '';
   }
 
   get nameEFormCtl() {
@@ -59,7 +59,7 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
 
   getNameEErrorMessage() {
     if (this.nameEFormCtl.hasError('pattern')) {
-      return '格式不正確，例:Dash Chen'
+      return '格式不正確，請輸入文字'
     }
     if (this.nameEFormCtl.hasError('maxlength')) {
       return `長度最多${this.nameEFormCtl.getError('maxlength').requiredLength}`;
@@ -72,11 +72,11 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
   }
 
   getIdNoErrorMessage() {
-    if (this.idNoFormCtl.hasError('pattern')) {
-      return '格式不正確，例:A123456789';
+    if (this.idNoFormCtl.hasError('pattern') || this.idNoFormCtl.hasError('idCard')) {
+      return '格式不正確，需有一個英文字母及9位數';
     }
 
-    return this.idNoFormCtl.hasError('idCard') ? '此身分證無效' : '';
+    return '';
   }
 
   get sexCodeFormCtl() {

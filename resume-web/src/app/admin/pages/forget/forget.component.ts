@@ -87,9 +87,9 @@ export class ForgetComponent extends BaseComponent implements OnInit {
     (err: Error) => {
       this.dialogConfig.icon = 'unsuccessful';
       this.dialogConfig.title = '信件發送失敗';
-      this.dialogConfig.subTitle = err.message;
+      this.dialogConfig.subTitle = '您輸入的電子郵件不存在，請重新輸入。';
       this.dialogConfig.showSuccessBtn = true;
-      this.dialogConfig.successBtnText = '再試一次';
+      this.dialogConfig.successBtnText = '關閉';
       this.dialog.open(CommonDialogComponent, {
         height: '311px',
         width: '614px',
