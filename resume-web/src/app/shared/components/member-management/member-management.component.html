@@ -73,7 +73,8 @@
                 </mat-form-field>
 
                 <button mat-raised-button class="app-shared-member-management__edit__btn h2-text--regular"
-                    [ngClass]="{'mat-button--blue': focusBtnKey !== 'Email'}" (click)="boundEmail()" *ngIf="focusBtnKey === 'Email'" [fxHide.lt-md]="true">
+                    [ngClass]="{'mat-button--blue': focusBtnKey !== 'Email'}" (click)="cancelEdit($event, 'Email')"
+                    *ngIf="focusBtnKey === 'Email'" [fxHide.lt-md]="true">
                     <span>取消</span>
                 </button>
                 <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon h2-text--regular"

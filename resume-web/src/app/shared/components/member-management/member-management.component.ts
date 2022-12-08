@@ -619,27 +619,27 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
   //   );
   // }
 
-  boundEmail() {
-    // 取消按鈕
-    if (this.focusBtnKey !== '') {
-      this.disOrEnableFormCtl(this.focusBtnKey, true);
-      this.focusBtnKey = '';
-    } else if (!this.isSP) {
-      if (!this.bounded.email) {
-        this.sendBoundEmail();
-      } else {
-        const subtitle = `按下確認後即解除${this.emailFormCtl.value}此電子郵件，請問是否解除?`;
-        const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
-        dialogRef.afterClosed().subscribe((res) => {
-          console.log(res);
-          if (res) {
-            // TODO 解除綁定信箱
-            this.bounded.email = false;
-          }
-        });
-      }
-    }
-  }
+  // boundEmail() {
+  //   // 取消按鈕
+  //   if (this.focusBtnKey !== '') {
+  //     this.disOrEnableFormCtl(this.focusBtnKey, true);
+  //     this.focusBtnKey = '';
+  //   } else if (!this.isSP) {
+  //     if (!this.bounded.email) {
+  //       this.sendBoundEmail();
+  //     } else {
+  //       const subtitle = `按下確認後即解除${this.emailFormCtl.value}此電子郵件，請問是否解除?`;
+  //       const dialogRef = this.errDialog('解除綁定', subtitle, '確定', '取消');
+  //       dialogRef.afterClosed().subscribe((res) => {
+  //         console.log(res);
+  //         if (res) {
+  //           // TODO 解除綁定信箱
+  //           this.bounded.email = false;
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
 
   sendBoundEmail() {
     if (this.emailFormCtl.value === this.user?.email) {
@@ -647,6 +647,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
       this.emailFormCtl.setErrors({
         same: true
       });
+      this.emailFormCtl.markAsTouched();
       return;
     }
     const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
@@ -665,7 +666,12 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
           return new Error(errMsg);
         });
       }),
-      finalize(() => { requestHttp$.unsubscribe() }),
+      finalize(() => {
+        this.updateUserData('Email');
+        this.focusBtnKey = '';
+        this.disOrEnableFormCtl('Email', true);
+        requestHttp$.unsubscribe()
+      }),
       takeUntil(this.destroy$),
     ).subscribe(
       res => {
@@ -674,6 +680,7 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
           this.emailFormCtl.setErrors({
             exist: true
           });
+          this.emailFormCtl.markAsTouched();
         } else {
           this.bounded.email = true;
           this.successDialog('系統已發出驗證信件', '麻煩至您填寫的信箱進行驗證！', '確定');
