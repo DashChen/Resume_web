@@ -172,6 +172,12 @@ $this: '.app-resume-management-form';
         }
 
         &--autobiographies {
+          min-height: 98px;
+          padding: 24px;
+          position: relative;
+        }
+
+        &--appendices {
           min-height: 151px;
           padding: 40px 24px 20px;
           position: relative;
@@ -180,18 +186,13 @@ $this: '.app-resume-management-form';
           }
         }
 
-        &--appendices {
-          min-height: 162px;
-          padding: 40px 24px;
-          position: relative;
-        }
-
         &--appendix {
           &-file {
             background: #EAEDF1;
             border-radius: 5px;
             height: 50px;
             max-width: 566px;
+            padding: 12.5px 20px;
             width: 100%;
             a {
               color: #006CD0;
