@@ -168,7 +168,7 @@
             <div fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [formGroup]="birthdayForm">
                 <mat-form-field class="mat-form-field__block mat-form-field__label" floatLabel="never" appearance="fill" >
                     <label class="mat-form-field__lable--top">生日</label>
-                    <input matInput type="text" pattern="\d{4}/\d{1,2}/\d{1,2}" [matDatepicker]="picker1" formControlName="Birthday" [min]="minDate" [max]="maxDate"
+                    <input matInput type="text" [matDatepicker]="picker1" formControlName="Birthday" [min]="minDate" [max]="maxDate"
                         [placeholder]="focusBtnKey !== 'Birthday' ? '未填寫': '請選擇日期'" (click)="picker1.open()">
                     <mat-error class="h3-text--medium" *ngIf="birthdayFormCtl.invalid">
                         {{ getBirthdayErrorMessage() }}

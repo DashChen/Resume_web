@@ -409,8 +409,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
           });
           break;
         case 'Birthday':
-          if (this.birthdayForm.invalid) {
-            this.birthdayForm.markAllAsTouched();
+          console.log(this.birthdayFormCtl);
+          if (this.birthdayFormCtl.invalid) {
+            this.birthdayFormCtl.markAllAsTouched();
             return;
           }
           this.birthdayFormCtl.addValidators([Validators.required]);
