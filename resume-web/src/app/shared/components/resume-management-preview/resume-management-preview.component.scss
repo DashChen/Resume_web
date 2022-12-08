@@ -172,7 +172,12 @@ $this: '.app-resume-management-form';
         }
 
         &--autobiographies {
-          padding: 24px 0px 24px 24px;
+          min-height: 151px;
+          padding: 40px 24px 20px;
+          position: relative;
+          &:not(:last-of-type) {
+            border-bottom: 1px solid #C5D0DF;
+          }
         }
 
         &--appendices {
@@ -227,6 +232,12 @@ $this: '.app-resume-management-form';
         }
       }
       &__image {
+        &__block {
+          @include lt-md {
+            align-items: center;
+            justify-content: center;
+          }
+        }
         &__avatar {
           width: 100px;
           height: 100px;
