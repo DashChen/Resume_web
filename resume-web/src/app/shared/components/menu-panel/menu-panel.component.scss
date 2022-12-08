@@ -43,7 +43,7 @@ $this: '.app-menu-panel';
 
 ::ng-deep .cdk-overlay-pane {
     .mat-menu-item {
-        &:hover:not([disabled]) {
+        &:hover:not([disabled]), &.cdk-program-focused:not([disabled]), &.cdk-keyboard-focused:not([disabled]), &-highlighted:not([disabled]) {
             background: white;
         }
     }

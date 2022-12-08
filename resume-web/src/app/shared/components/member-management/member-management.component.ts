@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '@app/core';
@@ -11,11 +10,9 @@ import { Actions as CommonActions } from '@app/shared/store/common';
 import { MediaObserver } from '@angular/flex-layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { createPasswordStrengthValidator, dateValidator, idCardValidator, MatchValidator, nameValidator } from '@app/core/validators';
-import { DateTime } from 'luxon';
 import { ISelectOption } from '@app/core/interfaces/select-option';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { ICountry } from '@app/core/interfaces/country';
-import { basicDialog } from '@app/core/interfaces/basic-dialog';
 
 @Component({
   selector: 'app-shared-member-management',
@@ -160,6 +157,9 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
   }
 
   getEmailErrorMessage() {
+    if (this.emailFormCtl.hasError('exist') || this.emailFormCtl.hasError('same')) {
+      return '該電子郵件已被註冊';
+    }
     return this.emailFormCtl.hasError('email') ? '格式不正確，例:WaDaMing@gmail.com' : '';
   }
 
@@ -324,6 +324,12 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
         this.phoneFormCtl.setValue(res);
       }
     });
+    this.emailFormCtl.valueChanges.subscribe(res => {
+      if (this.emailFormCtl.hasError('exist') || this.emailFormCtl.hasError('same')) {
+        this.emailFormCtl.reset();
+        this.emailFormCtl.setValue(res);
+      }
+    });
     this.passwordFormCtl.valueChanges.subscribe(res => {
       if (res && res.length > 0) {
         if (res === this.newPasswordFormCtl.value) {
@@ -424,32 +430,21 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
             this.emailForm.markAllAsTouched();
             return;
           }
-          // 信箱不一致才保存
-          if (this.emailFormCtl.value !== this.user?.email) {
-            requestApi = this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
+          this.sendBoundEmail();
+          return;
+        case 'Phone':
+          if (this.phoneForm.invalid) {
+            this.phoneForm.markAllAsTouched();
+            return;
+          }
+          if (this.verifiedSmsCode) {
+            requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate({
+              Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
+            },{
               headers: {
                 ...this.dataService.getAuthorizationToken(this.authorizeType)
               }
             });
-          }
-          break;
-        case 'Phone':
-          if (this.bounded.phone) {
-            this.cancelboundMobile();
-          } else {
-            if (this.phoneForm.invalid) {
-              this.phoneForm.markAllAsTouched();
-              return;
-            }
-            if (this.verifiedSmsCode) {
-              requestApi = this.dataService.api.appUserDatasUpdatePhoneUpdate({
-                Phone: this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value
-              },{
-                headers: {
-                  ...this.dataService.getAuthorizationToken(this.authorizeType)
-                }
-              });
-            }
           }
           break;
         case 'IdNo':
@@ -609,20 +604,20 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
     this.disOrEnableFormCtl(type, true);
   }
 
-  cancelboundMobile() {
-    console.log('cancelboundMobile');
-    const subtitle = `按下確認後即解除${this.phoneFormCtl.value}此手機號碼，請問是否解除?`;
-    const dialogRef = this.errDialog('解除綁定', subtitle, '確認', '取消');
-    dialogRef.afterClosed().subscribe(
-      (res) => {
-        if (res) {
-          // TODO 解除綁定
-          this.bounded.phone = false;
-          this.focusBtnKey = '';
-        }
-      }
-    );
-  }
+  // cancelboundMobile() {
+  //   console.log('cancelboundMobile');
+  //   const subtitle = `按下確認後即解除${this.phoneFormCtl.value}此手機號碼，請問是否解除?`;
+  //   const dialogRef = this.errDialog('解除綁定', subtitle, '確認', '取消');
+  //   dialogRef.afterClosed().subscribe(
+  //     (res) => {
+  //       if (res) {
+  //         // TODO 解除綁定
+  //         this.bounded.phone = false;
+  //         this.focusBtnKey = '';
+  //       }
+  //     }
+  //   );
+  // }
 
   boundEmail() {
     // 取消按鈕
@@ -647,6 +642,13 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
   }
 
   sendBoundEmail() {
+    if (this.emailFormCtl.value === this.user?.email) {
+      // 代表電子郵件相同
+      this.emailFormCtl.setErrors({
+        same: true
+      });
+      return;
+    }
     const requestHttp$ = from(this.dataService.api.appUserDatasUpdateEmailUpdate(this.emailForm.value,{
       headers: {
         ...this.dataService.getAuthorizationToken(this.authorizeType)
@@ -668,8 +670,14 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
     ).subscribe(
       res => {
         console.log(res);
-        this.bounded.email = true;
-        this.successDialog('系統已發出驗證信件', '麻煩至您填寫的信箱進行驗證！', '確定');
+        if (!res.data) {
+          this.emailFormCtl.setErrors({
+            exist: true
+          });
+        } else {
+          this.bounded.email = true;
+          this.successDialog('系統已發出驗證信件', '麻煩至您填寫的信箱進行驗證！', '確定');
+        }
       },
       err => {
         console.log(err);

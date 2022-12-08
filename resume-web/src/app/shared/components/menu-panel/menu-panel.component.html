@@ -1,7 +1,7 @@
 <mat-menu #menu="matMenu" [class]="class" class="app-menu-panel" [hasBackdrop]="false">
     <div (mouseleave)="menuTrigger.closeMenu()">
         <ng-container *ngFor="let item of items">
-            <div class="app-menu-panel__link" [class]="{'app-menu-panel__link--active': item.active}">
+            <div class="app-menu-panel__link" [ngClass]="{'app-menu-panel__link--active': item.active}">
                 <a [routerLink]="item.link" *ngIf="!item.children; else branch" mat-menu-item>
                     <span class="h2-text--bold">{{item.title}}</span>
                 </a>

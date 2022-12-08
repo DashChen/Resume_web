@@ -103,9 +103,17 @@ export class AdminMainLayoutComponent implements OnInit {
     this.store.dispatch(AdminActions.logout());
   }
 
-  showMenu(trigger: MatMenuTrigger) {
+  showMenu(event: MouseEvent, element:HTMLElement, trigger: MatMenuTrigger) {
+    // console.log(event, element, trigger);
+    if (trigger.menuOpen) {
+      return;
+    }
+    element.click();
+    // event.preventDefault();
+    // event.stopPropagation();
+
     this.activeMenuTrigger = trigger;
-    trigger.openMenu();
+    // trigger.openMenu();
   }
 
   closeMenu(event: MouseEvent) {

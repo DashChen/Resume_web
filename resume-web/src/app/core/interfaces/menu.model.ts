@@ -4,5 +4,6 @@ export interface link {
     title: string;
     icon: string;
     active: boolean;
+    hover?: boolean;
     children?: link[];
 }

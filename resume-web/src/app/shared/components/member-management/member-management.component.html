@@ -128,8 +128,7 @@
                             <span>{{ focusBtnKey !== 'Phone' ? '編輯' : '儲存' }}</span>
                         </button>
                         <button mat-icon-button class="app-shared-member-management__edit__btn mat-button--icon mat-button--blue h2-text--regular"
-                            (click)="editMember($event, 'Phone')" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)"
-                            *ngIf="!bounded.phone || focusBtnKey === ''" [fxHide.gt-sm]="true">
+                            (click)="editMember($event, 'Phone')" [disabled]="(focusBtnKey === 'Phone' && !verifiedSmsCode)" [fxHide.gt-sm]="true">
                             <mat-icon [svgIcon]="focusBtnKey === 'Phone' ? 'check-square' : 'edit'" aria-hidden="false" aria-label="edit icon"></mat-icon>
                         </button>
                     </div>
@@ -137,7 +136,7 @@
             </div>
         </div>
 
-        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'Phone' && !bounded.phone">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutGap.lt-md="0px" *ngIf="focusBtnKey === 'Phone'">
             <div fxLayout="row" fxLayoutGap="20px" fxFlex="1 1 100%" class="app-shared-member-management__card__body__field" [fxHide.lt-md]="true"></div>
 
             <div fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxFlex="1 1 100%"
