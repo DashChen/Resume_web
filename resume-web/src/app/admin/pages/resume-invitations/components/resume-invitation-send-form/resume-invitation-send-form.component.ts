@@ -11,6 +11,7 @@ import { ResumeInvitationService } from '../../..';
 import { Store } from '@ngrx/store';
 import { ApiConfig, ResumeMailTplsMailTplDto, ResumeResumeInvitationsResumeInvitationDto, ResumeShareCodesShareCodeDto, ResumeSMSTplsSMSTplDto } from '@app/core/models/Api';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
+import { Selectors as AdminSelectors } from '@app/shared/store/admin';
 import { DataService } from '@app/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Actions as RouterActions } from '@app/shared/store/router';
@@ -175,6 +176,9 @@ export class ResumeInvitationSendFormComponent extends BaseComponent implements 
     });
     this.smsTplFormCtl.valueChanges.subscribe(val => {
       this.showTemplateErr = !val && !this.mailTplFormCtl.value;
+    });
+    this.store.select(AdminSelectors.selectResumePerson).subscribe(selectedPersion => {
+      this.selectedPerson = selectedPersion;
     });
   }
 

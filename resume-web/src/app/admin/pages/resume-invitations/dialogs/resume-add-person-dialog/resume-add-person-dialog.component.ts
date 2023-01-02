@@ -12,6 +12,7 @@ import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/sha
 import { ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
 import { COUNTRY_TOKEN } from '@app/app.module';
 import { ICountry } from '@app/core/interfaces/country';
+import { nameValidator } from '@app/core/validators';
 
 @Component({
   selector: 'admin-resume-add-person-dialog',
@@ -30,7 +31,7 @@ export class ResumeAddPersonDialogComponent implements OnInit {
   addForm = new FormGroup({
     name: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^[\u2F00-\u2FD5|\u4E00-\u9FFF]{2,30}$/gm)
+      nameValidator(),
     ]),
     countryCode: new FormControl('TW', [Validators.required]),
     phone: new FormControl('', [
@@ -73,7 +74,7 @@ export class ResumeAddPersonDialogComponent implements OnInit {
     if (this.nameFormCtl.getError('required')) {
       return '請填寫此欄位';
     }
-    return this.nameFormCtl.hasError('pattern') ? '格式不正確，請輸入文字' : '';
+    return this.nameFormCtl.hasError('name') ? '格式不正確，請輸入文字' : '';
   }
 
   get countryCodeFormCtl() {

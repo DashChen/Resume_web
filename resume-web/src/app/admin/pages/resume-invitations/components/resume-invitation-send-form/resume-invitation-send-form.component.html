@@ -25,7 +25,7 @@
           <div fxLayout="row wrap" fxLayoutGap="18px" fxLayoutAlign="flex-start center" fxLayoutAlign.lt-md="flex-start center" fxLayoutGap.lt-md="0px"
             class="admin-resume-invitation-send-form__tags">
             <ng-container *ngFor="let person of selectedPerson; let index = index">
-              <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between center" class="admin-resume-invitation-send-form__person-tag">
+              <div fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="space-between center" class="admin-resume-invitation-send-form__person-tag">
                 <span class="h2-text--medium">{{person.name}}</span>
                 <mat-icon svgIcon="close-icon" (click)="removeSelectedPerson(index, person)"></mat-icon>
               </div>

@@ -54,23 +54,23 @@
                 </div>
             </button>
         </ng-container> -->
-
-        <button mat-stroked-button>
-            <div fxFlex fxLayout="row" fxLayoutAlign="center center" id="googleLoginBtn">
+        <div id="googleLoginBtn"></div>
+        <!-- <button mat-stroked-button>
+            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
                 <mat-icon svgIcon="google-icon" aria-hidden="false" aria-label="google icon"></mat-icon>
                 <div class="app-login__social__name h2-text--bold">Google</div>
             </div>
-        </button>
+        </button> -->
         <button mat-stroked-button (click)="loginBySocial('Facebook')">
-            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
                 <mat-icon svgIcon="facebook-icon" aria-hidden="false" aria-label="Facebook icon"></mat-icon>
-                <div class="app-login__social__name h2-text--bold">Facebook</div>
+                <div class="app-login__social__name h2-text--bold">使用 Facebook 帳戶登入</div>
             </div>
         </button>
         <button mat-stroked-button (click)="loginBySocial('Line')">
-            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
                 <mat-icon svgIcon="line-icon" aria-hidden="false" aria-label="line icon"></mat-icon>
-                <div class="app-login__social__name h2-text--bold">LINE</div>
+                <div class="app-login__social__name h2-text--bold">使用 LINE 帳戶登入</div>
             </div>
         </button>
     </div>

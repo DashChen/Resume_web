@@ -30,6 +30,9 @@ import { SocialUser } from '../entities/social-user';
 //  ]);
 
 export class DummyLoginProvider extends BaseLoginProvider {
+  parseSocialUserFromObj(params: any): SocialUser | null {
+    return null;
+  }
   public static readonly PROVIDER_ID: string = 'DUMMY';
 
   static readonly DEFAULT_USER = {

@@ -19,7 +19,7 @@ export const environment = {
     'LINE': {
       client_id: '1657468468',
       options: {
-        scopes: 'openid',
+        scope: 'openid',
         state: '12345abcde',
       }
     }

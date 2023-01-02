@@ -10,6 +10,7 @@ export abstract class BaseLoginProvider implements LoginProvider {
   abstract signIn(signInOptions?: object): Promise<SocialUser>;
   abstract signOut(revoke?: boolean): Promise<void>;
   refreshToken?(): Promise<SocialUser | null>;
+  abstract parseSocialUserFromObj(params: any): SocialUser | null;
 
   protected loadScript(
     id: string,

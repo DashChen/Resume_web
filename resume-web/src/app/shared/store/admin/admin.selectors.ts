@@ -25,3 +25,7 @@ export const selectCurrentUser = createSelector(
     selectAdminFeature,
     state => state.currentUser,
 );
+export const selectResumePerson = createSelector(
+    selectAdminFeature,
+    state => state.selectedPerson,
+);

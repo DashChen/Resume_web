@@ -17,6 +17,7 @@ import { DataService, ResizeService } from '@app/core';
 import { ApiConfig, ResumeCompanyJobsCompanyJobDto, ResumeResumeInvitationsResumeInvitationDto, ResumeShareCodesShareCodeDto } from '@app/core/models/Api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
+import { Actions as AdminActions } from '@app/shared/store/admin';
 import { BreakPointType, DeviceType, ViewportSize } from '@app/core/interfaces/breakpoints';
 import { BREAK_POINT_OPTION_TOKEN } from '@app/app.module';
 import { identity, omitBy, pickBy } from 'lodash';
@@ -494,6 +495,8 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
   }
 
   showSendMsg(show: boolean) {
+    // 將選擇的person 提供到發送信件&訊息
+    this.store.dispatch(AdminActions.setResumePerson({ payload: this.selection.selected }));
     this.store.dispatch(RouterActions.Go({
       path: ['/admin/resume-invitation/send-message']
     }));
@@ -516,7 +519,7 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
       if (result) {
         const selectedIds: string[] = [];
         const requestList: Observable<any>[] = [];
-        // todo: 變更被選擇的階段
+        // 變更被選擇的階段
         this.selection.selected.forEach(({ id }) => {
           selectedIds.push(id as string);
           const item = this.dataSource.data.find(item => item.id === id);
@@ -613,6 +616,8 @@ export class ResumeInvitationListComponent extends BaseComponent implements OnIn
             });
             // console.log('finalize httpRequest unsubscribe', this.originalData);
             this.dataSource.data = [...this.originalData];
+            this.disabledBatchEditBtn = true;
+            this.disabledDelBtn = true;
             requestList$.unsubscribe();
           }),
           takeUntil(this.destroy$),

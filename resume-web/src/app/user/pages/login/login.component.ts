@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { DataService } from '@app/core';
+import { DataService, HelperService } from '@app/core';
 import { ApiConfig, ContentType, ResumeShareCodesShareCodeDto, ResumeThirdPartiesThirdPartyCreateDto, VoloAbpHttpRemoteServiceErrorResponse } from '@app/core/models/Api';
 import { BaseComponent } from '@app/shared';
 import { CommonDialogComponent } from '@app/shared/dialog/common-dialog/common-dialog.component';
@@ -13,6 +13,7 @@ import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { createPasswordStrengthValidator } from '@app/core/validators';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@app/core/social-login/public-api';
+import { LineLoginProvider } from '@app/core/social-login/providers/line-login-provider';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     public override store: Store,
     public override dialog: MatDialog,
     public dataService: DataService<ApiConfig>,
+    private readonly _helperService: HelperService,
     private readonly _authService: SocialAuthService) {
     super(store, dialog);
   }
@@ -72,8 +74,14 @@ export class LoginComponent extends BaseComponent implements OnInit {
       }
     });
     this._authService.authState.subscribe((user) => {
-      console.log('authState', user);
-      this.user = user;
+      if (user?.authToken && user.provider) {
+        let payload = {
+          thirdPartyAccountCode: user?.authToken || '',
+          thirdPartyTypeCode: user?.provider || ''
+        };
+        // 進行三方登入
+        this.store.dispatch(UserActions.thirdPartyLogin({ payload: payload }));
+      }
     });
   }
 
@@ -149,17 +157,29 @@ export class LoginComponent extends BaseComponent implements OnInit {
       });
   }
 
-  
-
   loginBySocial(target?: 'Google' | 'Facebook' | 'Line') {
     switch (target) {
       case 'Google':
-        this._authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        // this._authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        let googleElement = document.getElementById('googleLoginBtn');
+        let iframeElement = googleElement?.querySelector('iframe');
+        if (iframeElement) {
+          let containerElement = iframeElement.contentWindow?.document.querySelector('#container');
+          if (containerElement) {
+            (containerElement as HTMLElement).click();
+          }
+        }
         break;
       case 'Facebook':
-        this._authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+        this._authService.signIn(FacebookLoginProvider.PROVIDER_ID, {
+          state: this._helperService.makeid(8)
+        });
         break;
       case 'Line':
+        this._authService.signIn(LineLoginProvider.PROVIDER_ID, {
+          redirect_uri: window.location.origin + window.location.pathname +'?provider=' + LineLoginProvider.PROVIDER_ID,
+          state: this._helperService.makeid(8)
+        });
         break;
     }
     return;

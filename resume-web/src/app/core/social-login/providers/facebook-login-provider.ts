@@ -117,4 +117,8 @@ export class FacebookLoginProvider extends BaseLoginProvider {
       });
     });
   }
+
+  parseSocialUserFromObj(params: any): SocialUser | null {
+    return null;
+  }
 }

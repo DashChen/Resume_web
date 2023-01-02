@@ -1,7 +1,7 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import { DataService } from '@app/core';
-import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseUpdateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ApiConfig, ResumeAutobiographiesAutobiographyCreateDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseUpdateDto, ResumeThirdPartiesThirdPartyCreateDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, props, Store } from '@ngrx/store';
 import { from, Observable, of } from 'rxjs';
@@ -12,6 +12,7 @@ import { Actions as RouterActions } from '@app/shared/store/router';
 import { Actions as CommonActions, Selectors as CommonSelectors } from '@app/shared/store/common';
 import { sortBy } from 'lodash';
 import { HttpErrorResponse } from '@angular/common/http';
+import { loginResponseDto } from '@app/core/models/login.model';
 
 @Injectable()
 export class UserEffects {
@@ -43,6 +44,24 @@ export class UserEffects {
                 }),
                 catchError(error => {
                     console.error('loginEffect error', error);
+                    return of(UserActions.loginFail({ payload: error }));
+                }),
+            )
+        })
+    ));
+
+    thirdPartyLoginEffect$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(UserActions.thirdPartyLogin),
+        map(params => params.payload),
+        exhaustMap((payload: ResumeThirdPartiesThirdPartyCreateDto) => {
+            return from(this.dataService.api.appThirdPartiesLoginCreate(payload, {})).pipe(
+                map(res => {
+                    console.log('thirdPartyLoginEffect', res);
+                    this.store.dispatch(CommonActions.setAdmin({ payload: false }));
+                    return UserActions.setToken({ payload: {} as loginResponseDto });
+                }),
+                catchError(error => {
+                    console.error('thirdPartyLoginEffect error', error);
                     return of(UserActions.loginFail({ payload: error }));
                 }),
             )

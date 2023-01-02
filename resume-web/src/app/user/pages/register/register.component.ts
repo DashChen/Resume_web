@@ -148,7 +148,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
             return throwError(() => new Error(`Error Code: ${err.status}\nMessage: ${err.error.error.message}`));
           }),
           finalize(() => {
-            
+
             request$.unsubscribe();
           }),
         ).subscribe((next) => {
@@ -216,6 +216,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
         // 代表電話號碼已經存在
         this.title = '註冊失敗';
         this.subtitle = `手機號${this.maskPhone(this.tempPhone)}已經存在`;
+        this.mobileFormControl.reset();
         this.mobileFormControl.setValue('');
       }
     })

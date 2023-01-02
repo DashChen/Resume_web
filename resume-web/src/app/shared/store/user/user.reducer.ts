@@ -21,7 +21,7 @@ export const initialState: UserState = {
     eductionCodeList: [],
     graduateCodeList: [],
     profilePicture: {},
-    invitationCode: ''
+    invitationCode: '',
 }
 
 export const userReducer = createReducer(

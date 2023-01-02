@@ -6,6 +6,8 @@ import { Selectors as RouterSelectors } from '@app/shared/store/router';
 import { Actions as UserActions, Selectors as UserSelectors } from '@app/shared/store/user';
 import { Actions as CommonActions } from '@app/shared/store/common';
 import { Actions as AdminActions, Selectors as AdminSelectors } from '@app/shared/store/admin';
+import { HelperService } from '.';
+import { SocialAuthService } from '../social-login/social-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +16,26 @@ export class StartupService {
 
   constructor(
     private store: Store,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private helperService: HelperService,
+    private _authService: SocialAuthService,
   ) { }
 
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
+      const queryObj = this.helperService.getParamsAsObject(location.search);
+      console.log('startup service href', window.location.href, queryObj);
+      if (queryObj['provider']) {
+        // 確認 state 是否存在
+        let state = localStorage.getItem(`${queryObj['provider']}_state`);
+        if (state && state != queryObj['state']) {
+          console.log('state no equal');
+        }
+        this._authService.parseSocialUser(queryObj['provider'], queryObj);
+      }
       const isAdmin = window.location.pathname.includes('admin') || false;
       const token = sessionStorage.getItem('JbToken') || this.cookie.get('JbToken');
-      const params = new URLSearchParams(window.location.search);
-      const invitationCode = params.get('invitationCode');
+      const invitationCode = queryObj['invitationCode'];
       if (!!invitationCode && !isAdmin) {
         this.store.dispatch(UserActions.setInvitationCode({ payload: invitationCode }));
       }

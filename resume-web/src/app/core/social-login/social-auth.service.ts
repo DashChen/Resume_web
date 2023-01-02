@@ -250,6 +250,18 @@ export class SocialAuthService {
     });
   }
 
+  parseSocialUser(providerId: string, params: object): SocialUser | null {
+    let providerObject = this.providers.get(providerId);
+    if (providerObject) {
+      let user = providerObject.parseSocialUserFromObj(params);
+      if (user) {
+        this.setUser(user);
+        return user;
+      }
+    }
+    return null;
+  }
+
   private setUser(user: SocialUser | null, id?: string) {
     if (user && id) user.provider = id;
     this._user = user;

@@ -1,5 +1,5 @@
 import { LoginProps } from '@app/core/interfaces/login';
-import { ResumeUserDatasUserDto } from '@app/core/models/Api';
+import { ResumeResumeInvitationsResumeInvitationDto, ResumeUserDatasUserDto } from '@app/core/models/Api';
 import { loginResponseDto } from '@app/core/models/login.model';
 import { createAction, props } from '@ngrx/store';
 
@@ -19,6 +19,7 @@ export const actionType = {
     GET_USER_FAIL: '[Admin Page] Get Admin Data fail',
 
     SET_TEMP_ACCOUNT: '[Admin Forget Page] Set Temp Account',
+    SET_SELECTED_RESUME_PERSON: '[Admin Resume Page] Set Resume Person',
 
     RESET_ERR: '[Admin] Reset error',
 }
@@ -72,6 +73,11 @@ export const getUserSuccess = createAction(
 export const getUserFail = createAction(
     actionType.GET_USER_FAIL,
     props<{ payload: any }>(),
+)
+
+export const setResumePerson = createAction(
+    actionType.SET_SELECTED_RESUME_PERSON,
+    props<{ payload: ResumeResumeInvitationsResumeInvitationDto[] }>()
 )
 
 export const resetErr = createAction(

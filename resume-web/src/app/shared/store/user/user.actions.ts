@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeLicensesLicenseUpdateDto, ResumeShareCodesShareCodeDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
+import { ResumeAppendicesAppendixDto, ResumeAutobiographiesAutobiographyCreateDto, ResumeAutobiographiesAutobiographyDto, ResumeBaseBasicsBaseBasicDto, ResumeBaseBasicsBaseBasicUpdateDto, ResumeEducationsEducationCreateDto, ResumeEducationsEducationDto, ResumeEducationsEducationUpdateDto, ResumeExperiencesExperienceCreateDto, ResumeExperiencesExperienceDto, ResumeExperiencesExperienceUpdateDto, ResumeLicensesLicenseCreateDto, ResumeLicensesLicenseDto, ResumeLicensesLicenseUpdateDto, ResumeShareCodesShareCodeDto, ResumeThirdPartiesThirdPartyCreateDto, ResumeUserDatasUserDto, VoloAbpAccountProfilePictureSourceDto, VoloAbpAccountProfilePictureType } from '@app/core/models/Api';
 import { loginResponseDto } from '@app/core/models/login.model';
 import { LoginProps } from '@app/core/interfaces/login';
 
@@ -13,6 +13,7 @@ export const actionType = {
     LOGOUT_FAIL: '[User Page] Logout fail',
 
     SET_TOKEN: '[User Page] Set token',
+    THIRD_PARTY_LOGIN: '[User Page] Login via third party',
 
     GET_USER: '[User Page] Get User Data',
     GET_USER_SUCCESS: '[User Page] Get User Data success',
@@ -99,6 +100,11 @@ export const loginSuccess = createAction(
 export const loginFail = createAction(
     actionType.LOGIN_FAIL,
     props<{ payload: any }>()
+);
+
+export const thirdPartyLogin = createAction(
+    actionType.THIRD_PARTY_LOGIN,
+    props<{ payload: ResumeThirdPartiesThirdPartyCreateDto }>()
 )
 
 export const logout = createAction(

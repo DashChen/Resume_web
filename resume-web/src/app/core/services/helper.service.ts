@@ -74,4 +74,60 @@ export class HelperService {
 
     window.URL.revokeObjectURL(url);
   }
+
+  getParamsAsObject(query: string) {
+    query = query.substring(query.indexOf('?') + 1);
+
+    var re = /([^&=]+)=?([^&]*)/g;
+    var decodeRE = /\+/g;
+
+    var decode = function (str: string) {
+        return decodeURIComponent(str.replace(decodeRE, " "));
+    };
+
+    var params = {} as any, e;
+    while (e = re.exec(query)) {
+        var k = decode(e[1]), v = decode(e[2]);
+        if (k.substring(k.length - 2) === '[]') {
+            k = k.substring(0, k.length - 2);
+            (params[k] || (params[k] = [])).push(v);
+        }
+        else params[k] = v;
+    }
+
+    var assign = function (obj: any, keyPath: string[], value: string) {
+        var lastKeyIndex = keyPath.length - 1;
+        for (var i = 0; i < lastKeyIndex; ++i) {
+            var key = keyPath[i];
+            if (!(key in obj))
+                obj[key] = {}
+            obj = obj[key];
+        }
+        obj[keyPath[lastKeyIndex]] = value;
+    }
+
+    for (var prop in params) {
+        var structure = prop.split('[');
+        if (structure.length > 1) {
+            var levels: string[] = [];
+            structure.forEach(function (item, i) {
+                var key = item.replace(/[?[\]\\ ]/g, '');
+                levels.push(key);
+            });
+            assign(params, levels, params[prop]);
+            delete(params[prop]);
+        }
+    }
+    return params;
+  }
+
+  makeid(length: number) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 }

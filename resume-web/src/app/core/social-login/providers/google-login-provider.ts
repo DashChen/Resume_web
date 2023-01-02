@@ -120,6 +120,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                   theme: "outline",
                   size: "large",
                   type: 'standard',
+                  width: '320'
                 }
               );
             }
@@ -232,5 +233,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         .join("")
     );
     return JSON.parse(jsonPayload);
+  }
+
+  parseSocialUserFromObj(params: any): SocialUser | null {
+    return null;
   }
 }

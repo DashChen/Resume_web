@@ -28,6 +28,7 @@ import {
   ResumeInvitationAppendixDialogComponent,
 } from './pages';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@app/core/social-login/public-api';
+import { LineLoginProvider } from '@app/core/social-login/providers/line-login-provider';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,13 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, So
               environment.social.FACEBOOK.options
             )
           },
+          {
+            id: LineLoginProvider.PROVIDER_ID,
+            provider: new LineLoginProvider(
+              environment.social.LINE.client_id,
+              environment.social.LINE.options
+            )
+          }
         ],
         onError: (err: any) => {
           console.error(err);
