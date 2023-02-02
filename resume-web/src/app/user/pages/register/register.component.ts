@@ -93,21 +93,21 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   getCountryCodeErrorMessage() {
     if (this.countryCodeFormControl.hasError('required')) {
-      return '請選擇這個欄位';
+      return '請選擇此欄位';
     }
     return '';
   }
 
   getMobileErrorMessage() {
     if (this.mobileFormControl.hasError('required')) {
-      return '請填寫這個欄位';
+      return '請填寫此欄位';
     }
     return '手機號碼格式錯誤';
   }
 
   getVerificationCodeErrorMessage() {
     if (this.verificationCodeFormControl.hasError('required')) {
-      return '請填寫這個欄位';
+      return '請填寫此欄位';
     }
     if (this.verificationCodeFormControl.hasError('pattern')) {
       return '驗證碼格錯誤';

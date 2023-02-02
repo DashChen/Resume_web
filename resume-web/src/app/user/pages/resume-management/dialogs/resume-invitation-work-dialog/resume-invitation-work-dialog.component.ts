@@ -46,7 +46,13 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
   }
 
   getDateAErrorMessage() {
-    return this.dateAFormCtl.hasError('required') ? '請填此欄位' : '';
+    if (this.dateAFormCtl.hasError('matDatepickerParse')) {
+      return '日期格式錯誤';
+    }
+    if (this.dateAFormCtl.hasError('required')) {
+      return '請填此欄位';
+    }
+    return '';
   }
 
   get dateDFormCtl() {
@@ -54,7 +60,13 @@ export class ResumeInvitationWorkDialogComponent extends BaseFormComponent {
   }
 
   getDateDErrorMessage() {
-    return this.dateDFormCtl.hasError('required') ? '請填此欄位' : '';
+    if (this.dateDFormCtl.hasError('matDatepickerParse')) {
+      return '日期格式錯誤';
+    }
+    if (this.dateDFormCtl.hasError('required')) {
+      return '請填此欄位';
+    }
+    return '';
   }
 
   get jobDescriptionFormCtl() {

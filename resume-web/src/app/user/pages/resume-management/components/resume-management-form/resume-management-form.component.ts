@@ -185,7 +185,14 @@ export class ResumeManagementFormComponent extends BaseComponent implements OnIn
     this.store.select(UserSelectors.selectResumeBasicInfo).pipe(
         takeUntil(this.destroy$)
       ).subscribe(res => {
-        this.basicInfo = res;
+        this.basicInfo = {...res};
+        // 需要處理生日
+        if (res.birthDate) {
+          const year = DateTime.fromISO(res.birthDate).year;
+          if (year == 1) {
+            this.basicInfo.birthDate = '1900-01-01T00:00:00+08:00';
+          }
+        }
       });
   }
 

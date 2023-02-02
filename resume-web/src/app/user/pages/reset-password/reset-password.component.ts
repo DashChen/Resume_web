@@ -30,7 +30,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
   otherSubtitle: string = '立即註冊';
 
   resetForm = new FormGroup({
-    password: new FormControl('', [Validators.required, createPasswordStrengthValidator()]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), createPasswordStrengthValidator()]),
     confirmPwd: new FormControl('', [Validators.required, MatchValidator('password', 'confirmPwd')]),
   });
 
@@ -46,7 +46,10 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     if (this.passwordFormCtl.hasError('required')) {
       return '請填寫此欄位'
     }
-    return this.passwordFormCtl.hasError('passwordStrength') ? '密碼設定長度至少為8個字元的字串' : '';
+    if (this.passwordFormCtl.hasError('passwordStrength')) {
+      return '密碼須包含大小寫英文、數字及至少1個特殊符號等';
+    }
+    return this.passwordFormCtl.hasError('minlength') ? '密碼設定長度至少為8個字元的字串' : '';
   }
 
   getConfirmPwdErrorMessage() {

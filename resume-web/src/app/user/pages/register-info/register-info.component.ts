@@ -71,10 +71,10 @@ export class RegisterInfoComponent extends BaseComponent implements OnInit {
 
   getPasswordErrorMessage() {
     if (this.passwordFormCtl.hasError('required')) {
-      return '請輸入關鍵字'
+      return '請填寫此欄位'
     }
     if (this.passwordFormCtl.hasError('passwordStrength')) {
-      return '密碼須包含大小寫英文、數字等';
+      return '密碼須包含大小寫英文、數字及至少1個特殊符號等';
     }
     return this.passwordFormCtl.hasError('minlength') ? '密碼設定長度至少為8個字元的字串' : '';
   }

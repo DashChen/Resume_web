@@ -98,7 +98,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return '請填寫這個欄位'
     }
     if (this.passwordFormCtl.hasError('passwordStrength')) {
-      return '密碼須包含大小寫英文、數字等';
+      return '密碼須包含大小寫英文、數字及至少1個特殊符號等';
     }
     return this.passwordFormCtl.hasError('minlength') ? '密碼設定長度至少為8個字元的字串' : '';
   }

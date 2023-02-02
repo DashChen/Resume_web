@@ -23,7 +23,7 @@ export class ResumeInvitationBasicDialogComponent extends BaseFormComponent impl
       nameValidator(),
     ]),
     nameE: new FormControl('', [
-      Validators.pattern(/[a-zA-Z\s]+/g),
+      Validators.pattern('^[a-zA-Z \s]{2,50}$'),
       Validators.maxLength(50),
     ]),
     idNo: new FormControl('', [

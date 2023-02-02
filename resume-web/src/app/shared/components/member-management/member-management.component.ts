@@ -499,17 +499,17 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
   updateUserData(type: string) {
     switch (type) {
       case 'Name':
-        if (this.user?.name) {
+        if (this.user) {
           this.user.name = this.nameFormCtl.value;
         }
         break;
       case 'Birthday':
-        if (this.user?.birthDay) {
+        if (this.user) {
           this.user.birthDay = this.birthdayFormCtl.value;
         }
         break;
       case 'Email':
-        if (this.user?.email) {
+        if (this.user) {
           this.user.email = this.emailFormCtl.value;
         }
         // 自動綁定
@@ -518,12 +518,12 @@ export class MemberManagementComponent extends BaseComponent implements OnInit, 
         // }
         break;
       case 'Phone':
-        if (this.user?.phone) {
+        if (this.user) {
           this.user.phone = this.countryObj.id_to_countrycode[this.countryCodeFormCtl.value].toString() + this.phoneFormCtl.value;
         }
         break;
       case 'IdNo':
-        if (this.user?.idNo) {
+        if (this.user) {
           this.user.idNo = this.idNoFormCtl.value;
         }
         break;
